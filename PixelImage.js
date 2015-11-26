@@ -4,16 +4,16 @@
 /** Create an image with access to individual pixels
 
     A pixel's color at (x,y) is determined through 2 indirections:
-    
-    - colormapIndex = pixelIndex[x,y] 
+
+    - colormapIndex = pixelIndex[x,y]
     - paletteIndex = colorMaps[colormapIndex][x,y]
     - color = palette[paletteIndex]
-    - red = color[0], green = color[1], blue = color[2]    
+    - red = color[0], green = color[1], blue = color[2]
 
     Pixels are indexed:
     - index at (x,y) undefined -> transparant
-    - index at (x,y) = number -> number of colormap in which color is stored at (x,y) 
-    
+    - index at (x,y) = number -> number of colormap in which color is stored at (x,y)
+
     Colormaps contain a mapping from (x,y) to an index in the palette.
 
 http://csdb.dk/forums/?roomid=11&topicid=21409&showallposts=1
@@ -26,7 +26,6 @@ http://www.efg2.com/Lab/Library/ImageProcessing/DHALF.TXT
 function PixelImage() {
 
     'use strict';
-
     // public properties
     this.height = undefined;
     this.width = undefined;
@@ -41,17 +40,20 @@ function PixelImage() {
 
 }
 
-/**
-  Initialize the image.
-*/
-PixelImage.prototype.init = function (w, h, colorMap) {
+PixelImage.create = function(w, h, colorMap, pWidth, pHeight) {
     'use strict';
 
-    this.height = h;
-    this.width = w;
+    var result = new PixelImage();
+
+    result.pWidth = pWidth === undefined ? 1 : pWidth;
+    result.pHeight = pHeight === undefined ? 1 : pHeight;
+    result.height = h;
+    result.width = w;
     if (colorMap !== undefined) {
-        this.colorMaps.push(colorMap);
+        result.colorMaps.push(colorMap);
     }
+
+    return result;
 };
 
 /**
@@ -66,7 +68,7 @@ PixelImage.prototype.findColorMap = function (x, y, color) {
         match;
 
     for (i = 0; i < this.colorMaps.length; i += 1) {
-        mapColor = this.colorMaps[i].getColor(x, y);
+      mapColor = this.colorMaps[i].getColor(x, y);
         if (mapColor === undefined) {
             match = i;
         }
@@ -80,6 +82,9 @@ PixelImage.prototype.findColorMap = function (x, y, color) {
 
 /**
  * Map a pixel to the closest available palette color at x, y
+ * @param {int} x X coordinate
+ * @param {int} y Y coordinate
+ * @returns {int} Colormap index for the closest Colormap
  */
 PixelImage.prototype.map = function (pixel, x, y, offsetPixel) {
     'use strict';
@@ -164,7 +169,7 @@ PixelImage.prototype.orderedDither = function (x, y) {
  * Set the value for a particular pixel.
  * @param {number} x - x coordinate
  * @param {number} y - y coordinate
- * @param {Array] pixel - Pixel values [r, g, b, a]
+ * @param {Array} pixel - Pixel values [r, g, b, a]
  */
 PixelImage.prototype.poke = function (x, y, pixel) {
     'use strict';
@@ -264,6 +269,8 @@ PixelImage.prototype.reduceToMax = function (x, y, w, h) {
 
 /**
  * Get the value of a particular pixel.
+ * @param {int} x X coordinate
+ * @param {int} y Y coordinate
  * @returns {Array} Pixel values [r, g, b, a], or an empty pixel if x and y are out of range.
  */
 PixelImage.prototype.peek = function (x, y) {
