@@ -1,7 +1,7 @@
 /*global document, PixelCalculator, ColorMap */
 /*exported PixelImage*/
 /*jslint bitwise: true*/
-/** Create an image with access to individual pixels
+/* Create an image with access to individual pixels
 
     A pixel's color at (x,y) is determined through 2 indirections:
 
@@ -40,7 +40,14 @@ function PixelImage() {
 
 }
 
-PixelImage.create = function(w, h, colorMap, pWidth, pHeight) {
+/**
+ * @param {int} w The width of the image
+ * @param {int} h The height of the image
+ * @param {int} pWidth The width of one pixel
+ @ @param {int} pHeight The height of one pixel
+ * @returns {PixelImage} The image
+ */
+PixelImage.create = function(w, h, pWidth, pHeight) {
     'use strict';
 
     var result = new PixelImage();
@@ -49,9 +56,6 @@ PixelImage.create = function(w, h, colorMap, pWidth, pHeight) {
     result.pHeight = pHeight === undefined ? 1 : pHeight;
     result.height = h;
     result.width = w;
-    if (colorMap !== undefined) {
-        result.colorMaps.push(colorMap);
-    }
 
     return result;
 };
@@ -82,8 +86,10 @@ PixelImage.prototype.findColorMap = function (x, y, color) {
 
 /**
  * Map a pixel to the closest available palette color at x, y
+ * @param {Array} pixel The pixel to map.
  * @param {int} x X coordinate
  * @param {int} y Y coordinate
+ * @param {Array} offsetPixel Offset the pixel with this value, used for dithering
  * @returns {int} Colormap index for the closest Colormap
  */
 PixelImage.prototype.map = function (pixel, x, y, offsetPixel) {
@@ -229,6 +235,9 @@ PixelImage.prototype.fromImageData = function (imageData) {
     this.drawImageData(imageData);
 };
 
+/*
+  Get the color index that is the most used within an area of the image.
+*/
 PixelImage.prototype.reduceToMax = function (x, y, w, h) {
     'use strict';
     var weights = [],
