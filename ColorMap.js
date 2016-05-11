@@ -28,7 +28,7 @@ function ColorMap(widthVal, heightVal, resXVal, resYVal) {
 /**
  * Is a coordinate in range?
  */
-ColorMap.prototype.isInRange = function (x, y) {
+ColorMap.prototype.isInRange = function(x, y) {
     'use strict';
     return (x >= 0 && x < this.width && y >= 0 && y < this.height);
 };
@@ -36,7 +36,7 @@ ColorMap.prototype.isInRange = function (x, y) {
 /**
  * Map an image x coordinate to a map x coordinate.
  */
-ColorMap.prototype.mapX = function (x) {
+ColorMap.prototype.mapX = function(x) {
     'use strict';
     return Math.floor(x / this.resX);
 };
@@ -52,7 +52,7 @@ ColorMap.prototype.mapY = function mapY(y) {
 /**
  * Set an area to a certain color.
  */
-ColorMap.prototype.add = function (x, y, color) {
+ColorMap.prototype.add = function(x, y, color) {
     'use strict';
     if (!this.isInRange(x, y)) {
         return;
@@ -72,7 +72,7 @@ ColorMap.prototype.add = function (x, y, color) {
  * Convert to an image so it can be displayed.
  * @param {Palette} the palette to use for looking up the colors.
  */
-ColorMap.prototype.toImageData = function toImageData(palette) { // {{{
+ColorMap.prototype.toImageData = function toImageData(palette) { 
 
     'use strict';
 
@@ -89,12 +89,12 @@ ColorMap.prototype.toImageData = function toImageData(palette) { // {{{
     }
 
     return imageData;
-}; // }}}
+}; 
 
- /**
-  * Get the color at x, y coordinate.
-  */
-ColorMap.prototype.getColor = function (x, y) { // {{{
+/**
+ * Get the palette index at x, y coordinate.
+ */
+ColorMap.prototype.getColor = function(x, y) { // {{{
 
     'use strict';
 

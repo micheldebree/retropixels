@@ -22,7 +22,7 @@ function KoalaPicture() {
 KoalaPicture.prototype = new BinaryFile();
 KoalaPicture.prototype.constructor = BinaryFile;
 
-KoalaPicture.prototype.read = function (arrayBuffer) {
+KoalaPicture.prototype.read = function(arrayBuffer) {
     'use strict';
     this.loadAddress = new Uint8Array(arrayBuffer, 0, 2);
     this.bitmap = new Uint8Array(arrayBuffer, 2, 8000);
@@ -35,20 +35,20 @@ KoalaPicture.prototype.read = function (arrayBuffer) {
  * Convert to a sequence of bytes.
  */
 KoalaPicture.prototype.toBytes = function() {
-  'use strict';
-  return this.concat([
-      this.loadAddress,
-      this.bitmap,
-      this.screenRam,
-      this.colorRam,
-      this.background
-  ]);
+    'use strict';
+    return this.concat([
+        this.loadAddress,
+        this.bitmap,
+        this.screenRam,
+        this.colorRam,
+        this.background
+    ]);
 };
 
 /**
  * Get a url to download this picture.
  */
-KoalaPicture.prototype.toUrl = function () {
+KoalaPicture.prototype.toUrl = function() {
     'use strict';
     return this.toObjectUrl(this.toBytes());
 };
@@ -56,7 +56,7 @@ KoalaPicture.prototype.toUrl = function () {
 /**
  * Get the Koala bitmap component from a PixelImage.
  */
-KoalaPicture.prototype.convertBitmap = function (pixelImage) {
+KoalaPicture.convertBitmap = function(pixelImage) {
     'use strict';
     var charY,
         charX,
@@ -70,10 +70,7 @@ KoalaPicture.prototype.convertBitmap = function (pixelImage) {
 
                 // pack 4 pixels into one byte
                 bitmap[bitmapIndex] =
-                    pixelImage.getPixelIndex(charX, charY + bitmapY) << 6
-                    | pixelImage.getPixelIndex(charX + 1, charY + bitmapY) << 4
-                    | pixelImage.getPixelIndex(charX + 2, charY + bitmapY) << 2
-                    | pixelImage.getPixelIndex(charX + 3, charY + bitmapY);
+                    pixelImage.getPixelIndex(charX, charY + bitmapY) << 6 | pixelImage.getPixelIndex(charX + 1, charY + bitmapY) << 4 | pixelImage.getPixelIndex(charX + 2, charY + bitmapY) << 2 | pixelImage.getPixelIndex(charX + 3, charY + bitmapY);
 
                 bitmapIndex += 1;
             }
@@ -85,7 +82,7 @@ KoalaPicture.prototype.convertBitmap = function (pixelImage) {
 /**
  * Get the Koala screenram component from two ColorMaps
  */
-KoalaPicture.prototype.convertScreenram = function (lowerColorMap, upperColorMap) {
+KoalaPicture.convertScreenram = function(lowerColorMap, upperColorMap) {
     'use strict';
 
     var colorX,
@@ -98,8 +95,7 @@ KoalaPicture.prototype.convertScreenram = function (lowerColorMap, upperColorMap
 
             // pack two colors in one byte
             screenRam[colorIndex] =
-                ((upperColorMap.getColor(colorX, colorY) << 4) & 0xf0)
-                | (lowerColorMap.getColor(colorX, colorY) & 0x0f);
+                ((upperColorMap.getColor(colorX, colorY) << 4) & 0xf0) | (lowerColorMap.getColor(colorX, colorY) & 0x0f);
             colorIndex += 1;
         }
     }
@@ -110,7 +106,7 @@ KoalaPicture.prototype.convertScreenram = function (lowerColorMap, upperColorMap
 /**
  * Get the Koala colorram component from a ColorMap
  */
-KoalaPicture.prototype.convertColorram = function (colorMap) {
+KoalaPicture.convertColorram = function(colorMap) {
     'use strict';
     var colorX,
         colorY,
@@ -138,7 +134,7 @@ KoalaPicture.prototype.convertColorram = function (colorMap) {
  * - colormap 1 and 2 have the screenram
  * - colormap 3 has the colorram
  */
-KoalaPicture.prototype.fromPixelImage = function (pixelImage) {
+KoalaPicture.fromPixelImage = function(pixelImage) {
     'use strict';
 
     var koalaPic = new KoalaPicture();
@@ -155,9 +151,11 @@ KoalaPicture.prototype.fromPixelImage = function (pixelImage) {
 /**
  * Convert a Koala Painter picture to a PixelImage.
  */
-KoalaPicture.prototype.toPixelImage = function (koalaPic, palette) {
+KoalaPicture.toPixelImage = function(koalaPic, palette) {
     'use strict';
-    var pixelImage = new PixelImage(),
+    var imageW = 160,
+        imageH = 200,
+        pixelImage = new PixelImage.create(imageW, imageH, undefined, 2, 1),
         charX,
         charY,
         bitmapY,
@@ -171,15 +169,12 @@ KoalaPicture.prototype.toPixelImage = function (koalaPic, palette) {
         color01,
         color10,
         color11,
-        imageW = 160,
-        imageH = 200,
         colorIndex = 0,
         pixelsPerCellHor = 4,
         pixelsPerCellVer = 8,
         pixelX,
         pixelY;
 
-    pixelImage.init(imageW, imageH);
     pixelImage.palette = palette;
     pixelImage.addColorMap(new ColorMap(imageW, imageH, imageW, imageH));
     pixelImage.addColorMap(new ColorMap(imageW, imageH, pixelsPerCellHor, pixelsPerCellVer));
@@ -229,7 +224,8 @@ KoalaPicture.prototype.toPixelImage = function (koalaPic, palette) {
     }
     // add background color as colorMap 0
     pixelImage.colorMaps[0].add(0, 0, koalaPic.background[0]);
-    pixelImage.pWidth = 2;
-    pixelImage.pHeight = 1;
+
+
+
     return pixelImage;
 };
