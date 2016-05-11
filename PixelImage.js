@@ -342,7 +342,7 @@ PixelImage.prototype.extractColorMap = function(colorMap) {
 */
 PixelImage.prototype.toSrcUrl = function() {
     'use strict';
-    this.assertValid()
+    this.assertValid();
     return this.toUrl('image/png');
 };
 
