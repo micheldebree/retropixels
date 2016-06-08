@@ -234,12 +234,11 @@ PixelImage.prototype.fromImageData = function(imageData) {
     this.drawImageData(imageData);
 };
 
-PixelImage.prototype.reduceToMax = function(x, y, w, h) {
+PixelImage.prototype.reduceToMax = function(x, y, w, h, colorMapIndex) {
     'use strict';
     var weights = [],
         ix,
         iy,
-        idx,
         color,
         maxWeight,
         maxColor;
@@ -251,21 +250,19 @@ PixelImage.prototype.reduceToMax = function(x, y, w, h) {
 
     for (ix = x; ix < x + w; ix += 1) {
         for (iy = y; iy < y + h; iy += 1) {
-            idx = this.getPixelIndex(ix, iy);
-            if (idx !== undefined) {
-                color = this.colorMaps[idx].getColor(ix, iy);
-                if (weights[color] === undefined) {
-                    weights[color] = 1;
-                } else {
-                    weights[color] = weights[color] + 1;
-                }
+            color = this.colorMaps[colorMapIndex].getColor(ix, iy);
+            if (weights[color] === undefined) {
+                weights[color] = 1;
+            } else {
+                weights[color] = weights[color] + 1;
+            }
 
-                if (maxWeight === undefined || weights[color] > maxWeight) {
-                    maxWeight = weights[color];
-                    maxColor = color;
-                }
+            if (maxWeight === undefined || weights[color] > maxWeight) {
+                maxWeight = weights[color];
+                maxColor = color;
             }
         }
+        
     }
 
     return maxColor;
@@ -295,7 +292,7 @@ PixelImage.prototype.peek = function(x, y) {
  * Extract pixels from an image and put them in a colormap.
  * @param {Colormap} colorMap The colormap to extract pixels to.
  */
-PixelImage.prototype.extractColorMap = function(colorMap) {
+PixelImage.prototype.extractColorMap = function(colorMap, colorMapIndex) {
     'use strict';
     var x,
         y,
@@ -303,14 +300,12 @@ PixelImage.prototype.extractColorMap = function(colorMap) {
         yy,
         rx = colorMap.resX,
         ry = colorMap.resY,
-        color,
-        curColor,
-        pixel;
+        color;
 
     for (x = 0; x < this.width; x += rx) {
         for (y = 0; y < this.height; y += ry) {
             // find the maximum used color in this area
-            color = this.reduceToMax(x, y, rx, ry);
+            color = this.reduceToMax(x, y, rx, ry, colorMapIndex);
 
             if ((color !== undefined) && (colorMap.getColor(x, y) === undefined)) {
 
@@ -318,18 +313,13 @@ PixelImage.prototype.extractColorMap = function(colorMap) {
 
                 // remove matching pixels from this image
                 for (xx = x; xx < x + rx; xx += 1) {
-                    for (yy = y; yy < y + ry; yy += 1) {
-                        pixel = this.getPixelIndex(xx, yy);
-                        if (pixel !== undefined) {
-                            curColor = this.colorMaps[pixel].getColor(xx, yy);
-                            if (color === curColor) {
-                                this.setPixelIndex(xx, yy, undefined);
-                            }
+                    for (yy = y; yy < y + ry; yy += 1) {        
+                        if (this.colorMaps[colorMapIndex].getColor(xx, yy) === color) {
+                                this.colorMaps[colorMapIndex].add(xx, yy, undefined);
                         }
                     }
                 }
             }
-
         }
     }
 
