@@ -66,31 +66,29 @@ PixelImage.prototype.assertValid = function() {
 };
 
 /**
- * Find an existing color map that has a specific color at x,y, or has
- * an empty (undefined) spot available
+ * Find a color index at a specific coordinate in one of the color maps.
+ * Returns the first match it finds, or undefined if no color maps contain the color index at the coordinate.
+ * @param {int} x X coordinate
+ * @param {int} y Y coordinate
+ * @returns {int} Color index to find
  */
-PixelImage.prototype.findColorMap = function(x, y, color) {
+PixelImage.prototype.findColorInMap = function(x, y, color) {
     'use strict';
 
-    var i,
-        mapColor,
-        match;
+    var i;
 
     for (i = 0; i < this.colorMaps.length; i += 1) {
-        mapColor = this.colorMaps[i].getColor(x, y);
-        if (mapColor === undefined) {
-            match = i;
-        }
-        if (color === mapColor) {
+        if (color === this.colorMaps[i].getColor(x, y)) {
             return i;
         }
     }
 
-    return match;
+    return undefined;
 };
 
+
 /**
- * Map a pixel to the closest available palette color at x, y
+ * Map a pixel to the closest available Colormap.
  * @param {int} x X coordinate
  * @param {int} y Y coordinate
  * @returns {int} Colormap index for the closest Colormap
@@ -141,7 +139,6 @@ PixelImage.prototype.setDitherOffset = function(x, y, offsetPixel) {
         }
         this.ditherOffset[y][x] = offsetPixel;
     }
-
 };
 
 PixelImage.prototype.addDitherOffset = function(x, y, offsetPixel) {
@@ -162,15 +159,8 @@ PixelImage.prototype.getDitherOffset = function(x, y) {
 
 PixelImage.prototype.orderedDither = function(x, y) {
     'use strict';
-    var offset = this.dither[y % this.dither.length][x % this.dither.length],
-        offsetPixel;
-
-    //offsetPixel = PixelCalculator.multiply(pixel, -offset);
-    //offsetPixel = PixelCalculator.divide(offsetPixel, 10);
-
-    offsetPixel = [offset, offset, offset];
-
-    this.addDitherOffset(x + 1, y, offsetPixel);
+    var offset = this.dither[y % this.dither.length][x % this.dither.length];
+    this.addDitherOffset(x + 1, y, [offset, offset, offset]);
 };
 
 
@@ -202,7 +192,13 @@ PixelImage.prototype.poke = function(x, y, pixel) {
     this.errorDiffusionDither(this, x, y, error);
 
     // try to reuse existing color map
-    colorMap = this.findColorMap(x, y, mappedIndex);
+    colorMap = this.findColorInMap(x, y, mappedIndex);
+    
+    // else see if there is there is a map with an empty pixel
+    if (colorMap === undefined) {
+        colorMap = this.findColorInMap(x, y, undefined);
+    }
+    
     if (colorMap !== undefined) {
         this.colorMaps[colorMap].add(x, y, mappedIndex);
     } else {
@@ -295,6 +291,10 @@ PixelImage.prototype.peek = function(x, y) {
     return paletteIndex !== undefined ? this.palette.get(paletteIndex) : PixelImage.emptyPixel;
 };
 
+/**
+ * Extract pixels from an image and put them in a colormap.
+ * @param {Colormap} colorMap The colormap to extract pixels to.
+ */
 PixelImage.prototype.extractColorMap = function(colorMap) {
     'use strict';
     var x,

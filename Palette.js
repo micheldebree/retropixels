@@ -21,30 +21,6 @@ Palette.prototype.getDistance = function (onePixel, index, offsetPixel) {
            Math.pow(onePixel[2] - otherPixel[2] - offsetPixel[2], 2));
 };
 
-
-Palette.prototype.getDistanceYUV = function (onePixel, index, offsetPixel) {
-    'use strict';
-    var otherPixel = PixelCalculator.toYUV(this.pixels[index]);
-    offsetPixel = offsetPixel !== undefined ? offsetPixel : [0, 0, 0];
-    onePixel = PixelCalculator.toYUV(PixelCalculator.substract(onePixel, offsetPixel));
-
-    return Math.sqrt(Math.pow(onePixel[0] - otherPixel[0], 2) +
-           Math.pow(onePixel[1] - otherPixel[1], 2) +
-           Math.pow(onePixel[2] - otherPixel[2], 2));
-};
-
-Palette.prototype.getDistanceY = function (onePixel, index, offsetPixel) {
-    'use strict';
-    var otherPixel = PixelCalculator.toYUV(this.pixels[index]);
-    offsetPixel = offsetPixel !== undefined ? offsetPixel : [0, 0, 0];
-    onePixel = PixelCalculator.toYUV(PixelCalculator.substract(onePixel, offsetPixel));
-
-    return Math.sqrt(Math.pow(onePixel[0] - otherPixel[0], 2));
-
-};
-
-
-
 /**
  * Map a pixel to the closest available color in the palette.
  * @returns the index into the palette
