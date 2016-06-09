@@ -262,32 +262,23 @@ PixelImage.prototype.extractColorMap = function(colorMap, colorMapIndex) {
     'use strict';
     var x,
         y,
-        xx,
-        yy,
         rx = colorMap.resX,
         ry = colorMap.resY,
-        color;
+        color,
+        fromMap = this.colorMaps[colorMapIndex];
 
     for (x = 0; x < this.width; x += rx) {
         for (y = 0; y < this.height; y += ry) {
             // find the maximum used color in this area
-            color = this.colorMaps[colorMapIndex].reduceToMax(x, y, rx, ry, colorMapIndex);
+            color = fromMap.reduceToMax(x, y, rx, ry, colorMapIndex);
 
             if ((color !== undefined) && (colorMap.getColor(x, y) === undefined)) {
-
                 colorMap.add(x, y, color);
-
-                // remove matching pixels from this image
-                for (xx = x; xx < x + rx; xx += 1) {
-                    for (yy = y; yy < y + ry; yy += 1) {        
-                        if (this.colorMaps[colorMapIndex].getColor(xx, yy) === color) {
-                            this.colorMaps[colorMapIndex].add(xx, yy, undefined);
-                        }
-                    }
-                }
             }
         }
     }
+    
+    fromMap.subtract(colorMap);
 
 };
 

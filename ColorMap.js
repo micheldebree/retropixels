@@ -142,3 +142,20 @@ ColorMap.prototype.reduceToMax = function(x, y, w, h) {
     return maxColor;
 
 };
+
+ColorMap.prototype.subtract = function(colorMap) {
+    
+    'use strict';
+
+    var x,
+        y;
+
+    // remove matching pixels from this image
+    for (x = 0; x < this.width; x += 1) {
+        for (y = 0; y < this.height; y += 1) {        
+            if (this.getColor(x, y) === colorMap.getColor(x, y)) {
+                this.add(x, y, undefined);
+            }
+        }
+    }
+};
