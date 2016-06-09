@@ -95,7 +95,6 @@ ColorMap.prototype.toImageData = function toImageData(palette) {
  * Get the palette index at x, y coordinate.
  */
 ColorMap.prototype.getColor = function(x, y) {
-
     'use strict';
 
     var mX = this.mapX(x),
@@ -105,8 +104,6 @@ ColorMap.prototype.getColor = function(x, y) {
         return this.colors[mX][mY];
     }
     return undefined;
-
-
 }; 
 
 /**
@@ -121,22 +118,17 @@ ColorMap.prototype.reduceToMax = function(x, y, w, h) {
         maxWeight,
         maxColor;
 
-    x = x !== undefined ? x : 0;
-    y = y !== undefined ? y : 0;
-    w = w !== undefined ? w : this.width;
-    h = h !== undefined ? h : this.height;
-
     for (ix = x; ix < x + w; ix += 1) {
         for (iy = y; iy < y + h; iy += 1) {
             color = this.getColor(ix, iy);
-            weights[color] = weights[color] === undefined ? 1 : weights[color] + 1;
-
-            if (maxWeight === undefined || weights[color] > maxWeight) {
-                maxWeight = weights[color];
-                maxColor = color;
+            if (color !== undefined) {
+                weights[color] = weights[color] === undefined ? 1 : weights[color] + 1;
+                if (maxWeight === undefined || weights[color] > maxWeight) {
+                    maxWeight = weights[color];
+                    maxColor = color;
+                }
             }
         }
-        
     }
 
     return maxColor;
@@ -144,18 +136,37 @@ ColorMap.prototype.reduceToMax = function(x, y, w, h) {
 };
 
 ColorMap.prototype.subtract = function(colorMap) {
-    
     'use strict';
 
     var x,
         y;
 
-    // remove matching pixels from this image
-    for (x = 0; x < this.width; x += 1) {
-        for (y = 0; y < this.height; y += 1) {        
+    for (x = 0; x < this.width; x += this.resX) {
+        for (y = 0; y < this.height; y += this.resY) {        
             if (this.getColor(x, y) === colorMap.getColor(x, y)) {
                 this.add(x, y, undefined);
             }
         }
     }
+};
+
+/**
+ * Extract colors and put them in a colormap.
+ * @param {Colormap} colorMap The colormap to extract pixels to.
+ */
+ColorMap.prototype.extractColorMap = function(toColorMap) {
+    'use strict';
+    var x,
+        y,
+        rx = toColorMap.resX,
+        ry = toColorMap.resY;
+
+    for (x = 0; x < toColorMap.width; x += rx) {
+        for (y = 0; y < toColorMap.height; y += ry) {
+            toColorMap.add(x, y, this.reduceToMax(x, y, rx, ry));
+        }
+    }
+    
+    this.subtract(toColorMap);
+
 };

@@ -255,34 +255,6 @@ PixelImage.prototype.peek = function(x, y) {
 };
 
 /**
- * Extract pixels from an image and put them in a colormap.
- * @param {Colormap} colorMap The colormap to extract pixels to.
- */
-PixelImage.prototype.extractColorMap = function(colorMap, colorMapIndex) {
-    'use strict';
-    var x,
-        y,
-        rx = colorMap.resX,
-        ry = colorMap.resY,
-        color,
-        fromMap = this.colorMaps[colorMapIndex];
-
-    for (x = 0; x < this.width; x += rx) {
-        for (y = 0; y < this.height; y += ry) {
-            // find the maximum used color in this area
-            color = fromMap.reduceToMax(x, y, rx, ry, colorMapIndex);
-
-            if ((color !== undefined) && (colorMap.getColor(x, y) === undefined)) {
-                colorMap.add(x, y, color);
-            }
-        }
-    }
-    
-    fromMap.subtract(colorMap);
-
-};
-
-/**
     Create a URL that can be used as the src for an Image.
 */
 PixelImage.prototype.toSrcUrl = function() {
