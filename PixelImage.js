@@ -234,40 +234,6 @@ PixelImage.prototype.fromImageData = function(imageData) {
     this.drawImageData(imageData);
 };
 
-PixelImage.prototype.reduceToMax = function(x, y, w, h, colorMapIndex) {
-    'use strict';
-    var weights = [],
-        ix,
-        iy,
-        color,
-        maxWeight,
-        maxColor;
-
-    x = x !== undefined ? x : 0;
-    y = y !== undefined ? y : 0;
-    w = w !== undefined ? w : this.width;
-    h = h !== undefined ? h : this.height;
-
-    for (ix = x; ix < x + w; ix += 1) {
-        for (iy = y; iy < y + h; iy += 1) {
-            color = this.colorMaps[colorMapIndex].getColor(ix, iy);
-            if (weights[color] === undefined) {
-                weights[color] = 1;
-            } else {
-                weights[color] = weights[color] + 1;
-            }
-
-            if (maxWeight === undefined || weights[color] > maxWeight) {
-                maxWeight = weights[color];
-                maxColor = color;
-            }
-        }
-        
-    }
-
-    return maxColor;
-
-};
 
 PixelImage.prototype.getPaletteIndex = function(x, y) {
     'use strict';
@@ -305,7 +271,7 @@ PixelImage.prototype.extractColorMap = function(colorMap, colorMapIndex) {
     for (x = 0; x < this.width; x += rx) {
         for (y = 0; y < this.height; y += ry) {
             // find the maximum used color in this area
-            color = this.reduceToMax(x, y, rx, ry, colorMapIndex);
+            color = this.colorMaps[colorMapIndex].reduceToMax(x, y, rx, ry, colorMapIndex);
 
             if ((color !== undefined) && (colorMap.getColor(x, y) === undefined)) {
 
@@ -315,15 +281,13 @@ PixelImage.prototype.extractColorMap = function(colorMap, colorMapIndex) {
                 for (xx = x; xx < x + rx; xx += 1) {
                     for (yy = y; yy < y + ry; yy += 1) {        
                         if (this.colorMaps[colorMapIndex].getColor(xx, yy) === color) {
-                                this.colorMaps[colorMapIndex].add(xx, yy, undefined);
+                            this.colorMaps[colorMapIndex].add(xx, yy, undefined);
                         }
                     }
                 }
             }
         }
     }
-
-    return colorMap;
 
 };
 

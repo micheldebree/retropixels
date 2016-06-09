@@ -94,7 +94,7 @@ ColorMap.prototype.toImageData = function toImageData(palette) {
 /**
  * Get the palette index at x, y coordinate.
  */
-ColorMap.prototype.getColor = function(x, y) { // {{{
+ColorMap.prototype.getColor = function(x, y) {
 
     'use strict';
 
@@ -107,4 +107,38 @@ ColorMap.prototype.getColor = function(x, y) { // {{{
     return undefined;
 
 
-}; // }}}
+}; 
+
+/**
+  Get the color that is most present in an area of the colormap.
+**/
+ColorMap.prototype.reduceToMax = function(x, y, w, h) {
+    'use strict';
+    var weights = [],
+        ix,
+        iy,
+        color,
+        maxWeight,
+        maxColor;
+
+    x = x !== undefined ? x : 0;
+    y = y !== undefined ? y : 0;
+    w = w !== undefined ? w : this.width;
+    h = h !== undefined ? h : this.height;
+
+    for (ix = x; ix < x + w; ix += 1) {
+        for (iy = y; iy < y + h; iy += 1) {
+            color = this.getColor(ix, iy);
+            weights[color] = weights[color] === undefined ? 1 : weights[color] + 1;
+
+            if (maxWeight === undefined || weights[color] > maxWeight) {
+                maxWeight = weights[color];
+                maxColor = color;
+            }
+        }
+        
+    }
+
+    return maxColor;
+
+};
