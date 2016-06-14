@@ -14,11 +14,19 @@ Palette.prototype.get = function (index) {
 Palette.prototype.getDistance = function (onePixel, index, offsetPixel) {
     'use strict';
     var otherPixel = this.pixels[index];
+    
     offsetPixel = offsetPixel !== undefined ? offsetPixel : [0, 0, 0];
 
-    return Math.sqrt(Math.pow(onePixel[0] - otherPixel[0] - offsetPixel[0], 2) +
-           Math.pow(onePixel[1] - otherPixel[1] - offsetPixel[1], 2) +
-           Math.pow(onePixel[2] - otherPixel[2] - offsetPixel[2], 2));
+    onePixel = PixelCalculator.toYUV(onePixel);
+    otherPixel = PixelCalculator.toYUV(otherPixel);
+    offsetPixel = PixelCalculator.toYUV(offsetPixel);
+
+    return Math.sqrt(
+       Math.pow(onePixel[0] - otherPixel[0] - offsetPixel[0], 2) +
+       Math.pow(onePixel[1] - otherPixel[1] - offsetPixel[1], 2) +
+       Math.pow(onePixel[2] - otherPixel[2] - offsetPixel[2], 2)
+   );
+
 };
 
 /**
