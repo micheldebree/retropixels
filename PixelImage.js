@@ -39,6 +39,10 @@ function PixelImage() {
         [0]
     ]; // n x n bayer matrix for ordered dithering
     this.errorDiffusionDither = function() {};
+    
+    // weight per pixel channel (RGB or YUV) when calculating distance
+    // [1, 1, 1] is equal weight, [1, 0, 0] in combination with YUV is phychedelic mode
+    this.mappingWeight = [1, 0, 0];
 
 }
 
@@ -105,7 +109,7 @@ PixelImage.prototype.map = function(pixel, x, y, offsetPixel) {
     // determine closest pixel in palette (ignoring alpha)
     for (i = 0; i < this.colorMaps.length; i += 1) {
         other = this.colorMaps[i].getColor(x, y);
-        d = this.palette.getDistance(pixel, other, offsetPixel);
+        d = this.palette.getDistance(pixel, other, offsetPixel, this.mappingWeight);
         if (minVal === undefined || d < minVal) {
             minVal = d;
             minI = i;
@@ -182,7 +186,7 @@ PixelImage.prototype.poke = function(x, y, pixel) {
     offsetPixel = this.getDitherOffset(x, y);
 
     // map to closest color in palette
-    mappedIndex = this.palette.mapPixel(pixel, offsetPixel);
+    mappedIndex = this.palette.mapPixel(pixel, offsetPixel, this.mappingWeight);
 
 
     // use the error for dithering

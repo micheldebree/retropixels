@@ -11,20 +11,21 @@ Palette.prototype.get = function (index) {
 };
 
 
-Palette.prototype.getDistance = function (onePixel, index, offsetPixel) {
+Palette.prototype.getDistance = function (onePixel, index, offsetPixel, weight) {
     'use strict';
     var otherPixel = this.pixels[index];
     
-    offsetPixel = offsetPixel !== undefined ? offsetPixel : [0, 0, 0];
+    offsetPixel = offsetPixel !== undefined ? offsetPixel : PixelCalculator.emptyPixel;
+    weight = weight !== undefined ? weight : [1, 1, 1];
 
     onePixel = PixelCalculator.toYUV(onePixel);
     otherPixel = PixelCalculator.toYUV(otherPixel);
     offsetPixel = PixelCalculator.toYUV(offsetPixel);
 
     return Math.sqrt(
-       Math.pow(onePixel[0] - otherPixel[0] - offsetPixel[0], 2) +
-       Math.pow(onePixel[1] - otherPixel[1] - offsetPixel[1], 2) +
-       Math.pow(onePixel[2] - otherPixel[2] - offsetPixel[2], 2)
+       weight[0] * Math.pow(onePixel[0] - otherPixel[0] - offsetPixel[0], 2) +
+       weight[1] * Math.pow(onePixel[1] - otherPixel[1] - offsetPixel[1], 2) +
+       weight[2] * Math.pow(onePixel[2] - otherPixel[2] - offsetPixel[2], 2)
    );
 
 };
@@ -33,9 +34,8 @@ Palette.prototype.getDistance = function (onePixel, index, offsetPixel) {
  * Map a pixel to the closest available color in the palette.
  * @returns the index into the palette
  */
-Palette.prototype.mapPixel = function (pixel, offset) {
+Palette.prototype.mapPixel = function (pixel, offset, weight) {
     'use strict';
-    offset = offset !== undefined ? offset : PixelCalculator.emptyPixel;
 
     var i,
         d,
@@ -45,7 +45,7 @@ Palette.prototype.mapPixel = function (pixel, offset) {
     // determine closest pixel in palette (ignoring alpha)
     for (i = 0; i < this.pixels.length; i += 1) {
         // calculate distance
-        d = this.getDistance(pixel, i, offset);
+        d = this.getDistance(pixel, i, offset, weight);
 
         if (minVal === undefined || d < minVal) {
             minVal = d;
@@ -74,5 +74,5 @@ var peptoPalette = new Palette([
     [0x6c, 0x6c, 0x6c, 0xff], //medium gray
     [0x9a, 0xd2, 0x84, 0xff], //light green
     [0x6c, 0x5e, 0xb5, 0xff], //light blue
-    [0x95, 0x95, 0x95, 0xff] //green
+    [0x95, 0x95, 0x95, 0xff]  //green
 ]);
