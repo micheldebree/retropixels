@@ -42,7 +42,7 @@ function PixelImage() {
     
     // weight per pixel channel (RGB or YUV) when calculating distance
     // [1, 1, 1] is equal weight, [1, 0, 0] in combination with YUV is phychedelic mode
-    this.mappingWeight = [1, 0, 0];
+    this.mappingWeight = [1, 1, 1];
 
 }
 

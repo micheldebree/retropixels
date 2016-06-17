@@ -12,6 +12,7 @@ Remapper.prototype.getColorMap = function (imageData, image) {
 
     unrestrictedImage.palette = image.palette;
     unrestrictedImage.dither = image.dither;
+    unrestrictedImage.mappingWeight = image.mappingWeight;
     unrestrictedImage.errorDiffusionDither = image.errorDiffusionDither;
     unrestrictedImage.drawImageData(imageData);
     return unrestrictedImage.colorMaps[0];
