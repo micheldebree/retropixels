@@ -165,16 +165,3 @@ PixelCalculator.toYUV = function (pixel) {
         
     ];
 };
-
-PixelCalculator.toYCbCr = function (pixel) {
-    'use strict';
-    return [
-        pixel[0] * 0.299 + pixel[1] * 0.587 + pixel[2] * 0.114,
-        128 - pixel[0] * -0.168736 - pixel[1] * 0.331264 + pixel[2] * 0.50000,
-        128 + pixel[0] * 0.50000 - pixel[1] * 0.418688 - pixel[2] * 0.08131
-        
-        // Cb = -0.16874 * R - 0.33126 * G + 0.50000 * B  + 128
-        //         Cr =  0.50000 * R - 0.41869 * G - 0.08131 * B  + 128
-        //  0.299 * otherPixel[0] + 0.587 * otherPixel[1] + 0.114 * otherPixel[2];
-    ];
-};
