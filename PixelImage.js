@@ -24,7 +24,6 @@ http://www.efg2.com/Lab/Library/ImageProcessing/DHALF.TXT
 
 */
 function PixelImage() {
-
     'use strict';
     // public properties
     this.height = undefined;
@@ -48,7 +47,6 @@ function PixelImage() {
 
 PixelImage.create = function(w, h, colorMap, pWidth, pHeight) {
     'use strict';
-
     var result = new PixelImage();
 
     result.pWidth = pWidth === undefined ? 1 : pWidth;
@@ -78,7 +76,6 @@ PixelImage.prototype.assertValid = function() {
  */
 PixelImage.prototype.findColorInMap = function(x, y, color) {
     'use strict';
-
     var i;
 
     for (i = 0; i < this.colorMaps.length; i += 1) {
@@ -99,7 +96,6 @@ PixelImage.prototype.findColorInMap = function(x, y, color) {
  */
 PixelImage.prototype.map = function(pixel, x, y, offsetPixel) {
     'use strict';
-
     var i,
         d,
         minVal,
@@ -122,7 +118,6 @@ PixelImage.prototype.map = function(pixel, x, y, offsetPixel) {
 
 PixelImage.prototype.setPixelIndex = function s(x, y, index) {
     'use strict';
-
     if (this.pixelIndex[y] === undefined) {
         this.pixelIndex[y] = [];
     }
@@ -158,7 +153,6 @@ PixelImage.prototype.getDitherOffset = function(x, y) {
         return row[x];
     }
     return PixelCalculator.emptyPixel;
-
 };
 
 PixelImage.prototype.orderedDither = function(x, y) {
@@ -277,7 +271,6 @@ PixelImage.prototype.toDownloadUrl = function() {
 
 PixelImage.prototype.toUrl = function(mimetype) {
     'use strict';
-
     var canvas = document.createElement('canvas'),
         context = canvas.getContext('2d'),
         imageData,
@@ -309,7 +302,6 @@ PixelImage.prototype.toUrl = function(mimetype) {
 
     context.putImageData(imageData, 0, 0);
     return canvas.toDataURL(mimetype);
-
 };
 
 PixelImage.prototype.addColorMap = function(colorMap) {

@@ -16,13 +16,11 @@
 
 function ColorMap(widthVal, heightVal, resXVal, resYVal) {
     'use strict';
-
     this.colors = [];
     this.width = widthVal;
     this.height = heightVal;
     this.resX = resXVal !== undefined ? resXVal : widthVal;
     this.resY = resYVal !== undefined ? resYVal : heightVal;
-
 }
 
 /**
@@ -73,9 +71,7 @@ ColorMap.prototype.add = function(x, y, color) {
  * @param {Palette} the palette to use for looking up the colors.
  */
 ColorMap.prototype.toImageData = function toImageData(palette) { 
-
     'use strict';
-
     var canvas = document.createElement('canvas'),
         context = canvas.getContext('2d'),
         imageData = context.createImageData(this.width, this.height),
@@ -96,7 +92,6 @@ ColorMap.prototype.toImageData = function toImageData(palette) {
  */
 ColorMap.prototype.getColor = function(x, y) {
     'use strict';
-
     var mX = this.mapX(x),
         mY = this.mapY(y);
 
@@ -137,7 +132,6 @@ ColorMap.prototype.reduceToMax = function(x, y, w, h) {
 
 ColorMap.prototype.subtract = function(colorMap) {
     'use strict';
-
     var x,
         y;
 
@@ -166,7 +160,5 @@ ColorMap.prototype.extractColorMap = function(toColorMap) {
             toColorMap.add(x, y, this.reduceToMax(x, y, rx, ry));
         }
     }
-    
     this.subtract(toColorMap);
-
 };

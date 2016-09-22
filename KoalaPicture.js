@@ -1,9 +1,7 @@
 /*global Uint8Array, PixelImage, ColorMap, BinaryFile */
 /*jslint bitwise: true*/
 function KoalaPicture() {
-
     'use strict';
-
     // 2 bytes load address (default $6000)
     this.loadAddress = new Uint8Array(2);
     this.loadAddress[0] = 0;
@@ -67,11 +65,9 @@ KoalaPicture.convertBitmap = function(pixelImage) {
     for (charY = 0; charY < pixelImage.height; charY += 8) {
         for (charX = 0; charX < pixelImage.width; charX += 4) {
             for (bitmapY = 0; bitmapY < 8; bitmapY += 1) {
-
                 // pack 4 pixels into one byte
                 bitmap[bitmapIndex] =
                     pixelImage.getPixelIndex(charX, charY + bitmapY) << 6 | pixelImage.getPixelIndex(charX + 1, charY + bitmapY) << 4 | pixelImage.getPixelIndex(charX + 2, charY + bitmapY) << 2 | pixelImage.getPixelIndex(charX + 3, charY + bitmapY);
-
                 bitmapIndex += 1;
             }
         }
@@ -84,7 +80,6 @@ KoalaPicture.convertBitmap = function(pixelImage) {
  */
 KoalaPicture.convertScreenram = function(lowerColorMap, upperColorMap) {
     'use strict';
-
     var colorX,
         colorY,
         colorIndex = 0,
@@ -92,7 +87,6 @@ KoalaPicture.convertScreenram = function(lowerColorMap, upperColorMap) {
 
     for (colorY = 0; colorY < lowerColorMap.height; colorY += 8) {
         for (colorX = 0; colorX < lowerColorMap.width; colorX += 4) {
-
             // pack two colors in one byte
             screenRam[colorIndex] =
                 ((upperColorMap.getColor(colorX, colorY) << 4) & 0xf0) | (lowerColorMap.getColor(colorX, colorY) & 0x0f);
@@ -100,7 +94,6 @@ KoalaPicture.convertScreenram = function(lowerColorMap, upperColorMap) {
         }
     }
     return screenRam;
-
 };
 
 /**
@@ -121,9 +114,7 @@ KoalaPicture.convertColorram = function(colorMap) {
             colorIndex += 1;
         }
     }
-
     return colorRam;
-
 };
 
 /**
@@ -136,7 +127,6 @@ KoalaPicture.convertColorram = function(colorMap) {
  */
 KoalaPicture.fromPixelImage = function(pixelImage) {
     'use strict';
-
     var koalaPic = new KoalaPicture();
 
     koalaPic.bitmap = this.convertBitmap(pixelImage);
@@ -145,7 +135,6 @@ KoalaPicture.fromPixelImage = function(pixelImage) {
     koalaPic.background[0] = pixelImage.colorMaps[0].getColor(0, 0);
 
     return koalaPic;
-
 };
 
 /**
@@ -224,8 +213,5 @@ KoalaPicture.toPixelImage = function(koalaPic, palette) {
     }
     // add background color as colorMap 0
     pixelImage.colorMaps[0].add(0, 0, koalaPic.background[0]);
-
-
-
     return pixelImage;
 };
