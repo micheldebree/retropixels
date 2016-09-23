@@ -162,6 +162,5 @@ PixelCalculator.toYUV = function (pixel) {
         pixel[0] * 0.299 + pixel[1] * 0.587 + pixel[2] * 0.114,
         pixel[0] * -0.14713 + pixel[1] * -0.28886 + pixel[2] * 0.436,
         pixel[0] * 0.615 + pixel[1] * -0.51499 + pixel[2] * -0.10001
-        
     ];
 };
