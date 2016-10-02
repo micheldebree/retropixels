@@ -4,10 +4,6 @@ function GraphicModes() {
     'use strict';
 }
 
-GraphicModes.all = {
-    'Multicolor': GraphicModes.c64Multicolor
-};
-
 GraphicModes.c64Multicolor = function() {
     'use strict';
     var pixelImage = PixelImage.create(160, 200, undefined, 2, 1);
@@ -47,3 +43,17 @@ GraphicModes.c64Hires = function() {
     pixelImage.colorMaps.push(new ColorMap(320, 200, 8, 8));
     return pixelImage;
 };
+
+GraphicModes.all = [{
+    key: 'Multicolor',
+    value: GraphicModes.c64Multicolor
+}, {
+    key: 'FLI',
+    value: GraphicModes.c64FLI
+}, {
+    key: 'AFLI',
+    value: GraphicModes.c64AFLI
+}, {
+    key: 'Hires',
+    value: GraphicModes.c64Hires
+}];

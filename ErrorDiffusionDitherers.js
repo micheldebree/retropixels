@@ -42,3 +42,17 @@ ErrorDiffusionDitherer.atkinsonDither = function(pixelImage, x, y, error) {
     pixelImage.addDitherOffset(x + 1, y + 1, ErrorDiffusionDitherer.weighError(error, 1, 8));
     pixelImage.addDitherOffset(x, y + 2, ErrorDiffusionDitherer.weighError(error, 1, 8));
 };
+
+ErrorDiffusionDitherer.all = [{
+    key: 'None',
+    value: function() {}
+}, {
+    key: 'Floyd-Steinberg',
+    value: ErrorDiffusionDitherer.fsDither
+}, {
+    key: 'Jarvis, Judice and Ninke',
+    value: ErrorDiffusionDitherer.jjnDither
+}, {
+    key: 'Atkinson',
+    value: ErrorDiffusionDitherer.atkinsonDither
+}];
