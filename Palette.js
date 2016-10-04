@@ -1,5 +1,5 @@
-/*exported Palette, peptoPalette */
-/*global PixelCalculator*/
+var PixelCalculator = require('./PixelCalculator.js');
+
 function Palette(pixels) {
     'use strict';
     this.pixels = pixels === undefined ? [] : pixels;
@@ -58,7 +58,7 @@ Palette.prototype.mapPixel = function (pixel, offset, weight) {
 };
 
 // TODO: put this somewhere but not in a global variable
-var peptoPalette = new Palette([
+Palette.peptoPalette = new Palette([
     [0, 0, 0, 0xff], // black
     [0xff, 0xff, 0xff, 0xff], // white
     [0x68, 0x37, 0x2b, 0xff], //red
@@ -76,3 +76,5 @@ var peptoPalette = new Palette([
     [0x6c, 0x5e, 0xb5, 0xff], //light blue
     [0x95, 0x95, 0x95, 0xff]  //green
 ]);
+
+module.exports = Palette;

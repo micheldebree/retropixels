@@ -1,4 +1,3 @@
-/*global document, PixelCalculator, ColorMap */
 /*exported PixelImage*/
 /*jslint bitwise: true*/
 /** Create an image with access to individual pixels
@@ -23,6 +22,10 @@ http://www.tannerhelland.com/4660/dithering-eleven-algorithms-source-code/
 http://www.efg2.com/Lab/Library/ImageProcessing/DHALF.TXT
 
 */
+
+var ColorMap = require('./ColorMap.js');
+var PixelCalculator = require('./PixelCalculator.js');
+
 function PixelImage() {
     'use strict';
     // public properties
@@ -252,18 +255,12 @@ PixelImage.prototype.peek = function(x, y) {
     return paletteIndex !== undefined ? this.palette.get(paletteIndex) : PixelImage.emptyPixel;
 };
 
-/**
-    Create a URL that can be used as the src for an Image.
-*/
 PixelImage.prototype.toSrcUrl = function() {
     'use strict';
     this.assertValid();
     return this.toUrl('image/png');
 };
 
-/**
-    Create a URL that can be used to download this as an image.
-*/
 PixelImage.prototype.toDownloadUrl = function() {
     'use strict';
     return this.toSrcUrl().replace('data:image/png', 'data:image/octet-stream');

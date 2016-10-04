@@ -1,4 +1,5 @@
-/*global PixelImage, ColorMap, peptoPalette */
+var PixelImage = require('./PixelImage.js'),
+    ColorMap = require('./ColorMap.js');
 
 function GraphicModes() {
     'use strict';

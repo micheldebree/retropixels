@@ -1,5 +1,4 @@
-/*global PixelCalculator, document */
-/*exported ColorMap*/
+/*global document */
 /**
  * Maps x, y coordinates to a pixel value.
  * The map has a certain resolution specifying the size of an area of the same color.
@@ -13,6 +12,8 @@
  */
 
 // http://stackoverflow.com/questions/8580540/javascript-calling-private-method-from-prototype-method
+
+var PixelCalculator = require('./PixelCalculator');
 
 function ColorMap(widthVal, heightVal, resXVal, resYVal) {
     'use strict';
@@ -161,4 +162,10 @@ ColorMap.prototype.extractColorMap = function(toColorMap) {
         }
     }
     this.subtract(toColorMap);
+};
+
+module.exports = {
+  mapX: mapX,
+  mapY: mapY,
+  extractColorMap: extractColorMap
 };
