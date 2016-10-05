@@ -255,6 +255,7 @@ PixelImage.prototype.peek = function(x, y) {
     return paletteIndex !== undefined ? this.palette.get(paletteIndex) : PixelImage.emptyPixel;
 };
 
+/*
 PixelImage.prototype.toSrcUrl = function() {
     'use strict';
     this.assertValid();
@@ -300,7 +301,7 @@ PixelImage.prototype.toUrl = function(mimetype) {
     context.putImageData(imageData, 0, 0);
     return canvas.toDataURL(mimetype);
 };
-
+*/
 PixelImage.prototype.addColorMap = function(colorMap) {
     'use strict';
     this.colorMaps.push(colorMap);
@@ -318,3 +319,5 @@ PixelImage.prototype.getTransparencyPercentage = function() {
 
     return Math.round((100 * count) / (this.width * this.height));
 };
+
+module.exports = PixelImage;

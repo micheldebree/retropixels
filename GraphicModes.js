@@ -58,3 +58,5 @@ GraphicModes.all = [{
     key: 'Hires',
     value: GraphicModes.c64Hires
 }];
+
+module.exports = GraphicModes;

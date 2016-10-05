@@ -1,26 +1,27 @@
-function OrderedDitherers() {
-    'use strict';
-}
+bayer2x2 = [
+    [1, 3],
+    [4, 2]
+];
 
-OrderedDitherers.all = [{
+bayer4x4 = [
+    [1, 9, 3, 11],
+    [13, 5, 15, 7],
+    [4, 12, 2, 10],
+    [16, 8, 14, 6]
+];
+
+
+all = [{
     key: 'None',
     value: [
         [0]
     ]
 }, {
     key: 'Bayer 2 x 2',
-    value: [
-        [1, 3],
-        [4, 2]
-    ]
+    value: bayer2x2 
 }, {
     key: 'Bayer 4 x 4',
-    value: [
-        [1, 9, 3, 11],
-        [13, 5, 15, 7],
-        [4, 12, 2, 10],
-        [16, 8, 14, 6]
-    ]
+    value: bayer4x4 
 }, {
     key: 'Bayer 8 x 8',
     value: [
@@ -34,3 +35,8 @@ OrderedDitherers.all = [{
         [43, 27, 39, 23, 42, 26, 38, 22]
     ]
 }];
+
+module.exports = {
+  bayer2x2: bayer2x2,
+  bayer4x4: bayer4x4
+};

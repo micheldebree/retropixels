@@ -29,11 +29,12 @@ function isEmpty(pixel) {
 }
 
 function equals(one, other) {
-    return !PixelCalculator.isEmpty(one) && !PixelCalculator.isEmpty(other) && one[0] === other[0] && one[1] === other[1] && one[2] === other[2];
+    return !isEmpty(one) && !isEmpty(other) && one[0] === other[0] && one[1] === other[1] && one[2] === other[2];
 }
 
 emptyPixel = [0, 0, 0, 0];
 
+/*
 function getImageData(img, w, h) {
     var canvas = document.createElement('canvas'),
         context = canvas.getContext('2d');
@@ -57,6 +58,7 @@ function cloneImageData(sourceImageData) {
     context.putImageData(sourceImageData, 0, 0);
     return context.getImageData(0, 0, canvas.width, canvas.height);
 }
+*/
 
 function coordsToindex(imageData, x, y) {
     var result = Math.floor(y) * (imageData.width << 2) + (x << 2);
@@ -65,7 +67,7 @@ function coordsToindex(imageData, x, y) {
 
 function poke(imageData, x, y, pixel) {
     if (pixel !== undefined) {
-        var i = PixelCalculator.coordsToindex(imageData, x, y);
+        var i = coordsToindex(imageData, x, y);
         if (i !== undefined) {
             imageData.data[i] = pixel[0];
             imageData.data[i + 1] = pixel[1];
@@ -76,7 +78,7 @@ function poke(imageData, x, y, pixel) {
 }
 
 function peek(imageData, x, y) {
-    var i = PixelCalculator.coordsToindex(imageData, x, y);
+    var i = coordsToindex(imageData, x, y);
     if (i !== undefined) {
         return [
             imageData.data[i],
@@ -85,9 +87,10 @@ function peek(imageData, x, y) {
             imageData.data[i + 3]
         ];
     }
-    return PixelCalculator.emptyPixel;
+    return emptyPixel;
 }
 
+/*
 function resize(imageData, w, h) {
     var canvas = document.createElement('canvas'),
         context = canvas.getContext('2d');
@@ -98,7 +101,7 @@ function resize(imageData, w, h) {
     context.putImageData(imageData, 0, 0, 0, 0, w, h);
     return context.getImageData(0, 0, w, h);
 }
-
+*/
 function toYUV(pixel) {
     return [
         pixel[0] * 0.299 + pixel[1] * 0.587 + pixel[2] * 0.114,
@@ -116,11 +119,7 @@ module.exports = {
     isEmpty: isEmpty,
     equals: equals,
     emptyPixel: emptyPixel,
-    getImageData: getImageData,
-    cloneImageData: cloneImageData,
-    coordsToindex: coordsToindex,
     peek: peek,
     poke: poke,
-    resize: resize,
     toYUV: toYUV
 };

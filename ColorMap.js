@@ -164,8 +164,4 @@ ColorMap.prototype.extractColorMap = function(toColorMap) {
     this.subtract(toColorMap);
 };
 
-module.exports = {
-  mapX: mapX,
-  mapY: mapY,
-  extractColorMap: extractColorMap
-};
+module.exports = ColorMap;
