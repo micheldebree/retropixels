@@ -1,14 +1,11 @@
 var PixelImage = require('./PixelImage.js'),
     ColorMap = require('./ColorMap.js');
+    Palette = require('./Palette.js');
 
-function GraphicModes() {
-    'use strict';
-}
-
-GraphicModes.c64Multicolor = function() {
+c64Multicolor = function() {
     'use strict';
     var pixelImage = PixelImage.create(160, 200, undefined, 2, 1);
-    pixelImage.palette = peptoPalette;
+    pixelImage.palette = Palette.peptoPalette;
     pixelImage.colorMaps.push(new ColorMap(160, 200));
     pixelImage.colorMaps.push(new ColorMap(160, 200, 4, 8));
     pixelImage.colorMaps.push(new ColorMap(160, 200, 4, 8));
@@ -16,10 +13,10 @@ GraphicModes.c64Multicolor = function() {
     return pixelImage;
 };
 
-GraphicModes.c64FLI = function() {
+c64FLI = function() {
     'use strict';
     var pixelImage = PixelImage.create(160, 200, undefined, 2, 1);
-    pixelImage.palette = peptoPalette;
+    pixelImage.palette = Palette.peptoPalette;
     pixelImage.colorMaps.push(new ColorMap(160, 200));
     pixelImage.colorMaps.push(new ColorMap(160, 200, 4, 8));
     pixelImage.colorMaps.push(new ColorMap(160, 200, 4, 1));
@@ -27,36 +24,27 @@ GraphicModes.c64FLI = function() {
     return pixelImage;
 };
 
-GraphicModes.c64AFLI = function() {
+c64AFLI = function() {
     'use strict';
     var pixelImage = PixelImage.create(320, 200, undefined, 1, 1);
-    pixelImage.palette = peptoPalette;
+    pixelImage.palette = Palette.peptoPalette;
     pixelImage.colorMaps.push(new ColorMap(320, 200, 8, 8));
     pixelImage.colorMaps.push(new ColorMap(320, 200, 8, 1));
     return pixelImage;
 };
 
-GraphicModes.c64Hires = function() {
+c64Hires = function() {
     'use strict';
     var pixelImage = PixelImage.create(320, 200, undefined, 1, 1);
-    pixelImage.palette = peptoPalette;
+    pixelImage.palette = Palette.peptoPalette;
     pixelImage.colorMaps.push(new ColorMap(320, 200, 8, 8));
     pixelImage.colorMaps.push(new ColorMap(320, 200, 8, 8));
     return pixelImage;
 };
 
-GraphicModes.all = [{
-    key: 'Multicolor',
-    value: GraphicModes.c64Multicolor
-}, {
-    key: 'FLI',
-    value: GraphicModes.c64FLI
-}, {
-    key: 'AFLI',
-    value: GraphicModes.c64AFLI
-}, {
-    key: 'Hires',
-    value: GraphicModes.c64Hires
-}];
-
-module.exports = GraphicModes;
+module.exports = {
+    c64Multicolor: c64Multicolor,
+    c64FLI: c64FLI,
+    c64AFLI: c64AFLI,
+    c64Hires: c64Hires
+};
