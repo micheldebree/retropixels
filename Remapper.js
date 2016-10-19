@@ -5,7 +5,8 @@
       'use strict';
       var w = imageData.width,
           h = imageData.height,
-          unrestrictedImage = PixelImage.create(w, h, new ColorMap(w, h, 1, 1), targetPixelImage.pWidth, targetPixelImage.pHeight);
+          unrestrictedImage = PixelImage.create(w, h, targetPixelImage.pWidth, targetPixelImage.pHeight);
+      unrestrictedImage.colorMaps.push(new ColorMap(w, h, 1, 1));
       unrestrictedImage.palette = targetPixelImage.palette;
       unrestrictedImage.dither = targetPixelImage.dither;
       unrestrictedImage.mappingWeight = targetPixelImage.mappingWeight;

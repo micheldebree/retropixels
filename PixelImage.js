@@ -48,7 +48,7 @@ function PixelImage() {
 
 }
 
-PixelImage.create = function(w, h, colorMap, pWidth, pHeight) {
+PixelImage.create = function(w, h, pWidth, pHeight) {
     'use strict';
     var result = new PixelImage();
 
@@ -56,9 +56,6 @@ PixelImage.create = function(w, h, colorMap, pWidth, pHeight) {
     result.pHeight = pHeight === undefined ? 1 : pHeight;
     result.height = h;
     result.width = w;
-    if (colorMap !== undefined) {
-        result.colorMaps.push(colorMap);
-    }
 
     return result;
 };

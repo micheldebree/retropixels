@@ -18,12 +18,21 @@ peptoPalette = new Palette([
     [0x6c, 0x6c, 0x6c, 0xff], //medium gray
     [0x9a, 0xd2, 0x84, 0xff], //light green
     [0x6c, 0x5e, 0xb5, 0xff], //light blue
-    [0x95, 0x95, 0x95, 0xff]  //green
+    [0x95, 0x95, 0x95, 0xff] //green
 ]);
+
+c64Unlimited = {
+    create: function() {
+        var pixelImage = PixelImage.create(320, 200, 1, 1);
+        pixelImage.palette = peptoPalette;
+        pixelImage.colorMaps.push(new ColorMap(320, 200, 1, 1));
+        return pixelImage;
+    }
+};
 
 c64Multicolor = {
     create: function() {
-        var pixelImage = PixelImage.create(160, 200, undefined, 2, 1);
+        var pixelImage = PixelImage.create(160, 200, 2, 1);
         pixelImage.palette = peptoPalette;
         pixelImage.colorMaps.push(new ColorMap(160, 200));
         pixelImage.colorMaps.push(new ColorMap(160, 200, 4, 8));
@@ -35,7 +44,7 @@ c64Multicolor = {
 
 c64FLI = {
     create: function() {
-        var pixelImage = PixelImage.create(160, 200, undefined, 2, 1);
+        var pixelImage = PixelImage.create(160, 200, 2, 1);
         pixelImage.palette = peptoPalette;
         pixelImage.colorMaps.push(new ColorMap(160, 200));
         pixelImage.colorMaps.push(new ColorMap(160, 200, 4, 8));
@@ -47,7 +56,7 @@ c64FLI = {
 
 c64AFLI = {
     create: function() {
-        var pixelImage = PixelImage.create(320, 200, undefined, 1, 1);
+        var pixelImage = PixelImage.create(320, 200, 1, 1);
         pixelImage.palette = peptoPalette;
         pixelImage.colorMaps.push(new ColorMap(320, 200, 8, 8));
         pixelImage.colorMaps.push(new ColorMap(320, 200, 8, 1));
@@ -57,7 +66,7 @@ c64AFLI = {
 
 c64Hires = {
     create: function() {
-        var pixelImage = PixelImage.create(320, 200, undefined, 1, 1);
+        var pixelImage = PixelImage.create(320, 200, 1, 1);
         pixelImage.palette = peptoPalette;
         pixelImage.colorMaps.push(new ColorMap(320, 200, 8, 8));
         pixelImage.colorMaps.push(new ColorMap(320, 200, 8, 8));
@@ -66,6 +75,7 @@ c64Hires = {
 };
 
 module.exports = {
+    c64Unlimited: c64Unlimited,
     c64Multicolor: c64Multicolor,
     c64FLI: c64FLI,
     c64AFLI: c64AFLI,

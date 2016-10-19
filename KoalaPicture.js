@@ -144,7 +144,7 @@ KoalaPicture.toPixelImage = function(koalaPic, palette) {
     'use strict';
     var imageW = 160,
         imageH = 200,
-        pixelImage = new PixelImage.create(imageW, imageH, undefined, 2, 1),
+        pixelImage = new PixelImage.create(imageW, imageH, 2, 1),
         charX,
         charY,
         bitmapY,
