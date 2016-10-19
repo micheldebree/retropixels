@@ -26,13 +26,13 @@ http://www.efg2.com/Lab/Library/ImageProcessing/DHALF.TXT
 var ColorMap = require('./ColorMap.js');
 var PixelCalculator = require('./PixelCalculator.js');
 
-function PixelImage() {
+function PixelImage(width, height, pWidth, pHeight) {
     'use strict';
     // public properties
-    this.height = undefined;
-    this.width = undefined;
-    this.pWidth = 1; // aspect width of one pixel
-    this.pHeight = 1; // aspect height of one pixel
+    this.width = width;
+    this.height = height;
+    this.pWidth = pWidth === undefined ? 1 : pWidth; // aspect width of one pixel
+    this.pHeight = pHeight === undefined ? 1 : pHeight; // aspect height of one pixel
     this.colorMaps = []; // maps x,y to a color
     this.palette = undefined; // the palette for all colors used in this image
     this.pixelIndex = []; // maps pixel x,y to a colormap
@@ -47,18 +47,6 @@ function PixelImage() {
     this.mappingWeight = [1, 1, 1];
 
 }
-
-PixelImage.create = function(w, h, pWidth, pHeight) {
-    'use strict';
-    var result = new PixelImage();
-
-    result.pWidth = pWidth === undefined ? 1 : pWidth;
-    result.pHeight = pHeight === undefined ? 1 : pHeight;
-    result.height = h;
-    result.width = w;
-
-    return result;
-};
 
 PixelImage.prototype.assertValid = function() {
     'use strict';

@@ -23,7 +23,7 @@ peptoPalette = new Palette([
 
 c64Unlimited = {
     create: function() {
-        var pixelImage = PixelImage.create(320, 200, 1, 1);
+        var pixelImage = new PixelImage(320, 200);
         pixelImage.palette = peptoPalette;
         pixelImage.colorMaps.push(new ColorMap(320, 200, 1, 1));
         return pixelImage;
@@ -32,7 +32,7 @@ c64Unlimited = {
 
 c64Multicolor = {
     create: function() {
-        var pixelImage = PixelImage.create(160, 200, 2, 1);
+        var pixelImage = new PixelImage(160, 200, 2, 1);
         pixelImage.palette = peptoPalette;
         pixelImage.colorMaps.push(new ColorMap(160, 200));
         pixelImage.colorMaps.push(new ColorMap(160, 200, 4, 8));
@@ -44,7 +44,7 @@ c64Multicolor = {
 
 c64FLI = {
     create: function() {
-        var pixelImage = PixelImage.create(160, 200, 2, 1);
+        var pixelImage = new PixelImage(160, 200, 2, 1);
         pixelImage.palette = peptoPalette;
         pixelImage.colorMaps.push(new ColorMap(160, 200));
         pixelImage.colorMaps.push(new ColorMap(160, 200, 4, 8));
@@ -56,7 +56,7 @@ c64FLI = {
 
 c64AFLI = {
     create: function() {
-        var pixelImage = PixelImage.create(320, 200, 1, 1);
+        var pixelImage = new PixelImage(320, 200);
         pixelImage.palette = peptoPalette;
         pixelImage.colorMaps.push(new ColorMap(320, 200, 8, 8));
         pixelImage.colorMaps.push(new ColorMap(320, 200, 8, 1));
@@ -66,7 +66,7 @@ c64AFLI = {
 
 c64Hires = {
     create: function() {
-        var pixelImage = PixelImage.create(320, 200, 1, 1);
+        var pixelImage = new PixelImage(320, 200);
         pixelImage.palette = peptoPalette;
         pixelImage.colorMaps.push(new ColorMap(320, 200, 8, 8));
         pixelImage.colorMaps.push(new ColorMap(320, 200, 8, 8));
