@@ -70,7 +70,7 @@ ColorMap.prototype.add = function(x, y, color) {
  * Convert to an image so it can be displayed.
  * @param {Palette} the palette to use for looking up the colors.
  */
-ColorMap.prototype.toImageData = function toImageData(palette) { 
+ColorMap.prototype.toImageData = function toImageData(palette) {
     'use strict';
     var canvas = document.createElement('canvas'),
         context = canvas.getContext('2d'),
@@ -85,7 +85,7 @@ ColorMap.prototype.toImageData = function toImageData(palette) {
     }
 
     return imageData;
-}; 
+};
 
 /**
  * Get the palette index at x, y coordinate.
@@ -99,7 +99,19 @@ ColorMap.prototype.getColor = function(x, y) {
         return this.colors[mX][mY];
     }
     return undefined;
-}; 
+};
+
+ColorMap.prototype.clear = function() {
+'use strict';
+    var x,y;
+ for (y = 0; y < this.height; y += 1) {
+        for (x = 0; x < this.width; x += 1) {
+            this.add(x,y, undefined);
+        }
+    }
+
+    this.colors = [];
+};
 
 /**
   Get the color that is most present in an area of the colormap.
@@ -136,7 +148,7 @@ ColorMap.prototype.subtract = function(colorMap) {
         y;
 
     for (x = 0; x < this.width; x += this.resX) {
-        for (y = 0; y < this.height; y += this.resY) {        
+        for (y = 0; y < this.height; y += this.resY) {
             if (this.getColor(x, y) === colorMap.getColor(x, y)) {
                 this.add(x, y, undefined);
             }

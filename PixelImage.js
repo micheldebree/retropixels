@@ -38,7 +38,7 @@ function PixelImage() {
         [0]
     ]; // n x n bayer matrix for ordered dithering
     this.errorDiffusionDither = function() {};
-    
+
     // weight per pixel channel (RGB or YUV) when calculating distance
     // [1, 1, 1] is equal weight, [1, 0, 0] in combination with YUV is phychedelic mode
     this.mappingWeight = [1, 1, 1];
@@ -76,17 +76,31 @@ PixelImage.prototype.assertValid = function() {
  */
 PixelImage.prototype.findColorInMap = function(x, y, color) {
     'use strict';
-    var i;
-
-    for (i = 0; i < this.colorMaps.length; i += 1) {
+    for (var i = 0; i < this.colorMaps.length; i += 1) {
         if (color === this.colorMaps[i].getColor(x, y)) {
             return i;
         }
     }
-
     return undefined;
 };
 
+PixelImage.prototype.clear = function() {
+  'use strict';
+    var x,y, i;
+
+
+ for (x = 0; x < this.width; x += 1) {
+        for (y = 0; y < this.height; y += 1) {
+            this.setPixelIndex(x, y, PixelCalculator.emptyPixel);
+        }
+    }
+
+ for (i = 0; i < this.colorMaps.length; i += 1) {
+        this.colorMaps[i].clear();
+    }
+
+    this.pixelIndex = [];
+};
 
 /**
  * Map a pixel to the closest available Colormap.
@@ -171,32 +185,25 @@ PixelImage.prototype.orderedDither = function(x, y) {
 PixelImage.prototype.poke = function(x, y, pixel) {
     'use strict';
 
-    var mappedIndex,
-        mappedPixel,
-        colorMap,
-        offsetPixel,
-        error;
-
-    offsetPixel = this.getDitherOffset(x, y);
+    var offsetPixel = this.getDitherOffset(x, y);
 
     // map to closest color in palette
-    mappedIndex = this.palette.mapPixel(pixel, offsetPixel, this.mappingWeight);
-
+    var mappedIndex = this.palette.mapPixel(pixel, offsetPixel, this.mappingWeight);
 
     // use the error for dithering
-    mappedPixel = this.palette.get(mappedIndex);
-    error = PixelCalculator.substract(mappedPixel, pixel);
+    var mappedPixel = this.palette.get(mappedIndex);
+    var error = PixelCalculator.substract(mappedPixel, pixel);
     this.orderedDither(x, y, pixel);
     this.errorDiffusionDither(this, x, y, error);
 
     // try to reuse existing color map
-    colorMap = this.findColorInMap(x, y, mappedIndex);
-    
+    var colorMap = this.findColorInMap(x, y, mappedIndex);
+
     // else see if there is there is a map with an empty pixel
     if (colorMap === undefined) {
         colorMap = this.findColorInMap(x, y, undefined);
     }
-    
+
     if (colorMap !== undefined) {
         this.colorMaps[colorMap].add(x, y, mappedIndex);
     } else {
@@ -205,9 +212,7 @@ PixelImage.prototype.poke = function(x, y, pixel) {
             colorMap = this.map(pixel, x, y, offsetPixel);
         }
     }
-
     this.setPixelIndex(x, y, colorMap);
-
 };
 
 PixelImage.prototype.drawImageData = function(imageData) {

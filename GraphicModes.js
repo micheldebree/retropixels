@@ -4,6 +4,14 @@ function GraphicModes() {
     'use strict';
 }
 
+GraphicModes.c64Fake = function() {
+    'use strict';
+    var pixelImage = PixelImage.create(160, 200, undefined, 2, 1);
+    pixelImage.palette = peptoPalette;
+    pixelImage.colorMaps.push(new ColorMap(160, 200, 1, 1));
+    return pixelImage;
+};
+
 GraphicModes.c64Multicolor = function() {
     'use strict';
     var pixelImage = PixelImage.create(160, 200, undefined, 2, 1);
