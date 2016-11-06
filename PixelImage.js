@@ -148,7 +148,7 @@ function PixelImage(width, height, pWidth, pHeight) {
         setPixelIndex(x, y, colorMap);
 
     };
-    
+
     /**
      * Get the value of a particular pixel.
      * @param {int} x X coordinate
@@ -161,13 +161,6 @@ function PixelImage(width, height, pWidth, pHeight) {
     };
 
 }
-
-PixelImage.prototype.assertValid = function() {
-    'use strict';
-    if (this.width === undefined || this.height === undefined) {
-        throw new Error('PixelImage has undefined dimensions.');
-    }
-};
 
 PixelImage.prototype.setDitherOffset = function(x, y, offsetPixel) {
     'use strict';

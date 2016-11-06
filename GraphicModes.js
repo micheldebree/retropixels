@@ -21,6 +21,25 @@ peptoPalette = new Palette([
     [0x95, 0x95, 0x95, 0xff] //green
 ]);
 
+spectrumPallete = new Palette([
+
+    [0, 0, 0, 0xff], // black
+    [0, 0, 0xd7], // blue
+    [0xd7, 0, 0], // red
+    [0xd7, 0, 0xd7], //magenta
+    [0, 0xd7, 0], //green
+    [0, 0xd7, 0xd7], //green
+    [0xd7, 0xd7, 0], // yellow
+    [0xd7, 0xd7, 0xd7], // gray
+    [0, 0, 0xff], // blue
+    [0xff, 0, 0], // red
+    [0xff, 0, 0xff], //magenta
+    [0, 0xff, 0], //green
+    [0, 0xff, 0xff], //green
+    [0xff, 0xff, 0], // yellow
+    [0xff, 0xff, 0xff] // gray
+]);
+
 c64Unlimited = {
     create: function() {
         var pixelImage = new PixelImage(320, 200);
@@ -74,10 +93,21 @@ c64Hires = {
     }
 };
 
+spectrumStandard = {
+    create: function() {
+        var pixelImage = new PixelImage(256, 192);
+        pixelImage.palette = spectrumPallete;
+        pixelImage.colorMaps.push(new ColorMap(256, 192, 8, 8));
+        pixelImage.colorMaps.push(new ColorMap(256, 192, 8, 8));
+        return pixelImage;
+    }
+};
+
 module.exports = {
     c64Unlimited: c64Unlimited,
     c64Multicolor: c64Multicolor,
     c64FLI: c64FLI,
     c64AFLI: c64AFLI,
-    c64Hires: c64Hires
+    c64Hires: c64Hires,
+    spectrumStandard: spectrumStandard
 };
