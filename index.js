@@ -1,3 +1,4 @@
+/*jshint esversion: 6 */
 var cli = require('commander'),
     fs = require('fs-extra'),
     jimp = require("jimp"),
@@ -5,7 +6,9 @@ var cli = require('commander'),
     pixelCalculator = require('./PixelCalculator.js'),
     orderedDitherers = require('./OrderedDitherers.js'),
     remapper = require('./Remapper.js'),
-    graphicMode = graphicModes.c64Multicolor;
+    koala = require('./KoalaPicture.js'),
+    graphicMode = graphicModes.c64Multicolor,
+    pixelImage = graphicMode.create();
 
 cli.version('0.1.0')
     .usage('[options] <infile> [outfile]')
@@ -27,9 +30,6 @@ jimp.read(inFile, function(err, jimpImage) {
     if (err) throw err;
 
     jimpImage.resize(graphicMode.width, graphicMode.height);
-
-    var pixelImage = graphicMode.create();
-
     pixelImage.dither = orderedDitherers.bayer4x4;
     remapper.optimizeColorMaps(jimpImage.bitmap, pixelImage);
     pixelImage.drawImageData(jimpImage.bitmap);
@@ -44,6 +44,13 @@ jimp.read(inFile, function(err, jimpImage) {
 
     jimpImage.write(outFile, function() {
         console.log('Written ' + outFile);
+    });
+
+    koalaPic = koala.fromPixelImage(pixelImage);
+    var koalaFile = inFile + '.kla';
+    fs.writeFile(koalaFile, new Buffer(koalaPic.toBytes()), (err) => {
+        if (err) throw err;
+        console.log('Written ' + koalaFile);
     });
 
 });

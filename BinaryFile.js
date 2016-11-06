@@ -1,4 +1,3 @@
-/*global Uint8Array, Blob, URL */
 function BinaryFile() {
     'use strict';
 }
@@ -6,7 +5,7 @@ function BinaryFile() {
 /**
  * Concatenate multiple 8-bit array buffers into one.
  */
-BinaryFile.prototype.concat = function (arrayBuffers) {
+BinaryFile.prototype.concat = function(arrayBuffers) {
     'use strict';
     var i,
         ii,
@@ -29,14 +28,6 @@ BinaryFile.prototype.concat = function (arrayBuffers) {
     }
 
     return result;
-
-
 };
 
-/**
- * Get a URL for downloading an array of bytes as a file.
- */
-BinaryFile.prototype.toObjectUrl = function (byteArray) {
-    'use strict';
-    return URL.createObjectURL(new Blob([byteArray], {type: 'application/octet-binary'}));
-};
+module.exports = BinaryFile;

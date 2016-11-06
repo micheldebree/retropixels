@@ -92,13 +92,13 @@ function PixelImage(width, height, pWidth, pHeight) {
         pixelIndex[y][x] = index;
     };
 
-    var getPixelIndex = function(x, y) {
+    this.getPixelIndex = function(x, y) {
         var row = pixelIndex[y];
         return row !== undefined ? row[x] : undefined;
     };
 
     var getPaletteIndex = function(x, y) {
-        var ci = getPixelIndex(x, y);
+        var ci = that.getPixelIndex(x, y);
         return ci !== undefined ? that.colorMaps[ci].getColor(x, y) : undefined;
     };
 

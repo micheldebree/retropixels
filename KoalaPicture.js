@@ -1,5 +1,8 @@
 /*global Uint8Array, PixelImage, ColorMap, BinaryFile */
 /*jslint bitwise: true*/
+
+var BinaryFile = require('./BinaryFile.js');
+
 function KoalaPicture() {
     'use strict';
     // 2 bytes load address (default $6000)
