@@ -14,7 +14,6 @@ function KoalaPicture() {
     this.colorRam = new Uint8Array(1000);
     // 1 byte background color
     this.background = new Uint8Array(1);
-
 }
 
 KoalaPicture.prototype = new BinaryFile();
@@ -215,3 +214,5 @@ KoalaPicture.toPixelImage = function(koalaPic, palette) {
     pixelImage.colorMaps[0].add(0, 0, koalaPic.background[0]);
     return pixelImage;
 };
+
+module.exports = KoalaPicture;

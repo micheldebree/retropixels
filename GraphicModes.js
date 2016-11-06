@@ -50,6 +50,10 @@ c64Unlimited = {
 };
 
 c64Multicolor = {
+    width: 160,
+    height: 200,
+    pixelWidth: 2,
+    pixelHeight: 1,
     create: function() {
         var pixelImage = new PixelImage(160, 200, 2, 1);
         pixelImage.palette = peptoPalette;
@@ -84,6 +88,10 @@ c64AFLI = {
 };
 
 c64Hires = {
+    width: 320,
+    height: 200,
+    pixelWidth: 1,
+    pixelHeight: 1,
     create: function() {
         var pixelImage = new PixelImage(320, 200);
         pixelImage.palette = peptoPalette;
