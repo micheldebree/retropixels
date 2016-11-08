@@ -7,11 +7,12 @@ var cli = require('commander'),
     orderedDitherers = require('./OrderedDitherers.js'),
     remapper = require('./Remapper.js'),
     koala = require('./KoalaPicture.js'),
+    path = require('path'),
     graphicMode = graphicModes.c64Multicolor,
     pixelImage = graphicMode.create();
 
 cli.version('0.1.0')
-    .usage('[options] <infile> [outfile]')
+    .usage('[options] <infile> <outfile>')
     .parse(process.argv);
 
 var inFile = cli.args[0],
@@ -23,34 +24,82 @@ if (inFile === undefined) {
 }
 
 if (outFile === undefined) {
-    outFile = inFile + '-retro.png';
+    console.error("Output file missing.");
+    cli.help();
 }
 
-jimp.read(inFile, function(err, jimpImage) {
+function savePrg(pixelImage) {
+    var koalaImage = koala.fromPixelImage(pixelImage);
+    fs.readFile('KoalaShower.prg', function(err, viewerCode) {
+        if (err) throw err;
+        var koalaBuffer = new Buffer(koalaImage.toBytes()),
+            writeBuffer = Buffer.concat([viewerCode, koalaBuffer]);
+        fs.writeFile(outFile, writeBuffer, function(err) {
+            if (err) throw err;
+            console.log('Written Commodore 64 executable ' + outFile);
+        });
+    });
+}
+
+function saveKoala(pixelImage) {
+    var koalaImage = koala.fromPixelImage(pixelImage);
+    fs.writeFile(outFile, new Buffer(koalaImage.toBytes()), function(err) {
+        if (err) throw err;
+        console.log('Written Koala Painter file ' + outFile);
+    });
+}
+
+function savePng(pixelImage) {
+    var x,
+        y,
+        jimpImage = new jimp(pixelImage.width, pixelImage.height, function(err, image) {
+            if (err) throw err;
+            for (y = 0; y < image.bitmap.height; y += 1) {
+                for (x = 0; x < image.bitmap.width; x += 1) {
+                    pixelCalculator.poke(image.bitmap, x, y, pixelImage.peek(x, y));
+                }
+            }
+            image.resize(pixelImage.width * pixelImage.pWidth, pixelImage.height * pixelImage.pHeight);
+            image.write(outFile, function() {
+                console.log('Written PNG image ' + outFile);
+            });
+        });
+}
+
+function cropFill(jimpImage, destWidth, destHeight) {
+    var srcWidth = jimpImage.bitmap.width,
+        srcHeight = jimpImage.bitmap.height,
+        destratio = destWidth / destHeight,
+        srcratio = srcWidth / srcHeight,
+        cropwidth = Math.round(srcratio > destratio ? srcHeight * destratio : srcWidth),
+        cropheight = Math.round(srcratio > destratio ? srcHeight : srcWidth / destratio),
+        sourceLeft = Math.round((srcWidth - cropwidth) / 2),
+        sourceTop = Math.round((srcHeight - cropheight) / 2);
+    jimpImage.crop(sourceLeft, sourceTop, cropwidth, cropheight);
+}
+
+jimp.read(inFile, (err, jimpImage) => {
     if (err) throw err;
 
+    cropFill(jimpImage, graphicMode.width * graphicMode.pixelWidth, graphicMode.height * graphicMode.pixelHeight);
     jimpImage.resize(graphicMode.width, graphicMode.height);
     pixelImage.dither = orderedDitherers.bayer4x4;
     remapper.optimizeColorMaps(jimpImage.bitmap, pixelImage);
     pixelImage.drawImageData(jimpImage.bitmap);
 
-    for (y = 0; y < jimpImage.bitmap.height; y += 1) {
-        for (x = 0; x < jimpImage.bitmap.width; x += 1) {
-            pixelCalculator.poke(jimpImage.bitmap, x, y, pixelImage.peek(x, y));
-        }
+    outExtension = path.extname(outFile);
+
+    if ('.kla' === outExtension) {
+      saveKoala(pixelImage);
     }
-
-    jimpImage.resize(graphicMode.width * graphicMode.pixelWidth, graphicMode.height * graphicMode.pixelHeight);
-
-    jimpImage.write(outFile, function() {
-        console.log('Written ' + outFile);
-    });
-
-    koalaPic = koala.fromPixelImage(pixelImage);
-    var koalaFile = inFile + '.kla';
-    fs.writeFile(koalaFile, new Buffer(koalaPic.toBytes()), (err) => {
-        if (err) throw err;
-        console.log('Written ' + koalaFile);
-    });
+    else if ('.prg' === outExtension) {
+      savePrg(pixelImage);
+    }
+    else if ('.png' === outExtension) {
+      savePng(pixelImage);
+    }
+    else {
+      console.error('Unknown file extension ' + outExtension + ', valid extensions are .png, .kla and .prg');
+    }
 
 });

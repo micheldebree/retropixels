@@ -1,6 +1,3 @@
-/*global Uint8Array, PixelImage, ColorMap, BinaryFile */
-/*jslint bitwise: true*/
-
 var BinaryFile = require('./BinaryFile.js');
 
 function KoalaPicture() {
