@@ -1,3 +1,6 @@
 node_modules
 *.png
 *.kla
+*.sym
+*.vs
+*.log
