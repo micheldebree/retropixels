@@ -64,7 +64,6 @@ function PixelImage(width, height, pWidth, pHeight) {
      * @returns {int} Colormap index for the closest Colormap
      */
     var map = function(pixel, x, y, offsetPixel) {
-
         var i,
             d,
             minVal,
@@ -80,9 +79,7 @@ function PixelImage(width, height, pWidth, pHeight) {
                 minI = i;
             }
         }
-
         return minI;
-
     };
 
     var setPixelIndex = function s(x, y, index) {
@@ -109,7 +106,6 @@ function PixelImage(width, height, pWidth, pHeight) {
      * @param {Array} pixel - Pixel values [r, g, b, a]
      */
     this.poke = function(x, y, pixel) {
-
         var mappedIndex,
             mappedPixel,
             colorMap,
@@ -121,7 +117,6 @@ function PixelImage(width, height, pWidth, pHeight) {
         // map to closest color in palette
         mappedIndex = this.palette.mapPixel(pixel, offsetPixel, this.mappingWeight);
 
-
         // use the error for dithering
         mappedPixel = this.palette.get(mappedIndex);
         error = PixelCalculator.substract(mappedPixel, pixel);
@@ -131,7 +126,7 @@ function PixelImage(width, height, pWidth, pHeight) {
         // try to reuse existing color map
         colorMap = findColorInMap(x, y, mappedIndex);
 
-        // else see if there is there is a map with an empty pixel
+        // else see if there is a map with an empty pixel
         if (colorMap === undefined) {
             colorMap = findColorInMap(x, y, undefined);
         }
@@ -139,14 +134,9 @@ function PixelImage(width, height, pWidth, pHeight) {
         if (colorMap !== undefined) {
             this.colorMaps[colorMap].add(x, y, mappedIndex);
         } else {
-            // if all else fails, map to closest existing color
-            if (colorMap === undefined) {
-                colorMap = map(pixel, x, y, offsetPixel);
-            }
+            colorMap = map(pixel, x, y, offsetPixel);
         }
-
         setPixelIndex(x, y, colorMap);
-
     };
 
     /**
@@ -159,7 +149,6 @@ function PixelImage(width, height, pWidth, pHeight) {
         var paletteIndex = getPaletteIndex(x, y);
         return paletteIndex !== undefined ? this.palette.get(paletteIndex) : PixelImage.emptyPixel;
     };
-
 }
 
 PixelImage.prototype.setDitherOffset = function(x, y, offsetPixel) {
