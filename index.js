@@ -30,7 +30,7 @@ if (outFile === undefined) {
 
 function savePrg(pixelImage) {
     var koalaImage = koala.fromPixelImage(pixelImage);
-    fs.readFile('KoalaShower.prg', function(err, viewerCode) {
+    fs.readFile('./c64/KoalaShower.prg', function(err, viewerCode) {
         if (err) throw err;
         var koalaBuffer = new Buffer(koalaImage.toBytes()),
             writeBuffer = Buffer.concat([viewerCode, koalaBuffer]);

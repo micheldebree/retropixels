@@ -22,7 +22,6 @@ peptoPalette = new Palette([
 ]);
 
 spectrumPallete = new Palette([
-
     [0, 0, 0, 0xff], // black
     [0, 0, 0xd7], // blue
     [0xd7, 0, 0], // red
@@ -40,7 +39,12 @@ spectrumPallete = new Palette([
     [0xff, 0xff, 0xff] // gray
 ]);
 
+// C64 resolution and palette, but no attribute restrictions (not supported on real c64)
 c64Unlimited = {
+    width: 320,
+    height: 200,
+    pixelWidth: 1,
+    pixelHeight: 1,
     create: function() {
         var pixelImage = new PixelImage(320, 200);
         pixelImage.palette = peptoPalette;
@@ -49,6 +53,7 @@ c64Unlimited = {
     }
 };
 
+// C64 standard multicolor mode
 c64Multicolor = {
     width: 160,
     height: 200,
@@ -65,7 +70,27 @@ c64Multicolor = {
     }
 };
 
+// C64 standard high resolution mode
+c64Hires = {
+    width: 320,
+    height: 200,
+    pixelWidth: 1,
+    pixelHeight: 1,
+    create: function() {
+        var pixelImage = new PixelImage(320, 200);
+        pixelImage.palette = peptoPalette;
+        pixelImage.colorMaps.push(new ColorMap(320, 200, 8, 8));
+        pixelImage.colorMaps.push(new ColorMap(320, 200, 8, 8));
+        return pixelImage;
+    }
+};
+
+// C64 FLI mode
 c64FLI = {
+    width: 160,
+    height: 200,
+    pixelWidth: 2,
+    pixelHeight: 1,
     create: function() {
         var pixelImage = new PixelImage(160, 200, 2, 1);
         pixelImage.palette = peptoPalette;
@@ -77,17 +102,8 @@ c64FLI = {
     }
 };
 
+// C64 AFLI mode
 c64AFLI = {
-    create: function() {
-        var pixelImage = new PixelImage(320, 200);
-        pixelImage.palette = peptoPalette;
-        pixelImage.colorMaps.push(new ColorMap(320, 200, 8, 8));
-        pixelImage.colorMaps.push(new ColorMap(320, 200, 8, 1));
-        return pixelImage;
-    }
-};
-
-c64Hires = {
     width: 320,
     height: 200,
     pixelWidth: 1,
@@ -96,7 +112,7 @@ c64Hires = {
         var pixelImage = new PixelImage(320, 200);
         pixelImage.palette = peptoPalette;
         pixelImage.colorMaps.push(new ColorMap(320, 200, 8, 8));
-        pixelImage.colorMaps.push(new ColorMap(320, 200, 8, 8));
+        pixelImage.colorMaps.push(new ColorMap(320, 200, 8, 1));
         return pixelImage;
     }
 };

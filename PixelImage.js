@@ -1,5 +1,3 @@
-/*exported PixelImage*/
-/*jslint bitwise: true*/
 /** Create an image with access to individual pixels
 
     A pixel's color at (x,y) is determined through 2 indirections:
@@ -46,10 +44,10 @@ function PixelImage(width, height, pWidth, pHeight) {
     // [1, 1, 1] is equal weight, [1, 0, 0] in combination with YUV is phychedelic mode
     this.mappingWeight = [1, 1, 1];
 
-    var that = this;
-
-    var findColorInMap = function(x, y, color) {
-        for (var i = 0; i < that.colorMaps.length; i += 1) {
+    var that = this,
+        findColorInMap = function(x, y, color) {
+            var i;
+        for (i = 0; i < that.colorMaps.length; i += 1) {
             if (color === that.colorMaps[i].getColor(x, y)) {
                 return i;
             }
