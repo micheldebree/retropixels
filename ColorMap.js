@@ -63,29 +63,7 @@ ColorMap.prototype.add = function(x, y, color) {
         this.colors[rx] = [];
     }
     this.colors[rx][this.mapY(y)] = color;
-
 };
-
-/**
- * Convert to an image so it can be displayed.
- * @param {Palette} the palette to use for looking up the colors.
- */
-// ColorMap.prototype.toImageData = function toImageData(palette) {
-//     'use strict';
-//     var canvas = document.createElement('canvas'),
-//         context = canvas.getContext('2d'),
-//         imageData = context.createImageData(this.width, this.height),
-//         x,
-//         y;
-//
-//     for (y = 0; y < this.height; y += 1) {
-//         for (x = 0; x < this.width; x += 1) {
-//             PixelCalculator.poke(imageData, x, y, palette.get(this.getColor(x, y)));
-//         }
-//     }
-//
-//     return imageData;
-// };
 
 /**
  * Get the palette index at x, y coordinate.

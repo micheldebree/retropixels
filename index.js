@@ -8,8 +8,8 @@ var cli = require('commander'),
     remapper = require('./Remapper.js'),
     koala = require('./KoalaPicture.js'),
     path = require('path'),
-    graphicMode = graphicModes.c64Multicolor,
-    pixelImage = graphicMode.create();
+    Converter = require('./Converter.js'),
+    graphicMode = graphicModes.c64Multicolor;
 
 cli.version('0.1.0')
     .usage('[options] <infile> <outfile>')
@@ -83,10 +83,11 @@ jimp.read(inFile, (err, jimpImage) => {
 
     cropFill(jimpImage, graphicMode.width * graphicMode.pixelWidth, graphicMode.height * graphicMode.pixelHeight);
     jimpImage.resize(graphicMode.width, graphicMode.height);
-    pixelImage.dither = orderedDitherers.bayer4x4;
-    remapper.optimizeColorMaps(jimpImage.bitmap, pixelImage);
-    pixelImage.drawImageData(jimpImage.bitmap);
-
+    
+    converter = new Converter();
+    converter.graphicMode = graphicMode;
+    var pixelImage = converter.convert(jimpImage.bitmap);
+  
     outExtension = path.extname(outFile);
 
     if ('.kla' === outExtension) {
