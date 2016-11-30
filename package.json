@@ -1,6 +1,6 @@
 {
   "name": "retropixels",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "Apply limitations of retro computers to images.",
   "main": "index.js",
   "dependencies": {
@@ -8,7 +8,9 @@
     "fs-extra": "1.0.0",
     "jimp": "0.2.27"
   },
-  "devDependencies": {},
+  "devDependencies": {
+    "webpack": "1.13.3"
+  },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },

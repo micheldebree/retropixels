@@ -1,6 +1,6 @@
-var PixelImage = require('./PixelImage.js'),
-    ColorMap = require('./ColorMap.js'),
-    Palette = require('./Palette.js');
+var PixelImage = require('../model/PixelImage.js'),
+    ColorMap = require('../model/ColorMap.js'),
+    Palette = require('../model/Palette.js');
 
 peptoPalette = new Palette([
     [0, 0, 0, 0xff], // black

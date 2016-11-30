@@ -1,6 +1,7 @@
-var graphicModes = require('./GraphicModes.js'),
-    orderedDitherers = require('./OrderedDitherers.js'),
-    remapper = require('./Remapper.js');
+var graphicModes = require('../profiles/GraphicModes.js'),
+    orderedDitherers = require('../profiles/OrderedDitherers.js'),
+    remapper = require('./Remapper.js'),
+    ImageData = require('../model/ImageData');
 
 function Converter() {
     'use strict';
@@ -10,7 +11,7 @@ function Converter() {
         var pixelImage = this.graphicMode.create();
         pixelImage.dither = this.dither;
         remapper.optimizeColorMaps(imageData, pixelImage);
-        pixelImage.drawImageData(imageData);
+        ImageData.drawImageData(imageData, pixelImage);
         return pixelImage;
     };
 }

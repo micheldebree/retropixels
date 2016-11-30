@@ -1,15 +1,14 @@
-/*jshint esversion: 6 */
 var cli = require('commander'),
     fs = require('fs-extra'),
     jimp = require("jimp"),
-    graphicModes = require('./GraphicModes.js'),
-    pixelCalculator = require('./PixelCalculator.js'),
-    orderedDitherers = require('./OrderedDitherers.js'),
-    remapper = require('./Remapper.js'),
-    koala = require('./KoalaPicture.js'),
+    graphicModes = require('./src/profiles/GraphicModes.js'),
+    Pixels = require('./src/model/Pixels.js'),
+    orderedDitherers = require('./src/profiles/OrderedDitherers.js'),
+    koala = require('./src/io/KoalaPicture.js'),
     path = require('path'),
-    Converter = require('./Converter.js'),
-    graphicMode = graphicModes.c64Multicolor;
+    Converter = require('./src/conversion/Converter.js'),
+    graphicMode = graphicModes.c64Multicolor,
+    ImageData = require('./src/model/ImageData.js');
 
 cli.version('0.1.0')
     .usage('[options] <infile> <outfile>')
@@ -30,7 +29,7 @@ if (outFile === undefined) {
 
 function savePrg(pixelImage) {
     var koalaImage = koala.fromPixelImage(pixelImage);
-    fs.readFile('./c64/KoalaShower.prg', function(err, viewerCode) {
+    fs.readFile('./src/c64/KoalaShower.prg', function(err, viewerCode) {
         if (err) throw err;
         var koalaBuffer = new Buffer(koalaImage.toBytes()),
             writeBuffer = Buffer.concat([viewerCode, koalaBuffer]);
@@ -56,7 +55,7 @@ function savePng(pixelImage) {
             if (err) throw err;
             for (y = 0; y < image.bitmap.height; y += 1) {
                 for (x = 0; x < image.bitmap.width; x += 1) {
-                    pixelCalculator.poke(image.bitmap, x, y, pixelImage.peek(x, y));
+                    ImageData.poke(image.bitmap, x, y, pixelImage.peek(x, y));
                 }
             }
             image.resize(pixelImage.width * pixelImage.pWidth, pixelImage.height * pixelImage.pHeight);

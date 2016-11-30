@@ -1,4 +1,4 @@
-var PixelCalculator = require('./PixelCalculator.js');
+var Pixels = require('./Pixels.js');
 
 function Palette(pixels) {
     'use strict';
@@ -14,12 +14,12 @@ Palette.prototype.getDistance = function(onePixel, index, offsetPixel, weight) {
     'use strict';
     var otherPixel = this.pixels[index];
 
-    offsetPixel = offsetPixel !== undefined ? offsetPixel : PixelCalculator.emptyPixel;
+    offsetPixel = offsetPixel !== undefined ? offsetPixel : Pixels.emptyPixel;
     weight = weight !== undefined ? weight : [1, 1, 1];
 
-    onePixel = PixelCalculator.toYUV(onePixel);
-    otherPixel = PixelCalculator.toYUV(otherPixel);
-    offsetPixel = PixelCalculator.toYUV(offsetPixel);
+    onePixel = Pixels.toYUV(onePixel);
+    otherPixel = Pixels.toYUV(otherPixel);
+    offsetPixel = Pixels.toYUV(offsetPixel);
 
     return Math.sqrt(
         weight[0] * Math.pow(onePixel[0] - otherPixel[0] - offsetPixel[0], 2) +

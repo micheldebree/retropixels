@@ -21,8 +21,7 @@ http://www.efg2.com/Lab/Library/ImageProcessing/DHALF.TXT
 
 */
 
-var ColorMap = require('./ColorMap.js');
-var PixelCalculator = require('./PixelCalculator.js');
+var Pixels = require('./Pixels.js');
 
 function PixelImage(width, height, pWidth, pHeight) {
     'use strict';
@@ -101,7 +100,7 @@ function PixelImage(width, height, pWidth, pHeight) {
      * Set the value for a particular pixel.
      * @param {number} x - x coordinate
      * @param {number} y - y coordinate
-     * @param {Array} pixel - Pixel values [r, g, b, a]
+     * @param {Array} pixel - Pixel values [r, g, b]
      */
     this.poke = function(x, y, pixel) {
         var mappedIndex,
@@ -117,7 +116,7 @@ function PixelImage(width, height, pWidth, pHeight) {
 
         // use the error for dithering
         mappedPixel = this.palette.get(mappedIndex);
-        error = PixelCalculator.substract(mappedPixel, pixel);
+        error = Pixels.substract(mappedPixel, pixel);
         this.orderedDither(x, y, pixel);
         this.errorDiffusionDither(this, x, y, error);
 
@@ -162,7 +161,7 @@ PixelImage.prototype.setDitherOffset = function(x, y, offsetPixel) {
 PixelImage.prototype.addDitherOffset = function(x, y, offsetPixel) {
     'use strict';
     var currentOffset = this.getDitherOffset(x, y);
-    this.setDitherOffset(x, y, PixelCalculator.add(currentOffset, offsetPixel));
+    this.setDitherOffset(x, y, Pixels.add(currentOffset, offsetPixel));
 };
 
 PixelImage.prototype.getDitherOffset = function(x, y) {
@@ -171,34 +170,13 @@ PixelImage.prototype.getDitherOffset = function(x, y) {
     if (row !== undefined && row[x] !== undefined) {
         return row[x];
     }
-    return PixelCalculator.emptyPixel;
+    return Pixels.emptyPixel;
 };
 
 PixelImage.prototype.orderedDither = function(x, y) {
     'use strict';
     var offset = this.dither[y % this.dither.length][x % this.dither.length];
     this.addDitherOffset(x + 1, y, [offset, offset, offset]);
-};
-
-PixelImage.prototype.drawImageData = function(imageData) {
-    'use strict';
-    var x,
-        y,
-        pixel;
-
-    for (y = 0; y < this.height; y += 1) {
-        for (x = 0; x < this.width; x += 1) {
-            pixel = PixelCalculator.peek(imageData, x, y);
-            this.poke(x, y, pixel);
-        }
-    }
-};
-
-PixelImage.prototype.fromImageData = function(imageData) {
-    'use strict';
-    this.init(imageData.width, imageData.height);
-    this.colorMaps = [new ColorMap(this.width, this.height, 1, 1)];
-    this.drawImageData(imageData);
 };
 
 PixelImage.prototype.addColorMap = function(colorMap) {

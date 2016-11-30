@@ -12,8 +12,6 @@
 
 // http://stackoverflow.com/questions/8580540/javascript-calling-private-method-from-prototype-method
 
-var PixelCalculator = require('./PixelCalculator');
-
 function ColorMap(widthVal, heightVal, resXVal, resYVal) {
     'use strict';
     this.colors = [];
