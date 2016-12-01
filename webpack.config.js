@@ -1,3 +1,6 @@
+/**
+ * Pack the Converter into a bundle to be used in the browser.
+ */
 var webpack = require("webpack");
 
 module.exports = {

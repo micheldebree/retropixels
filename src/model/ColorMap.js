@@ -77,40 +77,11 @@ ColorMap.prototype.getColor = function(x, y) {
     return undefined;
 };
 
-/**
-  Get the color that is most present in an area of the colormap.
-  TODO: move to Remapper
-**/
-ColorMap.prototype.reduceToMax = function(x, y, w, h) {
-    'use strict';
-    var weights = [],
-        ix,
-        iy,
-        color,
-        maxWeight,
-        maxColor;
-
-    for (ix = x; ix < x + w; ix += 1) {
-        for (iy = y; iy < y + h; iy += 1) {
-            color = this.getColor(ix, iy);
-            if (color !== undefined) {
-                weights[color] = weights[color] === undefined ? 1 : weights[color] + 1;
-                if (maxWeight === undefined || weights[color] > maxWeight) {
-                    maxWeight = weights[color];
-                    maxColor = color;
-                }
-            }
-        }
-    }
-
-    return maxColor;
-
-};
-
 ColorMap.prototype.subtract = function(colorMap) {
     'use strict';
     var x,
         y;
+        
     for (x = 0; x < this.width; x += this.resX) {
         for (y = 0; y < this.height; y += this.resY) {
             if (this.getColor(x, y) === colorMap.getColor(x, y)) {
@@ -118,26 +89,6 @@ ColorMap.prototype.subtract = function(colorMap) {
             }
         }
     }
-};
-
-/**
- * Extract colors and put them in a colormap.
- * @param {Colormap} colorMap The colormap to extract pixels to.
- * TODO: move to Remapper
- */
-ColorMap.prototype.extractColorMap = function(toColorMap) {
-    'use strict';
-    var x,
-        y,
-        rx = toColorMap.resX,
-        ry = toColorMap.resY;
-
-    for (x = 0; x < toColorMap.width; x += rx) {
-        for (y = 0; y < toColorMap.height; y += ry) {
-            toColorMap.add(x, y, this.reduceToMax(x, y, rx, ry));
-        }
-    }
-    this.subtract(toColorMap);
 };
 
 module.exports = ColorMap;

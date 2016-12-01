@@ -10,6 +10,9 @@ Palette.prototype.get = function(index) {
     return this.pixels[index];
 };
 
+/**
+ * TODO: move to Pixels.js
+ */
 Palette.prototype.getDistance = function(onePixel, index, offsetPixel, weight) {
     'use strict';
     var otherPixel = this.pixels[index];

@@ -20,7 +20,6 @@ http://www.tannerhelland.com/4660/dithering-eleven-algorithms-source-code/
 http://www.efg2.com/Lab/Library/ImageProcessing/DHALF.TXT
 
 */
-
 var Pixels = require('./Pixels.js');
 
 function PixelImage(width, height, pWidth, pHeight) {
