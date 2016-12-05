@@ -47,6 +47,7 @@ ColorMap.prototype.mapY = function mapY(y) {
 
 /**
  * Set an area to a certain color.
+ * TODO: rename to put
  */
 ColorMap.prototype.add = function(x, y, color) {
     'use strict';
@@ -65,6 +66,7 @@ ColorMap.prototype.add = function(x, y, color) {
 
 /**
  * Get the palette index at x, y coordinate.
+ * TODO: rename to getIndex
  */
 ColorMap.prototype.getColor = function(x, y) {
     'use strict';

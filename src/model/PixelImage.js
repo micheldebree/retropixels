@@ -64,12 +64,12 @@ function PixelImage(width, height, pWidth, pHeight) {
             d,
             minVal,
             minI = 0,
-            other;
+            otherIndex;
 
         // determine closest pixel in palette (ignoring alpha)
         for (i = 0; i < that.colorMaps.length; i += 1) {
-            other = that.colorMaps[i].getColor(x, y);
-            d = that.palette.getDistance(pixel, other, offsetPixel, that.mappingWeight);
+            otherIndex = that.colorMaps[i].getColor(x, y);
+            d = Pixels.getDistance(pixel, that.palette.get(otherIndex), offsetPixel, that.mappingWeight);
             if (minVal === undefined || d < minVal) {
                 minVal = d;
                 minI = i;
