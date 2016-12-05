@@ -1,5 +1,7 @@
+#!/usr/bin/env node
 var cli = require('commander'),
     fs = require('fs-extra'),
+    path = require('path'),
     jimp = require("jimp"),
     graphicModes = require('./src/profiles/GraphicModes.js'),
     Pixels = require('./src/model/Pixels.js'),
@@ -28,8 +30,10 @@ if (outFile === undefined) {
 }
 
 function savePrg(pixelImage) {
-    var koalaImage = koala.fromPixelImage(pixelImage);
-    fs.readFile('./src/c64/KoalaShower.prg', function(err, viewerCode) {
+    var koalaImage = koala.fromPixelImage(pixelImage),
+    binary = path.join(__dirname,'/src/c64/KoalaShower.prg');
+    
+    fs.readFile(binary, function(err, viewerCode) {
         if (err) throw err;
         var koalaBuffer = new Buffer(koalaImage.toBytes()),
             writeBuffer = Buffer.concat([viewerCode, koalaBuffer]);

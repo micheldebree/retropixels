@@ -1,27 +1,30 @@
 {
-  "name": "retropixels",
-  "version": "0.2.0",
-  "description": "Apply limitations of retro computers to images.",
-  "main": "index.js",
-  "dependencies": {
-    "commander": "2.9.0",
-    "fs-extra": "1.0.0",
-    "jimp": "0.2.27"
-  },
-  "devDependencies": {
-    "webpack": "1.13.3"
-  },
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/micheldebree/retropixels.git"
-  },
-  "author": "Michel de Bree",
-  "license": "MIT",
-  "bugs": {
-    "url": "https://github.com/micheldebree/retropixels/issues"
-  },
-  "homepage": "https://github.com/micheldebree/retropixels#readme"
+	"name": "retropixels",
+	"version": "0.2.0",
+	"description": "Apply limitations of retro computers to images.",
+	"main": "index.js",
+	"bin": {
+		"retropixels": "./index.js"
+	},
+	"dependencies": {
+		"commander": "2.9.0",
+		"fs-extra": "1.0.0",
+		"jimp": "0.2.27"
+	},
+	"devDependencies": {
+		"webpack": "1.13.3"
+	},
+	"scripts": {
+		"test": "echo \"Error: no test specified\" && exit 1"
+	},
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/micheldebree/retropixels.git"
+	},
+	"author": "Michel de Bree",
+	"license": "MIT",
+	"bugs": {
+		"url": "https://github.com/micheldebree/retropixels/issues"
+	},
+	"homepage": "https://github.com/micheldebree/retropixels#readme"
 }

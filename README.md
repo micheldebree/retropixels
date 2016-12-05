@@ -18,13 +18,15 @@ The following must be installed and callable from the command line:
 ### Installation
 - Clone or unzip this project
 - From the project root:
-  - ```npm install```
+  - ```npm install -g```
+
+You now have a new shell command called ```retropixels```  
   
 ### Usage
 
 For now, the command line tool converts an image to Commodore 64 multicolor format.
 
-    node index.js <infile> <outfile>
+    retropixels <infile> <outfile>
 
 With
 - ```<infile>```: the image to convert
@@ -50,3 +52,8 @@ View the result by running it in the [VICE](http://vice-emu.sourceforge.net) emu
 Optionally, to save some space and loading time, you could "crunch" (compress) the resulting ```.prg``` file using [exomizer](https://bitbucket.org/magli143/exomizer/wiki/Home):
 
     exomizer sfx basic eye.prg -o eye-crunched.prg
+
+
+## Uninstall
+
+        npm uninstall -g retropixels
