@@ -1,11 +1,12 @@
+/* jshint esversion: 6 */
 function coordsToindex(imageData, x, y) {
-    var result = Math.floor(y) * (imageData.width << 2) + (x << 2);
+    const result = Math.floor(y) * (imageData.width << 2) + (x << 2);
     return result < imageData.data.length ? result : undefined;
 }
 
 function poke(imageData, x, y, pixel) {
     if (pixel !== undefined) {
-        var i = coordsToindex(imageData, x, y);
+        const i = coordsToindex(imageData, x, y);
         if (i !== undefined) {
             imageData.data[i] = pixel[0];
             imageData.data[i + 1] = pixel[1];
@@ -16,7 +17,7 @@ function poke(imageData, x, y, pixel) {
 }
 
 function peek(imageData, x, y) {
-    var i = coordsToindex(imageData, x, y);
+    const i = coordsToindex(imageData, x, y);
     if (i !== undefined) {
         return [
             imageData.data[i],
@@ -29,12 +30,9 @@ function peek(imageData, x, y) {
 }
 
 function drawImageData(imageData, pixelImage) {
-    var x,
-        y,
-        pixel;
-    for (y = 0; y < pixelImage.height; y += 1) {
-        for (x = 0; x < pixelImage.width; x += 1) {
-            pixel = peek(imageData, x, y);
+    for (let y = 0; y < pixelImage.height; y += 1) {
+        for (let x = 0; x < pixelImage.width; x += 1) {
+            let pixel = peek(imageData, x, y);
             pixelImage.poke(x, y, pixel);
         }
     }

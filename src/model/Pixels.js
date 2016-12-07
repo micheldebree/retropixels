@@ -1,3 +1,4 @@
+/* jshint esversion: 6 */
 /**
  * Utility for calculations involving pixels
  */
@@ -39,10 +40,7 @@ function toYUV(pixel) {
 	];
 }
 
-function getDistance(onePixel, otherPixel, offsetPixel, weight) {
-	offsetPixel = offsetPixel !== undefined ? offsetPixel : Pixels.emptyPixel;
-	weight = weight !== undefined ? weight : [1, 1, 1];
-
+function getDistance(onePixel, otherPixel, offsetPixel = Pixels.emptyPixel, weight = [1, 1, 1]) {
 	onePixel = toYUV(onePixel);
 	otherPixel = toYUV(otherPixel);
 	offsetPixel = toYUV(offsetPixel);

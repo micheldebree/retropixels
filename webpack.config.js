@@ -4,12 +4,22 @@
 var webpack = require("webpack");
 
 module.exports = {
-     entry: './src/conversion/Converter.js',
-     output: {
-         path: './target',
-         filename: 'Converter.bundle.js'
-     },
-     plugins: [
-       new webpack.optimize.UglifyJsPlugin({minimize: true})
-     ]
+    entry: './src/conversion/Converter.js',
+    output: {
+        path: './target',
+        filename: 'Converter.bundle.js'
+    },
+    module: {
+        loaders: [{
+            test: /\.js$/,
+            exclude: /(node_modules|bower_components)/,
+            loader: 'babel-loader',
+            query: {
+                presets: ['es2015']
+            }
+        }]
+    },
+    plugins: [
+         new webpack.optimize.UglifyJsPlugin({minimize: true})
+    ],
 };

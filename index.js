@@ -1,5 +1,7 @@
 #!/usr/bin/env node
-var cli = require('commander'),
+
+/* jshint esversion: 6 */
+const cli = require('commander'),
     fs = require('fs-extra'),
     path = require('path'),
     jimp = require("jimp"),
@@ -7,7 +9,6 @@ var cli = require('commander'),
     Pixels = require('./src/model/Pixels.js'),
     orderedDitherers = require('./src/profiles/OrderedDitherers.js'),
     koala = require('./src/io/KoalaPicture.js'),
-    path = require('path'),
     Converter = require('./src/conversion/Converter.js'),
     graphicMode = graphicModes.c64Multicolor,
     ImageData = require('./src/model/ImageData.js');
@@ -16,7 +17,7 @@ cli.version('0.1.0')
     .usage('[options] <infile> <outfile>')
     .parse(process.argv);
 
-var inFile = cli.args[0],
+const inFile = cli.args[0],
     outFile = cli.args[1];
 
 if (inFile === undefined) {
@@ -30,12 +31,12 @@ if (outFile === undefined) {
 }
 
 function savePrg(pixelImage) {
-    var koalaImage = koala.fromPixelImage(pixelImage),
-    binary = path.join(__dirname,'/src/c64/KoalaShower.prg');
-    
+    const koalaImage = koala.fromPixelImage(pixelImage),
+        binary = path.join(__dirname, '/src/c64/KoalaShower.prg');
+
     fs.readFile(binary, function(err, viewerCode) {
         if (err) throw err;
-        var koalaBuffer = new Buffer(koalaImage.toBytes()),
+        const koalaBuffer = new Buffer(koalaImage.toBytes()),
             writeBuffer = Buffer.concat([viewerCode, koalaBuffer]);
         fs.writeFile(outFile, writeBuffer, function(err) {
             if (err) throw err;
@@ -45,7 +46,7 @@ function savePrg(pixelImage) {
 }
 
 function saveKoala(pixelImage) {
-    var koalaImage = koala.fromPixelImage(pixelImage);
+    const koalaImage = koala.fromPixelImage(pixelImage);
     fs.writeFile(outFile, new Buffer(koalaImage.toBytes()), function(err) {
         if (err) throw err;
         console.log('Written Koala Painter file ' + outFile);
@@ -53,24 +54,22 @@ function saveKoala(pixelImage) {
 }
 
 function savePng(pixelImage) {
-    var x,
-        y,
-        jimpImage = new jimp(pixelImage.width, pixelImage.height, function(err, image) {
-            if (err) throw err;
-            for (y = 0; y < image.bitmap.height; y += 1) {
-                for (x = 0; x < image.bitmap.width; x += 1) {
-                    ImageData.poke(image.bitmap, x, y, pixelImage.peek(x, y));
-                }
+    new jimp(pixelImage.width, pixelImage.height, function(err, image) {
+        if (err) throw err;
+        for (let y = 0; y < image.bitmap.height; y += 1) {
+            for (let x = 0; x < image.bitmap.width; x += 1) {
+                ImageData.poke(image.bitmap, x, y, pixelImage.peek(x, y));
             }
-            image.resize(pixelImage.width * pixelImage.pWidth, pixelImage.height * pixelImage.pHeight);
-            image.write(outFile, function() {
-                console.log('Written PNG image ' + outFile);
-            });
+        }
+        image.resize(pixelImage.width * pixelImage.pWidth, pixelImage.height * pixelImage.pHeight);
+        image.write(outFile, function() {
+            console.log('Written PNG image ' + outFile);
         });
+    });
 }
 
 function cropFill(jimpImage, destWidth, destHeight) {
-    var srcWidth = jimpImage.bitmap.width,
+    const srcWidth = jimpImage.bitmap.width,
         srcHeight = jimpImage.bitmap.height,
         destratio = destWidth / destHeight,
         srcratio = srcWidth / srcHeight,
@@ -86,24 +85,21 @@ jimp.read(inFile, (err, jimpImage) => {
 
     cropFill(jimpImage, graphicMode.width * graphicMode.pixelWidth, graphicMode.height * graphicMode.pixelHeight);
     jimpImage.resize(graphicMode.width, graphicMode.height);
-    
-    converter = new Converter();
+
+    const converter = new Converter();
     converter.graphicMode = graphicMode;
-    var pixelImage = converter.convert(jimpImage.bitmap);
-  
+    const pixelImage = converter.convert(jimpImage.bitmap);
+
     outExtension = path.extname(outFile);
 
     if ('.kla' === outExtension) {
-      saveKoala(pixelImage);
-    }
-    else if ('.prg' === outExtension) {
-      savePrg(pixelImage);
-    }
-    else if ('.png' === outExtension) {
-      savePng(pixelImage);
-    }
-    else {
-      console.error('Unknown file extension ' + outExtension + ', valid extensions are .png, .kla and .prg');
+        saveKoala(pixelImage);
+    } else if ('.prg' === outExtension) {
+        savePrg(pixelImage);
+    } else if ('.png' === outExtension) {
+        savePng(pixelImage);
+    } else {
+        console.error('Unknown file extension ' + outExtension + ', valid extensions are .png, .kla and .prg');
     }
 
 });
