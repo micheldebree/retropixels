@@ -47,7 +47,7 @@ class PixelImage {
 
     findColorInMap(x, y, color) {
         for (let i = 0; i < this.colorMaps.length; i += 1) {
-            if (color === this.colorMaps[i].getColor(x, y)) {
+            if (color === this.colorMaps[i].get(x, y)) {
                 return i;
             }
         }
@@ -66,7 +66,7 @@ class PixelImage {
 
         // determine closest pixel in palette (ignoring alpha)
         for (let i = 0; i < this.colorMaps.length; i += 1) {
-            let otherIndex = this.colorMaps[i].getColor(x, y);
+            let otherIndex = this.colorMaps[i].get(x, y);
             let d = Pixels.getDistance(pixel, this.palette.get(otherIndex), offsetPixel, this.mappingWeight);
             if (minVal === undefined || d < minVal) {
                 minVal = d;
@@ -90,7 +90,7 @@ class PixelImage {
 
     getPaletteIndex(x, y) {
         const ci = this.getPixelIndex(x, y);
-        return ci !== undefined ? this.colorMaps[ci].getColor(x, y) : undefined;
+        return ci !== undefined ? this.colorMaps[ci].get(x, y) : undefined;
     }
 
     getDitherOffset(x, y) {
@@ -127,7 +127,7 @@ class PixelImage {
         }
 
         if (colorMap !== undefined) {
-            this.colorMaps[colorMap].add(x, y, mappedIndex);
+            this.colorMaps[colorMap].put(x, y, mappedIndex);
         } else {
             colorMap = this.map(pixel, x, y, offsetPixel);
         }

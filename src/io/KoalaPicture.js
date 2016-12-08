@@ -62,7 +62,7 @@ class KoalaPicture extends BinaryFile {
             for (let colorX = 0; colorX < lowerColorMap.width; colorX += 4) {
                 // pack two colors in one byte
                 screenRam[colorIndex] =
-                    ((upperColorMap.getColor(colorX, colorY) << 4) & 0xf0) | (lowerColorMap.getColor(colorX, colorY) & 0x0f);
+                    ((upperColorMap.get(colorX, colorY) << 4) & 0xf0) | (lowerColorMap.get(colorX, colorY) & 0x0f);
                 colorIndex += 1;
             }
         }
@@ -80,7 +80,7 @@ class KoalaPicture extends BinaryFile {
 
         for (let colorY = 0; colorY < imageH; colorY += 8) {
             for (let colorX = 0; colorX < imageW; colorX += 4) {
-                colorRam[colorIndex] = colorMap.getColor(colorX, colorY) & 0x0f;
+                colorRam[colorIndex] = colorMap.get(colorX, colorY) & 0x0f;
                 colorIndex += 1;
             }
         }
@@ -106,7 +106,7 @@ class KoalaPicture extends BinaryFile {
         koalaPic.screenRam = this.convertScreenram(pixelImage.colorMaps[2], pixelImage.colorMaps[1]);
         koalaPic.colorRam = this.convertColorram(pixelImage.colorMaps[3]);
         koalaPic.background = new Uint8Array(1);
-        koalaPic.background[0] = pixelImage.colorMaps[0].getColor(0, 0);
+        koalaPic.background[0] = pixelImage.colorMaps[0].get(0, 0);
 
         return koalaPic;
     }
@@ -144,7 +144,6 @@ class KoalaPicture extends BinaryFile {
 
                     bitmapIndex += 1;
                 }
-
             }
         }
 
@@ -162,7 +161,6 @@ class KoalaPicture extends BinaryFile {
                 pixelImage.colorMaps[3].add(colorX, colorY, color11);
 
                 colorIndex += 1;
-
             }
         }
         // add background color as colorMap 0

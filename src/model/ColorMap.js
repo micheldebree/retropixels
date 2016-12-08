@@ -48,26 +48,26 @@ class ColorMap {
      * Set an area to a certain color.
      * TODO: rename to put
      */
-    add(x, y, color) {
+    put(x, y, paletteIndex) {
         if (!this.isInRange(x, y)) {
             return;
         }
 
-        let rx = this.mapX(x);
+        const rx = this.mapX(x);
 
         // add it to the color map
         if (this.colors[rx] === undefined) {
             this.colors[rx] = [];
         }
-        this.colors[rx][this.mapY(y)] = color;
+        this.colors[rx][this.mapY(y)] = paletteIndex;
     }
 
     /**
      * Get the palette index at x, y coordinate.
      * TODO: rename to getIndex
      */
-    getColor(x, y) {
-        let mX = this.mapX(x),
+    get(x, y) {
+        const mX = this.mapX(x),
             mY = this.mapY(y);
 
         if (this.colors[mX] !== undefined) {
@@ -79,8 +79,8 @@ class ColorMap {
     subtract(colorMap) {
         for (let x = 0; x < this.width; x += this.resX) {
             for (let y = 0; y < this.height; y += this.resY) {
-                if (this.getColor(x, y) === colorMap.getColor(x, y)) {
-                    this.add(x, y, undefined);
+                if (this.get(x, y) === colorMap.get(x, y)) {
+                    this.put(x, y, undefined);
                 }
             }
         }

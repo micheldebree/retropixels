@@ -29,7 +29,7 @@ function reduceToMax(colorMap, x, y, w, h) {
 
     for (let ix = x; ix < x + w; ix += 1) {
         for (let iy = y; iy < y + h; iy += 1) {
-            let color = colorMap.getColor(ix, iy);
+            let color = colorMap.get(ix, iy);
             if (color !== undefined) {
                 weights[color] = weights[color] === undefined ? 1 : weights[color] + 1;
                 if (maxWeight === undefined || weights[color] > maxWeight) {
@@ -51,7 +51,7 @@ function extractColorMap (fromColorMap, toColorMap) {
         
     for (let x = 0; x < toColorMap.width; x += rx) {
         for (let y = 0; y < toColorMap.height; y += ry) {
-            toColorMap.add(x, y, reduceToMax(fromColorMap, x, y, rx, ry));
+            toColorMap.put(x, y, reduceToMax(fromColorMap, x, y, rx, ry));
         }
     }
     fromColorMap.subtract(toColorMap);
