@@ -15,13 +15,17 @@ class Palette {
      * Map a pixel to the closest available color in the palette.
      * @returns the index into the palette
      */
-    mapPixel(pixel, offset, weight) {
+    mapPixel(pixel) {
+        if (pixel === undefined) {
+          throw new Error("pixel is mandatory.");
+        }
+      
         let minVal,
             minI;
 
         // determine closest pixel in palette (ignoring alpha)
         for (let i = 0; i < this.pixels.length; i += 1) {
-            let d = Pixels.getDistance(pixel, this.pixels[i], offset, weight);
+            let d = Pixels.getDistance(pixel, this.pixels[i]);
             if (minVal === undefined || d < minVal) {
                 minVal = d;
                 minI = i;

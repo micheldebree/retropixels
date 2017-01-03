@@ -48,7 +48,7 @@ c64Unlimited = {
     create: function() {
         var pixelImage = new PixelImage(320, 200);
         pixelImage.palette = peptoPalette;
-        pixelImage.colorMaps.push(new ColorMap(320, 200, 1, 1));
+        pixelImage.colorMaps.push(new ColorMap(320, 200, peptoPalette, 1, 1));
         return pixelImage;
     }
 };
@@ -62,10 +62,10 @@ c64Multicolor = {
     create: function() {
         var pixelImage = new PixelImage(160, 200, 2, 1);
         pixelImage.palette = peptoPalette;
-        pixelImage.colorMaps.push(new ColorMap(160, 200));
-        pixelImage.colorMaps.push(new ColorMap(160, 200, 4, 8));
-        pixelImage.colorMaps.push(new ColorMap(160, 200, 4, 8));
-        pixelImage.colorMaps.push(new ColorMap(160, 200, 4, 8));
+        pixelImage.colorMaps.push(new ColorMap(160, 200, peptoPalette, 160, 200));
+        pixelImage.colorMaps.push(new ColorMap(160, 200, peptoPalette, 4, 8));
+        pixelImage.colorMaps.push(new ColorMap(160, 200, peptoPalette, 4, 8));
+        pixelImage.colorMaps.push(new ColorMap(160, 200, peptoPalette, 4, 8));
         return pixelImage;
     }
 };
@@ -79,8 +79,8 @@ c64Hires = {
     create: function() {
         var pixelImage = new PixelImage(320, 200);
         pixelImage.palette = peptoPalette;
-        pixelImage.colorMaps.push(new ColorMap(320, 200, 8, 8));
-        pixelImage.colorMaps.push(new ColorMap(320, 200, 8, 8));
+        pixelImage.colorMaps.push(new ColorMap(320, 200, peptoPalette, 8, 8));
+        pixelImage.colorMaps.push(new ColorMap(320, 200, peptoPalette, 8, 8));
         return pixelImage;
     }
 };
@@ -94,10 +94,10 @@ c64FLI = {
     create: function() {
         var pixelImage = new PixelImage(160, 200, 2, 1);
         pixelImage.palette = peptoPalette;
-        pixelImage.colorMaps.push(new ColorMap(160, 200));
-        pixelImage.colorMaps.push(new ColorMap(160, 200, 4, 8));
-        pixelImage.colorMaps.push(new ColorMap(160, 200, 4, 1));
-        pixelImage.colorMaps.push(new ColorMap(160, 200, 4, 1));
+        pixelImage.colorMaps.push(new ColorMap(160, 200, peptoPalette));
+        pixelImage.colorMaps.push(new ColorMap(160, 200, peptoPalette, 4, 8));
+        pixelImage.colorMaps.push(new ColorMap(160, 200, peptoPalette, 4, 1));
+        pixelImage.colorMaps.push(new ColorMap(160, 200, peptoPalette, 4, 1));
         return pixelImage;
     }
 };
@@ -111,8 +111,8 @@ c64AFLI = {
     create: function() {
         var pixelImage = new PixelImage(320, 200);
         pixelImage.palette = peptoPalette;
-        pixelImage.colorMaps.push(new ColorMap(320, 200, 8, 8));
-        pixelImage.colorMaps.push(new ColorMap(320, 200, 8, 1));
+        pixelImage.colorMaps.push(new ColorMap(320, 200, peptoPalette, 8, 8));
+        pixelImage.colorMaps.push(new ColorMap(320, 200, peptoPalette, 8, 1));
         return pixelImage;
     }
 };
@@ -121,8 +121,8 @@ spectrumStandard = {
     create: function() {
         var pixelImage = new PixelImage(256, 192);
         pixelImage.palette = spectrumPallete;
-        pixelImage.colorMaps.push(new ColorMap(256, 192, 8, 8));
-        pixelImage.colorMaps.push(new ColorMap(256, 192, 8, 8));
+        pixelImage.colorMaps.push(new ColorMap(256, 192, spectrumPallete, 8, 8));
+        pixelImage.colorMaps.push(new ColorMap(256, 192, spectrumPallete, 8, 8));
         return pixelImage;
     }
 };

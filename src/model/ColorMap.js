@@ -15,12 +15,13 @@
 
 class ColorMap {
 
-    constructor(widthVal, heightVal, resXVal, resYVal) {
+    constructor(widthVal, heightVal, palette, resXVal = widthVal, resYVal = heightVal) {
         this.colors = [];
+        this.palette = palette;
         this.width = widthVal;
         this.height = heightVal;
-        this.resX = resXVal !== undefined ? resXVal : widthVal;
-        this.resY = resYVal !== undefined ? resYVal : heightVal;
+        this.resX = resXVal;
+        this.resY = resYVal; 
     }
 
     /**
@@ -74,6 +75,19 @@ class ColorMap {
             return this.colors[mX][mY];
         }
         return undefined;
+    }
+
+    getColor(x, y) {
+        const index = this.get(x, y);
+        if (index === undefined) {
+            return undefined;
+        }
+        return this.palette.get(index);
+    }
+    
+    // TODO: offset Pixel from the start instead of passing it down
+    isBestFit(pixel, x, y, weight) {
+      return this.palette.mapPixel(pixel, weight) === get(x, y);
     }
 
     subtract(colorMap) {

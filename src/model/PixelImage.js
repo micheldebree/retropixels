@@ -32,7 +32,6 @@ class PixelImage {
         this.pWidth = pWidth === undefined ? 1 : pWidth; // aspect width of one pixel
         this.pHeight = pHeight === undefined ? 1 : pHeight; // aspect height of one pixel
         this.colorMaps = []; // maps x,y to a color
-        this.palette = undefined; // the palette for all colors used in this image
         this.pixelIndex = []; // maps pixel x,y to a colormap
         this.ditherOffset = []; // offset for dithering used when mapping color
         this.dither = [
@@ -46,13 +45,45 @@ class PixelImage {
     }
 
     findColorInMap(x, y, color) {
+        if (x === undefined) {
+          throw new Error("x is mandatory.");
+        }
+        if (y === undefined) {
+          throw new Error("y is mandatory.");
+        }
+      
         for (let i = 0; i < this.colorMaps.length; i += 1) {
-            if (color === this.colorMaps[i].get(x, y)) {
+          // console.log("Finding color " + color + " in map " + i);
+            let colorMap = this.colorMaps[i];
+            let mappedIndex = colorMap.palette.mapPixel(color);
+            // console.log("mappedIndex is " + mappedIndex);
+            if (mappedIndex === colorMap.get(x, y)) {
+                // console.log("Found in map " + i);
+                return i;
+            }
+        }
+        // console.log("Not found.");
+        return undefined;
+    }
+
+    findUnusedInMap(x, y) {
+        if (x === undefined) {
+          throw new Error("x is mandatory.");
+        }
+        if (y === undefined) {
+          throw new Error("y is mandatory.");
+        }
+      
+        for (let i = 0; i < this.colorMaps.length; i += 1) {
+            // console.log("Looking for unused spot in colorMap " + i);
+            if (this.colorMaps[i].get(x, y) === undefined) {
+                // console.log("Found!");
                 return i;
             }
         }
         return undefined;
     }
+
 
     /**
      * Map a pixel to the closest available Colormap.
@@ -60,14 +91,14 @@ class PixelImage {
      * @param {int} y Y coordinate
      * @returns {int} Colormap index for the closest Colormap
      */
-    map(pixel, x, y, offsetPixel) {
+    map(pixel, x, y) {
         let minVal,
             minI = 0;
 
         // determine closest pixel in palette (ignoring alpha)
         for (let i = 0; i < this.colorMaps.length; i += 1) {
-            let otherIndex = this.colorMaps[i].get(x, y);
-            let d = Pixels.getDistance(pixel, this.palette.get(otherIndex), offsetPixel, this.mappingWeight);
+            let colorMap = this.colorMaps[i];
+            let d = Pixels.getDistance(pixel, colorMap.getColor(x, y));
             if (minVal === undefined || d < minVal) {
                 minVal = d;
                 minI = i;
@@ -108,30 +139,21 @@ class PixelImage {
      * @param {Array} pixel - Pixel values [r, g, b]
      */
     poke(x, y, pixel) {
-        const offsetPixel = this.getDitherOffset(x, y),
-              // map to closest color in palette
-              mappedIndex = this.palette.mapPixel(pixel, offsetPixel, this.mappingWeight),
-              // use the error for dithering
-              mappedPixel = this.palette.get(mappedIndex),
-              error = Pixels.substract(mappedPixel, pixel);
-              
-        this.orderedDither(x, y, pixel);
-        this.errorDiffusionDither(this, x, y, error);
-
         // try to reuse existing color map
-        let colorMap = this.findColorInMap(x, y, mappedIndex);
+        let colorMapIndex = this.findColorInMap(x, y, pixel);
 
         // else see if there is a map with an empty pixel
-        if (colorMap === undefined) {
-            colorMap = this.findColorInMap(x, y, undefined);
+        if (colorMapIndex === undefined) {
+            colorMapIndex = this.findUnusedInMap(x, y);
         }
-
-        if (colorMap !== undefined) {
-            this.colorMaps[colorMap].put(x, y, mappedIndex);
+        if (colorMapIndex !== undefined) {
+            const colorMap = this.colorMaps[colorMapIndex], 
+                  color = colorMap.palette.mapPixel(pixel);
+            colorMap.put(x, y, color);
         } else {
-            colorMap = this.map(pixel, x, y, offsetPixel);
+            colorMapIndex = this.map(pixel, x, y);
         }
-        this.setPixelIndex(x, y, colorMap);
+        this.setPixelIndex(x, y, colorMapIndex);
     }
 
     /**

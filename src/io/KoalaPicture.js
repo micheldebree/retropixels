@@ -125,10 +125,10 @@ class KoalaPicture extends BinaryFile {
             colorIndex = 0;
 
         pixelImage.palette = palette;
-        pixelImage.addColorMap(new ColorMap(imageW, imageH, imageW, imageH));
-        pixelImage.addColorMap(new ColorMap(imageW, imageH, pixelsPerCellHor, pixelsPerCellVer));
-        pixelImage.addColorMap(new ColorMap(imageW, imageH, pixelsPerCellHor, pixelsPerCellVer));
-        pixelImage.addColorMap(new ColorMap(imageW, imageH, pixelsPerCellHor, pixelsPerCellVer));
+        pixelImage.addColorMap(new ColorMap(imageW, imageH, palette));
+        pixelImage.addColorMap(new ColorMap(imageW, imageH, palette, pixelsPerCellHor, pixelsPerCellVer));
+        pixelImage.addColorMap(new ColorMap(imageW, imageH, palette, pixelsPerCellHor, pixelsPerCellVer));
+        pixelImage.addColorMap(new ColorMap(imageW, imageH, palette, pixelsPerCellHor, pixelsPerCellVer));
 
         for (let charY = 0; charY < imageH; charY += pixelsPerCellVer) {
             for (let charX = 0; charX < imageW; charX += pixelsPerCellHor) {
