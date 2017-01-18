@@ -12,7 +12,6 @@ function getColorMap(imageData, targetPixelImage) {
           unrestrictedImage = new PixelImage(w, h, targetPixelImage.pWidth, targetPixelImage.pHeight);
     unrestrictedImage.palette = targetPixelImage.palette;
     unrestrictedImage.colorMaps.push(new ColorMap(w, h, unrestrictedImage.palette, 1, 1));
-    unrestrictedImage.dither = targetPixelImage.dither;
     unrestrictedImage.mappingWeight = targetPixelImage.mappingWeight;
     unrestrictedImage.errorDiffusionDither = targetPixelImage.errorDiffusionDither;
     ImageData.drawImageData(imageData, unrestrictedImage);
