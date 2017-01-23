@@ -25,7 +25,8 @@ https://people.eecs.berkeley.edu/~dcoetzee/downloads/scolorq/
 
 */
 const Pixels = require('./Pixels.js'),
-    OrderedDithering = require('../conversion/OrderedDithering.js');
+    OrderedDithering = require('../conversion/OrderedDithering.js'),
+    orderedDithering = new OrderedDithering();
 
 class PixelImage {
 
@@ -41,14 +42,6 @@ class PixelImage {
         // weight per pixel channel (RGB or YUV) when calculating distance
         // [1, 1, 1] is equal weight, [1, 0, 0] in combination with YUV is phychedelic mode
         this.mappingWeight = [1, 1, 1];
-    }
-
-    offsetPixel(color, x, y) {
-        // TODO: init once
-        // TODO: move to Palette?
-        const dithering = new OrderedDithering(),
-            ditherOffset = dithering.getColorOffset(x, y);
-        return Pixels.add(color, ditherOffset);
     }
 
     /*  
@@ -67,7 +60,7 @@ class PixelImage {
         for (let i = 0; i < this.colorMaps.length; i += 1) {
             // console.log("Finding color " + color + " in map " + i);
             let colorMap = this.colorMaps[i];
-            let mappedIndex = colorMap.palette.mapPixel(this.offsetPixel(realColor, x, y));
+            let mappedIndex = colorMap.palette.mapPixel(orderedDithering.offsetColor(realColor, x, y));
             // console.log("mappedIndex is " + mappedIndex);
             if (mappedIndex === colorMap.get(x, y)) {
                 // console.log("Found in map " + i);
@@ -78,7 +71,7 @@ class PixelImage {
         return undefined;
     }
 
-    findUnusedInMap(x, y) {
+    tryClaimUnusedInMap(realColor, x, y) {
         if (x === undefined) {
             throw new Error("x is mandatory.");
         }
@@ -90,6 +83,9 @@ class PixelImage {
             // console.log("Looking for unused spot in colorMap " + i);
             if (this.colorMaps[i].get(x, y) === undefined) {
                 // console.log("Found!");
+                const colorMap = this.colorMaps[i],
+                    color = colorMap.palette.mapPixel(orderedDithering.offsetColor(realColor, x, y));
+                colorMap.put(x, y, color);
                 return i;
             }
         }
@@ -110,8 +106,8 @@ class PixelImage {
         // determine closest pixel in palette (ignoring alpha)
         for (let i = 0; i < this.colorMaps.length; i += 1) {
             let colorMap = this.colorMaps[i],
-                color = colorMap.getColor(x, y);
-            let d = Pixels.getDistance(pixel, this.offsetPixel(color, x, y));
+                color = colorMap.getColor(x, y),
+                d = Pixels.getDistance(pixel, orderedDithering.offsetColor(color, x, y));
             if (minVal === undefined || d < minVal) {
                 minVal = d;
                 minI = i;
@@ -144,6 +140,9 @@ class PixelImage {
      * @param {Array} pixel - Pixel values [r, g, b]
      */
     poke(x, y, realColor) {
+
+        // idea: do 'smart' poking in a separate class, with dependency to dithering
+
         // try to reuse existing color map that has the best fit for this color
         let colorMapIndex = this.findColorInMap(x, y, realColor);
         if (colorMapIndex !== undefined) {
@@ -152,15 +151,12 @@ class PixelImage {
         }
 
         // else see if there is a map with an empty attribute that we can claim
-        colorMapIndex = this.findUnusedInMap(x, y);
+        colorMapIndex = this.tryClaimUnusedInMap(realColor, x, y);
         if (colorMapIndex !== undefined) {
-            const colorMap = this.colorMaps[colorMapIndex],
-                color = colorMap.palette.mapPixel(this.offsetPixel(realColor, x, y));
-            colorMap.put(x, y, color);
             this.setPixelIndex(x, y, colorMapIndex);
             return;
         }
-        
+
         // otherwise just map to the ColorMap that has the closest match at x,y
         colorMapIndex = this.map(realColor, x, y);
         this.setPixelIndex(x, y, colorMapIndex);
