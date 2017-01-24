@@ -23,37 +23,37 @@ peptoPalette = new Palette([
 
 spectrumPallete = new Palette([
     [0, 0, 0, 0xff], // black
-    [0, 0, 0xd7], // blue
-    [0xd7, 0, 0], // red
-    [0xd7, 0, 0xd7], //magenta
-    [0, 0xd7, 0], //green
-    [0, 0xd7, 0xd7], //green
-    [0xd7, 0xd7, 0], // yellow
-    [0xd7, 0xd7, 0xd7], // gray
-    [0, 0, 0xff], // blue
-    [0xff, 0, 0], // red
-    [0xff, 0, 0xff], //magenta
-    [0, 0xff, 0], //green
-    [0, 0xff, 0xff], //green
-    [0xff, 0xff, 0], // yellow
-    [0xff, 0xff, 0xff] // gray
+    [0, 0, 0xd7, 0xff], // blue
+    [0xd7, 0, 0, 0xff], // red
+    [0xd7, 0, 0xd7, 0xff], //magenta
+    [0, 0xd7, 0, 0xff], //green
+    [0, 0xd7, 0xd7, 0xff], //green
+    [0xd7, 0xd7, 0, 0xff], // yellow
+    [0xd7, 0xd7, 0xd7, 0xff], // gray
+    [0, 0, 0xff, 0xff], // blue
+    [0xff, 0, 0, 0xff], // red
+    [0xff, 0, 0xff, 0xff], //magenta
+    [0, 0xff, 0, 0xff], //green
+    [0, 0xff, 0xff, 0xff], //green
+    [0xff, 0xff, 0, 0xff], // yellow
+    [0xff, 0xff, 0xff], // white
 ]);
 
 pysslaPalette2 = new Palette([
-  [0xeb, 0xae, 0x36]
+  [0xeb, 0xae, 0x36, 0xff]
 ]);
 
 pysslaPalette1 = new Palette([
-    [0xbd, 0x10, 0x2c], // red
-    [0x15, 0x62, 0xae], // blue
-    [0x8e, 0x75, 0xc0], // purple
-    [0xf3, 0x35, 0xb7], // pink
-    [0xd3, 0xd3, 0xd3], // white
-    [0x06, 0x4b, 0x21], // green
-    [0xe6, 0xa7, 0x21], // yellow
-    [0x27, 0x1b, 0x25], // brown
-    [0xda, 0x2a, 0x2a], // orange
-    [0x13, 0x13, 0x13]  // black
+    [0xbd, 0x10, 0x2c, 0xff], // red
+    [0x15, 0x62, 0xae, 0xff], // blue
+    [0x8e, 0x75, 0xc0, 0xff], // purple
+    [0xf3, 0x35, 0xb7, 0xff], // pink
+    [0xd3, 0xd3, 0xd3, 0xff], // white
+    [0x06, 0x4b, 0x21, 0xff], // green
+    [0xe6, 0xa7, 0x21, 0xff], // yellow
+    [0x27, 0x1b, 0x25, 0xff], // brown
+    [0xda, 0x2a, 0x2a, 0xff], // orange
+    [0x13, 0x13, 0x13, 0xff]  // black
 ]);
 
 // C64 resolution and palette, but no attribute restrictions (not supported on real c64)
@@ -130,6 +130,10 @@ c64AFLI = {
 };
 
 spectrumStandard = {
+    width: 256,
+    height: 192,
+    pixelWidth: 1,
+    pixelHeight: 1,
     create: function() {
         var pixelImage = new PixelImage(256, 192);
         pixelImage.colorMaps.push(new ColorMap(256, 192, spectrumPallete, 8, 8));
@@ -139,13 +143,13 @@ spectrumStandard = {
 };
 
 pyssla = {
-  width: 40,
-  height: 40,
-  pixelWidth: 1,
-  pixelHeight: 1,
+  width: 320,
+  height: 320,
+  pixelWidth: 8,
+  pixelHeight: 8,
   create: function() {
-    var pixelImage = new PixelImage(40, 40);
-    pixelImage.colorMaps.push(new ColorMap(40, 40, pysslaPalette1, 1, 1));
+    var pixelImage = new PixelImage(320, 320);
+    pixelImage.colorMaps.push(new ColorMap(320, 320, pysslaPalette1, 8, 8));
     return pixelImage;
   }
 };

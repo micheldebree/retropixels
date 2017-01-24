@@ -5,7 +5,8 @@
     "src/**/*.js"
   ],
   "dontLoad": [
-    "node_modules/**/*"
+    "node_modules/**/*",
+    "target/**/*"
   ],
   "plugins": {
     "node": {
