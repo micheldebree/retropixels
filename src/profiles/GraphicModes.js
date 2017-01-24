@@ -39,6 +39,23 @@ spectrumPallete = new Palette([
     [0xff, 0xff, 0xff] // gray
 ]);
 
+pysslaPalette2 = new Palette([
+  [0xeb, 0xae, 0x36]
+]);
+
+pysslaPalette1 = new Palette([
+    [0xbd, 0x10, 0x2c], // red
+    [0x15, 0x62, 0xae], // blue
+    [0x8e, 0x75, 0xc0], // purple
+    [0xf3, 0x35, 0xb7], // pink
+    [0xd3, 0xd3, 0xd3], // white
+    [0x06, 0x4b, 0x21], // green
+    [0xe6, 0xa7, 0x21], // yellow
+    [0x27, 0x1b, 0x25], // brown
+    [0xda, 0x2a, 0x2a], // orange
+    [0x13, 0x13, 0x13]  // black
+]);
+
 // C64 resolution and palette, but no attribute restrictions (not supported on real c64)
 c64Unlimited = {
     width: 320,
@@ -47,7 +64,6 @@ c64Unlimited = {
     pixelHeight: 1,
     create: function() {
         var pixelImage = new PixelImage(320, 200);
-        pixelImage.palette = peptoPalette;
         pixelImage.colorMaps.push(new ColorMap(320, 200, peptoPalette, 1, 1));
         return pixelImage;
     }
@@ -61,7 +77,6 @@ c64Multicolor = {
     pixelHeight: 1,
     create: function() {
         var pixelImage = new PixelImage(160, 200, 2, 1);
-        pixelImage.palette = peptoPalette;
         pixelImage.colorMaps.push(new ColorMap(160, 200, peptoPalette, 160, 200));
         pixelImage.colorMaps.push(new ColorMap(160, 200, peptoPalette, 4, 8));
         pixelImage.colorMaps.push(new ColorMap(160, 200, peptoPalette, 4, 8));
@@ -78,7 +93,6 @@ c64Hires = {
     pixelHeight: 1,
     create: function() {
         var pixelImage = new PixelImage(320, 200);
-        pixelImage.palette = peptoPalette;
         pixelImage.colorMaps.push(new ColorMap(320, 200, peptoPalette, 8, 8));
         pixelImage.colorMaps.push(new ColorMap(320, 200, peptoPalette, 8, 8));
         return pixelImage;
@@ -93,7 +107,6 @@ c64FLI = {
     pixelHeight: 1,
     create: function() {
         var pixelImage = new PixelImage(160, 200, 2, 1);
-        pixelImage.palette = peptoPalette;
         pixelImage.colorMaps.push(new ColorMap(160, 200, peptoPalette));
         pixelImage.colorMaps.push(new ColorMap(160, 200, peptoPalette, 4, 8));
         pixelImage.colorMaps.push(new ColorMap(160, 200, peptoPalette, 4, 1));
@@ -110,7 +123,6 @@ c64AFLI = {
     pixelHeight: 1,
     create: function() {
         var pixelImage = new PixelImage(320, 200);
-        pixelImage.palette = peptoPalette;
         pixelImage.colorMaps.push(new ColorMap(320, 200, peptoPalette, 8, 8));
         pixelImage.colorMaps.push(new ColorMap(320, 200, peptoPalette, 8, 1));
         return pixelImage;
@@ -120,11 +132,22 @@ c64AFLI = {
 spectrumStandard = {
     create: function() {
         var pixelImage = new PixelImage(256, 192);
-        pixelImage.palette = spectrumPallete;
         pixelImage.colorMaps.push(new ColorMap(256, 192, spectrumPallete, 8, 8));
         pixelImage.colorMaps.push(new ColorMap(256, 192, spectrumPallete, 8, 8));
         return pixelImage;
     }
+};
+
+pyssla = {
+  width: 40,
+  height: 40,
+  pixelWidth: 1,
+  pixelHeight: 1,
+  create: function() {
+    var pixelImage = new PixelImage(40, 40);
+    pixelImage.colorMaps.push(new ColorMap(40, 40, pysslaPalette1, 1, 1));
+    return pixelImage;
+  }
 };
 
 module.exports = {
@@ -133,5 +156,6 @@ module.exports = {
     c64FLI: c64FLI,
     c64AFLI: c64AFLI,
     c64Hires: c64Hires,
-    spectrumStandard: spectrumStandard
+    spectrumStandard: spectrumStandard,
+    pyssla: pyssla
 };

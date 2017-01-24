@@ -16,7 +16,6 @@ class Palette {
      * @returns the index into the palette
      */
     mapPixel(pixel) {
-
         if (pixel === undefined) {
           throw new Error("pixel is mandatory.");
         }

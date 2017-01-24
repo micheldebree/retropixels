@@ -60,6 +60,7 @@ class PixelImage {
         for (let i = 0; i < this.colorMaps.length; i += 1) {
             // console.log("Finding color " + color + " in map " + i);
             let colorMap = this.colorMaps[i];
+            // console.log("Palette is " + colorMap.palette);
             let mappedIndex = colorMap.palette.mapPixel(orderedDithering.offsetColor(realColor, x, y));
             // console.log("mappedIndex is " + mappedIndex);
             if (mappedIndex === colorMap.get(x, y)) {
@@ -128,11 +129,6 @@ class PixelImage {
         return row !== undefined ? row[x] : undefined;
     }
 
-    getPaletteIndex(x, y) {
-        const ci = this.getPixelIndex(x, y);
-        return ci !== undefined ? this.colorMaps[ci].get(x, y) : undefined;
-    }
-
     /**
      * Map a 'real' color to the best match in the image.
      * @param {number} x - x coordinate
@@ -163,14 +159,24 @@ class PixelImage {
     }
 
     /**
-     * Get the value of a particular pixel.
+     * Get the color of a particular pixel.
      * @param {int} x X coordinate
      * @param {int} y Y coordinate
      * @returns {Array} Pixel values [r, g, b, a], or an empty pixel if x and y are out of range.
      */
     peek(x, y) {
-        const paletteIndex = this.getPaletteIndex(x, y);
-        return paletteIndex !== undefined ? this.palette.get(paletteIndex) : PixelImage.emptyPixel;
+        // get the ColorMap for the color
+        const colorMapIndex = this.getPixelIndex(x, y);
+        if (colorMapIndex === undefined) {
+            return undefined;
+        }
+
+        // get the palette index from the ColorMap
+        const colorMap = this.colorMaps[colorMapIndex],
+            paletteIndex = colorMap.get(x, y);
+            
+        // return the color from the palette
+        return paletteIndex !== undefined ? colorMap.palette.get(paletteIndex) : PixelImage.emptyPixel;
     }
 
     addColorMap(colorMap) {

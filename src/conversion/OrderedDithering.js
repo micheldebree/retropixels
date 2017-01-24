@@ -29,6 +29,9 @@ class OrderedDithering {
             [43, 27, 39, 23, 42, 26, 38, 22]
         ];
 
+
+        this.matrix = this.bayer8x8;
+
         this.all = [{
             key: 'None',
             value: [
@@ -51,10 +54,11 @@ class OrderedDithering {
     }
 
     getColorOffset(x, y) {
-        const matrix_size = 4,
+        // N.B. only works for square matrices because assumed length == width!
+        const matrix_size = this.matrix[0].length,
             palette_size = 16,
             factor = 1 / (matrix_size * matrix_size),
-            value = factor * this.bayer4x4[y % matrix_size][x % matrix_size],
+            value = factor * this.matrix[y % matrix_size][x % matrix_size],
 
             r = 256 / palette_size,
             offset = r * (value - 0.5);

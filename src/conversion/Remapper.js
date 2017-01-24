@@ -1,17 +1,19 @@
 /* jshint esversion: 6 */
 /**
  * Create optimal colormaps for ImageData.
+ * TODO: does not support different palettes per colorMap
  */
 const PixelImage = require('../model/PixelImage'),
       ColorMap = require('../model/ColorMap'),
       ImageData = require('../model/ImageData');
 
+// TODO: now uses palette of first color map only
 function getColorMap(imageData, targetPixelImage) {
     const w = imageData.width,
           h = imageData.height,
-          unrestrictedImage = new PixelImage(w, h, targetPixelImage.pWidth, targetPixelImage.pHeight);
-    unrestrictedImage.palette = targetPixelImage.palette;
-    unrestrictedImage.colorMaps.push(new ColorMap(w, h, unrestrictedImage.palette, 1, 1));
+          unrestrictedImage = new PixelImage(w, h, targetPixelImage.pWidth, targetPixelImage.pHeight),
+          palette = targetPixelImage.colorMaps[0].palette;
+    unrestrictedImage.colorMaps.push(new ColorMap(w, h, palette, 1, 1));
     unrestrictedImage.mappingWeight = targetPixelImage.mappingWeight;
     unrestrictedImage.errorDiffusionDither = targetPixelImage.errorDiffusionDither;
     ImageData.drawImageData(imageData, unrestrictedImage);
