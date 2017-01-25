@@ -44,6 +44,9 @@ function toYUV(pixel) {
 }
 
 function getDistance(onePixel, otherPixel) {
+  
+    const weight = [1, 1, 1];
+    
     if (onePixel === undefined) {
         throw new Error("onePixel is mandatory.");
     }
@@ -54,9 +57,9 @@ function getDistance(onePixel, otherPixel) {
     otherPixel = toYUV(otherPixel);
 
     return Math.sqrt(
-        Math.pow(onePixel[0] - otherPixel[0], 2) +
-        Math.pow(onePixel[1] - otherPixel[1], 2) +
-        Math.pow(onePixel[2] - otherPixel[2], 2)
+        Math.pow(weight[0] * (onePixel[0] - otherPixel[0]), 2) +
+        Math.pow(weight[1] * (onePixel[1] - otherPixel[1]), 2) +
+        Math.pow(weight[2] * (onePixel[2] - otherPixel[2]), 2)
     );
 }
 

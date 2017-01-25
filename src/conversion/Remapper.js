@@ -2,6 +2,7 @@
 /**
  * Create optimal colormaps for ImageData.
  * TODO: does not support different palettes per colorMap
+ * TODO: rename 
  */
 const PixelImage = require('../model/PixelImage'),
       ColorMap = require('../model/ColorMap'),

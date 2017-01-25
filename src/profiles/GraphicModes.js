@@ -40,7 +40,16 @@ spectrumPallete = new Palette([
 ]);
 
 pysslaPalette2 = new Palette([
-  [0xeb, 0xae, 0x36, 0xff]
+  [0xc5, 0xdd, 0xdf, 0xff], // white
+  [0xeb, 0xae, 0x36, 0xff], // yellow
+  [0xb2, 0x48, 0xcf, 0xff], // purple
+  [0xd6, 0x00, 0x13, 0xff], // red
+  [0x00, 0x80, 0x46, 0xff], // green
+  [0xe0, 0x33, 0x1c, 0xff], // orange
+  [0x00, 0x7b, 0xb8, 0xff], // blue
+  [0xff, 0x00, 0x7f, 0xff], // pink
+  [0x4b, 0x21, 0x00, 0xff], // brown
+  [0x16, 0x16, 0x16, 0xff]  // black
 ]);
 
 pysslaPalette1 = new Palette([
@@ -143,13 +152,13 @@ spectrumStandard = {
 };
 
 pyssla = {
-  width: 320,
-  height: 320,
+  width: 232,
+  height: 232,
   pixelWidth: 8,
   pixelHeight: 8,
   create: function() {
-    var pixelImage = new PixelImage(320, 320);
-    pixelImage.colorMaps.push(new ColorMap(320, 320, pysslaPalette1, 8, 8));
+    var pixelImage = new PixelImage(232, 232);
+    pixelImage.colorMaps.push(new ColorMap(232, 232, pysslaPalette2, 8, 8));
     return pixelImage;
   }
 };
