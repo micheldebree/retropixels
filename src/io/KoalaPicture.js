@@ -43,7 +43,10 @@ class KoalaPicture extends BinaryFile {
                 for (let bitmapY = 0; bitmapY < 8; bitmapY += 1) {
                     // pack 4 pixels into one byte
                     bitmap[bitmapIndex] =
-                        pixelImage.getPixelIndex(charX, charY + bitmapY) << 6 | pixelImage.getPixelIndex(charX + 1, charY + bitmapY) << 4 | pixelImage.getPixelIndex(charX + 2, charY + bitmapY) << 2 | pixelImage.getPixelIndex(charX + 3, charY + bitmapY);
+                        pixelImage.getPixelIndex(charX, charY + bitmapY) << 6 
+                        | pixelImage.getPixelIndex(charX + 1, charY + bitmapY) << 4 
+                        | pixelImage.getPixelIndex(charX + 2, charY + bitmapY) << 2 
+                        | pixelImage.getPixelIndex(charX + 3, charY + bitmapY);
                     bitmapIndex += 1;
                 }
             }
@@ -62,7 +65,8 @@ class KoalaPicture extends BinaryFile {
             for (let colorX = 0; colorX < lowerColorMap.width; colorX += 4) {
                 // pack two colors in one byte
                 screenRam[colorIndex] =
-                    ((upperColorMap.get(colorX, colorY) << 4) & 0xf0) | (lowerColorMap.get(colorX, colorY) & 0x0f);
+                    ((upperColorMap.get(colorX, colorY) << 4) & 0xf0) 
+                    | (lowerColorMap.get(colorX, colorY) & 0x0f);
                 colorIndex += 1;
             }
         }

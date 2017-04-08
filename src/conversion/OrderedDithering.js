@@ -1,10 +1,11 @@
 /* jshint esversion: 6 */
-
 const Pixels = require('../model/Pixels.js');
 
 class OrderedDithering {
 
     constructor() {
+
+        // preset matrices {{{
 
         this.none = [ [ 0 ] ];
       
@@ -30,6 +31,7 @@ class OrderedDithering {
             [11, 59, 7, 55, 10, 58, 6, 54],
             [43, 27, 39, 23, 42, 26, 38, 22]
         ];
+        // }}}
 
         // default  
         this.matrix = this.bayer8x8;
@@ -49,25 +51,29 @@ class OrderedDithering {
         }];
     }
 
+// public {{{
+
     offsetColor(color, x, y) {
         return Pixels.add(color, this.getColorOffset(x, y));
     }
 
     getColorOffset(x, y) {
         // N.B. only works for square matrices because assumed length == width!
-        // TODO: unfix palette size
         const matrix_size = this.matrix[0].length,
+            // TODO: unfix palette size
             palette_size = 16,
             factor = 1 / (matrix_size * matrix_size),
             value = factor * this.matrix[y % matrix_size][x % matrix_size],
-
+            // TODO: calculate better r (per channel?)
             r = 256 / palette_size,
             offset = r * (value - 0.5);
-
-        // TODO: calculate better r (per channel?)
+       
         return [offset, offset, offset];
 
     }
+
+// }}}
+
 }
 
 module.exports = OrderedDithering;

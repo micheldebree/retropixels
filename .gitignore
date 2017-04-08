@@ -6,3 +6,5 @@ node_modules
 *.log
 .tags*
 tags
+.vscode
+target

@@ -29,7 +29,10 @@ function isEmpty(pixel) {
 }
 
 function equals(one, other) {
-    return !isEmpty(one) && !isEmpty(other) && one[0] === other[0] && one[1] === other[1] && one[2] === other[2];
+    return !isEmpty(one) && !isEmpty(other) &&
+        one[0] === other[0] &&
+        one[1] === other[1] &&
+        one[2] === other[2];
 }
 
 function toYUV(pixel) {
@@ -44,7 +47,6 @@ function toYUV(pixel) {
 }
 
 function getDistance(onePixel, otherPixel) {
-  
     const weight = [1, 1, 1];
     
     if (onePixel === undefined) {

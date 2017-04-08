@@ -8,6 +8,8 @@ const PixelImage = require('../model/PixelImage'),
       ColorMap = require('../model/ColorMap'),
       ImageData = require('../model/ImageData');
 
+// private {{{
+
 // TODO: now uses palette of first color map only
 function getColorMap(imageData, targetPixelImage) {
     const w = imageData.width,
@@ -58,6 +60,7 @@ function extractColorMap (fromColorMap, toColorMap) {
     }
     fromColorMap.subtract(toColorMap);
 }
+// }}}
 
 function optimizeColorMaps(imageData, targetPixelImage) {
     const colorMap = getColorMap(imageData, targetPixelImage);

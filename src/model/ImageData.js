@@ -1,9 +1,11 @@
 /* jshint esversion: 6 */
+// TODO: Make this a decorate for ImageData?
 function coordsToindex(imageData, x, y) {
     const result = Math.floor(y) * (imageData.width << 2) + (x << 2);
     return result < imageData.data.length ? result : undefined;
 }
 
+// Set the pixel at (x,y)
 function poke(imageData, x, y, pixel) {
     if (pixel !== undefined) {
         const i = coordsToindex(imageData, x, y);
@@ -16,6 +18,7 @@ function poke(imageData, x, y, pixel) {
     }
 }
 
+// Get the pixel at (x,y)
 function peek(imageData, x, y) {
     const i = coordsToindex(imageData, x, y);
     if (i !== undefined) {
@@ -26,9 +29,10 @@ function peek(imageData, x, y) {
             imageData.data[i + 3]
         ];
     }
-    return emptyPixel;
+    return emptyPixel; // TODO: is emptyPixel defined?
 }
 
+// Draw ImageData onto a PixelImage 
 function drawImageData(imageData, pixelImage) {
     for (let y = 0; y < pixelImage.height; y += 1) {
         for (let x = 0; x < pixelImage.width; x += 1) {

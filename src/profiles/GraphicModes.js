@@ -2,6 +2,8 @@ var PixelImage = require('../model/PixelImage.js'),
     ColorMap = require('../model/ColorMap.js'),
     Palette = require('../model/Palette.js');
 
+// Palettes {{{
+
 peptoPalette = new Palette([
     [0, 0, 0, 0xff], // black
     [0xff, 0xff, 0xff, 0xff], // white
@@ -65,6 +67,10 @@ pysslaPalette1 = new Palette([
     [0x13, 0x13, 0x13, 0xff]  // black
 ]);
 
+// }}}
+
+// C64 modes {{{
+
 // C64 resolution and palette, but no attribute restrictions (not supported on real c64)
 c64Unlimited = {
     width: 320,
@@ -123,6 +129,7 @@ c64FLI = {
         return pixelImage;
     }
 };
+// }}}
 
 // C64 AFLI mode
 c64AFLI = {

@@ -58,20 +58,21 @@ class PixelImage {
         }
 
         for (let i = 0; i < this.colorMaps.length; i += 1) {
-            // console.log("Finding color " + color + " in map " + i);
             let colorMap = this.colorMaps[i];
-            // console.log("Palette is " + colorMap.palette);
-            let mappedIndex = colorMap.palette.mapPixel(orderedDithering.offsetColor(realColor, x, y));
-            // console.log("mappedIndex is " + mappedIndex);
+            let mappedIndex = colorMap.palette.mapPixel(
+                orderedDithering.offsetColor(realColor, x, y));
             if (mappedIndex === colorMap.get(x, y)) {
-                // console.log("Found in map " + i);
                 return i;
             }
         }
-        // console.log("Not found.");
         return undefined;
     }
 
+
+    /**
+     * Try all ColorMaps to find an area that is not defined yet.
+     * If found, map realColor to the ColorMap's palette and clain the area.
+     */
     tryClaimUnusedInMap(realColor, x, y) {
         if (x === undefined) {
             throw new Error("x is mandatory.");
@@ -81,11 +82,10 @@ class PixelImage {
         }
 
         for (let i = 0; i < this.colorMaps.length; i += 1) {
-            // console.log("Looking for unused spot in colorMap " + i);
             if (this.colorMaps[i].get(x, y) === undefined) {
-                // console.log("Found!");
                 const colorMap = this.colorMaps[i],
-                    color = colorMap.palette.mapPixel(orderedDithering.offsetColor(realColor, x, y));
+                    color = colorMap.palette.mapPixel(
+                        orderedDithering.offsetColor(realColor, x, y));
                 colorMap.put(x, y, color);
                 return i;
             }
@@ -139,7 +139,7 @@ class PixelImage {
 
         // idea: do 'smart' poking in a separate class, with dependency to dithering
 
-        // try to reuse existing color map that has the best fit for this color
+        // try to reuse existing color map that has an exact fit for this color
         let colorMapIndex = this.findColorInMap(x, y, realColor);
         if (colorMapIndex !== undefined) {
             this.setPixelIndex(x, y, colorMapIndex);

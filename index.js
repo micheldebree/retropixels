@@ -29,6 +29,7 @@ if (outFile === undefined) {
     cli.help();
 }
 
+// Save PixelImage as a c64 native .PRG executable.
 function savePrg(pixelImage) {
     const koalaImage = koala.fromPixelImage(pixelImage),
         binary = path.join(__dirname, '/src/c64/KoalaShower.prg');
@@ -44,6 +45,7 @@ function savePrg(pixelImage) {
     });
 }
 
+// Save PixelImage as a KoalaPaint image.
 function saveKoala(pixelImage) {
     const koalaImage = koala.fromPixelImage(pixelImage);
     fs.writeFile(outFile, new Buffer(koalaImage.toBytes()), function(err) {
@@ -52,6 +54,7 @@ function saveKoala(pixelImage) {
     });
 }
 
+// Save PixelImage as a PNG image.
 function savePng(pixelImage) {
     new jimp(pixelImage.width, pixelImage.height, function(err, image) {
         if (err) throw err;
@@ -67,10 +70,11 @@ function savePng(pixelImage) {
     });
 }
 
-function cropFill(jimpImage, destWidth, destHeight) {
+// Crop a JIMP Image to fill up a specific ratio. Ratio is passed as relative width and height.
+function cropFill(jimpImage, relativeWidth, relativeHeight) {
     const srcWidth = jimpImage.bitmap.width,
         srcHeight = jimpImage.bitmap.height,
-        destratio = destWidth / destHeight,
+        destratio = relativeWidth / relativeHeight,
         srcratio = srcWidth / srcHeight,
         cropwidth = Math.round(srcratio > destratio ? srcHeight * destratio : srcWidth),
         cropheight = Math.round(srcratio > destratio ? srcHeight : srcWidth / destratio),
@@ -78,6 +82,8 @@ function cropFill(jimpImage, destWidth, destHeight) {
         sourceTop = Math.round((srcHeight - cropheight) / 2);
     jimpImage.crop(sourceLeft, sourceTop, cropwidth, cropheight);
 }
+
+// Main {{{
 
 jimp.read(inFile, (err, jimpImage) => {
     if (err) throw err;
@@ -102,3 +108,5 @@ jimp.read(inFile, (err, jimpImage) => {
     }
 
 });
+
+// }}}

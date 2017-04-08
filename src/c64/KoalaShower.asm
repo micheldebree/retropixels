@@ -33,7 +33,6 @@ start:
 	inx
 	bne !loop-
 	jmp *
-            
 
 // fill up with zero bytes up until the start of the bitmap ($2000)
 // leave out two bytes because the koala picture's first two bytes are the load address, then bitmap starts
