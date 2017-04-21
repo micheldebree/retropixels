@@ -1,10 +1,9 @@
-/* jshint esversion: 6 */
-class BinaryFile {
+export class BinaryFile {
 
     /**
      * Concatenate multiple 8-bit array buffers into one.
      */
-    concat(arrayBuffers) {
+    concat(arrayBuffers: Uint8Array[]): Uint8Array {
         let iii = 0,
             outputLength = 0;
 
@@ -25,4 +24,4 @@ class BinaryFile {
         return result;
     }
 }
-module.exports = BinaryFile;
+

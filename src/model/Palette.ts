@@ -1,13 +1,14 @@
-/* jshint esversion: 6 */
-const Pixels = require('./Pixels.js');
+import * as Pixels from './Pixels';
 
-class Palette {
+export class Palette {
 
-    constructor(pixels) {
+    pixels: number[][];
+
+    constructor(pixels: number[][]) {
         this.pixels = pixels === undefined ? [] : pixels;
     }
     
-    get(index) {
+    get(index: number): number[] {
         return this.pixels[index];
     }
 
@@ -15,17 +16,17 @@ class Palette {
      * Map a pixel to the closest available color in the palette.
      * @returns the index into the palette
      */
-    mapPixel(pixel) {
+    mapPixel(pixel: number[]): number {
         if (pixel === undefined) {
           throw new Error("pixel is mandatory.");
         }
       
-        let minVal,
-            minI;
+        let minVal: number;
+        let minI: number;
 
         // determine closest pixel in palette (ignoring alpha)
-        for (let i = 0; i < this.pixels.length; i += 1) {
-            let d = Pixels.getDistance(pixel, this.pixels[i]);
+        for (let i: number = 0; i < this.pixels.length; i += 1) {
+            let d: number = Pixels.getDistance(pixel, this.pixels[i]);
             if (minVal === undefined || d < minVal) {
                 minVal = d;
                 minI = i;
@@ -34,5 +35,3 @@ class Palette {
         return minI;
     }
 }
-
-module.exports = Palette;

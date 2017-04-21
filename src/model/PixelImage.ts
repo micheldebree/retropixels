@@ -24,18 +24,29 @@ http://bisqwit.iki.fi/story/howto/dither/jy/
 https://people.eecs.berkeley.edu/~dcoetzee/downloads/scolorq/
 
 */
-const Pixels = require('./Pixels.js'),
-    OrderedDithering = require('../conversion/OrderedDithering.js'),
-    orderedDithering = new OrderedDithering();
+import * as Pixels from './Pixels';
+import { OrderedDithering } from'../conversion/OrderedDithering';
+import { ColorMap } from './ColorMap';
 
-class PixelImage {
+export class PixelImage {
 
-    constructor(width, height, pWidth, pHeight) {
+    private orderedDithering = new OrderedDithering();
+    private pixelIndex: number[][];
+
+    width: number;
+    height: number;
+    pWidth: number;  // aspect width of one pixel
+    pHeight: number; // aspect height of one pixel
+    colorMaps: ColorMap[];
+
+    mappingWeight: number[];
+
+    constructor(width: number, height: number, pWidth: number = 1, pHeight: number = 1) {
         // public properties
         this.width = width;
         this.height = height;
-        this.pWidth = pWidth === undefined ? 1 : pWidth; // aspect width of one pixel
-        this.pHeight = pHeight === undefined ? 1 : pHeight; // aspect height of one pixel
+        this.pWidth = pWidth;
+        this.pHeight = pHeight;
         this.colorMaps = []; // maps x,y to a color
         this.pixelIndex = []; // maps pixel x,y to a colormap
 
@@ -48,8 +59,9 @@ class PixelImage {
       Find a ColorMap that the color can be mapped on exactly.
       Do this by mapping the color to each ColorMaps's palette and checking if the
       ColorMap has that mapped color at the specified position.
+      Returns the index of the ColorMap
     */
-    findColorInMap(x, y, realColor) {
+    findColorInMap(x: number, y: number, realColor: number[]): number {
         if (x === undefined) {
             throw new Error("x is mandatory.");
         }
@@ -57,10 +69,10 @@ class PixelImage {
             throw new Error("y is mandatory.");
         }
 
-        for (let i = 0; i < this.colorMaps.length; i += 1) {
-            let colorMap = this.colorMaps[i];
-            let mappedIndex = colorMap.palette.mapPixel(
-                orderedDithering.offsetColor(realColor, x, y));
+        for (let i: number = 0; i < this.colorMaps.length; i += 1) {
+            let colorMap: ColorMap = this.colorMaps[i];
+            let mappedIndex: number = colorMap.palette.mapPixel(
+                this.orderedDithering.offsetColor(realColor, x, y));
             if (mappedIndex === colorMap.get(x, y)) {
                 return i;
             }
@@ -71,9 +83,10 @@ class PixelImage {
 
     /**
      * Try all ColorMaps to find an area that is not defined yet.
-     * If found, map realColor to the ColorMap's palette and clain the area.
+     * If found, map realColor to the ColorMap's palette and claim the area.
+     * Returns index into the found ColorMap.
      */
-    tryClaimUnusedInMap(realColor, x, y) {
+    tryClaimUnusedInMap(realColor: number[], x: number, y: number): number {
         if (x === undefined) {
             throw new Error("x is mandatory.");
         }
@@ -85,7 +98,7 @@ class PixelImage {
             if (this.colorMaps[i].get(x, y) === undefined) {
                 const colorMap = this.colorMaps[i],
                     color = colorMap.palette.mapPixel(
-                        orderedDithering.offsetColor(realColor, x, y));
+                        this.orderedDithering.offsetColor(realColor, x, y));
                 colorMap.put(x, y, color);
                 return i;
             }
@@ -100,15 +113,15 @@ class PixelImage {
      * @param {int} y Y coordinate
      * @returns {int} Colormap index for the closest Colormap
      */
-    map(pixel, x, y) {
-        let minVal,
-            minI = 0;
+    map(pixel: number[], x: number, y: number): number {
+        let minVal: number,
+            minI: number = 0;
 
         // determine closest pixel in palette (ignoring alpha)
-        for (let i = 0; i < this.colorMaps.length; i += 1) {
-            let colorMap = this.colorMaps[i],
-                color = colorMap.getColor(x, y),
-                d = Pixels.getDistance(pixel, orderedDithering.offsetColor(color, x, y));
+        for (let i: number = 0; i < this.colorMaps.length; i += 1) {
+            let colorMap: ColorMap = this.colorMaps[i],
+                color: number[] = colorMap.getColor(x, y),
+                d: number = Pixels.getDistance(pixel, this.orderedDithering.offsetColor(color, x, y));
             if (minVal === undefined || d < minVal) {
                 minVal = d;
                 minI = i;
@@ -117,15 +130,15 @@ class PixelImage {
         return minI;
     }
 
-    setPixelIndex(x, y, index) {
+    setPixelIndex(x: number, y: number, index: number): void {
         if (this.pixelIndex[y] === undefined) {
             this.pixelIndex[y] = [];
         }
         this.pixelIndex[y][x] = index;
     }
 
-    getPixelIndex(x, y) {
-        const row = this.pixelIndex[y];
+    getPixelIndex(x: number, y: number): number {
+        const row: number[] = this.pixelIndex[y];
         return row !== undefined ? row[x] : undefined;
     }
 
@@ -135,12 +148,12 @@ class PixelImage {
      * @param {number} y - y coordinate
      * @param {Array} pixel - Pixel values [r, g, b]
      */
-    poke(x, y, realColor) {
+    poke(x: number, y: number, realColor: number[]): void {
 
         // idea: do 'smart' poking in a separate class, with dependency to dithering
 
         // try to reuse existing color map that has an exact fit for this color
-        let colorMapIndex = this.findColorInMap(x, y, realColor);
+        let colorMapIndex: number = this.findColorInMap(x, y, realColor);
         if (colorMapIndex !== undefined) {
             this.setPixelIndex(x, y, colorMapIndex);
             return;
@@ -164,7 +177,7 @@ class PixelImage {
      * @param {int} y Y coordinate
      * @returns {Array} Pixel values [r, g, b, a], or an empty pixel if x and y are out of range.
      */
-    peek(x, y) {
+    peek(x: number, y: number): number[] {
         // get the ColorMap for the color
         const colorMapIndex = this.getPixelIndex(x, y);
         if (colorMapIndex === undefined) {
@@ -176,13 +189,11 @@ class PixelImage {
             paletteIndex = colorMap.get(x, y);
             
         // return the color from the palette
-        return paletteIndex !== undefined ? colorMap.palette.get(paletteIndex) : PixelImage.emptyPixel;
+        return paletteIndex !== undefined ? colorMap.palette.get(paletteIndex) : [0, 0, 0, 0];
     }
 
-    addColorMap(colorMap) {
+    addColorMap(colorMap: ColorMap): void {
         this.colorMaps.push(colorMap);
     }
 
 }
-
-module.exports = PixelImage;

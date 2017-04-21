@@ -1,9 +1,17 @@
-/* jshint esversion: 6 */
-const BinaryFile = require('./BinaryFile.js');
+import { BinaryFile } from './BinaryFile';
+import { PixelImage } from '../model/PixelImage';
+import { ColorMap } from '../model/ColorMap';
+import { Palette } from '../model/Palette';
 
-class KoalaPicture extends BinaryFile {
+export class KoalaPicture extends BinaryFile {
 
-    read(arrayBuffer) {
+    loadAddress: Uint8Array;
+    bitmap: Uint8Array;
+    screenRam: Uint8Array;
+    colorRam: Uint8Array;
+    background: Uint8Array;
+
+    read(arrayBuffer: Uint8Array) {
         this.loadAddress = new Uint8Array(arrayBuffer, 0, 2);
         this.bitmap = new Uint8Array(arrayBuffer, 2, 8000);
         this.screenRam = new Uint8Array(arrayBuffer, 8002, 1000);
@@ -14,7 +22,7 @@ class KoalaPicture extends BinaryFile {
     /**
      * Convert to a sequence of bytes.
      */
-    toBytes() {
+    toBytes(): Uint8Array {
         return this.concat([
             this.loadAddress,
             this.bitmap,
@@ -25,16 +33,9 @@ class KoalaPicture extends BinaryFile {
     }
 
     /**
-     * Get a url to download this picture.
-     */
-    toUrl() {
-        return this.toObjectUrl(this.toBytes());
-    }
-
-    /**
      * Get the Koala bitmap component from a PixelImage.
      */
-    static convertBitmap(pixelImage) {
+    static convertBitmap(pixelImage: PixelImage): Uint8Array {
         const bitmap = new Uint8Array(8000);
         let bitmapIndex = 0;
 
@@ -57,12 +58,12 @@ class KoalaPicture extends BinaryFile {
     /**
      * Get the Koala screenram component from two ColorMaps
      */
-    static convertScreenram(lowerColorMap, upperColorMap) {
-        const screenRam = new Uint8Array(1000);
-        var colorIndex = 0;
+    static convertScreenram(lowerColorMap: ColorMap, upperColorMap: ColorMap): Uint8Array {
+        const screenRam: Uint8Array = new Uint8Array(1000);
+        var colorIndex: number = 0;
 
-        for (let colorY = 0; colorY < lowerColorMap.height; colorY += 8) {
-            for (let colorX = 0; colorX < lowerColorMap.width; colorX += 4) {
+        for (let colorY: number = 0; colorY < lowerColorMap.height; colorY += 8) {
+            for (let colorX: number = 0; colorX < lowerColorMap.width; colorX += 4) {
                 // pack two colors in one byte
                 screenRam[colorIndex] =
                     ((upperColorMap.get(colorX, colorY) << 4) & 0xf0) 
@@ -76,7 +77,7 @@ class KoalaPicture extends BinaryFile {
     /**
      * Get the Koala colorram component from a ColorMap
      */
-    static convertColorram(colorMap) {
+    static convertColorram(colorMap: ColorMap): Uint8Array {
         const imageW = colorMap.width,
             imageH = colorMap.height,
             colorRam = new Uint8Array(1000);
@@ -99,7 +100,7 @@ class KoalaPicture extends BinaryFile {
      * - colormap 1 and 2 have the screenram
      * - colormap 3 has the colorram
      */
-    static fromPixelImage(pixelImage) {
+    static fromPixelImage(pixelImage: PixelImage): KoalaPicture {
         const koalaPic = new KoalaPicture();
 
         koalaPic.loadAddress = new Uint8Array(2);
@@ -118,7 +119,7 @@ class KoalaPicture extends BinaryFile {
     /**
      * Convert a Koala Painter picture to a PixelImage.
      */
-    toPixelImage(koalaPic, palette) {
+    toPixelImage(koalaPic: KoalaPicture, palette: Palette): PixelImage {
         const imageW = 160,
             imageH = 200,
             pixelImage = new PixelImage(imageW, imageH, 2, 1),
@@ -128,7 +129,6 @@ class KoalaPicture extends BinaryFile {
         let bitmapIndex = 0,
             colorIndex = 0;
 
-        pixelImage.palette = palette;
         pixelImage.addColorMap(new ColorMap(imageW, imageH, palette));
         pixelImage.addColorMap(new ColorMap(imageW, imageH, palette, pixelsPerCellHor, pixelsPerCellVer));
         pixelImage.addColorMap(new ColorMap(imageW, imageH, palette, pixelsPerCellHor, pixelsPerCellVer));
@@ -160,16 +160,16 @@ class KoalaPicture extends BinaryFile {
                 let color11 = koalaPic.colorRam[colorIndex] & 0x0f;
 
                 // add the colors to the corresponding color maps
-                pixelImage.colorMaps[1].add(colorX, colorY, color01);
-                pixelImage.colorMaps[2].add(colorX, colorY, color10);
-                pixelImage.colorMaps[3].add(colorX, colorY, color11);
+                pixelImage.colorMaps[1].put(colorX, colorY, color01);
+                pixelImage.colorMaps[2].put(colorX, colorY, color10);
+                pixelImage.colorMaps[3].put(colorX, colorY, color11);
 
                 colorIndex += 1;
             }
         }
         // add background color as colorMap 0
-        pixelImage.colorMaps[0].add(0, 0, koalaPic.background[0]);
+        pixelImage.colorMaps[0].put(0, 0, koalaPic.background[0]);
         return pixelImage;
     }
 }
-module.exports = KoalaPicture;
+

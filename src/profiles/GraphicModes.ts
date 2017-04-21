@@ -1,10 +1,10 @@
-var PixelImage = require('../model/PixelImage.js'),
-    ColorMap = require('../model/ColorMap.js'),
-    Palette = require('../model/Palette.js');
+import {PixelImage } from '../model/PixelImage';
+import {ColorMap} from '../model/ColorMap';
+import {Palette} from  '../model/Palette';
 
 // Palettes {{{
 
-peptoPalette = new Palette([
+const peptoPalette = new Palette([
     [0, 0, 0, 0xff], // black
     [0xff, 0xff, 0xff, 0xff], // white
     [0x68, 0x37, 0x2b, 0xff], //red
@@ -23,7 +23,7 @@ peptoPalette = new Palette([
     [0x95, 0x95, 0x95, 0xff] //green
 ]);
 
-spectrumPallete = new Palette([
+const spectrumPallete = new Palette([
     [0, 0, 0, 0xff], // black
     [0, 0, 0xd7, 0xff], // blue
     [0xd7, 0, 0, 0xff], // red
@@ -41,7 +41,7 @@ spectrumPallete = new Palette([
     [0xff, 0xff, 0xff], // white
 ]);
 
-pysslaPalette2 = new Palette([
+const pysslaPalette2 = new Palette([
   [0xc5, 0xdd, 0xdf, 0xff], // white
   [0xeb, 0xae, 0x36, 0xff], // yellow
   [0xb2, 0x48, 0xcf, 0xff], // purple
@@ -54,7 +54,7 @@ pysslaPalette2 = new Palette([
   [0x16, 0x16, 0x16, 0xff]  // black
 ]);
 
-pysslaPalette1 = new Palette([
+const pysslaPalette1 = new Palette([
     [0xbd, 0x10, 0x2c, 0xff], // red
     [0x15, 0x62, 0xae, 0xff], // blue
     [0x8e, 0x75, 0xc0, 0xff], // purple
@@ -72,7 +72,7 @@ pysslaPalette1 = new Palette([
 // C64 modes {{{
 
 // C64 resolution and palette, but no attribute restrictions (not supported on real c64)
-c64Unlimited = {
+export const c64Unlimited = {
     width: 320,
     height: 200,
     pixelWidth: 1,
@@ -85,7 +85,7 @@ c64Unlimited = {
 };
 
 // C64 standard multicolor mode
-c64Multicolor = {
+export const c64Multicolor = {
     width: 160,
     height: 200,
     pixelWidth: 2,
@@ -101,7 +101,7 @@ c64Multicolor = {
 };
 
 // C64 standard high resolution mode
-c64Hires = {
+export const c64Hires = {
     width: 320,
     height: 200,
     pixelWidth: 1,
@@ -115,7 +115,7 @@ c64Hires = {
 };
 
 // C64 FLI mode
-c64FLI = {
+export const c64FLI = {
     width: 160,
     height: 200,
     pixelWidth: 2,
@@ -132,7 +132,7 @@ c64FLI = {
 // }}}
 
 // C64 AFLI mode
-c64AFLI = {
+export const c64AFLI = {
     width: 320,
     height: 200,
     pixelWidth: 1,
@@ -145,7 +145,7 @@ c64AFLI = {
     }
 };
 
-spectrumStandard = {
+export const spectrumStandard = {
     width: 256,
     height: 192,
     pixelWidth: 1,
@@ -158,7 +158,7 @@ spectrumStandard = {
     }
 };
 
-pyssla = {
+export const pyssla = {
   width: 232,
   height: 232,
   pixelWidth: 8,
@@ -168,14 +168,4 @@ pyssla = {
     pixelImage.colorMaps.push(new ColorMap(232, 232, pysslaPalette2, 8, 8));
     return pixelImage;
   }
-};
-
-module.exports = {
-    c64Unlimited: c64Unlimited,
-    c64Multicolor: c64Multicolor,
-    c64FLI: c64FLI,
-    c64AFLI: c64AFLI,
-    c64Hires: c64Hires,
-    spectrumStandard: spectrumStandard,
-    pyssla: pyssla
 };

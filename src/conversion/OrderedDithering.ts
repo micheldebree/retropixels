@@ -1,7 +1,14 @@
-/* jshint esversion: 6 */
-const Pixels = require('../model/Pixels.js');
+import * as Pixels from '../model/Pixels';
 
-class OrderedDithering {
+export class OrderedDithering {
+
+    matrix: number[][];
+
+    // presets
+    none: number[][];
+    bayer2x2: number[][];
+    bayer4x4: number[][];
+    bayer8x8: number[][];
 
     constructor() {
 
@@ -35,38 +42,25 @@ class OrderedDithering {
 
         // default  
         this.matrix = this.bayer8x8;
-
-        this.all = [{
-            key: 'None',
-            value: this.none
-        }, {
-            key: 'Bayer 2 x 2',
-            value: this.bayer2x2
-        }, {
-            key: 'Bayer 4 x 4',
-            value: this.bayer4x4
-        }, {
-            key: 'Bayer 8 x 8',
-            value: this.bayer8x8
-        }];
+      
     }
 
 // public {{{
 
-    offsetColor(color, x, y) {
+    offsetColor(color: number[], x: number, y: number): number[] {
         return Pixels.add(color, this.getColorOffset(x, y));
     }
 
-    getColorOffset(x, y) {
+    getColorOffset(x: number, y: number): number[] {
         // N.B. only works for square matrices because assumed length == width!
-        const matrix_size = this.matrix[0].length,
+        const matrix_size: number = this.matrix[0].length,
             // TODO: unfix palette size
-            palette_size = 16,
-            factor = 1 / (matrix_size * matrix_size),
-            value = factor * this.matrix[y % matrix_size][x % matrix_size],
+            palette_size: number = 16,
+            factor: number = 1 / (matrix_size * matrix_size),
+            value: number = factor * this.matrix[y % matrix_size][x % matrix_size],
             // TODO: calculate better r (per channel?)
-            r = 256 / palette_size,
-            offset = r * (value - 0.5);
+            r: number = 256 / palette_size,
+            offset: number = r * (value - 0.5);
        
         return [offset, offset, offset];
 
@@ -76,4 +70,4 @@ class OrderedDithering {
 
 }
 
-module.exports = OrderedDithering;
+

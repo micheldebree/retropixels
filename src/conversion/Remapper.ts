@@ -1,24 +1,21 @@
-/* jshint esversion: 6 */
 /**
  * Create optimal colormaps for ImageData.
  * TODO: does not support different palettes per colorMap
  * TODO: rename 
  */
-const PixelImage = require('../model/PixelImage'),
-      ColorMap = require('../model/ColorMap'),
-      ImageData = require('../model/ImageData');
-
-// private {{{
+import {PixelImage} from '../model/PixelImage';
+import {ColorMap} from '../model/ColorMap';
+import * as ImageData from '../model/ImageData';
+import {ImageDataInterface} from '../model/ImageDataInterface';
 
 // TODO: now uses palette of first color map only
-function getColorMap(imageData, targetPixelImage) {
-    const w = imageData.width,
-          h = imageData.height,
-          unrestrictedImage = new PixelImage(w, h, targetPixelImage.pWidth, targetPixelImage.pHeight),
+function getColorMap(imageData: ImageDataInterface, targetPixelImage: PixelImage): ColorMap {
+    const w: number = imageData.width,
+          h: number = imageData.height,
+          unrestrictedImage: PixelImage = new PixelImage(w, h, targetPixelImage.pWidth, targetPixelImage.pHeight),
           palette = targetPixelImage.colorMaps[0].palette;
     unrestrictedImage.colorMaps.push(new ColorMap(w, h, palette, 1, 1));
     unrestrictedImage.mappingWeight = targetPixelImage.mappingWeight;
-    unrestrictedImage.errorDiffusionDither = targetPixelImage.errorDiffusionDither;
     ImageData.drawImageData(imageData, unrestrictedImage);
     return unrestrictedImage.colorMaps[0];
 }
@@ -26,10 +23,10 @@ function getColorMap(imageData, targetPixelImage) {
 /**
   Get the color that is most present in an area of the colormap.
 **/
-function reduceToMax(colorMap, x, y, w, h) {
-    let weights = [],
-        maxWeight,
-        maxColor;
+function reduceToMax(colorMap: ColorMap, x: number, y: number, w: number, h: number): number {
+    let weights: number[] = [],
+        maxWeight: number,
+        maxColor: number;
 
     for (let ix = x; ix < x + w; ix += 1) {
         for (let iy = y; iy < y + h; iy += 1) {
@@ -49,7 +46,7 @@ function reduceToMax(colorMap, x, y, w, h) {
 /**
  * Delete colors from one colorMap and put them in another.
  */
-function extractColorMap (fromColorMap, toColorMap) {
+function extractColorMap (fromColorMap: ColorMap, toColorMap: ColorMap): void {
     const rx = toColorMap.resX,
           ry = toColorMap.resY;
         
@@ -62,7 +59,7 @@ function extractColorMap (fromColorMap, toColorMap) {
 }
 // }}}
 
-function optimizeColorMaps(imageData, targetPixelImage) {
+export function optimizeColorMaps(imageData: ImageDataInterface, targetPixelImage: PixelImage): void {
     const colorMap = getColorMap(imageData, targetPixelImage);
     // fill up the colormaps in the restricted image based on the colors in the unrestricted image
     for (let ci = 0; ci < targetPixelImage.colorMaps.length; ci += 1) {
@@ -70,6 +67,4 @@ function optimizeColorMaps(imageData, targetPixelImage) {
     }
 }
 
-module.exports = {
-  optimizeColorMaps : optimizeColorMaps
-};
+
