@@ -1,16 +1,24 @@
-#!/usr/bin/env node
+// const 
+// cli = require('commander'),
+// fs = require('fs-extra'),
+// path = require('path'),
+// jimp = require("jimp"),
+// graphicModes = require('./src/profiles/GraphicModes.js'),
+// Pixels = require('./src/model/Pixels.js'),
 
-/* jshint esversion: 6 */
-const cli = require('commander'),
-    fs = require('fs-extra'),
-    path = require('path'),
-    jimp = require("jimp"),
-    graphicModes = require('./src/profiles/GraphicModes.js'),
-    Pixels = require('./src/model/Pixels.js'),
-    koala = require('./src/io/KoalaPicture.js'),
-    Converter = require('./src/conversion/Converter.js'),
-    graphicMode = graphicModes.c64Multicolor,
-    ImageData = require('./src/model/ImageData.js');
+
+import * as cli from 'commander';
+import * as fs from 'fs-extra';
+import * as path from 'path';
+import * as jimp from 'jimp';
+
+import * as graphicModes from './src/profiles/GraphicModes.js';
+import * as Pixels from './src/model/Pixels.js';
+import * as koala from './src/io/KoalaPicture.js';
+import * as Converter from './src/conversion/Converter.js';
+import * as ImageData from './src/model/ImageData.js';
+
+const graphicMode = graphicModes.c64Multicolor;
 
 cli.version('0.1.0')
     .usage('[options] <infile> <outfile>')
@@ -34,11 +42,11 @@ function savePrg(pixelImage) {
     const koalaImage = koala.fromPixelImage(pixelImage),
         binary = path.join(__dirname, '/src/c64/KoalaShower.prg');
 
-    fs.readFile(binary, function(err, viewerCode) {
+    fs.readFile(binary, function (err, viewerCode) {
         if (err) throw err;
         const koalaBuffer = new Buffer(koalaImage.toBytes()),
             writeBuffer = Buffer.concat([viewerCode, koalaBuffer]);
-        fs.writeFile(outFile, writeBuffer, function(err) {
+        fs.writeFile(outFile, writeBuffer, function (err) {
             if (err) throw err;
             console.log('Written Commodore 64 executable ' + outFile);
         });
@@ -48,7 +56,7 @@ function savePrg(pixelImage) {
 // Save PixelImage as a KoalaPaint image.
 function saveKoala(pixelImage) {
     const koalaImage = koala.fromPixelImage(pixelImage);
-    fs.writeFile(outFile, new Buffer(koalaImage.toBytes()), function(err) {
+    fs.writeFile(outFile, new Buffer(koalaImage.toBytes()), function (err) {
         if (err) throw err;
         console.log('Written Koala Painter file ' + outFile);
     });
@@ -56,7 +64,7 @@ function saveKoala(pixelImage) {
 
 // Save PixelImage as a PNG image.
 function savePng(pixelImage) {
-    new jimp(pixelImage.width, pixelImage.height, function(err, image) {
+    new jimp(pixelImage.width, pixelImage.height, function (err, image) {
         if (err) throw err;
         for (let y = 0; y < image.bitmap.height; y += 1) {
             for (let x = 0; x < image.bitmap.width; x += 1) {
@@ -64,7 +72,7 @@ function savePng(pixelImage) {
             }
         }
         image.resize(pixelImage.width * pixelImage.pWidth, pixelImage.height * pixelImage.pHeight);
-        image.write(outFile, function() {
+        image.write(outFile, function () {
             console.log('Written PNG image ' + outFile);
         });
     });
@@ -95,7 +103,7 @@ jimp.read(inFile, (err, jimpImage) => {
     converter.graphicMode = graphicMode;
     const pixelImage = converter.convert(jimpImage.bitmap);
 
-    outExtension = path.extname(outFile);
+    const outExtension = path.extname(outFile);
 
     if ('.kla' === outExtension) {
         saveKoala(pixelImage);
