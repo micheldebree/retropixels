@@ -1,4 +1,3 @@
-/* jshint esversion: 6 */
 /**
  * Maps x, y coordinates to a pixel value.
  * The map has a certain resolution specifying the size of an area of the same color.
@@ -13,16 +12,18 @@
 
 // http://stackoverflow.com/questions/8580540/javascript-calling-private-method-from-prototype-method
 
+import { Palette } from './Palette'
+
 export class ColorMap {
 
     colors: number[][];
-    palette: any;
+    palette: Palette;
     width: number;
     height: number;
     resX: number;
     resY: number;
 
-    constructor(widthVal: number, heightVal: number, palette: any, resXVal: number = widthVal, resYVal: number = heightVal) {
+    constructor(widthVal: number, heightVal: number, palette: Palette, resXVal: number = widthVal, resYVal: number = heightVal) {
         this.colors = [];
         this.palette = palette;
         this.width = widthVal;
@@ -52,9 +53,12 @@ export class ColorMap {
         return Math.floor(y / this.resY);
     }
 
-    /**
-     * Set an area to a certain color.
-     */
+     /**
+      * Set an area to a certain color.
+      * @param {number} x            x coordinate
+      * @param {number} y            y coordinate
+      * @param {number} paletteIndex
+      */
     put(x: number, y: number, paletteIndex: number): void {
         if (!this.isInRange(x, y)) {
             return;
@@ -75,7 +79,7 @@ export class ColorMap {
      */
     get(x: number, y: number): number {
         const mX: number = this.mapX(x),
-              mY: number = this.mapY(y);
+            mY: number = this.mapY(y);
 
         if (this.colors[mX] !== undefined) {
             return this.colors[mX][mY];
@@ -83,7 +87,7 @@ export class ColorMap {
         return undefined;
     }
 
-    /** 
+    /**
      * Get the color at x, y coordinate.
      * @param  {number}   x [description]
      * @param  {number}   y [description]
@@ -98,8 +102,8 @@ export class ColorMap {
     }
 
     // TODO: offset Pixel from the start instead of passing it down
-    isBestFit(pixel: number[], x: number, y: number, weight: number[]): boolean {
-        return this.palette.mapPixel(pixel, weight) === this.get(x, y);
+    isBestFit(pixel: number[], x: number, y: number): boolean {
+        return this.palette.mapPixel(pixel) === this.get(x, y);
     }
 
     subtract(colorMap: ColorMap): void {

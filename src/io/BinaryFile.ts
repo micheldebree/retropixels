@@ -1,7 +1,12 @@
+/**
+ * A binary file consisting of multiple sequences of 8-bit bytes.
+ */
 export class BinaryFile {
 
     /**
      * Concatenate multiple 8-bit array buffers into one.
+     * @param  {Uint8Array[]} arrayBuffers The buffers to concatenate, in desired order.
+     * @return {Uint8Array} The buffers concatenated.
      */
     concat(arrayBuffers: Uint8Array[]): Uint8Array {
         let iii = 0,

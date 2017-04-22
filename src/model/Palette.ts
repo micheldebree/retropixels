@@ -1,4 +1,4 @@
-import * as Pixels from './Pixels';
+import { Pixels } from './Pixels';
 
 export class Palette {
 
@@ -7,7 +7,7 @@ export class Palette {
     constructor(pixels: number[][]) {
         this.pixels = pixels === undefined ? [] : pixels;
     }
-    
+
     get(index: number): number[] {
         return this.pixels[index];
     }
@@ -18,9 +18,9 @@ export class Palette {
      */
     mapPixel(pixel: number[]): number {
         if (pixel === undefined) {
-          throw new Error("pixel is mandatory.");
+            throw new Error("pixel is mandatory.");
         }
-      
+
         let minVal: number;
         let minI: number;
 

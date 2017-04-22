@@ -1,23 +1,32 @@
-import * as graphicModes from '../profiles/GraphicModes';
-import * as remapper from './Remapper';
-import * as ImageData from '../model/ImageData';
+import { Remapper } from './Remapper';
 import { ImageDataInterface } from '../model/ImageDataInterface';
 import { PixelImage } from '../model/PixelImage';
+import { c64Multicolor } from '../profiles/GraphicModes'
+import { GraphicMode } from '../profiles/GraphicMode'
 
+/**
+ * Converts ImageData to a PixelImage
+ * @param  {GraphicMode} graphicMode The GraphicMode to use for conversion.
+ */
 export class Converter {
 
-    graphicMode: any;
+    graphicMode: GraphicMode;
 
-    constructor() {
-        this.graphicMode = graphicModes.c64Multicolor;
+    constructor(graphicMode: GraphicMode) {
+        this.graphicMode = graphicMode;
     }
 
+    /**
+     * Convert ImageData to a PixelImage
+     * @param  {ImageDataInterface} imageData The ImageData to convert.
+     * @return {PixelImage} The converted image.
+     */
     convert(imageData: ImageDataInterface): PixelImage {
-        const pixelImage: PixelImage = this.graphicMode.create();
-        remapper.optimizeColorMaps(imageData, pixelImage);
-        ImageData.drawImageData(imageData, pixelImage);
+        const pixelImage: PixelImage = this.graphicMode.factory();
+        const remapper = new Remapper(pixelImage);
+
+        remapper.optimizeColorMaps(imageData);
+        remapper.drawImageData(imageData);
         return pixelImage;
     }
 }
-
-

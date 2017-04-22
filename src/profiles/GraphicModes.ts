@@ -1,6 +1,7 @@
-import {PixelImage } from '../model/PixelImage';
-import {ColorMap} from '../model/ColorMap';
-import {Palette} from  '../model/Palette';
+import { PixelImage } from '../model/PixelImage';
+import { ColorMap } from '../model/ColorMap';
+import { Palette } from '../model/Palette';
+import { GraphicMode } from '../profiles/GraphicMode';
 
 // Palettes {{{
 
@@ -42,16 +43,16 @@ const spectrumPallete = new Palette([
 ]);
 
 const pysslaPalette2 = new Palette([
-  [0xc5, 0xdd, 0xdf, 0xff], // white
-  [0xeb, 0xae, 0x36, 0xff], // yellow
-  [0xb2, 0x48, 0xcf, 0xff], // purple
-  [0xd6, 0x00, 0x13, 0xff], // red
-  [0x00, 0x80, 0x46, 0xff], // green
-  [0xe0, 0x33, 0x1c, 0xff], // orange
-  [0x00, 0x7b, 0xb8, 0xff], // blue
-  [0xff, 0x00, 0x7f, 0xff], // pink
-  [0x4b, 0x21, 0x00, 0xff], // brown
-  [0x16, 0x16, 0x16, 0xff]  // black
+    [0xc5, 0xdd, 0xdf, 0xff], // white
+    [0xeb, 0xae, 0x36, 0xff], // yellow
+    [0xb2, 0x48, 0xcf, 0xff], // purple
+    [0xd6, 0x00, 0x13, 0xff], // red
+    [0x00, 0x80, 0x46, 0xff], // green
+    [0xe0, 0x33, 0x1c, 0xff], // orange
+    [0x00, 0x7b, 0xb8, 0xff], // blue
+    [0xff, 0x00, 0x7f, 0xff], // pink
+    [0x4b, 0x21, 0x00, 0xff], // brown
+    [0x16, 0x16, 0x16, 0xff]  // black
 ]);
 
 const pysslaPalette1 = new Palette([
@@ -85,20 +86,16 @@ export const c64Unlimited = {
 };
 
 // C64 standard multicolor mode
-export const c64Multicolor = {
-    width: 160,
-    height: 200,
-    pixelWidth: 2,
-    pixelHeight: 1,
-    create: function() {
-        var pixelImage = new PixelImage(160, 200, 2, 1);
-        pixelImage.colorMaps.push(new ColorMap(160, 200, peptoPalette, 160, 200));
-        pixelImage.colorMaps.push(new ColorMap(160, 200, peptoPalette, 4, 8));
-        pixelImage.colorMaps.push(new ColorMap(160, 200, peptoPalette, 4, 8));
-        pixelImage.colorMaps.push(new ColorMap(160, 200, peptoPalette, 4, 8));
+export const c64Multicolor = new GraphicMode(160, 200, 2, 1,
+    function() {
+        var pixelImage = new PixelImage(this.width, this.height, this.pixelWidth, this.pixelHeight);
+        pixelImage.colorMaps.push(new ColorMap(this.width, this.height, peptoPalette, this.width, this.height));
+        pixelImage.colorMaps.push(new ColorMap(this.width, this.height, peptoPalette, 4, 8));
+        pixelImage.colorMaps.push(new ColorMap(this.width, this.height, peptoPalette, 4, 8));
+        pixelImage.colorMaps.push(new ColorMap(this.width, this.height, peptoPalette, 4, 8));
         return pixelImage;
     }
-};
+);
 
 // C64 standard high resolution mode
 export const c64Hires = {
@@ -159,13 +156,13 @@ export const spectrumStandard = {
 };
 
 export const pyssla = {
-  width: 232,
-  height: 232,
-  pixelWidth: 8,
-  pixelHeight: 8,
-  create: function() {
-    var pixelImage = new PixelImage(232, 232);
-    pixelImage.colorMaps.push(new ColorMap(232, 232, pysslaPalette2, 8, 8));
-    return pixelImage;
-  }
+    width: 232,
+    height: 232,
+    pixelWidth: 8,
+    pixelHeight: 8,
+    create: function() {
+        var pixelImage = new PixelImage(232, 232);
+        pixelImage.colorMaps.push(new ColorMap(232, 232, pysslaPalette2, 8, 8));
+        return pixelImage;
+    }
 };

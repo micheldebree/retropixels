@@ -1,5 +1,5 @@
 export interface ImageDataInterface {
-  width: number;
-  height: number;
-  data: number[];
+    width: number;
+    height: number;
+    data: number[];
 }

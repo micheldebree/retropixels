@@ -1,5 +1,6 @@
 node_modules
 *.png
+*.jpg
 *.kla
 *.sym
 *.vs
@@ -7,3 +8,4 @@ node_modules
 .tags*
 tags
 target
+**/*.swp

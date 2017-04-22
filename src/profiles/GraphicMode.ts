@@ -5,16 +5,23 @@ import { PixelImage } from '../model/PixelImage';
  * Includes a factory for creating new PixelImages in this mode.
  */
 export class GraphicMode {
-  width: number;
-  height: number;
-  pixelWidth: number;
-  pixelHeight: number;
-  factory: () => PixelImage; 
 
-  constructor(width: number, height: number, factory: () => any, pixelWidth: number = 1, pixelHeight: number = 1) {
-    this.width = width;
-    this.height = height;
-    this.pixelWidth = pixelWidth;
-    this.pixelHeight = pixelHeight;
-  }
+    // width and height in pixels
+    width: number;
+    height: number;
+
+    // width and height of one pixel
+    pixelWidth: number;
+    pixelHeight: number;
+
+    // creates an empty PixelImage for this GraphicMode.
+    factory: () => PixelImage;
+
+    constructor(width: number, height: number, pixelWidth: number = 1, pixelHeight: number = 1, factory: () => PixelImage) {
+        this.width = width;
+        this.height = height;
+        this.pixelWidth = pixelWidth;
+        this.pixelHeight = pixelHeight;
+        this.factory = factory;
+    }
 }

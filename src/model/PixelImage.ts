@@ -24,8 +24,8 @@ http://bisqwit.iki.fi/story/howto/dither/jy/
 https://people.eecs.berkeley.edu/~dcoetzee/downloads/scolorq/
 
 */
-import * as Pixels from './Pixels';
-import { OrderedDithering } from'../conversion/OrderedDithering';
+import { Pixels } from './Pixels';
+import { OrderedDithering } from '../conversion/OrderedDithering';
 import { ColorMap } from './ColorMap';
 
 export class PixelImage {
@@ -187,7 +187,7 @@ export class PixelImage {
         // get the palette index from the ColorMap
         const colorMap = this.colorMaps[colorMapIndex],
             paletteIndex = colorMap.get(x, y);
-            
+
         // return the color from the palette
         return paletteIndex !== undefined ? colorMap.palette.get(paletteIndex) : [0, 0, 0, 0];
     }

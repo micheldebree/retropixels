@@ -1,4 +1,4 @@
-import * as Pixels from '../model/Pixels';
+import { Pixels } from '../model/Pixels';
 
 export class OrderedDithering {
 
@@ -14,8 +14,8 @@ export class OrderedDithering {
 
         // preset matrices {{{
 
-        this.none = [ [ 0 ] ];
-      
+        this.none = [[0]];
+
         this.bayer2x2 = [
             [1, 3],
             [4, 2]
@@ -42,10 +42,8 @@ export class OrderedDithering {
 
         // default  
         this.matrix = this.bayer8x8;
-      
-    }
 
-// public {{{
+    }
 
     offsetColor(color: number[], x: number, y: number): number[] {
         return Pixels.add(color, this.getColorOffset(x, y));
@@ -61,12 +59,10 @@ export class OrderedDithering {
             // TODO: calculate better r (per channel?)
             r: number = 256 / palette_size,
             offset: number = r * (value - 0.5);
-       
+
         return [offset, offset, offset];
 
     }
-
-// }}}
 
 }
 
