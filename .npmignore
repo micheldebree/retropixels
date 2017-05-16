@@ -7,7 +7,4 @@ node_modules
 *.log
 .tags*
 tags
-target
 **/*.swp
-**/*.iml
-.idea

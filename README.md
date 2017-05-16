@@ -9,7 +9,7 @@ The library uses the CommonJS module format. It is not documented except for the
 
 ## Conversion tool
 
-The command line tool turns any image into a Commodore 64 Multicolor image. 
+The command line tool turns any image into a Commodore 64 Multicolor image.
 It can produce an image, or an executable that can be run on a real Commodore 64.
 
 ### Prerequisites
@@ -21,9 +21,9 @@ It can produce an image, or an executable that can be run on a real Commodore 64
 ### Installation
 - Clone or unzip this project
 - ```cd retropixels && tsc && npm install -g```
-    
-You now have a new shell command called ```retropixels```  
-  
+
+You now have a new shell command called ```retropixels```
+
 ### Usage
 
     retropixels <infile> <outfile>
@@ -46,16 +46,15 @@ The format of the outfile depends on the file extension:
 Convert an image to a Commodore 64 executable:
 
     retropixels eye.jpg eye.prg
-    
+
 View the result by running it in the [VICE](http://vice-emu.sourceforge.net) emulator:
-    
+
     x64 eye.prg
-    
+
 Optionally, to save some space and loading time, you could "crunch" (compress) the resulting ```.prg``` file using [exomizer](https://bitbucket.org/magli143/exomizer/wiki/Home):
 
     exomizer sfx basic eye.prg -o eye-crunched.prg
 
-
 ### Uninstall
 
-        npm uninstall -g retropixels
+    npm uninstall -g retropixels

@@ -1,7 +1,6 @@
 import { ImageDataInterface } from './ImageDataInterface';
 import { PixelImage } from './PixelImage';
 
-
 export class ImageData {
 
     private static coordsToindex(imageData: ImageDataInterface, x: number, y: number): number {
@@ -46,5 +45,3 @@ export class ImageData {
         }
     }
 }
-
-

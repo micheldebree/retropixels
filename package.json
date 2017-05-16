@@ -2,9 +2,9 @@
   "name": "retropixels",
   "version": "0.2.0",
   "description": "Apply limitations of retro computers to images.",
-  "main": "target/index.js",
+  "main": "index.js",
   "bin": {
-    "retropixels": "./target/index.js"
+    "retropixels": "./index.js"
   },
   "dependencies": {
     "commander": "2.9.0",
