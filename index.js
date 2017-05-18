@@ -5,16 +5,29 @@ const cli = require('commander'),
 	fs = require('fs-extra'),
 	path = require('path'),
 	jimp = require('jimp'),
-	graphicModes = require('./target/profiles/GraphicModes.js'),
+	GraphicModes = require('./target/profiles/GraphicModes.js'),
 	Pixels = require('./target/model/Pixels.js'),
 	KoalaPicture = require('./target/io/KoalaPicture.js'),
 	Converter = require('./target/conversion/Converter.js'),
-	graphicMode = graphicModes.c64Multicolor,
 	ImageData = require('./target/model/ImageData.js');
+
+let graphicMode = GraphicModes.all['c64Multicolor'];
 
 cli.version('0.2.0')
 	.usage('[options] <infile> <outfile>')
+	.option('-m, --mode [graphicMode]', 'Graphicmode to use. One of c64Multicolor (default), c64Hires, c64HiresMono or c64FLI.')
 	.parse(process.argv);
+
+if (cli.mode) {
+	if (cli.mode in GraphicModes.all) {
+		console.log('Using graphicMode ' + cli.mode);
+		graphicMode = GraphicModes.all[cli.mode];
+	} else {
+		console.error('Unknown Graphicmode: ' + cli.mode);
+		cli.help();
+		process.exit(1);
+	}
+}
 
 const inFile = cli.args[0],
 	outFile = cli.args[1];
@@ -31,6 +44,11 @@ if (outFile === undefined) {
 
 // Save PixelImage as a c64 native .PRG executable.
 function savePrg(pixelImage) {
+
+	if (cli.mode !== 'c64Multicolor') {
+		throw 'Commodore 64 executable format is only supported for c64Multicolor mode.';
+	}
+
 	const koalaImage = KoalaPicture.KoalaPicture.fromPixelImage(pixelImage),
 		binary = path.join(__dirname, '/src/c64/KoalaShower.prg');
 
@@ -47,6 +65,9 @@ function savePrg(pixelImage) {
 
 // Save PixelImage as a KoalaPaint image.
 function saveKoala(pixelImage) {
+	if (cli.mode !== 'c64Multicolor') {
+		throw 'Koala painter format is only supported for c64Multicolor mode.';
+	}
 	const koalaImage = KoalaPicture.KoalaPicture.fromPixelImage(pixelImage);
 	fs.writeFile(outFile, new Buffer(koalaImage.toBytes()), function(err) {
 		if (err) throw err;
@@ -86,26 +107,31 @@ function cropFill(jimpImage, relativeWidth, relativeHeight) {
 // Main {{{
 
 jimp.read(inFile, (err, jimpImage) => {
-	if (err) throw err;
+	try {
+		if (err) throw err;
 
-	cropFill(jimpImage, graphicMode.width * graphicMode.pixelWidth, graphicMode.height * graphicMode.pixelHeight);
-	jimpImage.resize(graphicMode.width, graphicMode.height);
+		cropFill(jimpImage, graphicMode.width * graphicMode.pixelWidth, graphicMode.height * graphicMode.pixelHeight);
+		jimpImage.resize(graphicMode.width, graphicMode.height);
 
-	const converter = new Converter.Converter(graphicMode);
-	const pixelImage = converter.convert(jimpImage.bitmap);
+		const converter = new Converter.Converter(graphicMode);
+		const pixelImage = converter.convert(jimpImage.bitmap);
 
-	outExtension = path.extname(outFile);
+		outExtension = path.extname(outFile);
 
-	if ('.kla' === outExtension) {
-		saveKoala(pixelImage);
-	} else if ('.prg' === outExtension) {
-		savePrg(pixelImage);
-	} else if ('.png' === outExtension) {
-		savePng(pixelImage);
-	} else {
-		console.error('Unknown file extension ' + outExtension + ', valid extensions are .png, .kla and .prg');
+		if ('.kla' === outExtension) {
+			saveKoala(pixelImage);
+		} else if ('.prg' === outExtension) {
+			savePrg(pixelImage);
+		} else if ('.png' === outExtension) {
+			savePng(pixelImage);
+		} else {
+			throw 'Unknown file extension ' + outExtension + ', valid extensions are .png, .kla and .prg';
+		}
+	} catch (e) {
+		console.error(e);
+		cli.help();
+		process.exit(1);
 	}
-
 });
 
 // }}}

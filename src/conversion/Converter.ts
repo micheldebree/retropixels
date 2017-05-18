@@ -12,6 +12,10 @@ export class Converter {
 
     graphicMode: GraphicMode;
 
+    /**
+     * Constructor
+     * @param  {GraphicMode} graphicMode The graphic mode to convert to.
+     */
     constructor(graphicMode: GraphicMode) {
         this.graphicMode = graphicMode;
     }

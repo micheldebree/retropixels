@@ -1,5 +1,8 @@
 import { Pixels } from '../model/Pixels';
 
+/**
+ * Applies ordered dithering with a Bayer matrix.
+ */
 export class OrderedDithering {
 
     matrix: number[][];
@@ -40,11 +43,18 @@ export class OrderedDithering {
         ];
         // }}}
 
-        // default  
+        // default
         this.matrix = this.bayer8x8;
 
     }
 
+    /**
+     * Offset all channels in a pixel color according to the Bayer matrix.
+     * @param  {number[]} color The pixel color to offset.
+     * @param  {number}   x     The x coordinate of the pixel.
+     * @param  {number}   y     The y coordinate of the pixel
+     * @return {number[]}       The offset pixel color.
+     */
     offsetColor(color: number[], x: number, y: number): number[] {
         return Pixels.add(color, this.getColorOffset(x, y));
     }

@@ -98,34 +98,36 @@ export const c64Multicolor = new GraphicMode(160, 200, 2, 1,
 );
 
 // C64 standard high resolution mode
-export const c64Hires = {
-    width: 320,
-    height: 200,
-    pixelWidth: 1,
-    pixelHeight: 1,
-    create: function() {
-        var pixelImage = new PixelImage(320, 200);
-        pixelImage.colorMaps.push(new ColorMap(320, 200, peptoPalette, 8, 8));
-        pixelImage.colorMaps.push(new ColorMap(320, 200, peptoPalette, 8, 8));
+export const c64Hires = new GraphicMode(320, 200, 1, 1,
+    function() {
+        var pixelImage = new PixelImage(this.width, this.height, this.pixelWidth, this.pixelHeight);
+        pixelImage.colorMaps.push(new ColorMap(this.width, this.height, peptoPalette, 8, 8));
+        pixelImage.colorMaps.push(new ColorMap(this.width, this.height, peptoPalette, 8, 8));
         return pixelImage;
     }
-};
+);
+
+// C64 standard high resolution monochrome mode
+export const c64HiresMono = new GraphicMode(320, 200, 1, 1,
+    function() {
+        var pixelImage = new PixelImage(this.width, this.height, this.pixelWidth, this.pixelHeight);
+        pixelImage.colorMaps.push(new ColorMap(this.width, this.height, peptoPalette, this.width, this.height));
+        pixelImage.colorMaps.push(new ColorMap(this.width, this.height, peptoPalette, this.width, this.height));
+        return pixelImage;
+    }
+);
 
 // C64 FLI mode
-export const c64FLI = {
-    width: 160,
-    height: 200,
-    pixelWidth: 2,
-    pixelHeight: 1,
-    create: function() {
-        var pixelImage = new PixelImage(160, 200, 2, 1);
-        pixelImage.colorMaps.push(new ColorMap(160, 200, peptoPalette));
-        pixelImage.colorMaps.push(new ColorMap(160, 200, peptoPalette, 4, 8));
-        pixelImage.colorMaps.push(new ColorMap(160, 200, peptoPalette, 4, 1));
-        pixelImage.colorMaps.push(new ColorMap(160, 200, peptoPalette, 4, 1));
+export const c64FLI = new GraphicMode(160, 200, 2, 1,
+    function() {
+        var pixelImage = new PixelImage(this.width, this.height, this.pixelWidth, this.pixelHeight);
+        pixelImage.colorMaps.push(new ColorMap(this.width, this.height, peptoPalette));
+        pixelImage.colorMaps.push(new ColorMap(this.width, this.height, peptoPalette, 4, 8));
+        pixelImage.colorMaps.push(new ColorMap(this.width, this.height, peptoPalette, 4, 1));
+        pixelImage.colorMaps.push(new ColorMap(this.width, this.height, peptoPalette, 4, 1));
         return pixelImage;
     }
-};
+);
 // }}}
 
 // C64 AFLI mode
@@ -166,3 +168,11 @@ export const pyssla = {
         return pixelImage;
     }
 };
+
+export const all = {
+    'c64Multicolor': c64Multicolor,
+    'c64Hires': c64Hires,
+    'c64HiresMono': c64HiresMono,
+    'c64FLI': c64FLI
+}
+

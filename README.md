@@ -58,3 +58,14 @@ Optionally, to save some space and loading time, you could "crunch" (compress) t
 ### Uninstall
 
     npm uninstall -g retropixels
+
+## Changelog
+
+
+### 0.2.0
+- Library: ported to Typescript
+- Conversion tool: support for graphicMode c64Hires
+
+### 0.1.0
+Initial version.
+

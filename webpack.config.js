@@ -4,7 +4,7 @@
 var webpack = require("webpack");
 
 module.exports = {
-    entry: './target/src/conversion/Converter.js',
+    entry: './target/conversion/Converter.js',
     output: {
         path: './target',
         filename: 'Converter.bundle.js'
