@@ -1,5 +1,4 @@
 #!/usr/bin/env node
-
 /* jshint esversion: 6 */
 const cli = require('commander'),
 	fs = require('fs-extra'),
@@ -11,11 +10,12 @@ const cli = require('commander'),
 	Converter = require('./target/conversion/Converter.js'),
 	ImageData = require('./target/model/ImageData.js');
 
+// default mode
 let graphicMode = GraphicModes.all['c64Multicolor'];
 
 cli.version('0.2.0')
 	.usage('[options] <infile> <outfile>')
-	.option('-m, --mode [graphicMode]', 'Graphicmode to use. One of c64Multicolor (default), c64Hires, c64HiresMono or c64FLI.')
+	.option('-m, --mode [graphicMode]', 'Graphicmode to use. One of c64Multicolor (default), c64Hires, c64HiresMono, c64FLI, c64AFLI')
 	.parse(process.argv);
 
 if (cli.mode) {

@@ -131,48 +131,39 @@ export const c64FLI = new GraphicMode(160, 200, 2, 1,
 // }}}
 
 // C64 AFLI mode
-export const c64AFLI = {
-    width: 320,
-    height: 200,
-    pixelWidth: 1,
-    pixelHeight: 1,
-    create: function() {
-        var pixelImage = new PixelImage(320, 200);
-        pixelImage.colorMaps.push(new ColorMap(320, 200, peptoPalette, 8, 8));
-        pixelImage.colorMaps.push(new ColorMap(320, 200, peptoPalette, 8, 1));
+export const c64AFLI = new GraphicMode(320, 200, 1, 1,
+    function() {
+        var pixelImage = new PixelImage(this.width, this.height, this.pixelWidth, this.pixelHeight);
+        pixelImage.colorMaps.push(new ColorMap(this.width, this.height, peptoPalette, 8, 8));
+        pixelImage.colorMaps.push(new ColorMap(this.width, this.height, peptoPalette, 8, 1));
         return pixelImage;
     }
-};
+);
 
-export const spectrumStandard = {
-    width: 256,
-    height: 192,
-    pixelWidth: 1,
-    pixelHeight: 1,
-    create: function() {
-        var pixelImage = new PixelImage(256, 192);
-        pixelImage.colorMaps.push(new ColorMap(256, 192, spectrumPallete, 8, 8));
-        pixelImage.colorMaps.push(new ColorMap(256, 192, spectrumPallete, 8, 8));
+export const spectrumStandard = new GraphicMode(256, 192, 1, 1,
+    function() {
+        var pixelImage = new PixelImage(this.width, this.height, this.pixelWidth, this.pixelHeight);
+        pixelImage.colorMaps.push(new ColorMap(this.width, this.height, spectrumPallete, 8, 8));
+        pixelImage.colorMaps.push(new ColorMap(this.width, this.height, spectrumPallete, 8, 8));
         return pixelImage;
     }
-};
+);
 
-export const pyssla = {
-    width: 232,
-    height: 232,
-    pixelWidth: 8,
-    pixelHeight: 8,
-    create: function() {
-        var pixelImage = new PixelImage(232, 232);
-        pixelImage.colorMaps.push(new ColorMap(232, 232, pysslaPalette2, 8, 8));
+export const pyssla = new GraphicMode(116, 116, 4, 4,
+    function() {
+        var pixelImage = new PixelImage(this.width, this.height, this.pixelWidth, this.pixelHeight);
+        pixelImage.colorMaps.push(new ColorMap(this.width, this.height, pysslaPalette2, this.pixelWidth, this.pixelHeight));
         return pixelImage;
     }
-};
+);
 
 export const all = {
     'c64Multicolor': c64Multicolor,
     'c64Hires': c64Hires,
     'c64HiresMono': c64HiresMono,
-    'c64FLI': c64FLI
+    'c64FLI': c64FLI,
+    'c64AFLI': c64AFLI,
+    'spectrumStandard': spectrumStandard,
+    'pyssla': pyssla
 }
 

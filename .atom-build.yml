@@ -1,0 +1,19 @@
+cmd: "tsc && node index.js helmet.jpg out.png && open out.png"
+name: default
+sh: true
+targets:
+- c64Hires:
+  name: c64Hires
+  cmd: "tsc && node index.js -m c64Hires helmet.jpg out.png && open out.png"
+- c64HiresMono:
+  name: c64HiresMono
+  cmd: "tsc && node index.js -m c64HiresMono helmet.jpg out.png && open out.png"
+- c64FLI:
+  name: c64FLI
+  cmd: "tsc && node index.js -m c64FLI helmet.jpg out.png && open out.png"
+- c64AFLI:
+  name: c64AFLI
+  cmd: "tsc && node index.js -m c64AFLI helmet.jpg out.png && open out.png"
+- spectrumStandard:
+  name: spectrumStandard
+  cmd: "tsc && node index.js -m spectrumStandard helmet.jpg out.png && open out.png"
