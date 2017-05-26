@@ -27,7 +27,7 @@ export class Converter {
      */
     convert(imageData: ImageDataInterface): PixelImage {
         const pixelImage: PixelImage = this.graphicMode.factory();
-        const remapper = new Remapper(pixelImage);
+        const remapper: Remapper = new Remapper(pixelImage);
 
         remapper.optimizeColorMaps(imageData);
         remapper.drawImageData(imageData);

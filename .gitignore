@@ -10,3 +10,5 @@ target
 **/*.swp
 **/*.iml
 .idea
+*.png
+*.jpg

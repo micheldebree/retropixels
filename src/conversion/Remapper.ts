@@ -6,7 +6,7 @@ import { ImageDataInterface } from '../model/ImageDataInterface';
 /**
  * Maps ImageData onto a PixelImage
  * TODO: does not support different palettes per colorMap
- * TODO: rename 
+ * TODO: rename
  * @param  {PixelImage} image The PixelImage to map ImageData to
  */
 export class Remapper {

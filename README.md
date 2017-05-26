@@ -12,15 +12,27 @@ The library uses the CommonJS module format. It is not documented except for the
 The command line tool turns any image into a Commodore 64 Multicolor image.
 It can produce an image, or an executable that can be run on a real Commodore 64.
 
+### Run the conversion tool with [Docker](https://www.docker.com)
+
+    docker run --rm -v "$PWD":/data/retropixels  micheldebree/retropixels-cli <infile> <outfile>
+
 ### Prerequisites
+
+Sourcecode is compiled to Typescript using Gulp.
 
 - [Git](https://git-scm.com)
 - [NodeJS](https://nodejs.org)
 - ```npm install -g typescript```
+- ```npm install -g gulp-cli```
 
 ### Installation
+
 - Clone or unzip this project
-- ```cd retropixels && tsc && npm install -g```
+
+        cd retropixels
+        npm install
+        gulp
+        npm install -g
 
 You now have a new shell command called ```retropixels```
 
@@ -61,11 +73,11 @@ Optionally, to save some space and loading time, you could "crunch" (compress) t
 
 ## Changelog
 
-
 ### 0.2.0
+
 - Library: ported to Typescript
 - Conversion tool: support for graphicMode c64Hires
 
 ### 0.1.0
-Initial version.
 
+Initial version.
