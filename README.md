@@ -1,7 +1,7 @@
 # retropixels
 
-A Javascript library for applying graphic mode limitations of retro computers on images.
-Also contains a command line conversion tool which demonstrates the use of the library.
+- A Javascript library for applying graphic mode limitations of retro computers on images.
+- A command line tool to convert images to c64 format.
 
 ## Library
 
@@ -14,7 +14,13 @@ It can produce an image, or an executable that can be run on a real Commodore 64
 
 ### Run the conversion tool with [Docker](https://www.docker.com)
 
-    docker run --rm -v "$PWD":/data/retropixels  micheldebree/retropixels-cli <infile> <outfile>
+The command line tool can be run with docker. The only prerequisite for this is Docker itself:
+
+    docker run --rm -v "$PWD":/data/retropixels  micheldebree/retropixels-cli [options] <infile> <outfile>
+
+The first time docker will download the image. Be patient. Next time it will get it from your local cache.
+
+## Build &amp; install locally
 
 ### Prerequisites
 
@@ -38,12 +44,21 @@ You now have a new shell command called ```retropixels```
 
 ### Usage
 
-    retropixels <infile> <outfile>
+    retropixels [options] <infile> <outfile>
 
 With
 
 - ```<infile>```: the image to convert
 - ```<outfile>```: the converted image. Supported extentions are ```.png```, ```.prg``` and ```.kla```
+- ```[options]```:
+  - ```-g <graphicMode>``` with ```<graphicMode>```:
+    - ```c64Multicolor``` (default)
+    - ```c64Hires```
+    - ```c64HiresMono```
+    - ```c64FLI```
+    - ```c64AFLI```
+
+N.B. Only ```c64Multicolor``` mode supports saving as ```.prg```
 
 #### ```<outfile>```
 
