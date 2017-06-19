@@ -1,10 +1,10 @@
 # Run retropixels CLI
-FROM node:6.11.0
+FROM node:6.11.0-alpine
 MAINTAINER michel@michdeldebree.nl
 ADD . /retropixels
 WORKDIR /retropixels
-RUN npm install -g typescript
-RUN npm install -g gulp-cli
+RUN npm install -g typescript@2.3.3
+RUN npm install -g gulp-cli@1.3.0
 RUN npm install -g
 RUN gulp
 RUN mkdir -p /data/retropixels
