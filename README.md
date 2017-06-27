@@ -16,7 +16,7 @@ It can produce an image, or an executable that can be run on a real Commodore 64
 
 The command line tool can be run with docker. The only prerequisite for this is Docker itself:
 
-    docker run --rm -v "$PWD":/data/retropixels  micheldebree/retropixels-cli [options] <infile> <outfile>
+    docker run --rm -v "$PWD":/data micheldebree/retropixels-cli [options] <infile> <outfile>
 
 The first time docker will download the image. Be patient. Next time it will get it from your local cache.
 

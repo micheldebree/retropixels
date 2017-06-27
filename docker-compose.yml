@@ -1,0 +1,7 @@
+version: '3'
+services:
+  retropixels-cli:
+    build: .
+    image: micheldebree/retropixels-cli
+    volumes:
+    - .:/data
