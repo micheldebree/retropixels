@@ -5,20 +5,26 @@
 
 ## Library
 
-The library uses the CommonJS module format. It is not documented except for the comments in the code itself.
+The library uses the CommonJS module format.
+It is not documented except for the comments in the code itself.
 
 ## Conversion tool
 
 The command line tool turns any image into a Commodore 64 Multicolor image.
-It can produce an image, or an executable that can be run on a real Commodore 64.
+It can produce an image, or an executable that can be
+run on a real Commodore 64.
 
 ### Run the conversion tool with [Docker](https://www.docker.com)
 
-The command line tool can be run with docker. The only prerequisite for this is Docker itself:
+The command line tool can be run with docker.
+The only prerequisite for this is Docker itself:
 
-    docker run --rm -v "$PWD":/data micheldebree/retropixels-cli [options] <infile> <outfile>
+```bash
+docker run --rm -v "$PWD":/data micheldebree/retropixels-cli [options] <infile> <outfile>
+```
 
-The first time docker will download the image. Be patient. Next time it will get it from your local cache.
+The first time docker will download the image.
+Be patient. Next time it will get it from your local cache.
 
 ## Build &amp; install locally
 
@@ -35,16 +41,20 @@ Sourcecode is compiled to Typescript using Gulp.
 
 - Clone or unzip this project
 
-        cd retropixels
-        npm install
-        gulp
-        npm install -g
+```bash
+cd retropixels
+npm install
+gulp
+npm install -g
+```
 
 You now have a new shell command called ```retropixels```
 
 ### Usage
 
-    retropixels [options] <infile> <outfile>
+```bash
+retropixels [options] <infile> <outfile>
+```
 
 With
 
@@ -72,19 +82,30 @@ The format of the outfile depends on the file extension:
 
 Convert an image to a Commodore 64 executable:
 
-    retropixels eye.jpg eye.prg
+```bash
+retropixels eye.jpg eye.prg
+```
 
-View the result by running it in the [VICE](http://vice-emu.sourceforge.net) emulator:
+View the result by running it in the
+[VICE](http://vice-emu.sourceforge.net) emulator:
 
-    x64 eye.prg
+```bash
+x64 eye.prg
+```
 
-Optionally, to save some space and loading time, you could "crunch" (compress) the resulting ```.prg``` file using [exomizer](https://bitbucket.org/magli143/exomizer/wiki/Home):
+Optionally, to save some space and loading time,
+you could "crunch" (compress) the resulting ```.prg``` file using
+[exomizer](https://bitbucket.org/magli143/exomizer/wiki/Home):
 
-    exomizer sfx basic eye.prg -o eye-crunched.prg
+```bash
+exomizer sfx basic eye.prg -o eye-crunched.prg
+```
 
 ### Uninstall
 
-    npm uninstall -g retropixels
+```bash
+npm uninstall -g retropixels
+```
 
 ## Changelog
 
