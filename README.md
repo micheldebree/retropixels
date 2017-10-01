@@ -23,7 +23,7 @@ With
 - ```<infile>```: the image to convert
 - ```<outfile>```: the converted image. Supported extentions are ```.png```, ```.prg``` and ```.kla```
 - ```[options]```:
-  - ```-g <graphicMode>``` with ```<graphicMode>```:
+  - ```-m <mode>``` with ```<mode>```:
     - ```c64Multicolor``` (default)
     - ```c64Hires```
     - ```c64HiresMono```

@@ -6,7 +6,6 @@ const cli = require('commander'),
   path = require('path'),
   jimp = require('jimp'),
   GraphicModes = require('./target/profiles/GraphicModes.js'),
-  Pixels = require('./target/model/Pixels.js'),
   KoalaPicture = require('./target/io/KoalaPicture.js'),
   Converter = require('./target/conversion/Converter.js'),
   ImageData = require('./target/model/ImageData.js');

@@ -7,17 +7,19 @@ import { PixelImage } from '../model/PixelImage';
 export class GraphicMode {
 
     // width and height in pixels
-    width: number;
-    height: number;
+    public width: number;
+    public height: number;
 
     // width and height of one pixel
-    pixelWidth: number;
-    pixelHeight: number;
+    public pixelWidth: number;
+    public pixelHeight: number;
 
     // creates an empty PixelImage for this GraphicMode.
-    factory: () => PixelImage;
+    public factory: () => PixelImage;
 
-    constructor(width: number, height: number, pixelWidth: number = 1, pixelHeight: number = 1, factory: () => PixelImage) {
+    constructor(width: number, height: number,
+                pixelWidth: number = 1, pixelHeight: number = 1,
+                factory: () => PixelImage) {
         this.width = width;
         this.height = height;
         this.pixelWidth = pixelWidth;

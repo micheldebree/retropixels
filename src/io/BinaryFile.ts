@@ -8,9 +8,9 @@ export class BinaryFile {
      * @param  {Uint8Array[]} arrayBuffers The buffers to concatenate, in desired order.
      * @return {Uint8Array} The buffers concatenated.
      */
-    concat(arrayBuffers: Uint8Array[]): Uint8Array {
-        let iii = 0,
-            outputLength = 0;
+    public concat(arrayBuffers: Uint8Array[]): Uint8Array {
+        let iii = 0;
+        let outputLength = 0;
 
         // measure final size
         for (let i = 0; i < arrayBuffers.length; i += 1) {
@@ -29,4 +29,3 @@ export class BinaryFile {
         return result;
     }
 }
-

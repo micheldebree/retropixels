@@ -12,18 +12,23 @@
 
 // http://stackoverflow.com/questions/8580540/javascript-calling-private-method-from-prototype-method
 
-import { Palette } from './Palette'
+import { Palette } from './Palette';
 
 export class ColorMap {
 
-    colors: number[][];
-    palette: Palette;
-    width: number;
-    height: number;
-    resX: number;
-    resY: number;
+    public colors: number[][];
+    public palette: Palette;
+    public width: number;
+    public height: number;
+    public resX: number;
+    public resY: number;
 
-    constructor(widthVal: number, heightVal: number, palette: Palette, resXVal: number = widthVal, resYVal: number = heightVal) {
+    constructor(widthVal: number,
+                heightVal: number,
+                palette: Palette,
+                resXVal: number = widthVal,
+                resYVal: number = heightVal) {
+
         this.colors = [];
         this.palette = palette;
         this.width = widthVal;
@@ -35,31 +40,31 @@ export class ColorMap {
     /**
      * Is a coordinate in range?
      */
-    isInRange(x: number, y: number): boolean {
+    public isInRange(x: number, y: number): boolean {
         return (x >= 0 && x < this.width && y >= 0 && y < this.height);
     }
 
     /**
      * Map an image x coordinate to a map x coordinate.
      */
-    mapX(x: number): number {
+    public mapX(x: number): number {
         return Math.floor(x / this.resX);
     }
 
     /**
      * Map an image y coordinate to a map y coordinate.
      */
-    mapY(y: number): number {
+    public mapY(y: number): number {
         return Math.floor(y / this.resY);
     }
 
-     /**
-      * Set an area to a certain color.
-      * @param {number} x            x coordinate
-      * @param {number} y            y coordinate
-      * @param {number} paletteIndex
-      */
-    put(x: number, y: number, paletteIndex: number): void {
+    /**
+     * Set an area to a certain color.
+     * @param {number} x            x coordinate
+     * @param {number} y            y coordinate
+     * @param {number} paletteIndex
+     */
+    public put(x: number, y: number, paletteIndex: number): void {
         if (!this.isInRange(x, y)) {
             return;
         }
@@ -77,9 +82,9 @@ export class ColorMap {
      * Get the palette index at x, y coordinate.
      * TODO: rename to getIndex
      */
-    get(x: number, y: number): number {
-        const mX: number = this.mapX(x),
-            mY: number = this.mapY(y);
+    public get(x: number, y: number): number {
+        const mX: number = this.mapX(x);
+        const mY: number = this.mapY(y);
 
         if (this.colors[mX] !== undefined) {
             return this.colors[mX][mY];
@@ -93,7 +98,7 @@ export class ColorMap {
      * @param  {number}   y [description]
      * @return {number[]}   [description]
      */
-    getColor(x: number, y: number): number[] {
+    public getColor(x: number, y: number): number[] {
         const index: number = this.get(x, y);
         if (index === undefined) {
             return undefined;
@@ -102,11 +107,11 @@ export class ColorMap {
     }
 
     // TODO: offset Pixel from the start instead of passing it down
-    isBestFit(pixel: number[], x: number, y: number): boolean {
+    public isBestFit(pixel: number[], x: number, y: number): boolean {
         return this.palette.mapPixel(pixel) === this.get(x, y);
     }
 
-    subtract(colorMap: ColorMap): void {
+    public subtract(colorMap: ColorMap): void {
         for (let x: number = 0; x < this.width; x += this.resX) {
             for (let y: number = 0; y < this.height; y += this.resY) {
                 if (this.get(x, y) === colorMap.get(x, y)) {
@@ -116,4 +121,3 @@ export class ColorMap {
         }
     }
 }
-

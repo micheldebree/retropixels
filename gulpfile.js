@@ -3,7 +3,7 @@ var gulp = require('gulp'),
   del = require('del');
 
 gulp.task('clean', function() {
-  return del(['target','*.png','*.prg','*.jpg']);
+  return del(['target']);
 });
 
 gulp.task('compile', function() {

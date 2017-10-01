@@ -1,49 +1,17 @@
-import { BinaryFile } from './BinaryFile';
-import { PixelImage } from '../model/PixelImage';
 import { ColorMap } from '../model/ColorMap';
 import { Palette } from '../model/Palette';
+import { PixelImage } from '../model/PixelImage';
+import { BinaryFile } from './BinaryFile';
 
 /**
  * A Koala Painter compatible picture.
  */
 export class KoalaPicture extends BinaryFile {
 
-    loadAddress: Uint8Array;
-    bitmap: Uint8Array;
-    screenRam: Uint8Array;
-    colorRam: Uint8Array;
-    background: Uint8Array;
-
-    /**
-     * Read the picture from an 8-bit buffer.
-     * @param  {Uint8Array} arrayBuffer The buffer to read.
-     */
-    read(arrayBuffer: Uint8Array): void {
-        this.loadAddress = new Uint8Array(arrayBuffer, 0, 2);
-        this.bitmap = new Uint8Array(arrayBuffer, 2, 8000);
-        this.screenRam = new Uint8Array(arrayBuffer, 8002, 1000);
-        this.colorRam = new Uint8Array(arrayBuffer, 9002, 1000);
-        this.background = new Uint8Array(arrayBuffer, 10002, 1);
-    }
-
-     /**
-      * Convert to a sequence of bytes.
-      * @return {Uint8Array} A sequence of 8-bit bytes.
-      */
-    toBytes(): Uint8Array {
-        return this.concat([
-            this.loadAddress,
-            this.bitmap,
-            this.screenRam,
-            this.colorRam,
-            this.background
-        ]);
-    }
-
     /**
      * Get the Koala bitmap component from a PixelImage.
      */
-    static convertBitmap(pixelImage: PixelImage): Uint8Array {
+    public static convertBitmap(pixelImage: PixelImage): Uint8Array {
         const bitmap: Uint8Array = new Uint8Array(8000);
         let bitmapIndex: number = 0;
 
@@ -66,9 +34,9 @@ export class KoalaPicture extends BinaryFile {
     /**
      * Get the Koala screenram component from two ColorMaps
      */
-    static convertScreenram(lowerColorMap: ColorMap, upperColorMap: ColorMap): Uint8Array {
+    public static convertScreenram(lowerColorMap: ColorMap, upperColorMap: ColorMap): Uint8Array {
         const screenRam: Uint8Array = new Uint8Array(1000);
-        var colorIndex: number = 0;
+        let colorIndex: number = 0;
 
         for (let colorY: number = 0; colorY < lowerColorMap.height; colorY += 8) {
             for (let colorX: number = 0; colorX < lowerColorMap.width; colorX += 4) {
@@ -85,11 +53,10 @@ export class KoalaPicture extends BinaryFile {
     /**
      * Get the Koala colorram component from a ColorMap
      */
-    static convertColorram(colorMap: ColorMap): Uint8Array {
-        const 
-            imageW: number = colorMap.width,
-            imageH: number = colorMap.height,
-            colorRam: Uint8Array = new Uint8Array(1000);
+    public static convertColorram(colorMap: ColorMap): Uint8Array {
+        const imageW: number = colorMap.width;
+        const imageH: number = colorMap.height;
+        const colorRam: Uint8Array = new Uint8Array(1000);
         let colorIndex: number = 0;
 
         for (let colorY: number = 0; colorY < imageH; colorY += 8) {
@@ -100,7 +67,7 @@ export class KoalaPicture extends BinaryFile {
         }
         return colorRam;
     }
-    
+
     /**
      * Convert a pixelImage to a KoalaPic
      * PixelImage must have the following specs:
@@ -109,7 +76,7 @@ export class KoalaPicture extends BinaryFile {
      * - colormap 1 and 2 have the screenram
      * - colormap 3 has the colorram
      */
-    static fromPixelImage(pixelImage: PixelImage): KoalaPicture {
+    public static fromPixelImage(pixelImage: PixelImage): KoalaPicture {
         const koalaPic: KoalaPicture = new KoalaPicture();
 
         koalaPic.loadAddress = new Uint8Array(2);
@@ -125,19 +92,50 @@ export class KoalaPicture extends BinaryFile {
         return koalaPic;
     }
 
+    public loadAddress: Uint8Array;
+    public bitmap: Uint8Array;
+    public screenRam: Uint8Array;
+    public colorRam: Uint8Array;
+    public background: Uint8Array;
+
+    /**
+     * Read the picture from an 8-bit buffer.
+     * @param  {Uint8Array} arrayBuffer The buffer to read.
+     */
+    public read(arrayBuffer: Uint8Array): void {
+        this.loadAddress = new Uint8Array(arrayBuffer, 0, 2);
+        this.bitmap = new Uint8Array(arrayBuffer, 2, 8000);
+        this.screenRam = new Uint8Array(arrayBuffer, 8002, 1000);
+        this.colorRam = new Uint8Array(arrayBuffer, 9002, 1000);
+        this.background = new Uint8Array(arrayBuffer, 10002, 1);
+    }
+
+    /**
+     * Convert to a sequence of bytes.
+     * @return {Uint8Array} A sequence of 8-bit bytes.
+     */
+    public toBytes(): Uint8Array {
+        return this.concat([
+            this.loadAddress,
+            this.bitmap,
+            this.screenRam,
+            this.colorRam,
+            this.background,
+        ]);
+    }
+
     /**
      * Convert a Koala Painter picture to a PixelImage.
      */
-    toPixelImage(koalaPic: KoalaPicture, palette: Palette): PixelImage {
-        const
-            imageW = 160,
-            imageH = 200,
-            pixelImage: PixelImage = new PixelImage(imageW, imageH, 2, 1),
-            pixelsPerCellHor = 4,
-            pixelsPerCellVer = 8;
+    public toPixelImage(koalaPic: KoalaPicture, palette: Palette): PixelImage {
+        const imageW = 160;
+        const imageH = 200;
+        const pixelImage: PixelImage = new PixelImage(imageW, imageH, 2, 1);
+        const pixelsPerCellHor = 4;
+        const pixelsPerCellVer = 8;
 
-        let bitmapIndex = 0,
-            colorIndex = 0;
+        let bitmapIndex = 0;
+        let colorIndex = 0;
 
         pixelImage.addColorMap(new ColorMap(imageW, imageH, palette));
         pixelImage.addColorMap(new ColorMap(imageW, imageH, palette, pixelsPerCellHor, pixelsPerCellVer));
@@ -148,8 +146,8 @@ export class KoalaPicture extends BinaryFile {
             for (let charX = 0; charX < imageW; charX += pixelsPerCellHor) {
                 for (let bitmapY = 0; bitmapY < pixelsPerCellVer; bitmapY += 1) {
 
-                    let pixelX = charX;
-                    let pixelY = charY + bitmapY;
+                    const pixelX = charX;
+                    const pixelY = charY + bitmapY;
 
                     pixelImage.setPixelIndex(pixelX, pixelY, (koalaPic.bitmap[bitmapIndex] >> 6) & 0x03);
                     pixelImage.setPixelIndex(pixelX + 1, pixelY, (koalaPic.bitmap[bitmapIndex] >> 4) & 0x03);
@@ -165,9 +163,9 @@ export class KoalaPicture extends BinaryFile {
             for (let colorX = 0; colorX < imageW; colorX += pixelsPerCellHor) {
 
                 // get two colors from screenRam and one from colorRam
-                let color01 = (koalaPic.screenRam[colorIndex] >> 4) & 0x0f;
-                let color10 = koalaPic.screenRam[colorIndex] & 0x0f;
-                let color11 = koalaPic.colorRam[colorIndex] & 0x0f;
+                const color01 = (koalaPic.screenRam[colorIndex] >> 4) & 0x0f;
+                const color10 = koalaPic.screenRam[colorIndex] & 0x0f;
+                const color11 = koalaPic.colorRam[colorIndex] & 0x0f;
 
                 // add the colors to the corresponding color maps
                 pixelImage.colorMaps[1].put(colorX, colorY, color01);
@@ -182,4 +180,3 @@ export class KoalaPicture extends BinaryFile {
         return pixelImage;
     }
 }
-

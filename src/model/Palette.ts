@@ -2,13 +2,13 @@ import { Pixels } from './Pixels';
 
 export class Palette {
 
-    pixels: number[][];
+    public pixels: number[][];
 
     constructor(pixels: number[][]) {
         this.pixels = pixels === undefined ? [] : pixels;
     }
 
-    get(index: number): number[] {
+    public get(index: number): number[] {
         return this.pixels[index];
     }
 
@@ -16,9 +16,9 @@ export class Palette {
      * Map a pixel to the closest available color in the palette.
      * @returns the index into the palette
      */
-    mapPixel(pixel: number[]): number {
+    public mapPixel(pixel: number[]): number {
         if (pixel === undefined) {
-            throw new Error("pixel is mandatory.");
+            throw new Error('pixel is mandatory.');
         }
 
         let minVal: number;
@@ -26,7 +26,7 @@ export class Palette {
 
         // determine closest pixel in palette (ignoring alpha)
         for (let i: number = 0; i < this.pixels.length; i += 1) {
-            let d: number = Pixels.getDistance(pixel, this.pixels[i]);
+            const d: number = Pixels.getDistance(pixel, this.pixels[i]);
             if (minVal === undefined || d < minVal) {
                 minVal = d;
                 minI = i;
