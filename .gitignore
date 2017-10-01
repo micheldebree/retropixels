@@ -1,5 +1,4 @@
 node_modules
-*.jpg
 *.kla
 *.sym
 *.vs
@@ -10,5 +9,3 @@ target
 **/*.swp
 **/*.iml
 .idea
-*.png
-*.jpg

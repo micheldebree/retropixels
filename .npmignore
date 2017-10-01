@@ -1,6 +1,4 @@
 node_modules
-*.png
-*.jpg
 *.kla
 *.sym
 *.vs
