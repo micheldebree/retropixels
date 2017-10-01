@@ -1,52 +1,11 @@
 # retropixels
 
-- A Javascript library for applying graphic mode limitations of retro computers on images.
-- A command line tool to convert images to c64 format.
+A command line tool to convert images to c64 format.
 
-## Library
+## Installation
 
-The library uses the CommonJS module format.
-It is not documented except for the comments in the code itself.
-
-## Conversion tool
-
-The command line tool turns any image into a Commodore 64 Multicolor image.
-It can produce an image, or an executable that can be
-run on a real Commodore 64.
-
-### Run the conversion tool with [Docker](https://www.docker.com)
-
-The command line tool can be run with docker.
-The only prerequisite for this is Docker itself:
-
-```bash
-docker run --rm -v "$PWD":/data micheldebree/retropixels-cli [options] <infile> <outfile>
-```
-
-The first time docker will download the image.
-Be patient. Next time it will get it from your local cache.
-
-## Build &amp; install locally
-
-### Prerequisites
-
-Sourcecode is compiled to Typescript using Gulp.
-
-- [Git](https://git-scm.com)
-- [NodeJS](https://nodejs.org)
-- ```npm install -g typescript```
-- ```npm install -g gulp-cli```
-
-### Installation
-
-- Clone or unzip this project
-
-```bash
-cd retropixels
-npm install
-gulp
-npm install -g
-```
+- Install [NodeJS](https://nodejs.org)
+- Run ``npm install -g retropixels``
 
 You now have a new shell command called ```retropixels```
 
@@ -100,6 +59,43 @@ you could "crunch" (compress) the resulting ```.prg``` file using
 ```bash
 exomizer sfx basic eye.prg -o eye-crunched.prg
 ```
+The command line tool turns any image into a Commodore 64 Multicolor image.
+It can produce an image, or an executable that can be
+run on a real Commodore 64.
+
+### Run the conversion tool with [Docker](https://www.docker.com)
+
+The command line tool can be run with docker.
+The only prerequisite for this is Docker itself:
+
+```bash
+docker run --rm -v "$PWD":/data micheldebree/retropixels-cli [options] <infile> <outfile>
+```
+
+The first time docker will download the image.
+Be patient. Next time it will get it from your local cache.
+
+## Build &amp; install locally
+
+### Prerequisites
+
+Sourcecode is compiled to Typescript using Gulp.
+
+- [Git](https://git-scm.com)
+- ```npm install -g typescript```
+- ```npm install -g gulp-cli```
+
+### Installation
+
+- Clone or unzip this project
+
+```bash
+cd retropixels
+npm install
+gulp
+npm install -g
+```
+
 
 ### Uninstall
 

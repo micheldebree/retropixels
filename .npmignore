@@ -8,3 +8,6 @@ node_modules
 .tags*
 tags
 **/*.swp
+*.sh
+Dockerfile
+docker-compose.yml
