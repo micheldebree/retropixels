@@ -2,6 +2,9 @@
 
 A command line tool to convert images to c64 format.
 
+![Input](miamivice.jpg)
+![Output](miamivice.png)
+
 ## Installation
 
 - Install [NodeJS](https://nodejs.org)
