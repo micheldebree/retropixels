@@ -24,8 +24,8 @@ export class Remapper {
     public optimizeColorMaps(imageData: ImageDataInterface): void {
         const colorMap: ColorMap = this.getColorMap(imageData, this.image);
         // fill up the colormaps in the restricted image based on the colors in the unrestricted image
-        for (let ci: number = 0; ci < this.image.colorMaps.length; ci += 1) {
-            this.extractColorMap(colorMap, this.image.colorMaps[ci]);
+        for (const map of this.image.colorMaps) {
+            this.extractColorMap(colorMap, map);
         }
     }
 

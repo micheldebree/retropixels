@@ -30,6 +30,7 @@ With
     - ```c64FLI```
     - ```c64AFLI```
 
+N.B. If the output file already exists, it will be overwritten.
 N.B. Only ```c64Multicolor``` mode supports saving as ```.prg```
 
 #### ```<outfile>```
@@ -62,6 +63,7 @@ you could "crunch" (compress) the resulting ```.prg``` file using
 ```bash
 exomizer sfx basic eye.prg -o eye-crunched.prg
 ```
+
 The command line tool turns any image into a Commodore 64 Multicolor image.
 It can produce an image, or an executable that can be
 run on a real Commodore 64.
@@ -99,11 +101,16 @@ gulp
 npm install -g
 ```
 
-
 ### Uninstall
 
 ```bash
 npm uninstall -g retropixels
+```
+
+## Build Docker image
+
+```bash
+docker build -t micheldebree/retropixels-cli .
 ```
 
 ## Changelog

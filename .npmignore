@@ -9,3 +9,6 @@ tags
 *.sh
 Dockerfile
 docker-compose.yml
+*.png
+*.jpg
+*.kla
