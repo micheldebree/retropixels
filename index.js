@@ -13,7 +13,7 @@ const cli = require('commander'),
 // default mode
 let graphicMode = GraphicModes.all['c64Multicolor'];
 
-cli.version('0.2.0')
+cli.version('0.2.1')
   .usage('[options] <infile> <outfile>')
   .option('-m, --mode [graphicMode]', 'Graphicmode to use. One of c64Multicolor (default), c64Hires, c64HiresMono, c64FLI, c64AFLI')
   .parse(process.argv);

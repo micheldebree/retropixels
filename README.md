@@ -5,12 +5,14 @@ A command line tool to convert images to c64 format.
 ![Input](miamivice.jpg)
 ![Output](miamivice.png)
 
-## Installation
+## For users
+
+### Installation
 
 - Install [NodeJS](https://nodejs.org)
 - Run ``npm install -g retropixels``
 
-You now have a new shell command called ```retropixels```
+You now have a new shell command called ``retropixels``
 
 ### Usage
 
@@ -20,26 +22,27 @@ retropixels [options] <infile> <outfile>
 
 With
 
-- ```<infile>```: the image to convert
-- ```<outfile>```: the converted image. Supported extentions are ```.png```, ```.prg``` and ```.kla```
-- ```[options]```:
-  - ```-m <mode>``` with ```<mode>```:
-    - ```c64Multicolor``` (default)
-    - ```c64Hires```
-    - ```c64HiresMono```
-    - ```c64FLI```
-    - ```c64AFLI```
+- ``<infile>``: the image to convert
+- ``<outfile>``: the converted image. Supported extentions are ``.png``, ``.prg`` and ``.kla``
+- ``[options]``:
+  - ``-m <mode>`` with ``<mode>``:
+    - ``c64Multicolor`` (default)
+    - ``c64Hires``
+    - ``c64HiresMono``
+    - ``c64FLI``
+    - ``c64AFLI``
 
 N.B. If the output file already exists, it will be overwritten.
-N.B. Only ```c64Multicolor``` mode supports saving as ```.prg```
 
-#### ```<outfile>```
+N.B. Only ``c64Multicolor`` mode supports saving as ``.prg``
+
+#### ``<outfile>``
 
 The format of the outfile depends on the file extension:
 
-- ```.png```: A PNG image
-- ```.kla```: A Koala Painter image, to be opened in Koala Painter on c64
-- ```.prg```: A Commodore 64 executable
+- ``.png``: A PNG image
+- ``.kla``: A Koala Painter image, to be opened in Koala Painter on c64
+- ``.prg``: A Commodore 64 executable
 
 ### Example
 
@@ -57,16 +60,43 @@ x64 eye.prg
 ```
 
 Optionally, to save some space and loading time,
-you could "crunch" (compress) the resulting ```.prg``` file using
+you could "crunch" (compress) the resulting ``.prg`` file using
 [exomizer](https://bitbucket.org/magli143/exomizer/wiki/Home):
 
 ```bash
 exomizer sfx basic eye.prg -o eye-crunched.prg
 ```
 
-The command line tool turns any image into a Commodore 64 Multicolor image.
-It can produce an image, or an executable that can be
-run on a real Commodore 64.
+### Uninstall
+
+```bash
+npm uninstall -g retropixels
+```
+
+## For developers
+
+### Build
+
+Sourcecode is compiled from Typescript using Gulp.
+
+- Install [Git](https://git-scm.com)
+- Clone or unzip this project
+
+```bash
+cd retropixels
+npm install -g typescript
+npm install -g gulp-cli
+npm install
+gulp
+```
+
+Run with ``node index.js [options] <infile> <outfile>``
+
+### Build Docker image
+
+```bash
+docker build -t micheldebree/retropixels-cli .
+```
 
 ### Run the conversion tool with [Docker](https://www.docker.com)
 
@@ -80,40 +110,11 @@ docker run --rm -v "$PWD":/data micheldebree/retropixels-cli [options] <infile> 
 The first time docker will download the image.
 Be patient. Next time it will get it from your local cache.
 
-## Build &amp; install locally
-
-### Prerequisites
-
-Sourcecode is compiled to Typescript using Gulp.
-
-- [Git](https://git-scm.com)
-- ```npm install -g typescript```
-- ```npm install -g gulp-cli```
-
-### Installation
-
-- Clone or unzip this project
-
-```bash
-cd retropixels
-npm install
-gulp
-npm install -g
-```
-
-### Uninstall
-
-```bash
-npm uninstall -g retropixels
-```
-
-## Build Docker image
-
-```bash
-docker build -t micheldebree/retropixels-cli .
-```
-
 ## Changelog
+
+### 0.2.1
+
+- Fixes in ``README.md``
 
 ### 0.2.0
 
