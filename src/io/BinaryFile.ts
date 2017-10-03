@@ -9,22 +9,22 @@ export class BinaryFile {
      * @return {Uint8Array} The buffers concatenated.
      */
     public concat(arrayBuffers: Uint8Array[]): Uint8Array {
-        let iii = 0;
-        let outputLength = 0;
+        let iii: number = 0;
+        let outputLength: number = 0;
 
         // measure final size
-        for (let i = 0; i < arrayBuffers.length; i += 1) {
-            outputLength += arrayBuffers[i].length;
-        }
+        arrayBuffers.forEach((buffer: Uint8Array, i: number) => {
+            outputLength += buffer.length;
+        });
 
         const result = new Uint8Array(outputLength);
 
-        for (let i = 0; i < arrayBuffers.length; i += 1) {
-            for (let ii = 0; ii < arrayBuffers[i].length; ii += 1) {
-                result[iii] = arrayBuffers[i][ii];
+        arrayBuffers.forEach((buffer: Uint8Array, i: number) => {
+            for (let ii = 0; ii < buffer.length; ii += 1) {
+                result[iii] = buffer[ii];
                 iii += 1;
             }
-        }
+        });
 
         return result;
     }

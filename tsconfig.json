@@ -4,11 +4,15 @@
         "module": "commonjs",
         "moduleResolution": "node",
         "noImplicitAny": true,
+        "noImplicitThis": true,
+        "noImplicitReturns": false,
         "removeComments": true,
         "preserveConstEnums": true,
         "outDir": "target",
         "sourceMap": true,
-        "allowJs": false
+        "allowJs": false,
+        "strictNullChecks": false,
+        "alwaysStrict": true
     },
     "include": [
         "**/*.ts"

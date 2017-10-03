@@ -84,8 +84,8 @@ Sourcecode is compiled from Typescript using Gulp.
 
 ```bash
 cd retropixels
-npm install -g typescript
-npm install -g gulp-cli
+npm install -g typescript@2.3.3
+npm install -g gulp-cli@1.3.0
 npm install
 gulp
 ```
@@ -111,6 +111,8 @@ The first time docker will download the image.
 Be patient. Next time it will get it from your local cache.
 
 ## Changelog
+
+### 0.2.2
 
 ### 0.2.1
 
