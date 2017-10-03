@@ -59,7 +59,7 @@ export class PixelImage {
      * If found, map realColor to the ColorMap's palette and claim the area.
      * Returns index into the found ColorMap.
      */
-    public tryClaimUnusedInMap(realColor: number[], x: number, y: number): number {
+    public tryClaimUnusedInMap(x: number, y: number, realColor: number[]): number {
         if (x === undefined) {
             throw new Error('x is mandatory.');
         }
@@ -93,7 +93,7 @@ export class PixelImage {
         for (let i: number = 0; i < this.colorMaps.length; i += 1) {
             const colorMap: ColorMap = this.colorMaps[i];
             const color: number[] = colorMap.getColor(x, y);
-            const d: number = Pixels.getDistance(pixel, this.orderedDithering.offsetColor(color, x, y));
+            const d: number = Pixels.getDistance(this.orderedDithering.offsetColor(pixel, x, y), color);
             if (minVal === undefined || d < minVal) {
                 minVal = d;
                 minI = i;
@@ -132,7 +132,7 @@ export class PixelImage {
         }
 
         // else see if there is a map with an empty attribute that we can claim
-        colorMapIndex = this.tryClaimUnusedInMap(realColor, x, y);
+        colorMapIndex = this.tryClaimUnusedInMap(x, y, realColor);
         if (colorMapIndex !== undefined) {
             this.setPixelIndex(x, y, colorMapIndex);
             return;
