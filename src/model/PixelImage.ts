@@ -43,13 +43,14 @@ export class PixelImage {
             throw new Error('y is mandatory.');
         }
 
-        this.colorMaps.forEach((colorMap: ColorMap, i: number) => {
+        for (let i: number = 0; i < this.colorMaps.length; i += 1) {
+            const colorMap: ColorMap = this.colorMaps[i];
             const mappedIndex: number = colorMap.palette.mapPixel(
                 this.orderedDithering.offsetColor(realColor, x, y));
             if (mappedIndex === colorMap.get(x, y)) {
                 return i;
             }
-        });
+        }
         return undefined;
     }
 
@@ -66,14 +67,15 @@ export class PixelImage {
             throw new Error('y is mandatory.');
         }
 
-        this.colorMaps.forEach((colorMap: ColorMap, i: number) => {
+        for (let i = 0; i < this.colorMaps.length; i += 1) {
             if (this.colorMaps[i].get(x, y) === undefined) {
+                const colorMap = this.colorMaps[i];
                 const color = colorMap.palette.mapPixel(
                     this.orderedDithering.offsetColor(realColor, x, y));
                 colorMap.put(x, y, color);
                 return i;
             }
-        });
+        }
         return undefined;
     }
 
@@ -88,14 +90,15 @@ export class PixelImage {
         let minI: number = 0;
 
         // determine closest pixel in palette (ignoring alpha)
-        this.colorMaps.forEach((colorMap: ColorMap, i: number) => {
+        for (let i: number = 0; i < this.colorMaps.length; i += 1) {
+            const colorMap: ColorMap = this.colorMaps[i];
             const color: number[] = colorMap.getColor(x, y);
             const d: number = Pixels.getDistance(this.orderedDithering.offsetColor(pixel, x, y), color);
             if (minVal === undefined || d < minVal) {
                 minVal = d;
                 minI = i;
             }
-        });
+        }
         return minI;
     }
 

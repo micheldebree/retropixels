@@ -25,13 +25,13 @@ export class Palette {
         let minI: number;
 
         // determine closest pixel in palette (ignoring alpha)
-        this.pixels.forEach((anotherPixel: number[], i: number) => {
-            const d: number = Pixels.getDistance(pixel, anotherPixel);
+        for (let i: number = 0; i < this.pixels.length; i += 1) {
+            const d: number = Pixels.getDistance(pixel, this.pixels[i]);
             if (minVal === undefined || d < minVal) {
                 minVal = d;
                 minI = i;
             }
-        });
+        }
         return minI;
     }
 }
