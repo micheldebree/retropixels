@@ -114,6 +114,8 @@ Be patient. Next time it will get it from your local cache.
 
 ### 0.2.2
 
+Optimized dithering, with better default setting.
+
 ### 0.2.1
 
 - Fixes in ``README.md``

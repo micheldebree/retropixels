@@ -1,4 +1,4 @@
-import { OrderedDithering } from '../conversion/OrderedDithering';
+import { BayerMatrix } from '../conversion/BayerMatrix';
 import { ColorMap } from './ColorMap';
 import { Pixels } from './Pixels';
 
@@ -12,7 +12,7 @@ export class PixelImage {
 
     public mappingWeight: number[];
 
-    private orderedDithering = new OrderedDithering();
+    private bayerMatrix = new BayerMatrix('bayer4x4', 64);
     private pixelIndex: number[][];
 
     constructor(width: number, height: number, pWidth: number = 1, pHeight: number = 1) {
@@ -46,7 +46,7 @@ export class PixelImage {
         for (let i: number = 0; i < this.colorMaps.length; i += 1) {
             const colorMap: ColorMap = this.colorMaps[i];
             const mappedIndex: number = colorMap.palette.mapPixel(
-                this.orderedDithering.offsetColor(realColor, x, y));
+                this.bayerMatrix.offsetColor(realColor, x, y));
             if (mappedIndex === colorMap.get(x, y)) {
                 return i;
             }
@@ -71,7 +71,7 @@ export class PixelImage {
             if (this.colorMaps[i].get(x, y) === undefined) {
                 const colorMap = this.colorMaps[i];
                 const color = colorMap.palette.mapPixel(
-                    this.orderedDithering.offsetColor(realColor, x, y));
+                    this.bayerMatrix.offsetColor(realColor, x, y));
                 colorMap.put(x, y, color);
                 return i;
             }
@@ -93,7 +93,7 @@ export class PixelImage {
         for (let i: number = 0; i < this.colorMaps.length; i += 1) {
             const colorMap: ColorMap = this.colorMaps[i];
             const color: number[] = colorMap.getColor(x, y);
-            const d: number = Pixels.getDistance(this.orderedDithering.offsetColor(pixel, x, y), color);
+            const d: number = Pixels.getDistance(this.bayerMatrix.offsetColor(pixel, x, y), color);
             if (minVal === undefined || d < minVal) {
                 minVal = d;
                 minI = i;
