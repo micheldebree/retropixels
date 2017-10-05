@@ -112,6 +112,8 @@ Be patient. Next time it will get it from your local cache.
 
 ## Changelog
 
+### 0.2.3
+
 ### 0.2.2
 
 Optimized dithering, with better default setting.

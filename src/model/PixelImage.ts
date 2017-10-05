@@ -12,7 +12,8 @@ export class PixelImage {
 
     public mappingWeight: number[];
 
-    private bayerMatrix = new BayerMatrix('bayer4x4', 64);
+    public bayerMatrix = new BayerMatrix('none', 0);
+
     private pixelIndex: number[][];
 
     constructor(width: number, height: number, pWidth: number = 1, pHeight: number = 1) {
