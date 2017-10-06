@@ -12,7 +12,7 @@ import { Remapper } from './Remapper';
 export class Converter {
 
     public graphicMode: GraphicMode;
-    public bayerMatrix: BayerMatrix = new BayerMatrix('bayer4x4', 32);
+    public bayerMatrix: BayerMatrix;
 
     /**
      * Constructor
@@ -29,9 +29,10 @@ export class Converter {
      */
     public convert(imageData: ImageDataInterface): PixelImage {
         const pixelImage: PixelImage = this.graphicMode.factory();
+        pixelImage.bayerMatrix = this.bayerMatrix;
+
         const remapper: Remapper = new Remapper(pixelImage);
 
-        pixelImage.bayerMatrix = this.bayerMatrix;
         remapper.optimizeColorMaps(imageData);
         remapper.drawImageData(imageData);
         return pixelImage;

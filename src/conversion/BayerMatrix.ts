@@ -1,5 +1,6 @@
 import { Pixels } from '../model/Pixels';
 
+// TODO: rename to OrderedDither
 export class BayerMatrix {
 
     private static sizePresets = {
@@ -33,6 +34,11 @@ export class BayerMatrix {
     constructor(sizePreset: string, depth: number) {
 
         const sourceMatrix: number[][] = BayerMatrix.sizePresets[sizePreset];
+
+        if (!sourceMatrix) {
+            throw new Error('Unknown ordered dithering preset: ' + sizePreset);
+        }
+
         const matrixSize = sourceMatrix[0].length;
         const factor: number = 1 / (matrixSize * matrixSize);
 
@@ -45,7 +51,6 @@ export class BayerMatrix {
             }
             rowIndex++;
         }
-        console.log('a ' + this.matrix);
 
     }
 

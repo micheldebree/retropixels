@@ -8,27 +8,44 @@ const cli = require('commander'),
   GraphicModes = require('./target/profiles/GraphicModes.js'),
   KoalaPicture = require('./target/io/KoalaPicture.js'),
   Converter = require('./target/conversion/Converter.js'),
-  ImageData = require('./target/model/ImageData.js');
+  ImageData = require('./target/model/ImageData.js'),
+  BayerMatrix = require('./target/conversion/BayerMatrix.js');
 
-// default mode
+// defaults
 let graphicMode = GraphicModes.all['c64Multicolor'];
+let ditherMode = 'bayer4x4';
+let ditherRadius = 32;
 
-cli.version('0.2.3')
+cli.version('0.3.0')
   .usage('[options] <infile> <outfile>')
-  .option('-m, --mode [graphicMode]', 'Graphicmode to use. One of c64Multicolor (default), c64Hires, c64HiresMono, c64FLI, c64AFLI')
+  .option('-m, --mode <graphicMode>', 'c64Multicolor (default), c64Hires, c64HiresMono, c64FLI, c64AFLI')
+  .option('-d, --ditherMode <ditherMode>', 'bayer2x2, bayer4x4 (default), bayer8x8')
+  .option('-r, --ditherRadius [0-64]', '0 = no dithering, 32 = default', parseInt)
   .parse(process.argv);
 
+// TODO: get rid of double bookkeeping (graphicMode and cli.mode)
 if (cli.mode) {
   if (cli.mode in GraphicModes.all) {
     console.log('Using graphicMode ' + cli.mode);
     graphicMode = GraphicModes.all[cli.mode];
-  } else {
+  }
+  else {
     console.error('Unknown Graphicmode: ' + cli.mode);
     cli.help();
     process.exit(1);
   }
-} else {
+}
+else {
   cli.mode = 'c64Multicolor';
+}
+
+if (cli.ditherRadius !== undefined) {
+  ditherRadius = cli.ditherRadius;
+  console.log(ditherRadius);
+}
+
+if (cli.ditherMode !== undefined) {
+  ditherMode = cli.ditherMode;
 }
 
 const inFile = cli.args[0],
@@ -116,20 +133,25 @@ jimp.read(inFile, (err, jimpImage) => {
     jimpImage.resize(graphicMode.width, graphicMode.height);
 
     const converter = new Converter.Converter(graphicMode);
+    converter.bayerMatrix = new BayerMatrix.BayerMatrix(ditherMode, ditherRadius);
     const pixelImage = converter.convert(jimpImage.bitmap);
 
     outExtension = path.extname(outFile);
 
     if ('.kla' === outExtension) {
       saveKoala(pixelImage);
-    } else if ('.prg' === outExtension) {
+    }
+    else if ('.prg' === outExtension) {
       savePrg(pixelImage);
-    } else if ('.png' === outExtension) {
+    }
+    else if ('.png' === outExtension) {
       savePng(pixelImage);
-    } else {
+    }
+    else {
       throw 'Unknown file extension ' + outExtension + ', valid extensions are .png, .kla and .prg';
     }
-  } catch (e) {
+  }
+  catch (e) {
     console.error(e);
     cli.help();
     process.exit(1);

@@ -10,8 +10,6 @@ export class PixelImage {
     public pHeight: number; // aspect height of one pixel
     public colorMaps: ColorMap[];
 
-    public mappingWeight: number[];
-
     public bayerMatrix = new BayerMatrix('none', 0);
 
     private pixelIndex: number[][];
@@ -24,10 +22,6 @@ export class PixelImage {
         this.pHeight = pHeight;
         this.colorMaps = []; // maps x,y to a color
         this.pixelIndex = []; // maps pixel x,y to a colormap
-
-        // weight per pixel channel (RGB or YUV) when calculating distance
-        // [1, 1, 1] is equal weight, [1, 0, 0] in combination with YUV is phychedelic mode
-        this.mappingWeight = [1, 1, 1];
     }
 
     /*

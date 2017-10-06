@@ -1,9 +1,14 @@
 # retropixels
 
-A command line tool to convert images to c64 format.
+A cross platform command line tool to convert images to c64 format.
 
-![Input](miamivice.jpg)
-![Output](miamivice.png)
+## Summary
+
+![Input](paintface.jpg)
+
+``retropixels paintface.jpg paintface.png``
+
+![Output](paintface.png)
 
 ## For users
 
@@ -23,7 +28,10 @@ retropixels [options] <infile> <outfile>
 With
 
 - ``<infile>``: the image to convert
-- ``<outfile>``: the converted image. Supported extentions are ``.png``, ``.prg`` and ``.kla``
+- ``<outfile>``: the converted image. The extension determines the format:
+    - ``<outfile>.png`` produces a PNG file.
+    - ``<outfile>.kla`` produces a Koala Painter file (only supported for c64Multicolor mode)
+    - ``<outfile>.prg`` produces a Commodore 64 executable (only supported for c64Multicolor mode)
 - ``[options]``:
   - ``-m <mode>`` with ``<mode>``:
     - ``c64Multicolor`` (default)
@@ -31,25 +39,19 @@ With
     - ``c64HiresMono``
     - ``c64FLI``
     - ``c64AFLI``
-
-N.B. If the output file already exists, it will be overwritten.
-
-N.B. Only ``c64Multicolor`` mode supports saving as ``.prg``
-
-#### ``<outfile>``
-
-The format of the outfile depends on the file extension:
-
-- ``.png``: A PNG image
-- ``.kla``: A Koala Painter image, to be opened in Koala Painter on c64
-- ``.prg``: A Commodore 64 executable
+  - ``-d <ditherMode>`` with ``<ditherMode>``:
+      - ``bayer2x2``
+      - ``bayer4x4`` (default)
+      - ``bayer8x8``
+  - ``-r <ditherRadius>`` with ``ditherRadius``:
+      - A number between 0 (no dithering) and 64 (heavy dithering). Default is 32.
 
 ### Example
 
 Convert an image to a Commodore 64 executable:
 
 ```bash
-retropixels eye.jpg eye.prg
+retropixels -b bayer8x8 -r 64 eye.jpg eye.prg
 ```
 
 View the result by running it in the
@@ -57,14 +59,6 @@ View the result by running it in the
 
 ```bash
 x64 eye.prg
-```
-
-Optionally, to save some space and loading time,
-you could "crunch" (compress) the resulting ``.prg`` file using
-[exomizer](https://bitbucket.org/magli143/exomizer/wiki/Home):
-
-```bash
-exomizer sfx basic eye.prg -o eye-crunched.prg
 ```
 
 ### Uninstall
@@ -112,7 +106,11 @@ Be patient. Next time it will get it from your local cache.
 
 ## Changelog
 
-### 0.2.3
+### 0.3.0
+
+- Dithering options added:
+    - ditherMode
+    - ditherRadius
 
 ### 0.2.2
 

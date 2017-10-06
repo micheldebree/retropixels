@@ -49,7 +49,6 @@ export class Remapper {
         const unrestrictedImage: PixelImage = new PixelImage(w, h, targetPixelImage.pWidth, targetPixelImage.pHeight);
         const palette = targetPixelImage.colorMaps[0].palette;
         unrestrictedImage.colorMaps.push(new ColorMap(w, h, palette, 1, 1));
-        unrestrictedImage.mappingWeight = targetPixelImage.mappingWeight;
         unrestrictedImage.bayerMatrix = targetPixelImage.bayerMatrix;
         ImageData.drawImageData(imageData, unrestrictedImage);
         return unrestrictedImage.colorMaps[0];
