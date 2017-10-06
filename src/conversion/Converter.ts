@@ -29,7 +29,8 @@ export class Converter {
      */
     public convert(imageData: ImageDataInterface): PixelImage {
         const pixelImage: PixelImage = this.graphicMode.factory();
-        pixelImage.bayerMatrix = this.bayerMatrix;
+
+        pixelImage.quantizer.ditherMatrix = this.bayerMatrix;
 
         const remapper: Remapper = new Remapper(pixelImage);
 

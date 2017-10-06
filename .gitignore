@@ -1,5 +1,6 @@
 node_modules
 *.kla
+*.prg
 *.sym
 *.vs
 *.log
@@ -9,3 +10,4 @@ target
 **/*.swp
 **/*.iml
 .idea
+acme-master

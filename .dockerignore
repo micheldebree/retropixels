@@ -1,0 +1,10 @@
+.vscode
+*.jpg
+*.png
+*.prg
+*.kla
+*.log
+*.tmp
+.*
+tags
+node_modules

@@ -1,26 +1,61 @@
+VERSION=0.3.1
 EXAMPLE=paintface
+DOCKERIMAGE=micheldebree/retropixels-cli
+DOCKERCMD=docker run -t --rm -v "$$PWD":/data $(DOCKERIMAGE)
+LOCALCMD=node index.js
 
 %.png: %.jpg compile
 	node index.js "$<" "$*.png"
 
-%.prg: %.jpg compile
-	node index.js "$<" "$*.prg"
+%.prg: %.jpg dockerimage
+	$(DOCKERCMD) "$<" "$*.prg"
 
-compile:
-	gulp
+%.prg: %.asm
+	cd ./src/c64 && make
+	mkdir -p ./target/c64 && mv ./src/c64/*.prg ./target/c64/ 
 
-install:
-	gulp
+compile: c64code node_modules
+	npm run prepare
+
+clean:
+	npm run clean
+	cd src/c64 && make clean
+
+node_modules:
+	npm install
+
+c64code: src/c64/KoalaShower.prg src/c64/FLIShower.prg
+
+install: clean compile
 	npm install -g
 
-dockerimage:
-	docker build -t micheldebree/retropixels-cli .
+release: publish
+	git tag $(VERSION)
+	git push
+	git push --tags
 
-example: compile $(EXAMPLE).png
+publish:
+	git clean -d -f
+	tsc
+	npm publish
+
+dockerimage: clean
+	docker build -t $(DOCKERIMAGE) .
+
+docker_debug: dockerimage
+	docker run -it --entrypoint /bin/sh $(DOCKERIMAGE)
+
+example: clean compile $(EXAMPLE).png
 	open $(EXAMPLE).png
 
-test64: compile $(EXAMPLE).prg
+# Test PRG making with dockerimage
+test64: $(EXAMPLE).prg
 	x64sc $(EXAMPLE).prg
 
+testfli: compile
+	$(LOCALCMD) -m c64FLI "$(EXAMPLE).jpg" "$(EXAMPLE).prg"
+	$(LOCALCMD) -m c64FLI "$(EXAMPLE).jpg" "$(EXAMPLE).png"
+	open "$(EXAMPLE).png"
+	x64sc "$(EXAMPLE).prg"
 
 

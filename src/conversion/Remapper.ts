@@ -6,7 +6,8 @@ import { PixelImage } from '../model/PixelImage';
 /**
  * Maps ImageData onto a PixelImage
  * TODO: does not support different palettes per colorMap
- * TODO: rename
+ * TODO: rename to ColorMapOptimizer or something
+ * TODO: move drawImageData to another class. This is just for optimizing.
  * @param  {PixelImage} image The PixelImage to map ImageData to
  */
 export class Remapper {
@@ -36,8 +37,7 @@ export class Remapper {
     public drawImageData(imageData: ImageDataInterface): void {
         for (let y: number = 0; y < this.image.height; y += 1) {
             for (let x: number = 0; x < this.image.width; x += 1) {
-                const pixel: number[] = ImageData.peek(imageData, x, y);
-                this.image.poke(x, y, pixel);
+                this.image.poke(x, y, ImageData.peek(imageData, x, y));
             }
         }
     }
@@ -49,7 +49,7 @@ export class Remapper {
         const unrestrictedImage: PixelImage = new PixelImage(w, h, targetPixelImage.pWidth, targetPixelImage.pHeight);
         const palette = targetPixelImage.colorMaps[0].palette;
         unrestrictedImage.colorMaps.push(new ColorMap(w, h, palette, 1, 1));
-        unrestrictedImage.bayerMatrix = targetPixelImage.bayerMatrix;
+        unrestrictedImage.quantizer = unrestrictedImage.quantizer;
         ImageData.drawImageData(imageData, unrestrictedImage);
         return unrestrictedImage.colorMaps[0];
     }

@@ -114,14 +114,14 @@ export class KoalaPicture extends BinaryFile {
      * Convert to a sequence of bytes.
      * @return {Uint8Array} A sequence of 8-bit bytes.
      */
-    public toBytes(): Uint8Array {
-        return this.concat([
+    public toMemoryMap(): Uint8Array[] {
+        return [
             this.loadAddress,
             this.bitmap,
             this.screenRam,
             this.colorRam,
-            this.background,
-        ]);
+            this.background
+        ];
     }
 
     /**

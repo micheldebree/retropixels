@@ -4,7 +4,7 @@
         "module": "commonjs",
         "moduleResolution": "node",
         "noImplicitAny": true,
-        "noImplicitThis": true,
+        "noImplicitThis": false,
         "noImplicitReturns": false,
         "removeComments": true,
         "preserveConstEnums": true,

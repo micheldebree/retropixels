@@ -14,36 +14,13 @@ export class Pixels {
     }
 
     /**
-     * Get the Euclidian distance between two pixels.
-     * @param  {number[]} onePixel   One pixel
-     * @param  {number[]} otherPixel Another pixel
-     * @return {number}              The Euclidian distance between the two pixels.
-     */
-    public static getDistance(onePixel: number[], otherPixel: number[]): number {
-        const weight: number[] = [1, 1, 1];
-
-        if (onePixel === undefined) {
-            throw new Error('onePixel is mandatory.');
-        }
-        if (otherPixel === undefined) {
-            throw new Error('otherPixel is mandatory.');
-        }
-        onePixel = Pixels.toYUV(onePixel);
-        otherPixel = Pixels.toYUV(otherPixel);
-
-        return Math.sqrt(
-            Math.pow(weight[0] * (onePixel[0] - otherPixel[0]), 2) +
-            Math.pow(weight[1] * (onePixel[1] - otherPixel[1]), 2) +
-            Math.pow(weight[2] * (onePixel[2] - otherPixel[2]), 2),
-        );
-    }
-
-    /**
      * Convert from an RGB pixel to YUV.
+     * SDTV with BT.601
+     * https://en.wikipedia.org/wiki/YUV
      * @param  {number[]} pixel The pixel to convert.
      * @return {number[]}       The result
      */
-    private static toYUV(pixel: number[]): number[] {
+    public static toYUV(pixel: number[]): number[] {
         if (pixel === undefined) {
             throw new Error('Pixel is mandatory.');
         }
@@ -51,6 +28,18 @@ export class Pixels {
             pixel[0] * 0.299 + pixel[1] * 0.587 + pixel[2] * 0.114,
             pixel[0] * -0.14713 + pixel[1] * -0.28886 + pixel[2] * 0.436,
             pixel[0] * 0.615 + pixel[1] * -0.51499 + pixel[2] * -0.10001,
+        ];
+    }
+
+    // HDTV with BT.709
+    public static toYUV2(pixel: number[]): number[] {
+        if (pixel === undefined) {
+            throw new Error('Pixel is mandatory.');
+        }
+        return [
+            pixel[0] * 0.2126 + pixel[1] * 0.7152 + pixel[2] * 0.0722,
+            pixel[0] * -0.09991 + pixel[1] * -0.33609 + pixel[2] * 0.436,
+            pixel[0] * 0.615 + pixel[1] * -0.55861 + pixel[2] * -0.05639,
         ];
     }
 

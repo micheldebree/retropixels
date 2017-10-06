@@ -21,8 +21,28 @@ const peptoPalette = new Palette([
     [0x6c, 0x6c, 0x6c, 0xff], // medium gray
     [0x9a, 0xd2, 0x84, 0xff], // light green
     [0x6c, 0x5e, 0xb5, 0xff], // light blue
+    [0x95, 0x95, 0x95, 0xff], // light gray
+]);
+
+const peptoGray = new Palette([
+    [0, 0, 0, 0xff], // black
+    [0xff, 0xff, 0xff, 0xff], // white
+    [0xffff, 0xffff, 0xffff, 0xffff],
+    [0xffff, 0xffff, 0xffff, 0xffff],
+    [0xffff, 0xffff, 0xffff, 0xffff],
+    [0xffff, 0xffff, 0xffff, 0xffff],
+    [0xffff, 0xffff, 0xffff, 0xffff],
+    [0xffff, 0xffff, 0xffff, 0xffff],
+    [0xffff, 0xffff, 0xffff, 0xffff],
+    [0xffff, 0xffff, 0xffff, 0xffff],
+    [0xffff, 0xffff, 0xffff, 0xffff],
+    [0x44, 0x44, 0x44, 0xff], // dark gray
+    [0x6c, 0x6c, 0x6c, 0xff], // medium gray
+    [0xffff, 0xffff, 0xffff, 0xffff],
+    [0xffff, 0xffff, 0xffff, 0xffff],
     [0x95, 0x95, 0x95, 0xff], // green
 ]);
+
 
 const spectrumPallete = new Palette([
     [0, 0, 0, 0xff], // black
@@ -107,6 +127,15 @@ export const c64Hires = new GraphicMode(320, 200, 1, 1,
     },
 );
 
+export const c64HiresGray = new GraphicMode(320, 200, 1, 1,
+    function() {
+        const pixelImage = new PixelImage(this.width, this.height, this.pixelWidth, this.pixelHeight);
+        pixelImage.colorMaps.push(new ColorMap(this.width, this.height, peptoGray, 8, 8));
+        pixelImage.colorMaps.push(new ColorMap(this.width, this.height, peptoGray, 8, 8));
+        return pixelImage;
+    },
+);
+
 // C64 standard high resolution monochrome mode
 export const c64HiresMono = new GraphicMode(320, 200, 1, 1,
     function() {
@@ -134,7 +163,7 @@ export const c64FLI = new GraphicMode(160, 200, 2, 1,
 export const c64AFLI = new GraphicMode(320, 200, 1, 1,
     function() {
         const pixelImage = new PixelImage(this.width, this.height, this.pixelWidth, this.pixelHeight);
-        pixelImage.colorMaps.push(new ColorMap(this.width, this.height, peptoPalette, 8, 8));
+        pixelImage.colorMaps.push(new ColorMap(this.width, this.height, peptoPalette, 8, 1));
         pixelImage.colorMaps.push(new ColorMap(this.width, this.height, peptoPalette, 8, 1));
         return pixelImage;
     },
@@ -160,6 +189,7 @@ export const pyssla = new GraphicMode(116, 116, 4, 4,
 export const all = {
     c64Multicolor,
     c64Hires,
+    c64HiresGray,
     c64HiresMono,
     c64FLI,
     c64AFLI,

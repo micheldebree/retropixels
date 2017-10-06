@@ -1,6 +1,6 @@
-import { BayerMatrix } from '../conversion/BayerMatrix';
+import { Quantizer } from '../conversion/Quantizer';
 import { ColorMap } from './ColorMap';
-import { Pixels } from './Pixels';
+import { Palette } from './Palette';
 
 export class PixelImage {
 
@@ -10,7 +10,7 @@ export class PixelImage {
     public pHeight: number; // aspect height of one pixel
     public colorMaps: ColorMap[];
 
-    public bayerMatrix = new BayerMatrix('none', 0);
+    public quantizer: Quantizer = new Quantizer();
 
     private pixelIndex: number[][];
 
@@ -31,20 +31,15 @@ export class PixelImage {
       Returns the index of the ColorMap
     */
     public findColorInMap(x: number, y: number, realColor: number[]): number {
-        if (x === undefined) {
-            throw new Error('x is mandatory.');
-        }
-        if (y === undefined) {
-            throw new Error('y is mandatory.');
-        }
 
-        for (let i: number = 0; i < this.colorMaps.length; i += 1) {
-            const colorMap: ColorMap = this.colorMaps[i];
-            const mappedIndex: number = colorMap.palette.mapPixel(
-                this.bayerMatrix.offsetColor(realColor, x, y));
+        let i: number = 0;
+
+        for (const colorMap of this.colorMaps) {
+            const mappedIndex: number = this.quantizer.mapPixel(x, y, realColor, colorMap.palette);
             if (mappedIndex === colorMap.get(x, y)) {
                 return i;
             }
+            i++;
         }
         return undefined;
     }
@@ -55,21 +50,16 @@ export class PixelImage {
      * Returns index into the found ColorMap.
      */
     public tryClaimUnusedInMap(x: number, y: number, realColor: number[]): number {
-        if (x === undefined) {
-            throw new Error('x is mandatory.');
-        }
-        if (y === undefined) {
-            throw new Error('y is mandatory.');
-        }
 
-        for (let i = 0; i < this.colorMaps.length; i += 1) {
-            if (this.colorMaps[i].get(x, y) === undefined) {
-                const colorMap = this.colorMaps[i];
-                const color = colorMap.palette.mapPixel(
-                    this.bayerMatrix.offsetColor(realColor, x, y));
+        let i: number = 0;
+
+        for (const colorMap of this.colorMaps) {
+            if (colorMap.get(x, y) === undefined) {
+                const color = this.quantizer.mapPixel(x, y, realColor, colorMap.palette);
                 colorMap.put(x, y, color);
                 return i;
             }
+            i++;
         }
         return undefined;
     }
@@ -81,20 +71,13 @@ export class PixelImage {
      * @returns {int} Colormap index for the closest Colormap
      */
     public map(pixel: number[], x: number, y: number): number {
-        let minVal: number;
-        let minI: number = 0;
 
         // determine closest pixel in palette (ignoring alpha)
-        for (let i: number = 0; i < this.colorMaps.length; i += 1) {
-            const colorMap: ColorMap = this.colorMaps[i];
-            const color: number[] = colorMap.getColor(x, y);
-            const d: number = Pixels.getDistance(this.bayerMatrix.offsetColor(pixel, x, y), color);
-            if (minVal === undefined || d < minVal) {
-                minVal = d;
-                minI = i;
-            }
+        const palette = new Palette([]);
+        for (const colorMap of this.colorMaps) {
+            palette.pixels.push(colorMap.getColor(x, y));
         }
-        return minI;
+        return this.quantizer.mapPixel(x, y, pixel, palette);
     }
 
     public setPixelIndex(x: number, y: number, index: number): void {

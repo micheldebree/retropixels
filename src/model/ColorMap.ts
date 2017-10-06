@@ -106,11 +106,6 @@ export class ColorMap {
         return this.palette.get(index);
     }
 
-    // TODO: offset Pixel from the start instead of passing it down
-    public isBestFit(pixel: number[], x: number, y: number): boolean {
-        return this.palette.mapPixel(pixel) === this.get(x, y);
-    }
-
     public subtract(colorMap: ColorMap): void {
         for (let x: number = 0; x < this.width; x += this.resX) {
             for (let y: number = 0; y < this.height; y += this.resY) {

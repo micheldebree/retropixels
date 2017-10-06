@@ -69,19 +69,24 @@ npm uninstall -g retropixels
 
 ## For developers
 
-### Build
+The build process has been tested on macOS. It should work on other platforms but you're on your own there.
 
-Sourcecode is compiled from Typescript using Gulp.
+### Prerequisites
 
-- Install [Git](https://git-scm.com)
+- [NodeJS](https://nodejs.org) (latest LTE version)
+- [Git](https://git-scm.com)
+- GCC
+- GNU make
+
+#### Build
+
 - Clone or unzip this project
 
 ```bash
 cd retropixels
 npm install -g typescript@2.3.3
-npm install -g gulp-cli@1.3.0
 npm install
-gulp
+make
 ```
 
 Run with ``node index.js [options] <infile> <outfile>``
@@ -106,11 +111,15 @@ Be patient. Next time it will get it from your local cache.
 
 ## Changelog
 
+### 0.3.1
+
+Internal refactoring.
+
 ### 0.3.0
 
 - Dithering options added:
-    - ditherMode
-    - ditherRadius
+  - ditherMode
+  - ditherRadius
 
 ### 0.2.2
 

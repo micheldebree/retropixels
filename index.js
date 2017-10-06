@@ -7,16 +7,19 @@ const cli = require('commander'),
   jimp = require('jimp'),
   GraphicModes = require('./target/profiles/GraphicModes.js'),
   KoalaPicture = require('./target/io/KoalaPicture.js'),
+  FLIPicture = require('./target/io/FLIPicture.js'),
   Converter = require('./target/conversion/Converter.js'),
   ImageData = require('./target/model/ImageData.js'),
   BayerMatrix = require('./target/conversion/BayerMatrix.js');
+  
+const c64BinariesFolder = '/target/c64'
 
 // defaults
 let graphicMode = GraphicModes.all['c64Multicolor'];
 let ditherMode = 'bayer4x4';
 let ditherRadius = 32;
 
-cli.version('0.3.0')
+cli.version('0.3.1')
   .usage('[options] <infile> <outfile>')
   .option('-m, --mode <graphicMode>', 'c64Multicolor (default), c64Hires, c64HiresMono, c64FLI, c64AFLI')
   .option('-d, --ditherMode <ditherMode>', 'bayer2x2, bayer4x4 (default), bayer8x8')
@@ -64,12 +67,24 @@ if (outFile === undefined) {
 // Save PixelImage as a c64 native .PRG executable.
 function savePrg(pixelImage) {
 
-  if (cli.mode !== 'c64Multicolor') {
-    throw 'Commodore 64 executable format is only supported for c64Multicolor mode.';
+  if (cli.mode === 'c64Multicolor') {
+    saveKoalaPrg(pixelImage);
+    return;
   }
 
+  if (cli.mode === 'c64FLI') {
+    saveFLIPrg(pixelImage);
+    return;
+  }
+
+  throw 'Commodore 64 executable format is not supported for mode ' + cli.mode + '.';
+}
+
+// Save PixelImage as a c64 native .PRG executable.
+function saveKoalaPrg(pixelImage) {
+
   const koalaImage = KoalaPicture.KoalaPicture.fromPixelImage(pixelImage),
-    binary = path.join(__dirname, '/src/c64/KoalaShower.prg');
+    binary = path.join(__dirname, c64BinariesFolder + '/KoalaShower.prg');
 
   fs.readFile(binary, function(err, viewerCode) {
     if (err) throw err;
@@ -82,13 +97,32 @@ function savePrg(pixelImage) {
   });
 }
 
+// Save PixelImage as a c64 native .PRG executable.
+function saveFLIPrg(pixelImage) {
+
+  const fliImage = FLIPicture.FLIPicture.fromPixelImage(pixelImage),
+    binary = path.join(__dirname, c64BinariesFolder + '/FLIShower.prg');
+
+  fs.readFile(binary, function(err, viewerCode) {
+    if (err) throw err;
+    const buffer = new Buffer(fliImage.toBytes()),
+      writeBuffer = Buffer.concat([viewerCode, buffer]);
+    fs.writeFile(outFile, writeBuffer, function(err) {
+      if (err) throw err;
+      console.log('Written Commodore 64 executable ' + outFile);
+    });
+  });
+}
+
+
+
 // Save PixelImage as a KoalaPaint image.
 function saveKoala(pixelImage) {
   if (cli.mode !== 'c64Multicolor') {
     throw 'Koala painter format is only supported for c64Multicolor mode.';
   }
   const koalaImage = KoalaPicture.KoalaPicture.fromPixelImage(pixelImage);
-  fs.writeFile(outFile, new Buffer(koalaImage.toBytes()), function(err) {
+  koalaImage.save(outFile, function(err) {
     if (err) throw err;
     console.log('Written Koala Painter file ' + outFile);
   });

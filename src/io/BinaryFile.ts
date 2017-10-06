@@ -1,14 +1,31 @@
+import * as fs from 'fs-extra';
+
 /**
  * A binary file consisting of multiple sequences of 8-bit bytes.
  */
-export class BinaryFile {
+export abstract class BinaryFile {
+
+    protected abstract toMemoryMap(): Uint8Array[];
+
+    // Save PixelImage as a KoalaPaint image.
+    public save(outFile: string, callback: () => {}) {
+
+        fs.writeFile(outFile, new Buffer(this.toBytes()), (err: Error) => {
+            if (err) { throw err; }
+            return callback();
+        });
+    }
+
+    private toBytes(): Uint8Array {
+        return this.concat(this.toMemoryMap());
+    }
 
     /**
      * Concatenate multiple 8-bit array buffers into one.
      * @param  {Uint8Array[]} arrayBuffers The buffers to concatenate, in desired order.
      * @return {Uint8Array} The buffers concatenated.
      */
-    public concat(arrayBuffers: Uint8Array[]): Uint8Array {
+    private concat(arrayBuffers: Uint8Array[]): Uint8Array {
         let iii = 0;
         let outputLength = 0;
 
@@ -28,4 +45,10 @@ export class BinaryFile {
 
         return result;
     }
+
+    public pad(buffer: Uint8Array, numberOfBytes: number): Uint8Array {
+        const padding = new Uint8Array(numberOfBytes);
+        return this.concat([buffer, padding]);
+    }
+
 }
