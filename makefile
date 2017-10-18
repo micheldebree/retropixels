@@ -7,8 +7,8 @@ LOCALCMD=node index.js
 %.png: %.jpg compile
 	node index.js "$<" "$*.png"
 
-%.prg: %.jpg dockerimage
-	$(DOCKERCMD) "$<" "$*.prg"
+%.prg: %.jpg compile
+	node index.js "$<" "$*.prg"
 
 %.prg: %.asm
 	cd ./src/c64 && make
@@ -45,7 +45,7 @@ dockerimage: clean
 docker_debug: dockerimage
 	docker run -it --entrypoint /bin/sh $(DOCKERIMAGE)
 
-example: clean compile $(EXAMPLE).png
+example: compile $(EXAMPLE).png
 	open $(EXAMPLE).png
 
 # Test PRG making with dockerimage
