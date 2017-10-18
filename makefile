@@ -1,4 +1,4 @@
-VERSION=0.4.0
+VERSION=0.4.1
 EXAMPLE=paintface
 DOCKERIMAGE=micheldebree/retropixels-cli
 DOCKERCMD=docker run -t --rm -v "$$PWD":/data $(DOCKERIMAGE)
@@ -36,7 +36,6 @@ release: publish
 
 publish:
 	git clean -d -f
-	tsc
 	npm publish
 
 dockerimage: clean
