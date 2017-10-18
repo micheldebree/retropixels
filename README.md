@@ -29,9 +29,9 @@ With
 
 - ``<infile>``: the image to convert
 - ``<outfile>``: the converted image. The extension determines the format:
-    - ``<outfile>.png`` produces a PNG file.
-    - ``<outfile>.kla`` produces a Koala Painter file (only supported for c64Multicolor mode)
-    - ``<outfile>.prg`` produces a Commodore 64 executable (only supported for c64Multicolor mode)
+  - ``<outfile>.png`` produces a PNG file
+  - ``<outfile>.kla`` produces a Koala Painter file (only supported for c64Multicolor mode)
+  - ``<outfile>.prg`` produces a Commodore 64 executable (only supported for modes c64Multicolor and c64FLI)
 - ``[options]``:
   - ``-m <mode>`` with ``<mode>``:
     - ``c64Multicolor`` (default)
@@ -43,7 +43,7 @@ With
       - ``bayer2x2``
       - ``bayer4x4`` (default)
       - ``bayer8x8``
-  - ``-r <ditherRadius>`` with ``ditherRadius``:
+  - ``-r <ditherRadius>`` with ``<ditherRadius>``:
       - A number between 0 (no dithering) and 64 (heavy dithering). Default is 32.
 
 ### Example
@@ -111,9 +111,10 @@ Be patient. Next time it will get it from your local cache.
 
 ## Changelog
 
-### 0.3.1
+### 0.4.0
 
-Internal refactoring.
+- Export FLI executable.
+- Internal refactoring.
 
 ### 0.3.0
 

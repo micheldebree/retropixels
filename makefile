@@ -1,4 +1,4 @@
-VERSION=0.3.1
+VERSION=0.4.0
 EXAMPLE=paintface
 DOCKERIMAGE=micheldebree/retropixels-cli
 DOCKERCMD=docker run -t --rm -v "$$PWD":/data $(DOCKERIMAGE)
@@ -12,7 +12,7 @@ LOCALCMD=node index.js
 
 %.prg: %.asm
 	cd ./src/c64 && make
-	mkdir -p ./target/c64 && mv ./src/c64/*.prg ./target/c64/ 
+	mkdir -p ./target/c64 && mv ./src/c64/*.prg ./target/c64/
 
 compile: c64code node_modules
 	npm run prepare
