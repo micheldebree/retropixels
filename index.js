@@ -8,11 +8,12 @@ const cli = require('commander'),
     GraphicModes = require('./target/profiles/GraphicModes.js'),
     KoalaPicture = require('./target/io/KoalaPicture.js'),
     FLIPicture = require('./target/io/FLIPicture.js'),
+    PNGPicture = require('./target/io/PNGPicture.js'),
     Converter = require('./target/conversion/Converter.js'),
     ImageData = require('./target/model/ImageData.js'),
     BayerMatrix = require('./target/conversion/BayerMatrix.js');
 
-const c64BinariesFolder = '/target/c64'
+const c64BinariesFolder = '/target/c64';
 
 // defaults
 let graphicMode = GraphicModes.all['c64Multicolor'];
@@ -129,7 +130,7 @@ function saveKoala(pixelImage) {
 }
 
 // Save PixelImage as a PNG image.
-function savePng(pixelImage) {
+function savePng(pixelImage, filename) {
     new jimp(pixelImage.width, pixelImage.height, function(err, image) {
         if (err) throw err;
         for (let y = 0; y < image.bitmap.height; y += 1) {
@@ -138,10 +139,18 @@ function savePng(pixelImage) {
             }
         }
         image.resize(pixelImage.width * pixelImage.pWidth, pixelImage.height * pixelImage.pHeight);
-        image.write(outFile, function() {
-            console.log('Written PNG image ' + outFile);
+        image.write(filename, function() {
+            console.log('Written PNG image ' + filename);
         });
     });
+}
+
+function saveDebugMaps(pixelImage) {
+    var mapimages = pixelImage.debugColorMaps();
+    var i = 0;
+    for (var mapimage of mapimages) {
+        savePng(mapimage, outFile + '-map' + i++ + '.png');
+    }
 }
 
 // Crop a JIMP Image to fill up a specific ratio. Ratio is passed as relative width and height.
@@ -181,7 +190,11 @@ jimp.read(inFile, (err, jimpImage) => {
             savePrg(pixelImage);
         }
         else if ('.png' === outExtension) {
-            savePng(pixelImage);
+            savePng(pixelImage, outFile);
+            // saveDebugMaps(pixelImage);
+            // PNGPicture.PNGPicture.save(pixelImage, outFile, () => {
+                // log.console('Saved PNG picture ' + outFile);
+            // });
         }
         else {
             throw 'Unknown file extension ' + outExtension + ', valid extensions are .png, .kla and .prg';

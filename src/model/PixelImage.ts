@@ -80,6 +80,7 @@ export class PixelImage {
         return this.quantizer.mapPixel(x, y, pixel, palette);
     }
 
+    // TODO: remove; make fixed pixel grid on construction
     public setPixelIndex(x: number, y: number, index: number): void {
         if (this.pixelIndex[y] === undefined) {
             this.pixelIndex[y] = [];
@@ -146,4 +147,21 @@ export class PixelImage {
         this.colorMaps.push(colorMap);
     }
 
+    public debugColorMaps(): PixelImage[] {
+
+        const result: PixelImage[] = [];
+
+        for (const colorMap of this.colorMaps) {
+            const pixelImage = new PixelImage(this.width, this.height, this.pWidth, this.pHeight);
+            pixelImage.colorMaps.push(colorMap);
+            for (let x = 0; x < this.width; x++) {
+                for (let y = 0; y < this.height; y++) {
+                    pixelImage.setPixelIndex(x, y, 0);
+                }
+            }
+            result.push(pixelImage);
+
+        }
+        return result;
+    }
 }

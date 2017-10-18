@@ -9,8 +9,8 @@
     "name": "Launch Program",
     "program": "${workspaceRoot}/index.js",
     "args": [
-      "-m", "c64Hires",
-      "skull.jpg", "skull.png"
+      "-m", "c64Multicolor",
+      "paintface.jpg", "paintface.png"
     ]
   }]
 }
