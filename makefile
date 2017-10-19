@@ -47,6 +47,10 @@ docker_debug: dockerimage
 example: compile $(EXAMPLE).png
 	open $(EXAMPLE).png
 
+samples: compile
+	$(LOCALCMD) -m c64FLI paintface.jpg ./samples/paintface-FLI-$(VERSION).png
+	$(LOCALCMD) -m c64FLI paintface.jpg ./samples/paintface-FLI-$(VERSION).prg
+
 # Test PRG making with dockerimage
 test64: $(EXAMPLE).prg
 	x64sc $(EXAMPLE).prg

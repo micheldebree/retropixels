@@ -191,9 +191,9 @@ export const c64FLI = new GraphicMode(160, 200, 2, 1,
     function() {
         const pixelImage = new PixelImage(this.width, this.height, this.pixelWidth, this.pixelHeight);
         pixelImage.colorMaps.push(new ColorMap(this.width, this.height, peptoPalette));
-        pixelImage.colorMaps.push(new ColorMap(this.width, this.height, peptoPalette, 4, 1));
-        pixelImage.colorMaps.push(new ColorMap(this.width, this.height, peptoPalette, 4, 1));
         pixelImage.colorMaps.push(new ColorMap(this.width, this.height, peptoPalette, 4, 8));
+        pixelImage.colorMaps.push(new ColorMap(this.width, this.height, peptoPalette, 4, 1));
+        pixelImage.colorMaps.push(new ColorMap(this.width, this.height, peptoPalette, 4, 1));
         return pixelImage;
     },
 );

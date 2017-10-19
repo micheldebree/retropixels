@@ -21,10 +21,10 @@ export class FLIPicture extends BinaryFile {
                     // pack 4 pixels into one byte
                     if (charX > 12) {
                         bitmap[bitmapIndex] =
-                            pixelImage.getPixelIndex(charX, charY + bitmapY) << 6
-                            | pixelImage.getPixelIndex(charX + 1, charY + bitmapY) << 4
-                            | pixelImage.getPixelIndex(charX + 2, charY + bitmapY) << 2
-                            | pixelImage.getPixelIndex(charX + 3, charY + bitmapY);
+                            FLIPicture.mapPixelIndex(pixelImage, charX, charY + bitmapY) << 6
+                            | FLIPicture.mapPixelIndex(pixelImage, charX + 1, charY + bitmapY) << 4
+                            | FLIPicture.mapPixelIndex(pixelImage, charX + 2, charY + bitmapY) << 2
+                            | FLIPicture.mapPixelIndex(pixelImage, charX + 3, charY + bitmapY);
                     }
                     bitmapIndex++;
                 }
@@ -75,21 +75,40 @@ export class FLIPicture extends BinaryFile {
         pic.loadAddress[0] = 0;
         pic.loadAddress[1] = 0x3c;
 
-        pic.colorRam = this.convertColorram(pixelImage.colorMaps[3]);
+        pic.colorRam = this.convertColorram(pixelImage.colorMaps[1]);
         pic.bitmap = this.convertBitmap(pixelImage);
-        pic.screenRam0 = this.convertScreenram(0, pixelImage.colorMaps[2], pixelImage.colorMaps[1]);
-        pic.screenRam1 = this.convertScreenram(1, pixelImage.colorMaps[2], pixelImage.colorMaps[1]);
-        pic.screenRam2 = this.convertScreenram(2, pixelImage.colorMaps[2], pixelImage.colorMaps[1]);
-        pic.screenRam3 = this.convertScreenram(3, pixelImage.colorMaps[2], pixelImage.colorMaps[1]);
-        pic.screenRam4 = this.convertScreenram(4, pixelImage.colorMaps[2], pixelImage.colorMaps[1]);
-        pic.screenRam5 = this.convertScreenram(5, pixelImage.colorMaps[2], pixelImage.colorMaps[1]);
-        pic.screenRam6 = this.convertScreenram(6, pixelImage.colorMaps[2], pixelImage.colorMaps[1]);
-        pic.screenRam7 = this.convertScreenram(7, pixelImage.colorMaps[2], pixelImage.colorMaps[1]);
+        pic.screenRam0 = this.convertScreenram(0, pixelImage.colorMaps[2], pixelImage.colorMaps[3]);
+        pic.screenRam1 = this.convertScreenram(1, pixelImage.colorMaps[2], pixelImage.colorMaps[3]);
+        pic.screenRam2 = this.convertScreenram(2, pixelImage.colorMaps[2], pixelImage.colorMaps[3]);
+        pic.screenRam3 = this.convertScreenram(3, pixelImage.colorMaps[2], pixelImage.colorMaps[3]);
+        pic.screenRam4 = this.convertScreenram(4, pixelImage.colorMaps[2], pixelImage.colorMaps[3]);
+        pic.screenRam5 = this.convertScreenram(5, pixelImage.colorMaps[2], pixelImage.colorMaps[3]);
+        pic.screenRam6 = this.convertScreenram(6, pixelImage.colorMaps[2], pixelImage.colorMaps[3]);
+        pic.screenRam7 = this.convertScreenram(7, pixelImage.colorMaps[2], pixelImage.colorMaps[3]);
 
         pic.background = new Uint8Array(1);
         pic.background[0] = pixelImage.colorMaps[0].get(0, 0);
 
         return pic;
+    }
+
+    private static indexMap = {
+        0: 0,
+        1: 3,
+        2: 2,
+        3: 1,
+    };
+
+    /**
+     * Map the index value in the PixelImage (0-3) to an index value in the FLI bitmap (0-3)
+     * This way the indexes of the ColorMaps in PixelImage do
+     * not have to be in the same order as the FLI destination image.
+     * @param pixelImage The PixelImage
+     * @param x The x location of the pixel index to be mapped
+     * @param y The x location of the pixel index to be mapped
+     */
+    private static mapPixelIndex(pixelImage: PixelImage, x: number, y: number) {
+        return FLIPicture.indexMap[pixelImage.getPixelIndex(x, y)];
     }
 
     public loadAddress: Uint8Array;
