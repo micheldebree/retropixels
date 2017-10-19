@@ -16,7 +16,7 @@ const cli = require('commander'),
 const c64BinariesFolder = '/target/c64';
 
 // defaults
-let graphicMode = GraphicModes.all['c64Multicolor'];
+let graphicMode = GraphicModes.all.c64Multicolor;
 let ditherMode = 'bayer4x4';
 let ditherRadius = 32;
 
@@ -181,6 +181,15 @@ jimp.read(inFile, (err, jimpImage) => {
         converter.bayerMatrix = new BayerMatrix.BayerMatrix(ditherMode, ditherRadius);
         const pixelImage = converter.convert(jimpImage.bitmap);
 
+        // Show FLI bug by clearing first 12 pixels on each row.
+        if (cli.mode === 'c64FLI') {
+            for (y = 0; y < pixelImage.height; y++) {
+                for (x = 0; x < 12; x++) {
+                    pixelImage.setPixelIndex(x, y, 0);
+                }
+            }
+        }
+
         outExtension = path.extname(outFile);
 
         if ('.kla' === outExtension) {
@@ -191,10 +200,6 @@ jimp.read(inFile, (err, jimpImage) => {
         }
         else if ('.png' === outExtension) {
             savePng(pixelImage, outFile);
-            // saveDebugMaps(pixelImage);
-            // PNGPicture.PNGPicture.save(pixelImage, outFile, () => {
-                // log.console('Saved PNG picture ' + outFile);
-            // });
         }
         else {
             throw 'Unknown file extension ' + outExtension + ', valid extensions are .png, .kla and .prg';

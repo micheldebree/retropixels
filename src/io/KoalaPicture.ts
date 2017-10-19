@@ -120,7 +120,7 @@ export class KoalaPicture extends BinaryFile {
             this.bitmap,
             this.screenRam,
             this.colorRam,
-            this.background
+            this.background,
         ];
     }
 

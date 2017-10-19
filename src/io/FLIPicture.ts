@@ -19,7 +19,7 @@ export class FLIPicture extends BinaryFile {
             for (let charX: number = 0; charX < pixelImage.width; charX += 4) {
                 for (let bitmapY: number = 0; bitmapY < 8; bitmapY += 1) {
                     // pack 4 pixels into one byte
-                    if (charX > 12) {
+                    if (charX > FLIPicture.FLIBugSize) {
                         bitmap[bitmapIndex] =
                             FLIPicture.mapPixelIndex(pixelImage, charX, charY + bitmapY) << 6
                             | FLIPicture.mapPixelIndex(pixelImage, charX + 1, charY + bitmapY) << 4
@@ -40,7 +40,7 @@ export class FLIPicture extends BinaryFile {
         for (let colorY: number = row; colorY < lowerColorMap.height; colorY += 8) {
             for (let colorX: number = 0; colorX < lowerColorMap.width; colorX += 4) {
                 // pack two colors in one byte
-                if (colorX > 12) {
+                if (colorX > FLIPicture.FLIBugSize) {
                     screenRam[colorIndex] =
                         ((upperColorMap.get(colorX, colorY) << 4) & 0xf0)
                         | (lowerColorMap.get(colorX, colorY) & 0x0f);
@@ -59,7 +59,7 @@ export class FLIPicture extends BinaryFile {
 
         for (let colorY: number = 0; colorY < imageH; colorY += 8) {
             for (let colorX: number = 0; colorX < imageW; colorX += 4) {
-                if (colorX > 12) {
+                if (colorX > FLIPicture.FLIBugSize) {
                     colorRam[colorIndex] = colorMap.get(colorX, colorY) & 0x0f;
                 }
                 colorIndex++;
@@ -91,6 +91,8 @@ export class FLIPicture extends BinaryFile {
 
         return pic;
     }
+
+    private static FLIBugSize: number  = 8;
 
     private static indexMap = {
         0: 0,

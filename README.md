@@ -111,6 +111,11 @@ Be patient. Next time it will get it from your local cache.
 
 ## Changelog
 
+### 0.4.1
+
+- [#16](https://github.com/micheldebree/retropixels/issues/16) Fixed suboptimal FLI color optimization
+- [#17](https://github.com/micheldebree/retropixels/issues/17) Made FLI bug visible in PNG export
+
 ### 0.4.0
 
 - Export FLI executable.
