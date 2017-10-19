@@ -8,6 +8,7 @@ const cli = require('commander'),
     GraphicModes = require('./target/profiles/GraphicModes.js'),
     KoalaPicture = require('./target/io/KoalaPicture.js'),
     FLIPicture = require('./target/io/FLIPicture.js'),
+    AFLIPicture = require('./target/io/AFLIPicture.js'),
     PNGPicture = require('./target/io/PNGPicture.js'),
     Converter = require('./target/conversion/Converter.js'),
     ImageData = require('./target/model/ImageData.js'),
@@ -78,6 +79,11 @@ function savePrg(pixelImage) {
         return;
     }
 
+    if (cli.mode === 'c64AFLI') {
+        saveAFLIPrg(pixelImage);
+        return;
+    }
+
     throw 'Commodore 64 executable format is not supported for mode ' + cli.mode + '.';
 }
 
@@ -115,7 +121,21 @@ function saveFLIPrg(pixelImage) {
     });
 }
 
+function saveAFLIPrg(pixelImage) {
 
+        const fliImage = AFLIPicture.AFLIPicture.fromPixelImage(pixelImage),
+            binary = path.join(__dirname, c64BinariesFolder + '/AFLIShower.prg');
+
+        fs.readFile(binary, function(err, viewerCode) {
+            if (err) throw err;
+            const buffer = new Buffer(fliImage.toBytes()),
+                writeBuffer = Buffer.concat([viewerCode, buffer]);
+            fs.writeFile(outFile, writeBuffer, function(err) {
+                if (err) throw err;
+                console.log('Written Commodore 64 executable ' + outFile);
+            });
+        });
+    }
 
 // Save PixelImage as a KoalaPaint image.
 function saveKoala(pixelImage) {

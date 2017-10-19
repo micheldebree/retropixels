@@ -3,7 +3,7 @@ ACME_SRC=acme-master/src
 %.prg: %.asm $(ACME_SRC)/acme
 	$(ACME_SRC)/acme "$<"
 
-all: KoalaShower.prg FLIShower.prg
+all: KoalaShower.prg FLIShower.prg AFLIShower.prg
 
 clean:
 	rm -f *.prg
