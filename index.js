@@ -22,7 +22,7 @@ let graphicMode = GraphicModes.all.c64Multicolor;
 let ditherMode = 'bayer4x4';
 let ditherRadius = 32;
 
-cli.version('0.4.2')
+cli.version('0.5.0')
     .usage('[options] <infile> <outfile>')
     .option('-m, --mode <graphicMode>', 'c64Multicolor (default), c64Hires, c64HiresMono, c64FLI, c64AFLI')
     .option('-d, --ditherMode <ditherMode>', 'bayer2x2, bayer4x4 (default), bayer8x8')
@@ -30,24 +30,21 @@ cli.version('0.4.2')
     .parse(process.argv);
 
 // TODO: get rid of double bookkeeping (graphicMode and cli.mode)
-if (cli.mode) {
-    if (cli.mode in GraphicModes.all) {
-        console.log('Using graphicMode ' + cli.mode);
-        graphicMode = GraphicModes.all[cli.mode];
-    }
-    else {
-        console.error('Unknown Graphicmode: ' + cli.mode);
-        cli.help();
-        process.exit(1);
-    }
-}
-else {
+if (!cli.mode) {
     cli.mode = 'c64Multicolor';
+}
+
+if (cli.mode in GraphicModes.all) {
+    console.log('Using graphicMode ' + cli.mode);
+    graphicMode = GraphicModes.all[cli.mode];
+} else {
+    console.error('Unknown Graphicmode: ' + cli.mode);
+    cli.help();
+    process.exit(1);
 }
 
 if (cli.ditherRadius !== undefined) {
     ditherRadius = cli.ditherRadius;
-    console.log(ditherRadius);
 }
 
 if (cli.ditherMode !== undefined) {
@@ -99,11 +96,11 @@ function saveKoalaPrg(pixelImage) {
     const koalaImage = KoalaPicture.KoalaPicture.fromPixelImage(pixelImage),
         binary = path.join(__dirname, c64BinariesFolder + '/KoalaShower.prg');
 
-    fs.readFile(binary, function(err, viewerCode) {
+    fs.readFile(binary, function (err, viewerCode) {
         if (err) throw err;
         const koalaBuffer = new Buffer(koalaImage.toBytes()),
             writeBuffer = Buffer.concat([viewerCode, koalaBuffer]);
-        fs.writeFile(outFile, writeBuffer, function(err) {
+        fs.writeFile(outFile, writeBuffer, function (err) {
             if (err) throw err;
             console.log('Written Commodore 64 executable ' + outFile);
         });
@@ -113,19 +110,19 @@ function saveKoalaPrg(pixelImage) {
 // Save PixelImage as a c64 native .PRG executable.
 function saveHiresPrg(pixelImage) {
 
-        const image = HiresPicture.HiresPicture.fromPixelImage(pixelImage),
-            binary = path.join(__dirname, c64BinariesFolder + '/HiresShower.prg');
+    const image = HiresPicture.HiresPicture.fromPixelImage(pixelImage),
+        binary = path.join(__dirname, c64BinariesFolder + '/HiresShower.prg');
 
-        fs.readFile(binary, function(err, viewerCode) {
+    fs.readFile(binary, function (err, viewerCode) {
+        if (err) throw err;
+        const buffer = new Buffer(image.toBytes()),
+            writeBuffer = Buffer.concat([viewerCode, buffer]);
+        fs.writeFile(outFile, writeBuffer, function (err) {
             if (err) throw err;
-            const buffer = new Buffer(image.toBytes()),
-                writeBuffer = Buffer.concat([viewerCode, buffer]);
-            fs.writeFile(outFile, writeBuffer, function(err) {
-                if (err) throw err;
-                console.log('Written Commodore 64 executable ' + outFile);
-            });
+            console.log('Written Commodore 64 executable ' + outFile);
         });
-    }
+    });
+}
 
 
 // Save PixelImage as a c64 native .PRG executable.
@@ -134,11 +131,11 @@ function saveFLIPrg(pixelImage) {
     const fliImage = FLIPicture.FLIPicture.fromPixelImage(pixelImage),
         binary = path.join(__dirname, c64BinariesFolder + '/FLIShower.prg');
 
-    fs.readFile(binary, function(err, viewerCode) {
+    fs.readFile(binary, function (err, viewerCode) {
         if (err) throw err;
         const buffer = new Buffer(fliImage.toBytes()),
             writeBuffer = Buffer.concat([viewerCode, buffer]);
-        fs.writeFile(outFile, writeBuffer, function(err) {
+        fs.writeFile(outFile, writeBuffer, function (err) {
             if (err) throw err;
             console.log('Written Commodore 64 executable ' + outFile);
         });
@@ -147,24 +144,24 @@ function saveFLIPrg(pixelImage) {
 
 function saveAFLIPrg(pixelImage) {
 
-        const fliImage = AFLIPicture.AFLIPicture.fromPixelImage(pixelImage),
-            binary = path.join(__dirname, c64BinariesFolder + '/AFLIShower.prg');
+    const fliImage = AFLIPicture.AFLIPicture.fromPixelImage(pixelImage),
+        binary = path.join(__dirname, c64BinariesFolder + '/AFLIShower.prg');
 
-        fs.readFile(binary, function(err, viewerCode) {
+    fs.readFile(binary, function (err, viewerCode) {
+        if (err) throw err;
+        const buffer = new Buffer(fliImage.toBytes()),
+            writeBuffer = Buffer.concat([viewerCode, buffer]);
+        fs.writeFile(outFile, writeBuffer, function (err) {
             if (err) throw err;
-            const buffer = new Buffer(fliImage.toBytes()),
-                writeBuffer = Buffer.concat([viewerCode, buffer]);
-            fs.writeFile(outFile, writeBuffer, function(err) {
-                if (err) throw err;
-                console.log('Written Commodore 64 executable ' + outFile);
-            });
+            console.log('Written Commodore 64 executable ' + outFile);
         });
-    }
+    });
+}
 
 // Save PixelImage as a KoalaPaint image.
 function saveKoala(pixelImage) {
     const koalaImage = KoalaPicture.KoalaPicture.fromPixelImage(pixelImage);
-    koalaImage.save(outFile, function(err) {
+    koalaImage.save(outFile, function (err) {
         if (err) throw err;
         console.log('Written Koala Painter file ' + outFile);
     });
@@ -172,7 +169,7 @@ function saveKoala(pixelImage) {
 
 // Save PixelImage as a PNG image.
 function savePng(pixelImage, filename) {
-    new jimp(pixelImage.width, pixelImage.height, function(err, image) {
+    new jimp(pixelImage.width, pixelImage.height, function (err, image) {
         if (err) throw err;
         for (let y = 0; y < image.bitmap.height; y += 1) {
             for (let x = 0; x < image.bitmap.width; x += 1) {
@@ -180,7 +177,7 @@ function savePng(pixelImage, filename) {
             }
         }
         image.resize(pixelImage.width * pixelImage.pWidth, pixelImage.height * pixelImage.pHeight);
-        image.write(filename, function() {
+        image.write(filename, function () {
             console.log('Written PNG image ' + filename);
         });
     });
@@ -235,18 +232,14 @@ jimp.read(inFile, (err, jimpImage) => {
 
         if ('.kla' === outExtension) {
             saveKoala(pixelImage);
-        }
-        else if ('.prg' === outExtension) {
+        } else if ('.prg' === outExtension) {
             savePrg(pixelImage);
-        }
-        else if ('.png' === outExtension) {
+        } else if ('.png' === outExtension) {
             savePng(pixelImage, outFile);
-        }
-        else {
+        } else {
             throw 'Unknown file extension ' + outExtension + ', valid extensions are .png, .kla and .prg';
         }
-    }
-    catch (e) {
+    } catch (e) {
         console.error(e);
         cli.help();
         process.exit(1);

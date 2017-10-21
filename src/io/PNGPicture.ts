@@ -17,7 +17,6 @@ export class PNGPicture {
             // image.resize(pixelImage.width
                 // * pixelImage.pWidth, pixelImage.height
                 // * pixelImage.pHeight);
-               console.log(image.write);
             image.write(outFile, () => {
                 return callback();
             });

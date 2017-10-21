@@ -8,7 +8,7 @@ A cross platform command line tool to convert images to c64 format.
 
 ``retropixels paintface.jpg paintface.png``
 
-![Output](paintface.png)
+![Output](samples/paintface-Multicolor.png)
 
 ## For users
 
@@ -31,7 +31,7 @@ With
 - ``<outfile>``: the converted image. The extension determines the format:
   - ``<outfile>.png`` produces a PNG file
   - ``<outfile>.kla`` produces a Koala Painter file (only supported for c64Multicolor mode)
-  - ``<outfile>.prg`` produces a Commodore 64 executable (only supported for modes c64Multicolor and c64FLI)
+  - ``<outfile>.prg`` produces a Commodore 64 executable
 - ``[options]``:
   - ``-m <mode>`` with ``<mode>``:
     - ``c64Multicolor`` (default)
@@ -45,6 +45,10 @@ With
       - ``bayer8x8``
   - ``-r <ditherRadius>`` with ``<ditherRadius>``:
       - A number between 0 (no dithering) and 64 (heavy dithering). Default is 32.
+
+Notes:
+  - The FLI/AFLI display code was found on [codebase64.org](http://codebase64.org/doku.php?id=base:fli_displayer)
+  - FLI/AFLI modes result in an issue with the leftmost 3 characters on each row being unusable. You will see a blank space in the image. This is a limitation of the Commodore 64 VIC chip hacking involved in creating this artificial mode, and is not a bug in retropixels.
 
 ### Example
 
@@ -110,6 +114,15 @@ The first time docker will download the image.
 Be patient. Next time it will get it from your local cache.
 
 ## Changelog
+
+### 0.5.0
+
+All modes now support saving as Commodore 64 executable (.prg)
+
+- [#3](https://github.com/micheldebree/retropixels/issues/3) Export PRG for c64Hires mode
+- [#4](https://github.com/micheldebree/retropixels/issues/4) Export PRG for c64FLI mode
+- [#18](https://github.com/micheldebree/retropixels/issues/18) Export PRG for c64AFLI mode
+
 
 ### 0.4.1
 

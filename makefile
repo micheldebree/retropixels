@@ -1,4 +1,4 @@
-VERSION=0.4.2
+VERSION=0.5.0
 EXAMPLE=paintface
 DOCKERIMAGE=micheldebree/retropixels-cli
 DOCKERCMD=docker run -t --rm -v "$$PWD":/data $(DOCKERIMAGE)
@@ -44,20 +44,17 @@ dockerimage: clean
 docker_debug: dockerimage
 	docker run -it --entrypoint /bin/sh $(DOCKERIMAGE)
 
-example: compile $(EXAMPLE).png
-	open $(EXAMPLE).png
-
 samples: compile
-	$(LOCALCMD) paintface.jpg ./samples/paintface-Multicolor-$(VERSION).png
-	$(LOCALCMD) paintface.jpg ./samples/paintface-Multicolor-$(VERSION).prg
-	$(LOCALCMD) -m c64Hires paintface.jpg ./samples/paintface-Hires-$(VERSION).png
-	$(LOCALCMD) -m c64Hires paintface.jpg ./samples/paintface-Hires-$(VERSION).prg
-	$(LOCALCMD) -m c64HiresMono paintface.jpg ./samples/paintface-HiresMono-$(VERSION).png
-	$(LOCALCMD) -m c64HiresMono paintface.jpg ./samples/paintface-HiresMono-$(VERSION).prg
-	$(LOCALCMD) -m c64FLI paintface.jpg ./samples/paintface-FLI-$(VERSION).png
-	$(LOCALCMD) -m c64FLI paintface.jpg ./samples/paintface-FLI-$(VERSION).prg
-	$(LOCALCMD) -m c64AFLI paintface.jpg ./samples/paintface-AFLI-$(VERSION).png
-	$(LOCALCMD) -m c64AFLI paintface.jpg ./samples/paintface-AFLI-$(VERSION).prg
+	$(LOCALCMD) paintface.jpg ./samples/paintface-Multicolor.png
+	$(LOCALCMD) paintface.jpg ./samples/paintface-Multicolor.prg
+	$(LOCALCMD) -m c64Hires paintface.jpg ./samples/paintface-Hires.png
+	$(LOCALCMD) -m c64Hires paintface.jpg ./samples/paintface-Hires.prg
+	$(LOCALCMD) -m c64HiresMono paintface.jpg ./samples/paintface-HiresMono.png
+	$(LOCALCMD) -m c64HiresMono paintface.jpg ./samples/paintface-HiresMono.prg
+	$(LOCALCMD) -m c64FLI paintface.jpg ./samples/paintface-FLI.png
+	$(LOCALCMD) -m c64FLI paintface.jpg ./samples/paintface-FLI.prg
+	$(LOCALCMD) -m c64AFLI paintface.jpg ./samples/paintface-AFLI.png
+	$(LOCALCMD) -m c64AFLI paintface.jpg ./samples/paintface-AFLI.prg
 
 # Test PRG making with dockerimage
 test64: $(EXAMPLE).prg
