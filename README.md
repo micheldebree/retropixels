@@ -47,8 +47,9 @@ With
       - A number between 0 (no dithering) and 64 (heavy dithering). Default is 32.
 
 Notes:
-  - The FLI/AFLI display code was found on [codebase64.org](http://codebase64.org/doku.php?id=base:fli_displayer)
-  - FLI/AFLI modes result in an issue with the leftmost 3 characters on each row being unusable. You will see a blank space in the image. This is a limitation of the Commodore 64 VIC chip hacking involved in creating this artificial mode, and is not a bug in retropixels.
+
+- The FLI/AFLI display code was found on [codebase64.org](http://codebase64.org/doku.php?id=base:fli_displayer)
+- FLI/AFLI modes result in an issue with the leftmost 3 characters on each row being unusable. You will see a blank space in the image. This is a limitation of the Commodore 64 VIC chip hacking involved in creating this artificial mode, and is not a bug in retropixels.
 
 ### Example
 
@@ -115,6 +116,8 @@ Be patient. Next time it will get it from your local cache.
 
 ## Changelog
 
+### 0.5.1
+
 ### 0.5.0
 
 All modes now support saving as Commodore 64 executable (.prg)
@@ -122,7 +125,6 @@ All modes now support saving as Commodore 64 executable (.prg)
 - [#3](https://github.com/micheldebree/retropixels/issues/3) Export PRG for c64Hires mode
 - [#4](https://github.com/micheldebree/retropixels/issues/4) Export PRG for c64FLI mode
 - [#18](https://github.com/micheldebree/retropixels/issues/18) Export PRG for c64AFLI mode
-
 
 ### 0.4.1
 

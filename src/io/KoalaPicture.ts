@@ -2,71 +2,12 @@ import { ColorMap } from '../model/ColorMap';
 import { Palette } from '../model/Palette';
 import { PixelImage } from '../model/PixelImage';
 import { BinaryFile } from './BinaryFile';
+import { C64Mapper } from './C64Mapper';
 
 /**
  * A Koala Painter compatible picture.
  */
 export class KoalaPicture extends BinaryFile {
-
-    /**
-     * Get the Koala bitmap component from a PixelImage.
-     */
-    public static convertBitmap(pixelImage: PixelImage): Uint8Array {
-        const bitmap: Uint8Array = new Uint8Array(8000);
-        let bitmapIndex: number = 0;
-
-        for (let charY: number = 0; charY < pixelImage.height; charY += 8) {
-            for (let charX: number = 0; charX < pixelImage.width; charX += 4) {
-                for (let bitmapY: number = 0; bitmapY < 8; bitmapY += 1) {
-                    // pack 4 pixels into one byte
-                    bitmap[bitmapIndex] =
-                        pixelImage.getPixelIndex(charX, charY + bitmapY) << 6
-                        | pixelImage.getPixelIndex(charX + 1, charY + bitmapY) << 4
-                        | pixelImage.getPixelIndex(charX + 2, charY + bitmapY) << 2
-                        | pixelImage.getPixelIndex(charX + 3, charY + bitmapY);
-                    bitmapIndex += 1;
-                }
-            }
-        }
-        return bitmap;
-    }
-
-    /**
-     * Get the Koala screenram component from two ColorMaps
-     */
-    public static convertScreenram(lowerColorMap: ColorMap, upperColorMap: ColorMap): Uint8Array {
-        const screenRam: Uint8Array = new Uint8Array(1000);
-        let colorIndex: number = 0;
-
-        for (let colorY: number = 0; colorY < lowerColorMap.height; colorY += 8) {
-            for (let colorX: number = 0; colorX < lowerColorMap.width; colorX += 4) {
-                // pack two colors in one byte
-                screenRam[colorIndex] =
-                    ((upperColorMap.get(colorX, colorY) << 4) & 0xf0)
-                    | (lowerColorMap.get(colorX, colorY) & 0x0f);
-                colorIndex += 1;
-            }
-        }
-        return screenRam;
-    }
-
-    /**
-     * Get the Koala colorram component from a ColorMap
-     */
-    public static convertColorram(colorMap: ColorMap): Uint8Array {
-        const imageW: number = colorMap.width;
-        const imageH: number = colorMap.height;
-        const colorRam: Uint8Array = new Uint8Array(1000);
-        let colorIndex: number = 0;
-
-        for (let colorY: number = 0; colorY < imageH; colorY += 8) {
-            for (let colorX: number = 0; colorX < imageW; colorX += 4) {
-                colorRam[colorIndex] = colorMap.get(colorX, colorY) & 0x0f;
-                colorIndex += 1;
-            }
-        }
-        return colorRam;
-    }
 
     /**
      * Convert a pixelImage to a KoalaPic
@@ -83,9 +24,11 @@ export class KoalaPicture extends BinaryFile {
         koalaPic.loadAddress[0] = 0;
         koalaPic.loadAddress[1] = 0x60;
 
-        koalaPic.bitmap = this.convertBitmap(pixelImage);
-        koalaPic.screenRam = this.convertScreenram(pixelImage.colorMaps[2], pixelImage.colorMaps[1]);
-        koalaPic.colorRam = this.convertColorram(pixelImage.colorMaps[3]);
+        const mapper: C64Mapper = new C64Mapper();
+
+        koalaPic.bitmap = mapper.convertBitmap(pixelImage);
+        koalaPic.screenRam = mapper.convertScreenram(pixelImage, 2, 1);
+        koalaPic.colorRam = mapper.convertColorram(pixelImage, 3);
         koalaPic.background = new Uint8Array(1);
         koalaPic.background[0] = pixelImage.colorMaps[0].get(0, 0);
 
@@ -97,6 +40,7 @@ export class KoalaPicture extends BinaryFile {
     public screenRam: Uint8Array;
     public colorRam: Uint8Array;
     public background: Uint8Array;
+    private mapper: C64Mapper = new C64Mapper();
 
     /**
      * Read the picture from an 8-bit buffer.
