@@ -7,6 +7,7 @@ const cli = require('commander'),
     jimp = require('jimp'),
     GraphicModes = require('./target/profiles/GraphicModes.js'),
     KoalaPicture = require('./target/io/KoalaPicture.js'),
+    HiresPicture = require('./target/io/HiresPicture.js'),
     FLIPicture = require('./target/io/FLIPicture.js'),
     AFLIPicture = require('./target/io/AFLIPicture.js'),
     PNGPicture = require('./target/io/PNGPicture.js'),
@@ -84,6 +85,11 @@ function savePrg(pixelImage) {
         return;
     }
 
+    if (cli.mode == 'c64Hires' || cli.mode == 'c64HiresMono') {
+        saveHiresPrg(pixelImage);
+        return;
+    }
+
     throw 'Commodore 64 executable format is not supported for mode ' + cli.mode + '.';
 }
 
@@ -103,6 +109,24 @@ function saveKoalaPrg(pixelImage) {
         });
     });
 }
+
+// Save PixelImage as a c64 native .PRG executable.
+function saveHiresPrg(pixelImage) {
+
+        const image = HiresPicture.HiresPicture.fromPixelImage(pixelImage),
+            binary = path.join(__dirname, c64BinariesFolder + '/HiresShower.prg');
+
+        fs.readFile(binary, function(err, viewerCode) {
+            if (err) throw err;
+            const buffer = new Buffer(image.toBytes()),
+                writeBuffer = Buffer.concat([viewerCode, buffer]);
+            fs.writeFile(outFile, writeBuffer, function(err) {
+                if (err) throw err;
+                console.log('Written Commodore 64 executable ' + outFile);
+            });
+        });
+    }
+
 
 // Save PixelImage as a c64 native .PRG executable.
 function saveFLIPrg(pixelImage) {
@@ -139,9 +163,6 @@ function saveAFLIPrg(pixelImage) {
 
 // Save PixelImage as a KoalaPaint image.
 function saveKoala(pixelImage) {
-    if (cli.mode !== 'c64Multicolor') {
-        throw 'Koala painter format is only supported for c64Multicolor mode.';
-    }
     const koalaImage = KoalaPicture.KoalaPicture.fromPixelImage(pixelImage);
     koalaImage.save(outFile, function(err) {
         if (err) throw err;

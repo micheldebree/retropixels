@@ -6,6 +6,7 @@
 		"EditorConfig.editorconfig",
 		"dbaeumer.vscode-eslint",
 		"dbaeumer.jshint",
-		"tomconte.kickassembler"
+		"tomconte.kickassembler",
+		"rbbit.typescript-hero"
 	]
 }

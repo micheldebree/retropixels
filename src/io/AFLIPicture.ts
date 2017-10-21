@@ -11,7 +11,9 @@ import { BinaryFile } from './BinaryFile';
  */
 export class AFLIPicture extends BinaryFile {
 
-    public static convertBitmap(pixelImage: PixelImage): Uint8Array {
+    private static FLIBugSize: number = 8;
+
+    private static convertBitmap(pixelImage: PixelImage): Uint8Array {
         const bitmap: Uint8Array = new Uint8Array(8000);
         let bitmapIndex: number = 0;
 
@@ -38,7 +40,7 @@ export class AFLIPicture extends BinaryFile {
         return bitmap;
     }
 
-    public static convertScreenram(row: number, lowerColorMap: ColorMap, upperColorMap: ColorMap): Uint8Array {
+    private static convertScreenram(row: number, lowerColorMap: ColorMap, upperColorMap: ColorMap): Uint8Array {
         const screenRam: Uint8Array = new Uint8Array(1000);
         let colorIndex: number = 0;
 
@@ -56,7 +58,7 @@ export class AFLIPicture extends BinaryFile {
         return screenRam;
     }
 
-    public static fromPixelImage(pixelImage: PixelImage): AFLIPicture {
+    private static fromPixelImage(pixelImage: PixelImage): AFLIPicture {
         const pic: AFLIPicture = new AFLIPicture();
 
         pic.loadAddress = new Uint8Array(2);
@@ -76,24 +78,22 @@ export class AFLIPicture extends BinaryFile {
         return pic;
     }
 
-    private static FLIBugSize: number  = 8;
-
-    public loadAddress: Uint8Array;
-    public screenRam0: Uint8Array;
-    public screenRam1: Uint8Array;
-    public screenRam2: Uint8Array;
-    public screenRam3: Uint8Array;
-    public screenRam4: Uint8Array;
-    public screenRam5: Uint8Array;
-    public screenRam6: Uint8Array;
-    public screenRam7: Uint8Array;
-    public bitmap: Uint8Array;
+    private loadAddress: Uint8Array;
+    private screenRam0: Uint8Array;
+    private screenRam1: Uint8Array;
+    private screenRam2: Uint8Array;
+    private screenRam3: Uint8Array;
+    private screenRam4: Uint8Array;
+    private screenRam5: Uint8Array;
+    private screenRam6: Uint8Array;
+    private screenRam7: Uint8Array;
+    private bitmap: Uint8Array;
 
     /**
      * Convert to a sequence of bytes.
      * @return {Uint8Array} A sequence of 8-bit bytes.
      */
-    public toMemoryMap(): Uint8Array[] {
+    protected toMemoryMap(): Uint8Array[] {
         return [
             this.loadAddress,
             this.pad(this.screenRam0, 24),

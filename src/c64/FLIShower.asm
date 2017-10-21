@@ -140,12 +140,9 @@ initgfx:
          lda #$ff
          sta $7fff      ; upper/lower border black
 
-         lda #$18
-         sta $d016
-         lda #$08
-         sta $d018
-         lda #$96       ; VIC bank $4000-$7FFF
-         sta $dd00
+         +d016_screen_control 1,1,0
+         +d018_vic_mem 0,1,0
+         +vic_bank 1
 
          ldy #$04
          ldx #$00
