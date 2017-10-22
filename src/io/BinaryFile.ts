@@ -5,8 +5,6 @@ import * as fs from 'fs-extra';
  */
 export abstract class BinaryFile {
 
-    protected abstract toMemoryMap(): Uint8Array[];
-
     // Save PixelImage as a KoalaPaint image.
     public save(outFile: string, callback: () => {}) {
 
@@ -15,6 +13,12 @@ export abstract class BinaryFile {
             return callback();
         });
     }
+
+    public pad(buffer: Uint8Array, numberOfBytes: number): Uint8Array {
+        return this.concat([buffer, new Uint8Array(numberOfBytes)]);
+    }
+
+    protected abstract toMemoryMap(): Uint8Array[];
 
     private toBytes(): Uint8Array {
         return this.concat(this.toMemoryMap());
@@ -26,29 +30,18 @@ export abstract class BinaryFile {
      * @return {Uint8Array} The buffers concatenated.
      */
     private concat(arrayBuffers: Uint8Array[]): Uint8Array {
-        let iii = 0;
-        let outputLength = 0;
 
-        // measure final size
-        for (let i = 0; i < arrayBuffers.length; i += 1) {
-            outputLength += arrayBuffers[i].length;
+        if (arrayBuffers.length === 1) {
+            return arrayBuffers[0];
         }
 
-        const result = new Uint8Array(outputLength);
+        return arrayBuffers.reduce((total, current) => {
+            const result = new Uint8Array(total.length + current.length);
+            result.set(total, 0);
+            result.set(current, total.length);
+            return result;
+        });
 
-        for (let i = 0; i < arrayBuffers.length; i += 1) {
-            for (let ii = 0; ii < arrayBuffers[i].length; ii += 1) {
-                result[iii] = arrayBuffers[i][ii];
-                iii += 1;
-            }
-        }
-
-        return result;
-    }
-
-    public pad(buffer: Uint8Array, numberOfBytes: number): Uint8Array {
-        const padding = new Uint8Array(numberOfBytes);
-        return this.concat([buffer, padding]);
     }
 
 }
