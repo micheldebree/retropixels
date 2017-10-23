@@ -1,6 +1,12 @@
+import * as fs from 'fs-extra';
+import * as path from 'path';
 import { ColorMap } from '../model/ColorMap';
 import { PixelImage } from '../model/PixelImage';
+import { BinaryFile } from './BinaryFile';
 
+/**
+ * A factory for creating Commodore 64 files from PixelImages.
+ */
 export class C64Mapper {
 
   public indexMap = {
@@ -10,7 +16,33 @@ export class C64Mapper {
     3: 3,
   };
 
-  public FLIBugSize = 0;
+  public FLIBugSize: number = 0;
+
+  // The filename containing viewer code for executables.
+  public viewerFilename: string;
+  private viewersFolder: string = '/target/c64/';
+
+  // Save PixelImage as a c64 native .PRG executable.
+  public saveExecutable(binaryFile: BinaryFile, outFile: string, callback: () => {}) {
+
+    if (!this.viewerFilename) {
+      throw new Error('Filename for viewercode is not set.');
+    }
+
+    // https://stackoverflow.com/questions/10265798/determine-project-root-from-a-running-node-js-application
+    const appDir = path.dirname(require.main.filename);
+    const viewerFile: string = path.join(appDir, this.viewersFolder + this.viewerFilename);
+
+    fs.readFile(viewerFile, (readError, viewerCode) => {
+      if (readError) { throw readError; }
+      const buffer: Buffer = new Buffer(binaryFile.toBytes());
+      const writeBuffer: Buffer = Buffer.concat([viewerCode, buffer]);
+      fs.writeFile(outFile, writeBuffer, (writeError) => {
+        if (writeError) { throw writeError; }
+        if (callback) { return callback(); }
+      });
+    });
+  }
 
   public convertBitmap(pixelImage: PixelImage): Uint8Array {
     const bitmap: Uint8Array = new Uint8Array(8000);
@@ -41,8 +73,8 @@ export class C64Mapper {
   }
 
   public convertScreenram(pixelImage: PixelImage,
-                          lowerColorIndex: number, upperColorIndex: number,
-                          yOffset: number = 0): Uint8Array {
+    lowerColorIndex: number, upperColorIndex: number,
+    yOffset: number = 0): Uint8Array {
 
     const screenRam: Uint8Array = new Uint8Array(1000);
     let colorIndex: number = 0;

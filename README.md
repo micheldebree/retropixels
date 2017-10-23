@@ -1,6 +1,6 @@
 # retropixels
 
-A cross platform command line tool to convert images to c64 format.
+A cross platform command line tool to convert images to Commodore 64 format.
 
 ## Summary
 

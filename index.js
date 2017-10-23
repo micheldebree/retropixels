@@ -13,7 +13,8 @@ const cli = require('commander'),
     PNGPicture = require('./target/io/PNGPicture.js'),
     Converter = require('./target/conversion/Converter.js'),
     ImageData = require('./target/model/ImageData.js'),
-    BayerMatrix = require('./target/conversion/BayerMatrix.js');
+    BayerMatrix = require('./target/conversion/BayerMatrix.js'),
+    C64Mapper = require('./target/io/C64Mapper.js');
 
 const c64BinariesFolder = '/target/c64';
 
@@ -68,93 +69,29 @@ if (outFile === undefined) {
 function savePrg(pixelImage) {
 
     if (cli.mode === 'c64Multicolor') {
-        saveKoalaPrg(pixelImage);
-        return;
+        return saveExecutable(KoalaPicture.KoalaPicture.fromPixelImage(pixelImage), 'KoalaShower.prg');
     }
 
     if (cli.mode === 'c64FLI') {
-        saveFLIPrg(pixelImage);
-        return;
+        return saveExecutable(FLIPicture.FLIPicture.fromPixelImage(pixelImage), 'FLIShower.prg');
     }
 
     if (cli.mode === 'c64AFLI') {
-        saveAFLIPrg(pixelImage);
-        return;
+        return saveExecutable(AFLIPicture.AFLIPicture.fromPixelImage(pixelImage), 'AFLIShower.prg');
     }
 
     if (cli.mode == 'c64Hires' || cli.mode == 'c64HiresMono') {
-        saveHiresPrg(pixelImage);
-        return;
+        return saveExecutable(HiresPicture.HiresPicture.fromPixelImage(pixelImage), 'HiresShower.prg');
     }
 
     throw 'Commodore 64 executable format is not supported for mode ' + cli.mode + '.';
 }
 
-// Save PixelImage as a c64 native .PRG executable.
-function saveKoalaPrg(pixelImage) {
-
-    const koalaImage = KoalaPicture.KoalaPicture.fromPixelImage(pixelImage),
-        binary = path.join(__dirname, c64BinariesFolder + '/KoalaShower.prg');
-
-    fs.readFile(binary, function (err, viewerCode) {
-        if (err) throw err;
-        const koalaBuffer = new Buffer(koalaImage.toBytes()),
-            writeBuffer = Buffer.concat([viewerCode, koalaBuffer]);
-        fs.writeFile(outFile, writeBuffer, function (err) {
-            if (err) throw err;
-            console.log('Written Commodore 64 executable ' + outFile);
-        });
-    });
-}
-
-// Save PixelImage as a c64 native .PRG executable.
-function saveHiresPrg(pixelImage) {
-
-    const image = HiresPicture.HiresPicture.fromPixelImage(pixelImage),
-        binary = path.join(__dirname, c64BinariesFolder + '/HiresShower.prg');
-
-    fs.readFile(binary, function (err, viewerCode) {
-        if (err) throw err;
-        const buffer = new Buffer(image.toBytes()),
-            writeBuffer = Buffer.concat([viewerCode, buffer]);
-        fs.writeFile(outFile, writeBuffer, function (err) {
-            if (err) throw err;
-            console.log('Written Commodore 64 executable ' + outFile);
-        });
-    });
-}
-
-
-// Save PixelImage as a c64 native .PRG executable.
-function saveFLIPrg(pixelImage) {
-
-    const fliImage = FLIPicture.FLIPicture.fromPixelImage(pixelImage),
-        binary = path.join(__dirname, c64BinariesFolder + '/FLIShower.prg');
-
-    fs.readFile(binary, function (err, viewerCode) {
-        if (err) throw err;
-        const buffer = new Buffer(fliImage.toBytes()),
-            writeBuffer = Buffer.concat([viewerCode, buffer]);
-        fs.writeFile(outFile, writeBuffer, function (err) {
-            if (err) throw err;
-            console.log('Written Commodore 64 executable ' + outFile);
-        });
-    });
-}
-
-function saveAFLIPrg(pixelImage) {
-
-    const fliImage = AFLIPicture.AFLIPicture.fromPixelImage(pixelImage),
-        binary = path.join(__dirname, c64BinariesFolder + '/AFLIShower.prg');
-
-    fs.readFile(binary, function (err, viewerCode) {
-        if (err) throw err;
-        const buffer = new Buffer(fliImage.toBytes()),
-            writeBuffer = Buffer.concat([viewerCode, buffer]);
-        fs.writeFile(outFile, writeBuffer, function (err) {
-            if (err) throw err;
-            console.log('Written Commodore 64 executable ' + outFile);
-        });
+function saveExecutable(binary, viewerFilename) {
+    const mapper = new C64Mapper.C64Mapper();
+    mapper.viewerFilename = viewerFilename;
+    mapper.saveExecutable(binary, outFile, () => {
+        console.log('Written Commodore 64 executable ' + outFile);
     });
 }
 

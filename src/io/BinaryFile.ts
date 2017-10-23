@@ -18,11 +18,11 @@ export abstract class BinaryFile {
         return this.concat([buffer, new Uint8Array(numberOfBytes)]);
     }
 
-    protected abstract toMemoryMap(): Uint8Array[];
-
-    private toBytes(): Uint8Array {
+    public toBytes(): Uint8Array {
         return this.concat(this.toMemoryMap());
     }
+
+    protected abstract toMemoryMap(): Uint8Array[];
 
     /**
      * Concatenate multiple 8-bit array buffers into one.

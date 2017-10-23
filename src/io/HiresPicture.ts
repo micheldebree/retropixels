@@ -9,10 +9,6 @@ export class HiresPicture extends BinaryFile {
     public static fromPixelImage(pixelImage: PixelImage): HiresPicture {
         const pic: HiresPicture = new HiresPicture();
 
-        pic.loadAddress = new Uint8Array(2);
-        pic.loadAddress[0] = 0;
-        pic.loadAddress[1] = 0x20;
-
         const mapper: C64Mapper = new C64Mapper();
 
         pic.bitmap = mapper.convertBitmap(pixelImage);
@@ -21,7 +17,6 @@ export class HiresPicture extends BinaryFile {
         return pic;
     }
 
-    public loadAddress: Uint8Array;
     public bitmap: Uint8Array;
     public screenRam: Uint8Array;
 
@@ -31,7 +26,7 @@ export class HiresPicture extends BinaryFile {
      */
     public toMemoryMap(): Uint8Array[] {
         return [
-            this.loadAddress,
+            new Uint8Array([0, 0x20]),
             this.bitmap,
             this.screenRam,
         ];
