@@ -1,13 +1,12 @@
 import { ColorMap } from '../model/ColorMap';
 import { Palette } from '../model/Palette';
 import { PixelImage } from '../model/PixelImage';
-import { BinaryFile } from './BinaryFile';
 import { C64Mapper } from './C64Mapper';
 
 /**
  * A Koala Painter compatible picture.
  */
-export class KoalaPicture extends BinaryFile {
+export class KoalaPicture {
 
     /**
      * Convert a pixelImage to a KoalaPic

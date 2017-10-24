@@ -1,7 +1,6 @@
 import { ColorMap } from '../model/ColorMap';
 import { Palette } from '../model/Palette';
 import { PixelImage } from '../model/PixelImage';
-import { BinaryFile } from './BinaryFile';
 import { C64Mapper } from './C64Mapper';
 
 /**
@@ -10,7 +9,7 @@ import { C64Mapper } from './C64Mapper';
  * $4000-$5fff screen ram data
  * $6000-      bitmap data
  */
-export class FLIPicture extends BinaryFile {
+export class FLIPicture {
 
     public static fromPixelImage(pixelImage: PixelImage): FLIPicture {
         const pic: FLIPicture = new FLIPicture();
@@ -55,15 +54,15 @@ export class FLIPicture extends BinaryFile {
     public toMemoryMap(): Uint8Array[] {
         return [
             this.loadAddress,
-            this.pad(this.colorRam, 24),
-            this.pad(this.screenRam[0], 24),
-            this.pad(this.screenRam[1], 24),
-            this.pad(this.screenRam[2], 24),
-            this.pad(this.screenRam[3], 24),
-            this.pad(this.screenRam[4], 24),
-            this.pad(this.screenRam[5], 24),
-            this.pad(this.screenRam[6], 24),
-            this.pad(this.screenRam[7], 24),
+            C64Mapper.pad(this.colorRam, 24),
+            C64Mapper.pad(this.screenRam[0], 24),
+            C64Mapper.pad(this.screenRam[1], 24),
+            C64Mapper.pad(this.screenRam[2], 24),
+            C64Mapper.pad(this.screenRam[3], 24),
+            C64Mapper.pad(this.screenRam[4], 24),
+            C64Mapper.pad(this.screenRam[5], 24),
+            C64Mapper.pad(this.screenRam[6], 24),
+            C64Mapper.pad(this.screenRam[7], 24),
             this.bitmap,
             this.background,
         ];

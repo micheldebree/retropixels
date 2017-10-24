@@ -2,12 +2,30 @@ import * as fs from 'fs-extra';
 import * as path from 'path';
 import { ColorMap } from '../model/ColorMap';
 import { PixelImage } from '../model/PixelImage';
-import { BinaryFile } from './BinaryFile';
 
 /**
  * A factory for creating Commodore 64 files from PixelImages.
  */
 export class C64Mapper {
+
+  public static pad(buffer: Uint8Array, numberOfBytes: number): Uint8Array {
+    return this.concat([buffer, new Uint8Array(numberOfBytes)]);
+  }
+
+  private static concat(arrayBuffers: Uint8Array[]): Uint8Array {
+
+    if (arrayBuffers.length === 1) {
+      return arrayBuffers[0];
+    }
+
+    return arrayBuffers.reduce((total, current) => {
+      const result = new Uint8Array(total.length + current.length);
+      result.set(total, 0);
+      result.set(current, total.length);
+      return result;
+    });
+
+  }
 
   public indexMap = {
     0: 0,
@@ -22,8 +40,17 @@ export class C64Mapper {
   public viewerFilename: string;
   private viewersFolder: string = '/target/c64/';
 
+  // Save PixelImage as a KoalaPaint image.
+  public save(memoryMap: Uint8Array[], outFile: string, callback: () => {}) {
+
+    fs.writeFile(outFile, new Buffer(C64Mapper.concat(memoryMap)), (err: Error) => {
+      if (err) { throw err; }
+      return callback();
+    });
+  }
+
   // Save PixelImage as a c64 native .PRG executable.
-  public saveExecutable(binaryFile: BinaryFile, outFile: string, callback: () => {}) {
+  public saveExecutable(memoryMap: Uint8Array[], outFile: string, callback: () => {}) {
 
     if (!this.viewerFilename) {
       throw new Error('Filename for viewercode is not set.');
@@ -35,7 +62,7 @@ export class C64Mapper {
 
     fs.readFile(viewerFile, (readError, viewerCode) => {
       if (readError) { throw readError; }
-      const buffer: Buffer = new Buffer(binaryFile.toBytes());
+      const buffer: Buffer = new Buffer(C64Mapper.concat(memoryMap));
       const writeBuffer: Buffer = Buffer.concat([viewerCode, buffer]);
       fs.writeFile(outFile, writeBuffer, (writeError) => {
         if (writeError) { throw writeError; }
@@ -73,8 +100,8 @@ export class C64Mapper {
   }
 
   public convertScreenram(pixelImage: PixelImage,
-    lowerColorIndex: number, upperColorIndex: number,
-    yOffset: number = 0): Uint8Array {
+                          lowerColorIndex: number, upperColorIndex: number,
+                          yOffset: number = 0): Uint8Array {
 
     const screenRam: Uint8Array = new Uint8Array(1000);
     let colorIndex: number = 0;

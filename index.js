@@ -87,10 +87,10 @@ function savePrg(pixelImage) {
     throw 'Commodore 64 executable format is not supported for mode ' + cli.mode + '.';
 }
 
-function saveExecutable(binary, viewerFilename) {
+function saveExecutable(nativeImage, viewerFilename) {
     const mapper = new C64Mapper.C64Mapper();
     mapper.viewerFilename = viewerFilename;
-    mapper.saveExecutable(binary, outFile, () => {
+    mapper.saveExecutable(nativeImage.toMemoryMap(), outFile, () => {
         console.log('Written Commodore 64 executable ' + outFile);
     });
 }

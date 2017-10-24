@@ -1,14 +1,12 @@
 import { ColorMap } from '../model/ColorMap';
 import { Palette } from '../model/Palette';
 import { PixelImage } from '../model/PixelImage';
-import { BinaryFile } from './BinaryFile';
 import { C64Mapper } from './C64Mapper';
 
-export class HiresPicture extends BinaryFile {
+export class HiresPicture {
 
     public static fromPixelImage(pixelImage: PixelImage): HiresPicture {
         const pic: HiresPicture = new HiresPicture();
-
         const mapper: C64Mapper = new C64Mapper();
 
         pic.bitmap = mapper.convertBitmap(pixelImage);
