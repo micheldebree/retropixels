@@ -30,7 +30,6 @@ cli.version('0.5.1')
     .option('-r, --ditherRadius [0-64]', '0 = no dithering, 32 = default', parseInt)
     .parse(process.argv);
 
-// TODO: get rid of double bookkeeping (graphicMode and cli.mode)
 if (!cli.mode) {
     cli.mode = 'c64Multicolor';
 }
@@ -160,7 +159,7 @@ jimp.read(inFile, (err, jimpImage) => {
         if (cli.mode === 'c64FLI') {
             for (y = 0; y < pixelImage.height; y++) {
                 for (x = 0; x < 12; x++) {
-                    pixelImage.setPixelIndex(x, y, 0);
+                    pixelImage.pixelIndex[y][x] = 0;
                 }
             }
         }

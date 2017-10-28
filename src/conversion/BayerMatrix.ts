@@ -77,15 +77,9 @@ export class BayerMatrix {
         this.width = sourceMatrix[0].length;
         const factor: number = 1 / (this.width * this.height);
 
-        let rowIndex = 0;
-        for (const row of sourceMatrix) {
-            this.matrix[rowIndex] = [];
-            let elementIndex = 0;
-            for (const element of row) {
-                this.matrix[rowIndex][elementIndex++] = depth * (factor * element - 0.5);
-            }
-            rowIndex++;
-        }
+        this.matrix = sourceMatrix.map((row, rowIndex) => {
+            return sourceMatrix[rowIndex].map((column) => depth * (factor * column - 0.5) );
+        });
 
     }
 

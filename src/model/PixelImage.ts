@@ -12,7 +12,7 @@ export class PixelImage {
 
     public quantizer: Quantizer = new Quantizer();
 
-    private pixelIndex: number[][];
+    public pixelIndex: number[][];
 
     constructor(width: number, height: number, pWidth: number = 1, pHeight: number = 1) {
         // public properties
@@ -22,6 +22,9 @@ export class PixelImage {
         this.pHeight = pHeight;
         this.colorMaps = []; // maps x,y to a color
         this.pixelIndex = []; // maps pixel x,y to a colormap
+        for (let y = 0; y < height; y++) {
+            this.pixelIndex[y] = [];
+        }
     }
 
     /*
@@ -80,19 +83,6 @@ export class PixelImage {
         return this.quantizer.mapPixel(x, y, pixel, palette);
     }
 
-    // TODO: remove; make fixed pixel grid on construction
-    public setPixelIndex(x: number, y: number, index: number): void {
-        if (this.pixelIndex[y] === undefined) {
-            this.pixelIndex[y] = [];
-        }
-        this.pixelIndex[y][x] = index;
-    }
-
-    public getPixelIndex(x: number, y: number): number {
-        const row: number[] = this.pixelIndex[y];
-        return row !== undefined ? row[x] : undefined;
-    }
-
     /**
      * Map a 'real' color to the best match in the image.
      * @param {number} x - x coordinate
@@ -106,20 +96,20 @@ export class PixelImage {
         // try to reuse existing color map that has an exact fit for this color
         let colorMapIndex: number = this.findColorInMap(x, y, realColor);
         if (colorMapIndex !== undefined) {
-            this.setPixelIndex(x, y, colorMapIndex);
+            this.pixelIndex[y][x] = colorMapIndex;
             return;
         }
 
         // else see if there is a map with an empty attribute that we can claim
         colorMapIndex = this.tryClaimUnusedInMap(x, y, realColor);
         if (colorMapIndex !== undefined) {
-            this.setPixelIndex(x, y, colorMapIndex);
+            this.pixelIndex[y][x] = colorMapIndex;
             return;
         }
 
         // otherwise just map to the ColorMap that has the closest match at x,y
         colorMapIndex = this.map(realColor, x, y);
-        this.setPixelIndex(x, y, colorMapIndex);
+        this.pixelIndex[y][x] = colorMapIndex;
     }
 
     /**
@@ -130,7 +120,7 @@ export class PixelImage {
      */
     public peek(x: number, y: number): number[] {
         // get the ColorMap for the color
-        const colorMapIndex = this.getPixelIndex(x, y);
+        const colorMapIndex = this.pixelIndex[y][x];
         if (colorMapIndex === undefined) {
             return undefined;
         }
@@ -156,7 +146,7 @@ export class PixelImage {
             pixelImage.colorMaps.push(colorMap);
             for (let x = 0; x < this.width; x++) {
                 for (let y = 0; y < this.height; y++) {
-                    pixelImage.setPixelIndex(x, y, 0);
+                    pixelImage.pixelIndex[y][x] = 0;
                 }
             }
             result.push(pixelImage);

@@ -30,7 +30,8 @@ With
 - ``<infile>``: the image to convert
 - ``<outfile>``: the converted image. The extension determines the format:
   - ``<outfile>.png`` produces a PNG file
-  - ``<outfile>.kla`` produces a Koala Painter file (only supported for c64Multicolor mode)
+  - ``<outfile>.kla`` produces a Koala Painter file
+                      (only supported for c64Multicolor mode)
   - ``<outfile>.prg`` produces a Commodore 64 executable
 - ``[options]``:
   - ``-m <mode>`` with ``<mode>``:
@@ -40,16 +41,20 @@ With
     - ``c64FLI``
     - ``c64AFLI``
   - ``-d <ditherMode>`` with ``<ditherMode>``:
-      - ``bayer2x2``
-      - ``bayer4x4`` (default)
-      - ``bayer8x8``
+    - ``bayer2x2``
+    - ``bayer4x4`` (default)
+    - ``bayer8x8``
   - ``-r <ditherRadius>`` with ``<ditherRadius>``:
-      - A number between 0 (no dithering) and 64 (heavy dithering). Default is 32.
+    - A number between 0 (no dithering) and 64 (heavy dithering). Default is 32.
 
 Notes:
 
 - The FLI/AFLI display code was found on [codebase64.org](http://codebase64.org/doku.php?id=base:fli_displayer)
-- FLI/AFLI modes result in an issue with the leftmost 3 characters on each row being unusable. You will see a blank space in the image. This is a limitation of the Commodore 64 VIC chip hacking involved in creating this artificial mode, and is not a bug in retropixels.
+- FLI/AFLI modes result in an issue with the leftmost 3 characters on
+  each row being unusable.
+  You will see a blank space in the image. This is a limitation of the
+  Commodore 64 VIC chip hacking
+  involved in creating this artificial mode, and is not a bug in retropixels
 
 ### Example
 
@@ -74,7 +79,8 @@ npm uninstall -g retropixels
 
 ## For developers
 
-The build process has been tested on macOS. It should work on other platforms but you're on your own there.
+The build process has been tested on macOS.
+It should work on other platforms but you're on your own there.
 
 ### Prerequisites
 
@@ -118,18 +124,25 @@ Be patient. Next time it will get it from your local cache.
 
 ### 0.5.1
 
+Internal refactoring.
+
 ### 0.5.0
 
 All modes now support saving as Commodore 64 executable (.prg)
 
-- [#3](https://github.com/micheldebree/retropixels/issues/3) Export PRG for c64Hires mode
-- [#4](https://github.com/micheldebree/retropixels/issues/4) Export PRG for c64FLI mode
-- [#18](https://github.com/micheldebree/retropixels/issues/18) Export PRG for c64AFLI mode
+- [#3](https://github.com/micheldebree/retropixels/issues/3)
+  Export PRG for c64Hires mode
+- [#4](https://github.com/micheldebree/retropixels/issues/4)
+  Export PRG for c64FLI mode
+- [#18](https://github.com/micheldebree/retropixels/issues/18)
+  Export PRG for c64AFLI mode
 
 ### 0.4.1
 
-- [#16](https://github.com/micheldebree/retropixels/issues/16) Fixed suboptimal FLI color optimization
-- [#17](https://github.com/micheldebree/retropixels/issues/17) Made FLI bug visible in PNG export
+- [#16](https://github.com/micheldebree/retropixels/issues/16)
+  Fixed suboptimal FLI color optimization
+- [#17](https://github.com/micheldebree/retropixels/issues/17)
+  Made FLI bug visible in PNG export
 
 ### 0.4.0
 
@@ -138,9 +151,10 @@ All modes now support saving as Commodore 64 executable (.prg)
 
 ### 0.3.0
 
-- Dithering options added:
-  - ditherMode
-  - ditherRadius
+Dithering options added:
+
+- ditherMode
+- ditherRadius
 
 ### 0.2.2
 

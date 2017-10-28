@@ -1,6 +1,6 @@
 VERSION=0.5.1
 EXAMPLE=paintface
-DOCKERIMAGE=micheldebree/retropixels-cli
+DOCKERIMAGE=micheldebree/retropixels-cli:$(VERSION)
 DOCKERCMD=docker run -t --rm -v "$$PWD":/data $(DOCKERIMAGE)
 LOCALCMD=node index.js
 
@@ -38,7 +38,7 @@ publish:
 	git clean -d -f
 	npm publish
 
-dockerimage: clean
+dockerimage: Dockerfile
 	docker build -t $(DOCKERIMAGE) .
 
 docker_debug: dockerimage
@@ -56,7 +56,9 @@ samples: compile
 	$(LOCALCMD) -m c64AFLI paintface.jpg ./samples/paintface-AFLI.png
 	$(LOCALCMD) -m c64AFLI paintface.jpg ./samples/paintface-AFLI.prg
 
-# Test PRG making with dockerimage
+testdocker: dockerimage
+	docker run -v "$$PWD":/data micheldebree/retropixels-cli -m c64FLI paintface.jpg ./samples/paintface-FLI.prg
+
 test64: $(EXAMPLE).prg
 	x64sc $(EXAMPLE).prg
 

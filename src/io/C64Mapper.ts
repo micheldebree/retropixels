@@ -57,7 +57,7 @@ export class C64Mapper {
     }
 
     // https://stackoverflow.com/questions/10265798/determine-project-root-from-a-running-node-js-application
-    const appDir = path.dirname(require.main.filename);
+    const appDir: string = path.dirname(require.main.filename);
     const viewerFile: string = path.join(appDir, this.viewersFolder + this.viewerFilename);
 
     fs.readFile(viewerFile, (readError, viewerCode) => {
@@ -91,8 +91,7 @@ export class C64Mapper {
               packedByte = packedByte | this.mapPixelIndex(pixelImage, x, y) << shiftTimes;
             }
           }
-          bitmap[bitmapIndex] = packedByte;
-          bitmapIndex++;
+          bitmap[bitmapIndex++] = packedByte;
         }
       }
     }
@@ -146,7 +145,7 @@ export class C64Mapper {
   }
 
   private mapPixelIndex(pixelImage: PixelImage, x: number, y: number) {
-    return this.indexMap[pixelImage.getPixelIndex(x, y)];
+    return this.indexMap[pixelImage.pixelIndex[y][x]];
   }
 
 }

@@ -89,13 +89,13 @@ export class KoalaPicture {
             for (let charX = 0; charX < imageW; charX += pixelsPerCellHor) {
                 for (let bitmapY = 0; bitmapY < pixelsPerCellVer; bitmapY += 1) {
 
-                    const pixelX = charX;
-                    const pixelY = charY + bitmapY;
+                    const x = charX;
+                    const y = charY + bitmapY;
 
-                    pixelImage.setPixelIndex(pixelX, pixelY, (koalaPic.bitmap[bitmapIndex] >> 6) & 0x03);
-                    pixelImage.setPixelIndex(pixelX + 1, pixelY, (koalaPic.bitmap[bitmapIndex] >> 4) & 0x03);
-                    pixelImage.setPixelIndex(pixelX + 2, pixelY, (koalaPic.bitmap[bitmapIndex] >> 2) & 0x03);
-                    pixelImage.setPixelIndex(pixelX + 3, pixelY, koalaPic.bitmap[bitmapIndex] & 0x03);
+                    pixelImage.pixelIndex[y][x] = (koalaPic.bitmap[bitmapIndex] >> 6) & 0x03;
+                    pixelImage.pixelIndex[y][x + 1] = (koalaPic.bitmap[bitmapIndex] >> 4) & 0x03;
+                    pixelImage.pixelIndex[y][x + 2] = (koalaPic.bitmap[bitmapIndex] >> 2) & 0x03;
+                    pixelImage.pixelIndex[y][x + 3] = koalaPic.bitmap[bitmapIndex] & 0x03;
 
                     bitmapIndex += 1;
                 }
