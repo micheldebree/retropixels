@@ -122,6 +122,8 @@ Be patient. Next time it will get it from your local cache.
 
 ## Changelog
 
+### 0.5.2
+
 ### 0.5.1
 
 Internal refactoring.

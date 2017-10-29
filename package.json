@@ -1,6 +1,6 @@
 {
     "name": "retropixels",
-    "version": "0.5.1",
+    "version": "0.5.2",
     "description": "Apply limitations of retro computers to images.",
     "main": "index.js",
     "bin": {
