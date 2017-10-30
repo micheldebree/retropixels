@@ -1,7 +1,7 @@
 {
     "name": "retropixels",
     "version": "0.5.2",
-    "description": "Apply limitations of retro computers to images.",
+    "description": "A cross platform command line tool to convert images to Commodore 64 format.",
     "main": "index.js",
     "bin": {
         "retropixels": "./index.js"

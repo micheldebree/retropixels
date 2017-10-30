@@ -9,9 +9,6 @@
  *
  * A color is an index into a palette. A pixel is a set of RGBA values.
  */
-
-// http://stackoverflow.com/questions/8580540/javascript-calling-private-method-from-prototype-method
-
 import { Palette } from './Palette';
 
 export class ColorMap {
@@ -35,27 +32,9 @@ export class ColorMap {
         this.height = heightVal;
         this.resX = resXVal;
         this.resY = resYVal;
-    }
-
-    /**
-     * Is a coordinate in range?
-     */
-    public isInRange(x: number, y: number): boolean {
-        return (x >= 0 && x < this.width && y >= 0 && y < this.height);
-    }
-
-    /**
-     * Map an image x coordinate to a map x coordinate.
-     */
-    public mapX(x: number): number {
-        return Math.floor(x / this.resX);
-    }
-
-    /**
-     * Map an image y coordinate to a map y coordinate.
-     */
-    public mapY(y: number): number {
-        return Math.floor(y / this.resY);
+        for (let x = 0; x < this.width; x++) {
+            this.colors[x] = new Array(this.height);
+        }
     }
 
     /**
@@ -84,10 +63,9 @@ export class ColorMap {
      */
     public get(x: number, y: number): number {
         const mX: number = this.mapX(x);
-        const mY: number = this.mapY(y);
 
         if (this.colors[mX] !== undefined) {
-            return this.colors[mX][mY];
+            return this.colors[mX][this.mapY(y)];
         }
         return undefined;
     }
@@ -114,5 +92,17 @@ export class ColorMap {
                 }
             }
         }
+    }
+
+    private isInRange(x: number, y: number): boolean {
+        return (x >= 0 && x < this.width && y >= 0 && y < this.height);
+    }
+
+    private mapX(x: number): number {
+        return Math.floor(x / this.resX);
+    }
+
+    private mapY(y: number): number {
+        return Math.floor(y / this.resY);
     }
 }
