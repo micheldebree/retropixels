@@ -119,6 +119,17 @@ function savePng(pixelImage, filename) {
   });
 }
 
+function ditherImage(jimpImage, matrix) {
+  for (let y = 0; y < jimpImage.bitmap.height; y += 1) {
+    for (let x = 0; x < jimpImage.bitmap.width; x += 1) {
+      let pixel = ImageData.ImageData.peek(jimpImage.bitmap, x, y);
+      // console.log(pixel);
+      pixel = matrix.offsetColor(pixel, x, y);
+      ImageData.ImageData.poke(jimpImage.bitmap, x, y, pixel);
+    }
+  }
+}
+
 function saveDebugMaps(pixelImage) {
   var mapimages = pixelImage.debugColorMaps();
   var i = 0;
@@ -151,8 +162,9 @@ jimp.read(inFile, (err, jimpImage) => {
 
     // jimpImage.normalize();
 
+    ditherImage(jimpImage, new BayerMatrix.BayerMatrix(ditherMode, ditherRadius));
+
     const converter = new Converter.Converter(graphicMode);
-    converter.bayerMatrix = new BayerMatrix.BayerMatrix(ditherMode, ditherRadius);
     const pixelImage = converter.convert(jimpImage.bitmap);
 
     // Show FLI bug by clearing first 12 pixels on each row.

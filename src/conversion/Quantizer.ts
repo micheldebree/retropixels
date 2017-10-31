@@ -1,4 +1,3 @@
-import { BayerMatrix } from '../conversion/BayerMatrix';
 import { Palette } from '../model/Palette';
 import { Pixels } from '../model/Pixels';
 
@@ -34,7 +33,6 @@ export class Quantizer {
   };
 
   public measurer: (onePixel: number[], otherPixel: number[]) => number = Quantizer.distanceYUV;
-  public ditherMatrix: BayerMatrix = new BayerMatrix('none', 0);
 
   /**
    * Get the best match for a pixel from a palette.
@@ -50,10 +48,8 @@ export class Quantizer {
     // then reduce to just the element with the lowest distance,
     // and return just the index.
 
-    const offsetPixel = this.ditherMatrix.offsetColor(pixel, x, y);
-
     return palette.pixels
-      .map((palettePixel, index) => [index, this.measurer(offsetPixel, palettePixel)])
+      .map((palettePixel, index) => [index, this.measurer(pixel, palettePixel)])
       .reduce((acc, current) => (current[1] < acc[1] ? current : acc), [null, Number.POSITIVE_INFINITY])[0];
   }
 }

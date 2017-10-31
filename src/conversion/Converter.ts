@@ -2,7 +2,6 @@ import { ImageDataInterface } from '../model/ImageDataInterface';
 import { PixelImage } from '../model/PixelImage';
 import { GraphicMode } from '../profiles/GraphicMode';
 import { c64Multicolor } from '../profiles/GraphicModes';
-import { BayerMatrix } from './BayerMatrix';
 import { Remapper } from './Remapper';
 
 /**
@@ -11,7 +10,6 @@ import { Remapper } from './Remapper';
  */
 export class Converter {
   public graphicMode: GraphicMode;
-  public bayerMatrix: BayerMatrix;
 
   /**
    * Constructor
@@ -28,9 +26,6 @@ export class Converter {
    */
   public convert(imageData: ImageDataInterface): PixelImage {
     const pixelImage: PixelImage = this.graphicMode.factory();
-
-    pixelImage.quantizer.ditherMatrix = this.bayerMatrix;
-
     const remapper: Remapper = new Remapper(pixelImage);
 
     remapper.optimizeColorMaps(imageData);

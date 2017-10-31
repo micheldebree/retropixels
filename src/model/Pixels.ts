@@ -9,7 +9,12 @@ export class Pixels {
    * @return {number[]}       The pixels added together.
    */
   public static add(one: number[], other: number[]): number[] {
-    return [one[0] + other[0], one[1] + other[1], one[2] + other[2], one[3] + other[3]];
+    return [
+      Pixels.cap(one[0] + other[0]),
+      Pixels.cap(one[1] + other[1]),
+      Pixels.cap(one[2] + other[2]),
+      Pixels.cap(one[3] + other[3])
+    ];
   }
 
   /**
@@ -40,6 +45,10 @@ export class Pixels {
       pixel[0] * -0.09991 + pixel[1] * -0.33609 + pixel[2] * 0.436,
       pixel[0] * 0.615 + pixel[1] * -0.55861 + pixel[2] * -0.05639
     ];
+  }
+
+  private static cap(pixelChannel: number) {
+    return Math.min(255, Math.max(0, pixelChannel));
   }
 
   public emptyPixel: number[] = [0, 0, 0, 0];
