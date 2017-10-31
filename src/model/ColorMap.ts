@@ -12,97 +12,97 @@
 import { Palette } from './Palette';
 
 export class ColorMap {
+  public colors: number[][];
+  public palette: Palette;
+  public width: number;
+  public height: number;
+  public resX: number;
+  public resY: number;
 
-    public colors: number[][];
-    public palette: Palette;
-    public width: number;
-    public height: number;
-    public resX: number;
-    public resY: number;
+  constructor(
+    widthVal: number,
+    heightVal: number,
+    palette: Palette,
+    resXVal: number = widthVal,
+    resYVal: number = heightVal
+  ) {
+    this.colors = [];
+    this.palette = palette;
+    this.width = widthVal;
+    this.height = heightVal;
+    this.resX = resXVal;
+    this.resY = resYVal;
+    for (let x = 0; x < this.width; x++) {
+      this.colors[x] = new Array(this.height);
+    }
+  }
 
-    constructor(widthVal: number,
-                heightVal: number,
-                palette: Palette,
-                resXVal: number = widthVal,
-                resYVal: number = heightVal) {
+  /**
+   * Set an area to a certain color.
+   * @param {number} x            x coordinate
+   * @param {number} y            y coordinate
+   * @param {number} paletteIndex
+   */
+  public put(x: number, y: number, paletteIndex: number): void {
+    if (!this.isInRange(x, y)) {
+      return;
+    }
 
-        this.colors = [];
-        this.palette = palette;
-        this.width = widthVal;
-        this.height = heightVal;
-        this.resX = resXVal;
-        this.resY = resYVal;
-        for (let x = 0; x < this.width; x++) {
-            this.colors[x] = new Array(this.height);
+    const rx: number = this.mapX(x);
+
+    // add it to the color map
+    if (this.colors[rx] === undefined) {
+      this.colors[rx] = [];
+    }
+    this.colors[rx][this.mapY(y)] = paletteIndex;
+  }
+
+  /**
+   * Get the palette index at x, y coordinate.
+   * TODO: rename to getIndex
+   */
+  public get(x: number, y: number): number {
+    const mX: number = this.mapX(x);
+
+    if (this.colors[mX] !== undefined) {
+      return this.colors[mX][this.mapY(y)];
+    }
+    return undefined;
+  }
+
+  /**
+   * Get the color at x, y coordinate.
+   * @param  {number}   x [description]
+   * @param  {number}   y [description]
+   * @return {number[]}   [description]
+   */
+  public getColor(x: number, y: number): number[] {
+    const index: number = this.get(x, y);
+    if (index === undefined) {
+      return undefined;
+    }
+    return this.palette.get(index);
+  }
+
+  public subtract(colorMap: ColorMap): void {
+    for (let x: number = 0; x < this.width; x += this.resX) {
+      for (let y: number = 0; y < this.height; y += this.resY) {
+        if (this.get(x, y) === colorMap.get(x, y)) {
+          this.put(x, y, undefined);
         }
+      }
     }
+  }
 
-    /**
-     * Set an area to a certain color.
-     * @param {number} x            x coordinate
-     * @param {number} y            y coordinate
-     * @param {number} paletteIndex
-     */
-    public put(x: number, y: number, paletteIndex: number): void {
-        if (!this.isInRange(x, y)) {
-            return;
-        }
+  private isInRange(x: number, y: number): boolean {
+    return x >= 0 && x < this.width && y >= 0 && y < this.height;
+  }
 
-        const rx: number = this.mapX(x);
+  private mapX(x: number): number {
+    return Math.floor(x / this.resX);
+  }
 
-        // add it to the color map
-        if (this.colors[rx] === undefined) {
-            this.colors[rx] = [];
-        }
-        this.colors[rx][this.mapY(y)] = paletteIndex;
-    }
-
-    /**
-     * Get the palette index at x, y coordinate.
-     * TODO: rename to getIndex
-     */
-    public get(x: number, y: number): number {
-        const mX: number = this.mapX(x);
-
-        if (this.colors[mX] !== undefined) {
-            return this.colors[mX][this.mapY(y)];
-        }
-        return undefined;
-    }
-
-    /**
-     * Get the color at x, y coordinate.
-     * @param  {number}   x [description]
-     * @param  {number}   y [description]
-     * @return {number[]}   [description]
-     */
-    public getColor(x: number, y: number): number[] {
-        const index: number = this.get(x, y);
-        if (index === undefined) {
-            return undefined;
-        }
-        return this.palette.get(index);
-    }
-
-    public subtract(colorMap: ColorMap): void {
-        for (let x: number = 0; x < this.width; x += this.resX) {
-            for (let y: number = 0; y < this.height; y += this.resY) {
-                if (this.get(x, y) === colorMap.get(x, y)) {
-                    this.put(x, y, undefined);
-                }
-            }
-        }
-    }
-
-    private isInRange(x: number, y: number): boolean {
-        return (x >= 0 && x < this.width && y >= 0 && y < this.height);
-    }
-
-    private mapX(x: number): number {
-        return Math.floor(x / this.resX);
-    }
-
-    private mapY(y: number): number {
-        return Math.floor(y / this.resY);
-    }
+  private mapY(y: number): number {
+    return Math.floor(y / this.resY);
+  }
 }

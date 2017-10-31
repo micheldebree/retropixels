@@ -2,7 +2,7 @@ import { ImageDataInterface } from '../model/ImageDataInterface';
 import { PixelImage } from '../model/PixelImage';
 import { GraphicMode } from '../profiles/GraphicMode';
 import { c64Multicolor } from '../profiles/GraphicModes';
-import { BayerMatrix} from './BayerMatrix';
+import { BayerMatrix } from './BayerMatrix';
 import { Remapper } from './Remapper';
 
 /**
@@ -10,32 +10,31 @@ import { Remapper } from './Remapper';
  * @param  {GraphicMode} graphicMode The GraphicMode to use for conversion.
  */
 export class Converter {
+  public graphicMode: GraphicMode;
+  public bayerMatrix: BayerMatrix;
 
-    public graphicMode: GraphicMode;
-    public bayerMatrix: BayerMatrix;
+  /**
+   * Constructor
+   * @param  {GraphicMode} graphicMode The graphic mode to convert to.
+   */
+  constructor(graphicMode: GraphicMode) {
+    this.graphicMode = graphicMode;
+  }
 
-    /**
-     * Constructor
-     * @param  {GraphicMode} graphicMode The graphic mode to convert to.
-     */
-    constructor(graphicMode: GraphicMode) {
-        this.graphicMode = graphicMode;
-    }
+  /**
+   * Convert ImageData to a PixelImage
+   * @param  {ImageDataInterface} imageData The ImageData to convert.
+   * @return {PixelImage} The converted image.
+   */
+  public convert(imageData: ImageDataInterface): PixelImage {
+    const pixelImage: PixelImage = this.graphicMode.factory();
 
-    /**
-     * Convert ImageData to a PixelImage
-     * @param  {ImageDataInterface} imageData The ImageData to convert.
-     * @return {PixelImage} The converted image.
-     */
-    public convert(imageData: ImageDataInterface): PixelImage {
-        const pixelImage: PixelImage = this.graphicMode.factory();
+    pixelImage.quantizer.ditherMatrix = this.bayerMatrix;
 
-        pixelImage.quantizer.ditherMatrix = this.bayerMatrix;
+    const remapper: Remapper = new Remapper(pixelImage);
 
-        const remapper: Remapper = new Remapper(pixelImage);
-
-        remapper.optimizeColorMaps(imageData);
-        remapper.drawImageData(imageData);
-        return pixelImage;
-    }
+    remapper.optimizeColorMaps(imageData);
+    remapper.drawImageData(imageData);
+    return pixelImage;
+  }
 }

@@ -1,12 +1,13 @@
 {
-    "defaultSeverity": "error",
-    "extends": [
-        "tslint:recommended"
-    ],
-    "jsRules": {},
-    "rules": {
-        "quotemark": [true, "single", "jsx-double"],
-        "no-bitwise": false
-    },
-    "rulesDirectory": []
+  "defaultSeverity": "error",
+  "extends": ["tslint:recommended"],
+  "jsRules": {},
+  "rules": {
+    "quotemark": [true, "single", "jsx-double"],
+    "no-bitwise": false,
+    "trailing-comma": [true, { "multiline": "never", "singleline": "never" }],
+    "arrow-parens": false,
+    "semicolon": [true, "always", "ignore-bound-class-methods"]
+  },
+  "rulesDirectory": []
 }

@@ -1,15 +1,13 @@
 import { Pixels } from './Pixels';
 
 export class Palette {
+  public pixels: number[][];
 
-    public pixels: number[][];
+  constructor(pixels: number[][]) {
+    this.pixels = pixels === undefined ? [] : pixels;
+  }
 
-    constructor(pixels: number[][]) {
-        this.pixels = pixels === undefined ? [] : pixels;
-    }
-
-    public get(index: number): number[] {
-        return this.pixels[index];
-    }
-
+  public get(index: number): number[] {
+    return this.pixels[index];
+  }
 }
