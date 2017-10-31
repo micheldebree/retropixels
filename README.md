@@ -122,7 +122,14 @@ Be patient. Next time it will get it from your local cache.
 
 ## Changelog
 
+### 0.5.3
+
 ### 0.5.2
+
+Bugfix:
+
+- [#22](https://github.com/micheldebree/retropixels/issues/22)
+  Fixed small dithering bug.
 
 ### 0.5.1
 

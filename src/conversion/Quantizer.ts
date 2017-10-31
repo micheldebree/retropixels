@@ -51,8 +51,11 @@ export class Quantizer {
         // map pixels to [index, distance to pixel],
         // then reduce to just the element with the lowest distance,
         // and return just the index.
+
+        const offsetPixel = this.ditherMatrix.offsetColor(pixel, x, y);
+
         return palette.pixels
-            .map((el, index) => [index, this.measurer(this.ditherMatrix.offsetColor(pixel, x, y), el)])
+            .map((palettePixel, index) => [index, this.measurer(offsetPixel, palettePixel)])
             .reduce((acc, current) => current[1] < acc[1] ? current : acc
                 , [null, Number.POSITIVE_INFINITY])[0];
     }

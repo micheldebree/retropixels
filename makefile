@@ -1,4 +1,4 @@
-VERSION=0.5.2
+VERSION=0.5.3
 EXAMPLE=paintface
 DOCKERIMAGE=micheldebree/retropixels-cli:$(VERSION)
 DOCKERCMD=docker run -t --rm -v "$$PWD":/data $(DOCKERIMAGE)
