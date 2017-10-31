@@ -48,8 +48,9 @@ export class Remapper {
         const h: number = imageData.height;
         const unrestrictedImage: PixelImage = new PixelImage(w, h, targetPixelImage.pWidth, targetPixelImage.pHeight);
         const palette = targetPixelImage.colorMaps[0].palette;
-        unrestrictedImage.colorMaps.push(new ColorMap(w, h, palette, 1, 1));
-        unrestrictedImage.quantizer = unrestrictedImage.quantizer;
+        unrestrictedImage.colorMaps.push(
+            new ColorMap(w, h, palette, 1, 1));
+        unrestrictedImage.quantizer = targetPixelImage.quantizer;
         ImageData.drawImageData(imageData, unrestrictedImage);
         return unrestrictedImage.colorMaps[0];
     }

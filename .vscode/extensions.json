@@ -5,8 +5,8 @@
 		// Extension identifier format: ${publisher}.${name}. Example: vscode.csharp
 		"EditorConfig.editorconfig",
 		"dbaeumer.vscode-eslint",
-		"dbaeumer.jshint",
 		"tomconte.kickassembler",
-		"rbbit.typescript-hero"
+		"rbbit.typescript-hero",
+		"esbenp.prettier-vscode"
 	]
 }
