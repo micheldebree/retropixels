@@ -21,7 +21,7 @@ You now have a new shell command called ``retropixels``
 
 ### Usage
 
-```bash
+```sh
 retropixels [options] <infile> <outfile>
 ```
 
@@ -60,20 +60,20 @@ Notes:
 
 Convert an image to a Commodore 64 executable:
 
-```bash
+```sh
 retropixels -b bayer8x8 -r 64 eye.jpg eye.prg
 ```
 
 View the result by running it in the
 [VICE](http://vice-emu.sourceforge.net) emulator:
 
-```bash
+```sh
 x64 eye.prg
 ```
 
 ### Uninstall
 
-```bash
+```sh
 npm uninstall -g retropixels
 ```
 
@@ -93,7 +93,7 @@ It should work on other platforms but you're on your own there.
 
 - Clone or unzip this project
 
-```bash
+```sh
 cd retropixels
 npm install -g typescript@2.3.3
 npm install
@@ -104,7 +104,7 @@ Run with ``node index.js [options] <infile> <outfile>``
 
 ### Build Docker image
 
-```bash
+```sh
 docker build -t micheldebree/retropixels-cli .
 ```
 
@@ -113,7 +113,7 @@ docker build -t micheldebree/retropixels-cli .
 The command line tool can be run with docker.
 The only prerequisite for this is Docker itself:
 
-```bash
+```sh
 docker run --rm -v "$PWD":/data micheldebree/retropixels-cli [options] <infile> <outfile>
 ```
 

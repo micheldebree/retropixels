@@ -1,8 +1,12 @@
+import { ImageData } from '../model/ImageData';
+import { ImageDataInterface } from '../model/ImageDataInterface';
 import { Pixels } from '../model/Pixels';
 
-// TODO: rename to OrderedDither
-export class BayerMatrix {
-  private static sizePresets: { [key: string]: number[][] } = {
+/**
+ * Apply ordered dithering to an image.
+ */
+export class OrderedDither {
+  public static presets: { [key: string]: number[][] } = {
     bayer2x2: [[1, 3], [4, 2]],
     bayer4x4: [[1, 9, 3, 11], [13, 5, 15, 7], [4, 12, 2, 10], [16, 8, 14, 6]],
     bayer8x8: [
@@ -41,29 +45,24 @@ export class BayerMatrix {
   };
 
   private matrix: number[][] = [];
-  private width: number;
-  private height: number;
 
-  // depth: 64 for 8x8
-
-  constructor(sizePreset: string, depth: number) {
-    const sourceMatrix: number[][] = BayerMatrix.sizePresets[sizePreset];
-
-    if (!sourceMatrix) {
-      throw new Error('Unknown ordered dithering preset: ' + sizePreset);
-    }
-
-    this.height = sourceMatrix.length;
-    this.width = sourceMatrix[0].length;
-    const factor: number = 1 / (this.width * this.height);
-
-    this.matrix = sourceMatrix.map((row, rowIndex) => {
-      return sourceMatrix[rowIndex].map(column => depth * (factor * column - 0.5));
+  constructor(normalizedMatrix: number[][], depth: number) {
+    const factor: number = 1 / (normalizedMatrix.length * normalizedMatrix[0].length);
+    this.matrix = normalizedMatrix.map((row, rowIndex) => {
+      return normalizedMatrix[rowIndex].map(column => depth * (factor * column - 0.5));
     });
   }
 
-  public offsetColor(color: number[], x: number, y: number): number[] {
-    const offset: number = this.matrix[y % this.height][x % this.width];
+  public dither(image: ImageDataInterface) {
+    for (let y = 0; y < image.height; y++) {
+      for (let x = 0; x < image.width; x++) {
+        ImageData.poke(image, x, y, this.offsetColor(ImageData.peek(image, x, y), x, y));
+      }
+    }
+  }
+
+  private offsetColor(color: number[], x: number, y: number): number[] {
+    const offset: number = this.matrix[y % this.matrix.length][x % this.matrix[0].length];
     return Pixels.add(color, [offset, offset, offset]);
   }
 }

@@ -13,7 +13,7 @@ const cli = require('commander'),
   PNGPicture = require('./target/io/PNGPicture.js'),
   Converter = require('./target/conversion/Converter.js'),
   ImageData = require('./target/model/ImageData.js'),
-  BayerMatrix = require('./target/conversion/BayerMatrix.js'),
+  OrderedDither = require('./target/conversion/OrderedDither.js'),
   C64Mapper = require('./target/io/C64Mapper.js');
 
 const c64BinariesFolder = '/target/c64';
@@ -119,17 +119,6 @@ function savePng(pixelImage, filename) {
   });
 }
 
-function ditherImage(jimpImage, matrix) {
-  for (let y = 0; y < jimpImage.bitmap.height; y += 1) {
-    for (let x = 0; x < jimpImage.bitmap.width; x += 1) {
-      let pixel = ImageData.ImageData.peek(jimpImage.bitmap, x, y);
-      // console.log(pixel);
-      pixel = matrix.offsetColor(pixel, x, y);
-      ImageData.ImageData.poke(jimpImage.bitmap, x, y, pixel);
-    }
-  }
-}
-
 function saveDebugMaps(pixelImage) {
   var mapimages = pixelImage.debugColorMaps();
   var i = 0;
@@ -162,7 +151,12 @@ jimp.read(inFile, (err, jimpImage) => {
 
     // jimpImage.normalize();
 
-    ditherImage(jimpImage, new BayerMatrix.BayerMatrix(ditherMode, ditherRadius));
+    const ditherPreset = OrderedDither.OrderedDither.presets[ditherMode];
+    if (!ditherPreset) {
+      throw new Error('Unknown dithering mode: ' + ditherPreset);
+    }
+
+    new OrderedDither.OrderedDither(ditherPreset, ditherRadius).dither(jimpImage.bitmap);
 
     const converter = new Converter.Converter(graphicMode);
     const pixelImage = converter.convert(jimpImage.bitmap);
