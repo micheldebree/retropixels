@@ -131,19 +131,6 @@ const pysslaPalette1 = new Palette([
 
 // C64 modes {{{
 
-// C64 resolution and palette, but no attribute restrictions (not supported on real c64)
-export const c64Unlimited = {
-  width: 320,
-  height: 200,
-  pixelWidth: 1,
-  pixelHeight: 1,
-  create() {
-    const pixelImage = new PixelImage(320, 200);
-    pixelImage.colorMaps.push(new ColorMap(320, 200, peptoPalette, 1, 1));
-    return pixelImage;
-  }
-};
-
 // C64 standard multicolor mode
 export const c64Multicolor = new GraphicMode(160, 200, 2, 1, function() {
   const pixelImage = new PixelImage(this.width, this.height, this.pixelWidth, this.pixelHeight);
@@ -154,11 +141,25 @@ export const c64Multicolor = new GraphicMode(160, 200, 2, 1, function() {
   return pixelImage;
 });
 
+// C64 resolution and palette, but no attribute restrictions (not supported on real c64)
+export const c64MulticolorFake = new GraphicMode(160, 200, 2, 1, function() {
+  const pixelImage = new PixelImage(this.width, this.height, this.pixelWidth, this.pixelHeight);
+  pixelImage.colorMaps.push(new ColorMap(this.width, this.height, peptoPalette, 1, 1));
+  return pixelImage;
+});
+
 // C64 standard high resolution mode
 export const c64Hires = new GraphicMode(320, 200, 1, 1, function() {
   const pixelImage = new PixelImage(this.width, this.height, this.pixelWidth, this.pixelHeight);
   pixelImage.colorMaps.push(new ColorMap(this.width, this.height, peptoPalette, 8, 8));
   pixelImage.colorMaps.push(new ColorMap(this.width, this.height, peptoPalette, 8, 8));
+  return pixelImage;
+});
+
+// C64 resolution and palette, but no attribute restrictions (not supported on real c64)
+export const c64HiresFake = new GraphicMode(320, 200, 1, 1, function() {
+  const pixelImage = new PixelImage(this.width, this.height, this.pixelWidth, this.pixelHeight);
+  pixelImage.colorMaps.push(new ColorMap(this.width, this.width, peptoPalette, 1, 1));
   return pixelImage;
 });
 
@@ -211,9 +212,11 @@ export const pyssla = new GraphicMode(116, 116, 4, 4, function() {
 
 export const all = {
   c64Multicolor,
+  c64MulticolorFake,
   c64Hires,
   c64HiresGray,
   c64HiresMono,
+  c64HiresFake,
   c64FLI,
   c64AFLI,
   spectrumStandard,

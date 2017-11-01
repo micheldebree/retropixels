@@ -96,7 +96,6 @@ It should work on other platforms but you're on your own there.
 ```sh
 cd retropixels
 npm install -g typescript@2.3.3
-npm install
 make
 ```
 
@@ -122,7 +121,15 @@ Be patient. Next time it will get it from your local cache.
 
 ## Changelog
 
-### 0.5.3
+### 0.6.0
+
+Features:
+
+- [#19](https://github.com/micheldebree/retropixels/issues/19): Undocumented 'fake' modes.
+
+Fixes:
+[#21](https://github.com/micheldebree/retropixels/issues/21),
+[#23](https://github.com/micheldebree/retropixels/issues/23)
 
 ### 0.5.2
 
