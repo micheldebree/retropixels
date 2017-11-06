@@ -1,4 +1,4 @@
-VERSION=0.6.0
+VERSION=0.6.1
 EXAMPLE=paintface
 DOCKERIMAGE=micheldebree/retropixels-cli:$(VERSION)
 DOCKERCMD=docker run -t --rm -v "$$PWD":/data $(DOCKERIMAGE)
@@ -47,6 +47,7 @@ docker_debug: dockerimage
 samples: compile
 	$(LOCALCMD) paintface.jpg ./samples/paintface-Multicolor.png
 	$(LOCALCMD) paintface.jpg ./samples/paintface-Multicolor.prg
+	$(LOCALCMD) paintface.jpg ./samples/paintface-Multicolor.kla
 	$(LOCALCMD) -m c64Hires paintface.jpg ./samples/paintface-Hires.png
 	$(LOCALCMD) -m c64Hires paintface.jpg ./samples/paintface-Hires.prg
 	$(LOCALCMD) -m c64HiresMono paintface.jpg ./samples/paintface-HiresMono.png

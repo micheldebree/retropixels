@@ -121,11 +121,19 @@ Be patient. Next time it will get it from your local cache.
 
 ## Changelog
 
+### 0.6.1
+
+Fixes:
+
+- [#25](https://github.com/micheldebree/retropixels/issues/25):
+  Koala export is broken. (Thanks to Alex Goldblat for reporting this)
+
 ### 0.6.0
 
 Features:
 
-- [#19](https://github.com/micheldebree/retropixels/issues/19): Undocumented 'fake' modes.
+- [#19](https://github.com/micheldebree/retropixels/issues/19):
+  Undocumented fake modes.
 
 Fixes:
 [#21](https://github.com/micheldebree/retropixels/issues/21),

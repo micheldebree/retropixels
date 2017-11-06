@@ -24,7 +24,7 @@ let ditherMode = 'bayer4x4';
 let ditherRadius = 32;
 
 cli
-  .version('0.6.0')
+  .version('0.6.1')
   .usage('[options] <infile> <outfile>')
   .option('-m, --mode <graphicMode>', 'c64Multicolor (default), c64Hires, c64HiresMono, c64FLI, c64AFLI')
   .option('-d, --ditherMode <ditherMode>', 'bayer2x2, bayer4x4 (default), bayer8x8')
@@ -96,9 +96,9 @@ function saveExecutable(nativeImage, viewerFilename) {
 
 // Save PixelImage as a KoalaPaint image.
 function saveKoala(pixelImage) {
+  const mapper = new C64Mapper.C64Mapper();
   const koalaImage = KoalaPicture.KoalaPicture.fromPixelImage(pixelImage);
-  koalaImage.save(outFile, function(err) {
-    if (err) throw err;
+  mapper.save(koalaImage.toMemoryMap(), outFile, () => {
     console.log('Written Koala Painter file ' + outFile);
   });
 }
