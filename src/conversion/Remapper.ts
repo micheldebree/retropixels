@@ -34,8 +34,8 @@ export class Remapper {
    * @param  {ImageDataInterface} imageData The ImageData to map
    */
   public drawImageData(imageData: ImageDataInterface): void {
-    for (let y: number = 0; y < this.image.height; y += 1) {
-      for (let x: number = 0; x < this.image.width; x += 1) {
+    for (let y: number = 0; y < this.image.mode.height; y += 1) {
+      for (let x: number = 0; x < this.image.mode.width; x += 1) {
         this.image.poke(x, y, ImageData.peek(imageData, x, y));
       }
     }
@@ -45,7 +45,7 @@ export class Remapper {
   private getColorMap(imageData: ImageDataInterface, targetPixelImage: PixelImage): ColorMap {
     const w: number = imageData.width;
     const h: number = imageData.height;
-    const unrestrictedImage: PixelImage = new PixelImage(w, h, targetPixelImage.pWidth, targetPixelImage.pHeight);
+    const unrestrictedImage: PixelImage = new PixelImage(targetPixelImage.mode);
     const palette = targetPixelImage.colorMaps[0].palette;
     unrestrictedImage.colorMaps.push(new ColorMap(w, h, palette, 1, 1));
     unrestrictedImage.quantizer = targetPixelImage.quantizer;

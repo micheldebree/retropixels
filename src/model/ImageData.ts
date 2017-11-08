@@ -26,8 +26,8 @@ export class ImageData {
 
   // Draw ImageData onto a PixelImage
   public static drawImageData(imageData: ImageDataInterface, pixelImage: PixelImage) {
-    for (let y: number = 0; y < pixelImage.height; y += 1) {
-      for (let x: number = 0; x < pixelImage.width; x += 1) {
+    for (let y: number = 0; y < pixelImage.mode.height; y += 1) {
+      for (let x: number = 0; x < pixelImage.mode.width; x += 1) {
         const pixel: number[] = this.peek(imageData, x, y);
         pixelImage.poke(x, y, pixel);
       }

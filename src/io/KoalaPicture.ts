@@ -22,7 +22,7 @@ export class KoalaPicture {
     koalaPic.loadAddress[0] = 0;
     koalaPic.loadAddress[1] = 0x60;
 
-    const mapper: C64Mapper = new C64Mapper();
+    const mapper: C64Mapper = new C64Mapper(pixelImage.mode);
 
     koalaPic.bitmap = mapper.convertBitmap(pixelImage);
     koalaPic.screenRam = mapper.convertScreenram(pixelImage, 2, 1);
@@ -38,7 +38,6 @@ export class KoalaPicture {
   public screenRam: Uint8Array;
   public colorRam: Uint8Array;
   public background: Uint8Array;
-  private mapper: C64Mapper = new C64Mapper();
 
   /**
    * Read the picture from an 8-bit buffer.
@@ -63,54 +62,54 @@ export class KoalaPicture {
   /**
    * Convert a Koala Painter picture to a PixelImage.
    */
-  public toPixelImage(koalaPic: KoalaPicture, palette: Palette): PixelImage {
-    const imageW = 160;
-    const imageH = 200;
-    const pixelImage: PixelImage = new PixelImage(imageW, imageH, 2, 1);
-    const pixelsPerCellHor = 4;
-    const pixelsPerCellVer = 8;
+//   public toPixelImage(koalaPic: KoalaPicture, palette: Palette): PixelImage {
+//     const imageW = 160;
+//     const imageH = 200;
+//     const pixelImage: PixelImage = new PixelImage(GraphicModes[]);
+//     const pixelsPerCellHor = 4;
+//     const pixelsPerCellVer = 8;
 
-    let bitmapIndex = 0;
-    let colorIndex = 0;
+//     let bitmapIndex = 0;
+//     let colorIndex = 0;
 
-    pixelImage.addColorMap(new ColorMap(imageW, imageH, palette));
-    pixelImage.addColorMap(new ColorMap(imageW, imageH, palette, pixelsPerCellHor, pixelsPerCellVer));
-    pixelImage.addColorMap(new ColorMap(imageW, imageH, palette, pixelsPerCellHor, pixelsPerCellVer));
-    pixelImage.addColorMap(new ColorMap(imageW, imageH, palette, pixelsPerCellHor, pixelsPerCellVer));
+//     pixelImage.addColorMap(new ColorMap(imageW, imageH, palette));
+//     pixelImage.addColorMap(new ColorMap(imageW, imageH, palette, pixelsPerCellHor, pixelsPerCellVer));
+//     pixelImage.addColorMap(new ColorMap(imageW, imageH, palette, pixelsPerCellHor, pixelsPerCellVer));
+//     pixelImage.addColorMap(new ColorMap(imageW, imageH, palette, pixelsPerCellHor, pixelsPerCellVer));
 
-    for (let charY = 0; charY < imageH; charY += pixelsPerCellVer) {
-      for (let charX = 0; charX < imageW; charX += pixelsPerCellHor) {
-        for (let bitmapY = 0; bitmapY < pixelsPerCellVer; bitmapY += 1) {
-          const x = charX;
-          const y = charY + bitmapY;
+//     for (let charY = 0; charY < imageH; charY += pixelsPerCellVer) {
+//       for (let charX = 0; charX < imageW; charX += pixelsPerCellHor) {
+//         for (let bitmapY = 0; bitmapY < pixelsPerCellVer; bitmapY += 1) {
+//           const x = charX;
+//           const y = charY + bitmapY;
 
-          pixelImage.pixelIndex[y][x] = (koalaPic.bitmap[bitmapIndex] >> 6) & 0x03;
-          pixelImage.pixelIndex[y][x + 1] = (koalaPic.bitmap[bitmapIndex] >> 4) & 0x03;
-          pixelImage.pixelIndex[y][x + 2] = (koalaPic.bitmap[bitmapIndex] >> 2) & 0x03;
-          pixelImage.pixelIndex[y][x + 3] = koalaPic.bitmap[bitmapIndex] & 0x03;
+//           pixelImage.pixelIndex[y][x] = (koalaPic.bitmap[bitmapIndex] >> 6) & 0x03;
+//           pixelImage.pixelIndex[y][x + 1] = (koalaPic.bitmap[bitmapIndex] >> 4) & 0x03;
+//           pixelImage.pixelIndex[y][x + 2] = (koalaPic.bitmap[bitmapIndex] >> 2) & 0x03;
+//           pixelImage.pixelIndex[y][x + 3] = koalaPic.bitmap[bitmapIndex] & 0x03;
 
-          bitmapIndex += 1;
-        }
-      }
-    }
+//           bitmapIndex += 1;
+//         }
+//       }
+//     }
 
-    for (let colorY = 0; colorY < imageH; colorY += pixelsPerCellVer) {
-      for (let colorX = 0; colorX < imageW; colorX += pixelsPerCellHor) {
-        // get two colors from screenRam and one from colorRam
-        const color01 = (koalaPic.screenRam[colorIndex] >> 4) & 0x0f;
-        const color10 = koalaPic.screenRam[colorIndex] & 0x0f;
-        const color11 = koalaPic.colorRam[colorIndex] & 0x0f;
+//     for (let colorY = 0; colorY < imageH; colorY += pixelsPerCellVer) {
+//       for (let colorX = 0; colorX < imageW; colorX += pixelsPerCellHor) {
+//         // get two colors from screenRam and one from colorRam
+//         const color01 = (koalaPic.screenRam[colorIndex] >> 4) & 0x0f;
+//         const color10 = koalaPic.screenRam[colorIndex] & 0x0f;
+//         const color11 = koalaPic.colorRam[colorIndex] & 0x0f;
 
-        // add the colors to the corresponding color maps
-        pixelImage.colorMaps[1].put(colorX, colorY, color01);
-        pixelImage.colorMaps[2].put(colorX, colorY, color10);
-        pixelImage.colorMaps[3].put(colorX, colorY, color11);
+//         // add the colors to the corresponding color maps
+//         pixelImage.colorMaps[1].put(colorX, colorY, color01);
+//         pixelImage.colorMaps[2].put(colorX, colorY, color10);
+//         pixelImage.colorMaps[3].put(colorX, colorY, color11);
 
-        colorIndex += 1;
-      }
-    }
-    // add background color as colorMap 0
-    pixelImage.colorMaps[0].put(0, 0, koalaPic.background[0]);
-    return pixelImage;
-  }
+//         colorIndex += 1;
+//       }
+//     }
+//     // add background color as colorMap 0
+//     pixelImage.colorMaps[0].put(0, 0, koalaPic.background[0]);
+//     return pixelImage;
+//   }
 }

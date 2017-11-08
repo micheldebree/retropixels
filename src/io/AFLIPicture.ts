@@ -11,8 +11,7 @@ export class AFLIPicture {
     pic.loadAddress[0] = 0;
     pic.loadAddress[1] = 0x40;
 
-    const mapper: C64Mapper = new C64Mapper();
-    mapper.FLIBugSize = 8;
+    const mapper: C64Mapper = new C64Mapper(pixelImage.mode);
 
     pic.bitmap = mapper.convertBitmap(pixelImage);
     pic.screenRam = [];

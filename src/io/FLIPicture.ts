@@ -17,14 +17,7 @@ export class FLIPicture {
     pic.loadAddress[0] = 0;
     pic.loadAddress[1] = 0x3c;
 
-    const mapper: C64Mapper = new C64Mapper();
-    mapper.indexMap = {
-      0: 0,
-      1: 3,
-      2: 2,
-      3: 1
-    };
-    mapper.FLIBugSize = 8;
+    const mapper: C64Mapper = new C64Mapper(pixelImage.mode);
 
     pic.colorRam = mapper.convertColorram(pixelImage, 1);
     pic.bitmap = mapper.convertBitmap(pixelImage);

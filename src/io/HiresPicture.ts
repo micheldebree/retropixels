@@ -6,7 +6,7 @@ import { C64Mapper } from './C64Mapper';
 export class HiresPicture {
   public static fromPixelImage(pixelImage: PixelImage): HiresPicture {
     const pic: HiresPicture = new HiresPicture();
-    const mapper: C64Mapper = new C64Mapper();
+    const mapper: C64Mapper = new C64Mapper(pixelImage.mode);
 
     pic.bitmap = mapper.convertBitmap(pixelImage);
     pic.screenRam = mapper.convertScreenram(pixelImage, 0, 1);

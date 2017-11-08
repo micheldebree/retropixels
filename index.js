@@ -24,7 +24,7 @@ let ditherMode = 'bayer4x4';
 let ditherRadius = 32;
 
 cli
-  .version('0.6.1')
+  .version('0.6.2')
   .usage('[options] <infile> <outfile>')
   .option('-m, --mode <graphicMode>', 'c64Multicolor (default), c64Hires, c64HiresMono, c64FLI, c64AFLI')
   .option('-d, --ditherMode <ditherMode>', 'bayer2x2, bayer4x4 (default), bayer8x8')
@@ -105,14 +105,14 @@ function saveKoala(pixelImage) {
 
 // Save PixelImage as a PNG image.
 function savePng(pixelImage, filename) {
-  new jimp(pixelImage.width, pixelImage.height, function(err, image) {
+  new jimp(pixelImage.mode.width, pixelImage.mode.height, function(err, image) {
     if (err) throw err;
     for (let y = 0; y < image.bitmap.height; y += 1) {
       for (let x = 0; x < image.bitmap.width; x += 1) {
         ImageData.ImageData.poke(image.bitmap, x, y, pixelImage.peek(x, y));
       }
     }
-    image.resize(pixelImage.width * pixelImage.pWidth, pixelImage.height * pixelImage.pHeight);
+    image.resize(pixelImage.mode.width * pixelImage.mode.pixelWidth, pixelImage.mode.height * pixelImage.mode.pixelHeight);
     image.write(filename, function() {
       console.log('Written PNG image ' + filename);
     });

@@ -10,23 +10,40 @@ export class GraphicMode {
   public height: number;
 
   // width and height of one pixel
-  public pixelWidth: number;
-  public pixelHeight: number;
+  public pixelWidth: number = 1;
+  public pixelHeight: number = 1;
+
+  public rowsPerCell: number = 8;
+  public bytesPerCellRow: number = 1;
+
+  public FLIBugSize: number = 0;
+
+  public indexMap = {
+    0: 0,
+    1: 1,
+    2: 2,
+    3: 3
+  };
 
   // creates an empty PixelImage for this GraphicMode.
   public factory: () => PixelImage;
 
-  constructor(
-    width: number,
-    height: number,
-    pixelWidth: number = 1,
-    pixelHeight: number = 1,
-    factory: () => PixelImage
-  ) {
+  constructor(width: number, height: number, factory: () => PixelImage) {
     this.width = width;
     this.height = height;
-    this.pixelWidth = pixelWidth;
-    this.pixelHeight = pixelHeight;
     this.factory = factory;
   }
+
+  public mapPixelIndex(pixelImage: PixelImage, x: number, y: number) {
+    return this.indexMap[pixelImage.pixelIndex[y][x]];
+  }
+
+  public pixelsPerByte(): number {
+    return 8 / this.pixelWidth;
+  }
+
+  public pixelsPerCellRow(): number {
+    return this.bytesPerCellRow * this.pixelsPerByte();
+  }
+
 }

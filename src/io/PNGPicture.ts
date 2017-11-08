@@ -4,7 +4,7 @@ import { PixelImage } from '../model/PixelImage';
 
 export class PNGPicture {
   public static save(pixelImage: PixelImage, outFile: string, callback: () => {}) {
-    Jimp(pixelImage.width, pixelImage.height, (err: Error, image: Jimp) => {
+    Jimp(pixelImage.mode.width, pixelImage.mode.height, (err: Error, image: Jimp) => {
       if (err) {
         throw err;
       }
