@@ -1,7 +1,9 @@
 import { ColorMap } from '../model/ColorMap';
 import { Palette } from '../model/Palette';
 import { PixelImage } from '../model/PixelImage';
+import { GraphicMode } from '../profiles/GraphicMode';
 import { C64Mapper } from './C64Mapper';
+import { IC64Image } from './IC64Image';
 
 /**
  * A FLI picture.
@@ -9,35 +11,32 @@ import { C64Mapper } from './C64Mapper';
  * $4000-$5fff screen ram data
  * $6000-      bitmap data
  */
-export class FLIPicture {
-  public static fromPixelImage(pixelImage: PixelImage): FLIPicture {
-    const pic: FLIPicture = new FLIPicture();
+export class FLIPicture extends IC64Image {
+  public formatName: string = 'FLI';
+  private loadAddress: Uint8Array;
+  private colorRam: Uint8Array;
+  private screenRam: Uint8Array[];
+  private bitmap: Uint8Array;
+  private background: Uint8Array;
 
-    pic.loadAddress = new Uint8Array(2);
-    pic.loadAddress[0] = 0;
-    pic.loadAddress[1] = 0x3c;
+  public fromPixelImage(pixelImage: PixelImage) {
+    this.loadAddress = new Uint8Array(2);
+    this.loadAddress[0] = 0;
+    this.loadAddress[1] = 0x3c;
 
     const mapper: C64Mapper = new C64Mapper(pixelImage.mode);
 
-    pic.colorRam = mapper.convertColorram(pixelImage, 1);
-    pic.bitmap = mapper.convertBitmap(pixelImage);
+    this.colorRam = mapper.convertColorram(pixelImage, 1);
+    this.bitmap = mapper.convertBitmap(pixelImage);
 
-    pic.screenRam = [];
+    this.screenRam = [];
     for (let i: number = 0; i < 8; i++) {
-      pic.screenRam[i] = mapper.convertScreenram(pixelImage, 2, 3, i);
+      this.screenRam[i] = mapper.convertScreenram(pixelImage, 2, 3, i);
     }
 
-    pic.background = new Uint8Array(1);
-    pic.background[0] = pixelImage.colorMaps[0].get(0, 0);
-
-    return pic;
+    this.background = new Uint8Array(1);
+    this.background[0] = pixelImage.colorMaps[0].get(0, 0);
   }
-
-  public loadAddress: Uint8Array;
-  public colorRam: Uint8Array;
-  public screenRam: Uint8Array[];
-  public bitmap: Uint8Array;
-  public background: Uint8Array;
 
   /**
    * Convert to a sequence of bytes.
@@ -46,15 +45,15 @@ export class FLIPicture {
   public toMemoryMap(): Uint8Array[] {
     return [
       this.loadAddress,
-      C64Mapper.pad(this.colorRam, 24),
-      C64Mapper.pad(this.screenRam[0], 24),
-      C64Mapper.pad(this.screenRam[1], 24),
-      C64Mapper.pad(this.screenRam[2], 24),
-      C64Mapper.pad(this.screenRam[3], 24),
-      C64Mapper.pad(this.screenRam[4], 24),
-      C64Mapper.pad(this.screenRam[5], 24),
-      C64Mapper.pad(this.screenRam[6], 24),
-      C64Mapper.pad(this.screenRam[7], 24),
+      this.pad(this.colorRam, 24),
+      this.pad(this.screenRam[0], 24),
+      this.pad(this.screenRam[1], 24),
+      this.pad(this.screenRam[2], 24),
+      this.pad(this.screenRam[3], 24),
+      this.pad(this.screenRam[4], 24),
+      this.pad(this.screenRam[5], 24),
+      this.pad(this.screenRam[6], 24),
+      this.pad(this.screenRam[7], 24),
       this.bitmap,
       this.background
     ];

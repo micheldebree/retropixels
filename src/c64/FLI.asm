@@ -1,4 +1,3 @@
-!to "FLIShower.prg", cbm
 !source "basic_upstart.asm"
 
 tab18   = $0e00

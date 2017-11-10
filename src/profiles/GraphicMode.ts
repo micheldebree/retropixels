@@ -1,3 +1,4 @@
+import { Palette } from '../model/Palette';
 import { PixelImage } from '../model/PixelImage';
 
 /**
@@ -12,6 +13,8 @@ export class GraphicMode {
   // width and height of one pixel
   public pixelWidth: number = 1;
   public pixelHeight: number = 1;
+
+  public palette: Palette;
 
   public rowsPerCell: number = 8;
   public bytesPerCellRow: number = 1;
@@ -28,9 +31,10 @@ export class GraphicMode {
   // creates an empty PixelImage for this GraphicMode.
   public factory: () => PixelImage;
 
-  constructor(width: number, height: number, factory: () => PixelImage) {
+  constructor(width: number, height: number, palette: Palette, factory: () => PixelImage) {
     this.width = width;
     this.height = height;
+    this.palette = palette;
     this.factory = factory;
   }
 
@@ -45,5 +49,4 @@ export class GraphicMode {
   public pixelsPerCellRow(): number {
     return this.bytesPerCellRow * this.pixelsPerByte();
   }
-
 }

@@ -1,21 +1,20 @@
 import { ColorMap } from '../model/ColorMap';
 import { Palette } from '../model/Palette';
 import { PixelImage } from '../model/PixelImage';
+import { GraphicMode } from '../profiles/GraphicMode';
 import { C64Mapper } from './C64Mapper';
+import { IC64Image } from './IC64Image';
 
-export class HiresPicture {
-  public static fromPixelImage(pixelImage: PixelImage): HiresPicture {
-    const pic: HiresPicture = new HiresPicture();
+export class HiresPicture extends IC64Image {
+  public formatName: string = 'Hires';
+  private bitmap: Uint8Array;
+  private screenRam: Uint8Array;
+
+  public fromPixelImage(pixelImage: PixelImage) {
     const mapper: C64Mapper = new C64Mapper(pixelImage.mode);
-
-    pic.bitmap = mapper.convertBitmap(pixelImage);
-    pic.screenRam = mapper.convertScreenram(pixelImage, 0, 1);
-
-    return pic;
+    this.bitmap = mapper.convertBitmap(pixelImage);
+    this.screenRam = mapper.convertScreenram(pixelImage, 0, 1);
   }
-
-  public bitmap: Uint8Array;
-  public screenRam: Uint8Array;
 
   /**
    * Convert to a sequence of bytes.

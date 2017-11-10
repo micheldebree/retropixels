@@ -68,37 +68,43 @@ if (outFile === undefined) {
 // Save PixelImage as a c64 native .PRG executable.
 function savePrg(pixelImage) {
   if (cli.mode === 'c64Multicolor') {
-    return saveExecutable(KoalaPicture.KoalaPicture.fromPixelImage(pixelImage), 'KoalaShower.prg');
+    let picture = new KoalaPicture.KoalaPicture();
+    picture.fromPixelImage(pixelImage);
+    return saveExecutable(picture);
   }
 
   if (cli.mode === 'c64FLI') {
-    return saveExecutable(FLIPicture.FLIPicture.fromPixelImage(pixelImage), 'FLIShower.prg');
+    let picture = new FLIPicture.FLIPicture();
+    picture.fromPixelImage(pixelImage);
+    return saveExecutable(picture);
   }
 
   if (cli.mode === 'c64AFLI') {
-    return saveExecutable(AFLIPicture.AFLIPicture.fromPixelImage(pixelImage), 'AFLIShower.prg');
+    let picture = new AFLIPicture.AFLIPicture();
+    picture.fromPixelImage(pixelImage);
+    return saveExecutable(picture);
   }
 
   if (cli.mode == 'c64Hires' || cli.mode == 'c64HiresMono') {
-    return saveExecutable(HiresPicture.HiresPicture.fromPixelImage(pixelImage), 'HiresShower.prg');
+    let picture = new HiresPicture.HiresPicture();
+    picture.fromPixelImage(pixelImage);
+    return saveExecutable(picture);
   }
 
   throw 'Commodore 64 executable format is not supported for mode ' + cli.mode + '.';
 }
 
-function saveExecutable(nativeImage, viewerFilename) {
-  const mapper = new C64Mapper.C64Mapper();
-  mapper.viewerFilename = viewerFilename;
-  mapper.saveExecutable(nativeImage.toMemoryMap(), outFile, () => {
+function saveExecutable(nativeImage) {
+  nativeImage.saveExecutable(outFile, () => {
     console.log('Written Commodore 64 executable ' + outFile);
   });
 }
 
 // Save PixelImage as a KoalaPaint image.
 function saveKoala(pixelImage) {
-  const mapper = new C64Mapper.C64Mapper();
-  const koalaImage = KoalaPicture.KoalaPicture.fromPixelImage(pixelImage);
-  mapper.save(koalaImage.toMemoryMap(), outFile, () => {
+  let picture = new KoalaPicture.KoalaPicture();
+  picture.fromPixelImage(pixelImage);
+  picture.save(outFile, () => {
     console.log('Written Koala Painter file ' + outFile);
   });
 }
@@ -112,7 +118,10 @@ function savePng(pixelImage, filename) {
         ImageData.ImageData.poke(image.bitmap, x, y, pixelImage.peek(x, y));
       }
     }
-    image.resize(pixelImage.mode.width * pixelImage.mode.pixelWidth, pixelImage.mode.height * pixelImage.mode.pixelHeight);
+    image.resize(
+      pixelImage.mode.width * pixelImage.mode.pixelWidth,
+      pixelImage.mode.height * pixelImage.mode.pixelHeight
+    );
     image.write(filename, function() {
       console.log('Written PNG image ' + filename);
     });

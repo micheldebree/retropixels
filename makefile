@@ -24,7 +24,7 @@ clean:
 node_modules:
 	npm install
 
-c64code: src/c64/KoalaShower.prg
+c64code: src/c64/Koala.prg
 
 install: clean compile
 	npm install -g

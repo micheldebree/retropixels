@@ -123,8 +123,8 @@ export class PixelImage {
     return paletteIndex !== undefined ? colorMap.palette.get(paletteIndex) : [0, 0, 0, 0];
   }
 
-  public addColorMap(colorMap: ColorMap): void {
-    this.colorMaps.push(colorMap);
+  public addColorMap(resXVal: number = this.mode.width, resYVal: number = this.mode.height): void {
+    this.colorMaps.push(new ColorMap(this.mode.width, this.mode.height, this.mode.palette, resXVal, resYVal));
   }
 
   public debugColorMaps(): PixelImage[] {

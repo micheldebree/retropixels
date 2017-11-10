@@ -1,9 +1,9 @@
 ACME_SRC=acme-master/src
 
 %.prg: %.asm $(ACME_SRC)/acme
-	$(ACME_SRC)/acme -r "$*.txt" "$<"
+	$(ACME_SRC)/acme -f cbm -r "$*.txt" -o "$*.prg" "$<"
 
-all: KoalaShower.prg HiresShower.prg FLIShower.prg AFLIShower.prg
+all: Koala.prg Hires.prg FLI.prg AFLI.prg
 
 clean:
 	rm -f *.prg
