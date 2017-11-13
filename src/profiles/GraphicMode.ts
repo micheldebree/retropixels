@@ -49,4 +49,62 @@ export class GraphicMode {
   public pixelsPerCellRow(): number {
     return this.bytesPerCellRow * this.pixelsPerByte();
   }
+
+  public extractAttributeData(
+    pixelImage: PixelImage,
+    yOffset: number,
+    callback: (x: number, y: number) => number
+  ): Uint8Array {
+    const result: Uint8Array = new Uint8Array(1000).fill(0);
+    let index: number = 0;
+
+    this.forEachCell(yOffset, (x, y) => {
+      result[index++] = x >= this.FLIBugSize ? callback(x, y) : 0;
+    });
+    return result;
+  }
+
+  /**
+   * Execute for each row in a cell.
+   * @param pixelImage The image
+   * @param cellX The left of the cell
+   * @param cellY The top of the cell
+   * @param callback
+   */
+  public forEachCellRow(cellY: number, callback: (y) => void) {
+    for (let rowY = cellY; rowY < cellY + this.rowsPerCell; rowY++) {
+      callback(rowY);
+    }
+  }
+
+  /**
+   * Execute for each cell in the image.
+   * @param pixelImage The image
+   * @param yOffset Added to the y coordinate of the cell top
+   * @param callback Called with the topleft position in the image of the cell.
+   */
+  public forEachCell(yOffset = 0, callback: (x: number, y: number) => void): void {
+    const pixelsPerCellRow: number = this.pixelsPerCellRow();
+
+    for (let y: number = yOffset; y < this.height; y += this.rowsPerCell) {
+      for (let x: number = 0; x < this.width; x += pixelsPerCellRow) {
+        callback(x, y);
+      }
+    }
+  }
+
+  public forEachByte(cellX: number, callback: (x) => void) {
+    for (let byteX = cellX; byteX < cellX + this.bytesPerCellRow; byteX++) {
+      callback(byteX);
+    }
+  }
+
+  public forEachPixel(byteX: number, callback: (x: number, shiftTimes: number) => void) {
+    const pixelsPerByte: number = this.pixelsPerByte();
+
+    for (let pixelX: number = 0; pixelX < pixelsPerByte; pixelX++) {
+      const shiftTimes = (pixelsPerByte - 1 - pixelX) * this.pixelWidth;
+      callback(byteX + pixelX, shiftTimes);
+    }
+  }
 }

@@ -2,18 +2,20 @@ import { ColorMap } from '../model/ColorMap';
 import { Palette } from '../model/Palette';
 import { PixelImage } from '../model/PixelImage';
 import { GraphicMode } from '../profiles/GraphicMode';
-import { C64Format } from './C64Format';
-import { C64Mapper } from './C64Mapper';
+import { GraphicModes } from '../profiles/GraphicModes';
+import { C64Layout } from './C64Layout';
+import { IC64Format } from './IC64Format';
 
-export class HiresPicture extends C64Format {
+export class HiresPicture implements IC64Format {
   public formatName: string = 'Hires';
+  public mode: GraphicMode = GraphicModes.c64Hires;
+
   private bitmap: Uint8Array;
   private screenRam: Uint8Array;
 
   public fromPixelImage(pixelImage: PixelImage) {
-    const mapper: C64Mapper = new C64Mapper(pixelImage.mode);
-    this.bitmap = mapper.convertBitmap(pixelImage);
-    this.screenRam = mapper.convertScreenram(pixelImage, 0, 1);
+    this.bitmap = C64Layout.convertBitmap(pixelImage);
+    this.screenRam = C64Layout.convertScreenram(pixelImage, 0, 1);
   }
 
   /**

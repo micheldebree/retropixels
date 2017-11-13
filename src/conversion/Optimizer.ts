@@ -3,57 +3,27 @@ import { ImageData } from '../model/ImageData';
 import { ImageDataInterface } from '../model/ImageDataInterface';
 import { PixelImage } from '../model/PixelImage';
 
-/**
- * Maps ImageData onto a PixelImage
- * TODO: does not support different palettes per colorMap
- * TODO: rename to ColorMapOptimizer or something
- * TODO: move drawImageData to another class. This is just for optimizing.
- * @param  {PixelImage} image The PixelImage to map ImageData to
- */
-export class Remapper {
-  public image: PixelImage;
-
-  constructor(image: PixelImage) {
-    this.image = image;
-  }
-
-  /**
-   * Create optimal ColorMaps according to ImageData
-   * @param {ImageDataInterface} imageData [description]
-   */
-  public optimizeColorMaps(imageData: ImageDataInterface): void {
-    const colorMap: ColorMap = this.getColorMap(imageData, this.image);
+export class Optimizer {
+  public static optimizeColorMaps(pixelImage: PixelImage, imageData: ImageDataInterface): void {
+    const colorMap: ColorMap = this.getColorMap(imageData, pixelImage);
     // fill up the colormaps in the restricted image based on the colors in the unrestricted image
-    for (const map of this.image.colorMaps) {
+    for (const map of pixelImage.colorMaps) {
       this.extractColorMap(colorMap, map);
     }
   }
 
-  /**
-   * Map ImageData on the PixelImage
-   * @param  {ImageDataInterface} imageData The ImageData to map
-   */
-  public drawImageData(imageData: ImageDataInterface): void {
-    for (let y: number = 0; y < this.image.mode.height; y += 1) {
-      for (let x: number = 0; x < this.image.mode.width; x += 1) {
-        this.image.poke(x, y, ImageData.peek(imageData, x, y));
-      }
-    }
-  }
-
   // TODO: now uses palette of first color map only
-  private getColorMap(imageData: ImageDataInterface, targetPixelImage: PixelImage): ColorMap {
+  private static getColorMap(imageData: ImageDataInterface, targetPixelImage: PixelImage): ColorMap {
     const w: number = imageData.width;
     const h: number = imageData.height;
     const unrestrictedImage: PixelImage = new PixelImage(targetPixelImage.mode);
     const palette = targetPixelImage.colorMaps[0].palette;
     unrestrictedImage.colorMaps.push(new ColorMap(w, h, palette, 1, 1));
-    unrestrictedImage.quantizer = targetPixelImage.quantizer;
     ImageData.drawImageData(imageData, unrestrictedImage);
     return unrestrictedImage.colorMaps[0];
   }
 
-  private reduceToMax(colorMap: ColorMap, x: number, y: number, w: number, h: number): number {
+  private static reduceToMax(colorMap: ColorMap, x: number, y: number, w: number, h: number): number {
     const weights: number[] = [];
     let maxWeight: number;
     let maxColor: number;
@@ -76,7 +46,7 @@ export class Remapper {
   /**
    * Delete colors from one colorMap and put them in another.
    */
-  private extractColorMap(fromColorMap: ColorMap, toColorMap: ColorMap): void {
+  private static extractColorMap(fromColorMap: ColorMap, toColorMap: ColorMap): void {
     const rx: number = toColorMap.resX;
     const ry: number = toColorMap.resY;
 

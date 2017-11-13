@@ -2,8 +2,9 @@ import { ColorMap } from '../model/ColorMap';
 import { Palette } from '../model/Palette';
 import { PixelImage } from '../model/PixelImage';
 import { GraphicMode } from '../profiles/GraphicMode';
-import { C64Format } from './C64Format';
-import { C64Mapper } from './C64Mapper';
+import { GraphicModes } from '../profiles/GraphicModes';
+import { C64Layout } from './C64Layout';
+import { IC64Format } from './IC64Format';
 
 /**
  * A FLI picture.
@@ -11,8 +12,9 @@ import { C64Mapper } from './C64Mapper';
  * $4000-$5fff screen ram data
  * $6000-      bitmap data
  */
-export class FLIPicture extends C64Format {
+export class FLIPicture implements IC64Format {
   public formatName: string = 'FLI';
+  public mode: GraphicMode = GraphicModes.c64FLI;
   private loadAddress: Uint8Array;
   private colorRam: Uint8Array;
   private screenRam: Uint8Array[];
@@ -24,14 +26,12 @@ export class FLIPicture extends C64Format {
     this.loadAddress[0] = 0;
     this.loadAddress[1] = 0x3c;
 
-    const mapper: C64Mapper = new C64Mapper(pixelImage.mode);
-
-    this.colorRam = mapper.convertColorram(pixelImage, 1);
-    this.bitmap = mapper.convertBitmap(pixelImage);
+    this.colorRam = C64Layout.convertColorram(pixelImage, 1);
+    this.bitmap = C64Layout.convertBitmap(pixelImage);
 
     this.screenRam = [];
     for (let i: number = 0; i < 8; i++) {
-      this.screenRam[i] = mapper.convertScreenram(pixelImage, 2, 3, i);
+      this.screenRam[i] = C64Layout.convertScreenram(pixelImage, 2, 3, i);
     }
 
     this.background = new Uint8Array(1);
@@ -45,15 +45,15 @@ export class FLIPicture extends C64Format {
   public toMemoryMap(): Uint8Array[] {
     return [
       this.loadAddress,
-      this.pad(this.colorRam, 24),
-      this.pad(this.screenRam[0], 24),
-      this.pad(this.screenRam[1], 24),
-      this.pad(this.screenRam[2], 24),
-      this.pad(this.screenRam[3], 24),
-      this.pad(this.screenRam[4], 24),
-      this.pad(this.screenRam[5], 24),
-      this.pad(this.screenRam[6], 24),
-      this.pad(this.screenRam[7], 24),
+      C64Layout.pad(this.colorRam, 24),
+      C64Layout.pad(this.screenRam[0], 24),
+      C64Layout.pad(this.screenRam[1], 24),
+      C64Layout.pad(this.screenRam[2], 24),
+      C64Layout.pad(this.screenRam[3], 24),
+      C64Layout.pad(this.screenRam[4], 24),
+      C64Layout.pad(this.screenRam[5], 24),
+      C64Layout.pad(this.screenRam[6], 24),
+      C64Layout.pad(this.screenRam[7], 24),
       this.bitmap,
       this.background
     ];

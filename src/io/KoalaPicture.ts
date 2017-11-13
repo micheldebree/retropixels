@@ -2,14 +2,16 @@ import { ColorMap } from '../model/ColorMap';
 import { Palette } from '../model/Palette';
 import { PixelImage } from '../model/PixelImage';
 import { GraphicMode } from '../profiles/GraphicMode';
-import { C64Format } from './C64Format';
-import { C64Mapper } from './C64Mapper';
+import { GraphicModes } from '../profiles/GraphicModes';
+import { C64Layout } from './C64Layout';
+import { IC64Format } from './IC64Format';
 
 /**
  * A Koala Painter compatible picture.
  */
-export class KoalaPicture extends C64Format {
+export class KoalaPicture implements IC64Format {
   public formatName: string = 'Koala';
+  public mode: GraphicMode = GraphicModes.c64Multicolor;
   private loadAddress: Uint8Array;
   private bitmap: Uint8Array;
   private screenRam: Uint8Array;
@@ -28,11 +30,9 @@ export class KoalaPicture extends C64Format {
     this.loadAddress[0] = 0;
     this.loadAddress[1] = 0x60;
 
-    const mapper: C64Mapper = new C64Mapper(pixelImage.mode);
-
-    this.bitmap = mapper.convertBitmap(pixelImage);
-    this.screenRam = mapper.convertScreenram(pixelImage, 2, 1);
-    this.colorRam = mapper.convertColorram(pixelImage, 3);
+    this.bitmap = C64Layout.convertBitmap(pixelImage);
+    this.screenRam = C64Layout.convertScreenram(pixelImage, 2, 1);
+    this.colorRam = C64Layout.convertColorram(pixelImage, 3);
     this.background = new Uint8Array(1);
     this.background[0] = pixelImage.colorMaps[0].get(0, 0);
   }

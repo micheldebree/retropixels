@@ -32,8 +32,6 @@ export class Quantizer {
     return Math.abs(Pixels.toYUV(onePixel)[0] - Pixels.toYUV(otherPixel)[0]);
   };
 
-  public measurer: (onePixel: number[], otherPixel: number[]) => number = Quantizer.distanceYUV;
-
   /**
    * Get the best match for a pixel from a palette.
    * X and Y coordinates are provided for dithering.
@@ -43,7 +41,7 @@ export class Quantizer {
    * @param palette The palette to map the pixel to
    * @returns The index of the palette entry that contains the best match.
    */
-  public mapPixel(x: number, y: number, pixel: number[], palette: Palette): number {
+  public static mapPixel(x: number, y: number, pixel: number[], palette: Palette): number {
     // map pixels to [index, distance to pixel],
     // then reduce to just the element with the lowest distance,
     // and return just the index.
@@ -52,4 +50,6 @@ export class Quantizer {
       .map((palettePixel, index) => [index, this.measurer(pixel, palettePixel)])
       .reduce((acc, current) => (current[1] < acc[1] ? current : acc), [null, Number.POSITIVE_INFINITY])[0];
   }
+
+  private static measurer: (onePixel: number[], otherPixel: number[]) => number = Quantizer.distanceYUV;
 }

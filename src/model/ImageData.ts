@@ -1,3 +1,4 @@
+import { Poker } from '../conversion/Poker';
 import { ImageDataInterface } from './ImageDataInterface';
 import { PixelImage } from './PixelImage';
 
@@ -29,7 +30,7 @@ export class ImageData {
     for (let y: number = 0; y < pixelImage.mode.height; y += 1) {
       for (let x: number = 0; x < pixelImage.mode.width; x += 1) {
         const pixel: number[] = this.peek(imageData, x, y);
-        pixelImage.poke(x, y, pixel);
+        Poker.poke(pixelImage, x, y, pixel);
       }
     }
   }

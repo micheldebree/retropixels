@@ -1,5 +1,4 @@
 #!/usr/bin/env node
-
 /* jshint esversion: 6 */
 const cli = require('commander'),
   fs = require('fs-extra'),
@@ -12,14 +11,13 @@ const cli = require('commander'),
   AFLIPicture = require('./target/io/AFLIPicture.js'),
   PNGPicture = require('./target/io/PNGPicture.js'),
   Converter = require('./target/conversion/Converter.js'),
+  Poker = require('./target/conversion/Poker.js'),
   ImageData = require('./target/model/ImageData.js'),
   OrderedDither = require('./target/conversion/OrderedDither.js'),
-  C64Mapper = require('./target/io/C64Mapper.js');
-
-const c64BinariesFolder = '/target/c64';
+  C64Writer = require('./target/io/C64Writer.js');
 
 // defaults
-let graphicMode = GraphicModes.all.c64Multicolor;
+let graphicMode = GraphicModes.GraphicModes.c64Multicolor;
 let ditherMode = 'bayer4x4';
 let ditherRadius = 32;
 
@@ -35,9 +33,9 @@ if (!cli.mode) {
   cli.mode = 'c64Multicolor';
 }
 
-if (cli.mode in GraphicModes.all) {
+if (cli.mode in GraphicModes.GraphicModes.all) {
   console.log('Using graphicMode ' + cli.mode);
-  graphicMode = GraphicModes.all[cli.mode];
+  graphicMode = GraphicModes.GraphicModes.all[cli.mode];
 } else {
   console.error('Unknown Graphicmode: ' + cli.mode);
   cli.help();
@@ -67,6 +65,7 @@ if (outFile === undefined) {
 
 // Save PixelImage as a c64 native .PRG executable.
 function savePrg(pixelImage) {
+
   if (cli.mode === 'c64Multicolor') {
     let picture = new KoalaPicture.KoalaPicture();
     picture.fromPixelImage(pixelImage);
@@ -95,7 +94,7 @@ function savePrg(pixelImage) {
 }
 
 function saveExecutable(nativeImage) {
-  nativeImage.saveExecutable(outFile, () => {
+  C64Writer.C64Writer.saveExecutable(nativeImage, outFile, () => {
     console.log('Written Commodore 64 executable ' + outFile);
   });
 }
@@ -104,7 +103,7 @@ function saveExecutable(nativeImage) {
 function saveKoala(pixelImage) {
   let picture = new KoalaPicture.KoalaPicture();
   picture.fromPixelImage(pixelImage);
-  picture.save(outFile, () => {
+  C64Writer.C64Writer.save(picture, outFile, () => {
     console.log('Written Koala Painter file ' + outFile);
   });
 }
@@ -115,7 +114,7 @@ function savePng(pixelImage, filename) {
     if (err) throw err;
     for (let y = 0; y < image.bitmap.height; y += 1) {
       for (let x = 0; x < image.bitmap.width; x += 1) {
-        ImageData.ImageData.poke(image.bitmap, x, y, pixelImage.peek(x, y));
+        ImageData.ImageData.poke(image.bitmap, x, y, Poker.Poker.peek(pixelImage, x, y));
       }
     }
     image.resize(
@@ -167,8 +166,7 @@ jimp.read(inFile, (err, jimpImage) => {
 
     new OrderedDither.OrderedDither(ditherPreset, ditherRadius).dither(jimpImage.bitmap);
 
-    const converter = new Converter.Converter(graphicMode);
-    const pixelImage = converter.convert(jimpImage.bitmap);
+    const pixelImage = Converter.Converter.convert(jimpImage.bitmap, graphicMode);
 
     // Show FLI bug by clearing first 12 pixels on each row.
     if (cli.mode === 'c64FLI') {

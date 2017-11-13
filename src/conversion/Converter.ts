@@ -1,35 +1,28 @@
+import { ImageData } from '../model/ImageData';
 import { ImageDataInterface } from '../model/ImageDataInterface';
 import { PixelImage } from '../model/PixelImage';
 import { GraphicMode } from '../profiles/GraphicMode';
-import { c64Multicolor } from '../profiles/GraphicModes';
-import { Remapper } from './Remapper';
+import { Optimizer } from './Optimizer';
+import { Poker } from './Poker';
 
-/**
- * Converts ImageData to a PixelImage
- * @param  {GraphicMode} graphicMode The GraphicMode to use for conversion.
- */
 export class Converter {
-  public graphicMode: GraphicMode;
+  public static convert(imageData: ImageDataInterface, graphicMode: GraphicMode): PixelImage {
+    const pixelImage: PixelImage = graphicMode.factory();
 
-  /**
-   * Constructor
-   * @param  {GraphicMode} graphicMode The graphic mode to convert to.
-   */
-  constructor(graphicMode: GraphicMode) {
-    this.graphicMode = graphicMode;
+    Optimizer.optimizeColorMaps(pixelImage, imageData);
+    this.drawImageData(pixelImage, imageData);
+    return pixelImage;
   }
 
   /**
-   * Convert ImageData to a PixelImage
-   * @param  {ImageDataInterface} imageData The ImageData to convert.
-   * @return {PixelImage} The converted image.
+   * Map ImageData on the PixelImage
+   * @param  {ImageDataInterface} imageData The ImageData to map
    */
-  public convert(imageData: ImageDataInterface): PixelImage {
-    const pixelImage: PixelImage = this.graphicMode.factory();
-    const remapper: Remapper = new Remapper(pixelImage);
-
-    remapper.optimizeColorMaps(imageData);
-    remapper.drawImageData(imageData);
-    return pixelImage;
+  private static drawImageData(image: PixelImage, imageData: ImageDataInterface): void {
+    for (let y: number = 0; y < image.mode.height; y += 1) {
+      for (let x: number = 0; x < image.mode.width; x += 1) {
+        Poker.poke(image, x, y, ImageData.peek(imageData, x, y));
+      }
+    }
   }
 }
