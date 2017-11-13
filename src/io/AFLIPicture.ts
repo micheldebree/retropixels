@@ -2,10 +2,10 @@ import { ColorMap } from '../model/ColorMap';
 import { Palette } from '../model/Palette';
 import { PixelImage } from '../model/PixelImage';
 import { GraphicMode } from '../profiles/GraphicMode';
+import { C64Format } from './C64Format';
 import { C64Mapper } from './C64Mapper';
-import { IC64Image } from './IC64Image';
 
-export class AFLIPicture extends IC64Image {
+export class AFLIPicture extends C64Format {
   public formatName: string = 'AFLI';
   private loadAddress: Uint8Array;
   private screenRam: Uint8Array[];

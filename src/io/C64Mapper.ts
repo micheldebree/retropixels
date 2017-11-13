@@ -1,7 +1,7 @@
 import { ColorMap } from '../model/ColorMap';
 import { PixelImage } from '../model/PixelImage';
 import { GraphicMode } from '../profiles/GraphicMode';
-import { IC64Image } from './IC64Image';
+import { C64Format } from './C64Format';
 
 /**
  * A factory for creating Commodore 64 files from PixelImages.

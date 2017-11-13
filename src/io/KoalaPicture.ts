@@ -2,13 +2,13 @@ import { ColorMap } from '../model/ColorMap';
 import { Palette } from '../model/Palette';
 import { PixelImage } from '../model/PixelImage';
 import { GraphicMode } from '../profiles/GraphicMode';
+import { C64Format } from './C64Format';
 import { C64Mapper } from './C64Mapper';
-import { IC64Image } from './IC64Image';
 
 /**
  * A Koala Painter compatible picture.
  */
-export class KoalaPicture extends IC64Image {
+export class KoalaPicture extends C64Format {
   public formatName: string = 'Koala';
   private loadAddress: Uint8Array;
   private bitmap: Uint8Array;

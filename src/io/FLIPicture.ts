@@ -2,8 +2,8 @@ import { ColorMap } from '../model/ColorMap';
 import { Palette } from '../model/Palette';
 import { PixelImage } from '../model/PixelImage';
 import { GraphicMode } from '../profiles/GraphicMode';
+import { C64Format } from './C64Format';
 import { C64Mapper } from './C64Mapper';
-import { IC64Image } from './IC64Image';
 
 /**
  * A FLI picture.
@@ -11,7 +11,7 @@ import { IC64Image } from './IC64Image';
  * $4000-$5fff screen ram data
  * $6000-      bitmap data
  */
-export class FLIPicture extends IC64Image {
+export class FLIPicture extends C64Format {
   public formatName: string = 'FLI';
   private loadAddress: Uint8Array;
   private colorRam: Uint8Array;

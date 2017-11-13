@@ -5,7 +5,7 @@ import { GraphicMode } from '../profiles/GraphicMode';
 
 import { C64Mapper } from './C64Mapper';
 
-export abstract class IC64Image {
+export abstract class C64Format {
   private static concat(arrayBuffers: Uint8Array[]): Uint8Array {
     if (arrayBuffers.length === 1) {
       return arrayBuffers[0];
@@ -35,7 +35,7 @@ export abstract class IC64Image {
       if (readError) {
         throw readError;
       }
-      const buffer: Buffer = new Buffer(IC64Image.concat(this.toMemoryMap()));
+      const buffer: Buffer = new Buffer(C64Format.concat(this.toMemoryMap()));
       const writeBuffer: Buffer = Buffer.concat([viewerCode, buffer]);
       fs.writeFile(outFile, writeBuffer, writeError => {
         if (writeError) {
@@ -50,7 +50,7 @@ export abstract class IC64Image {
 
   // Save PixelImage as a KoalaPaint image.
   public save(outFile: string, callback: () => {}) {
-    fs.writeFile(outFile, new Buffer(IC64Image.concat(this.toMemoryMap())), (err: Error) => {
+    fs.writeFile(outFile, new Buffer(C64Format.concat(this.toMemoryMap())), (err: Error) => {
       if (err) {
         throw err;
       }
@@ -59,6 +59,6 @@ export abstract class IC64Image {
   }
 
   protected pad(buffer: Uint8Array, numberOfBytes: number): Uint8Array {
-    return IC64Image.concat([buffer, new Uint8Array(numberOfBytes)]);
+    return C64Format.concat([buffer, new Uint8Array(numberOfBytes)]);
   }
 }
