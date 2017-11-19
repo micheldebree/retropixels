@@ -6,6 +6,7 @@ const cli = require('commander'),
   jimp = require('jimp'),
   GraphicModes = require('./target/profiles/GraphicModes.js'),
   KoalaPicture = require('./target/io/KoalaPicture.js'),
+  SpritePad = require('./target/io/SpritePad.js'),
   HiresPicture = require('./target/io/HiresPicture.js'),
   FLIPicture = require('./target/io/FLIPicture.js'),
   AFLIPicture = require('./target/io/AFLIPicture.js'),
@@ -66,6 +67,8 @@ if (outFile === undefined) {
 // Save PixelImage as a c64 native .PRG executable.
 function savePrg(pixelImage) {
 
+  // TODO: convert ifs into a map
+
   if (cli.mode === 'c64Multicolor') {
     let picture = new KoalaPicture.KoalaPicture();
     picture.fromPixelImage(pixelImage);
@@ -90,6 +93,12 @@ function savePrg(pixelImage) {
     return saveExecutable(picture);
   }
 
+  if (cli.mode == 'c64HiresSprites') {
+    let picture = new HiresSprites.HiresSprites();
+    picture.fromPixelImage(pixelImage);
+    return saveExecutable(picture);
+  }
+
   throw 'Commodore 64 executable format is not supported for mode ' + cli.mode + '.';
 }
 
@@ -101,10 +110,20 @@ function saveExecutable(nativeImage) {
 
 // Save PixelImage as a KoalaPaint image.
 function saveKoala(pixelImage) {
-  let picture = new KoalaPicture.KoalaPicture();
-  picture.fromPixelImage(pixelImage);
-  C64Writer.C64Writer.save(picture, outFile, () => {
-    console.log('Written Koala Painter file ' + outFile);
+  saveBinary(new KoalaPicture.KoalaPicture(), pixelImage);
+}
+
+function saveSpritePad(pixelImage) {
+  let image = new SpritePad.SpritePad();
+  // TODO: does image need a separate mode?
+  image.mode = pixelImage.mode;
+  saveBinary(image, pixelImage);
+}
+
+function saveBinary(image, pixelImage) {
+  image.fromPixelImage(pixelImage);
+  C64Writer.C64Writer.save(image, outFile, () => {
+    console.log('Written ' + outFile + ' in ' + image.formatName + ' format.');
   });
 }
 
@@ -185,6 +204,8 @@ jimp.read(inFile, (err, jimpImage) => {
       savePrg(pixelImage);
     } else if ('.png' === outExtension) {
       savePng(pixelImage, outFile);
+    } else if ('.spd' == outExtension) {
+      saveSpritePad(pixelImage);
     } else {
       throw 'Unknown file extension ' + outExtension + ', valid extensions are .png, .kla and .prg';
     }

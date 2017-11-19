@@ -20,6 +20,7 @@ export class C64Layout {
   }
 
   public static convertBitmap(pixelImage: PixelImage): Uint8Array {
+    // TODO: calculate size of bitmap
     const bitmap: Uint8Array = new Uint8Array(8000);
     let bitmapIndex: number = 0;
 

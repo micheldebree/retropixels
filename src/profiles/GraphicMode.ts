@@ -36,9 +36,20 @@ export class GraphicMode {
     this.height = height;
     this.palette = palette;
     this.factory = factory;
+
+    // console.log('Graphicmode:');
+    // console.log('------------');
+    // console.log(width + ' x ' + height + ' pixels');
+    // console.log(this.pixelsPerByte() + ' pixels per byte');
   }
 
   public mapPixelIndex(pixelImage: PixelImage, x: number, y: number) {
+    if (x >= pixelImage.mode.width || x < 0) {
+      throw new Error('x value out of bounds: ' + x);
+    }
+    if (y >= pixelImage.mode.height || y < 0) {
+      throw new Error('y value out of bounds: ' + y);
+    }
     return this.indexMap[pixelImage.pixelIndex[y][x]];
   }
 
@@ -94,7 +105,8 @@ export class GraphicMode {
   }
 
   public forEachByte(cellX: number, callback: (x) => void) {
-    for (let byteX = cellX; byteX < cellX + this.bytesPerCellRow; byteX++) {
+    const pixelsPerByte: number = this.pixelsPerByte();
+    for (let byteX = cellX; byteX < cellX + this.bytesPerCellRow * pixelsPerByte; byteX += pixelsPerByte) {
       callback(byteX);
     }
   }
