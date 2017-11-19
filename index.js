@@ -23,7 +23,7 @@ let ditherMode = 'bayer4x4';
 let ditherRadius = 32;
 
 cli
-  .version('0.6.2')
+  .version('0.7.0')
   .usage('[options] <infile> <outfile>')
   .option('-m, --mode <graphicMode>', 'c64Multicolor (default), c64Hires, c64HiresMono, c64FLI, c64AFLI')
   .option('-d, --ditherMode <ditherMode>', 'bayer2x2, bayer4x4 (default), bayer8x8')
@@ -115,8 +115,6 @@ function saveKoala(pixelImage) {
 
 function saveSpritePad(pixelImage) {
   let image = new SpritePad.SpritePad();
-  // TODO: does image need a separate mode?
-  image.mode = pixelImage.mode;
   saveBinary(image, pixelImage);
 }
 

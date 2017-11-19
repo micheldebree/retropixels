@@ -106,6 +106,20 @@ export class GraphicModes {
     return result;
   })();
 
+  public static c64TwocolorSprites: GraphicMode = (() => {
+    const result = new GraphicMode(8 * 24, 3 * 21, Palettes.peptoPalette, function() {
+      const pixelImage: PixelImage = new PixelImage(this);
+      // background
+      pixelImage.colorMaps.push(new ColorMap(this.width, this.height, Palettes.peptoPalette));
+      // foreground
+      pixelImage.colorMaps.push(new ColorMap(this.width, this.height, Palettes.peptoPalette));
+      return pixelImage;
+    });
+    result.bytesPerCellRow = 3;
+    result.rowsPerCell = 21;
+    return result;
+  })();
+
   public static c64MulticolorSprites: GraphicMode = (() => {
     const result: GraphicMode = new GraphicMode(8 * 24 / 2, 3 * 21, Palettes.peptoPalette, function() {
       const pixelImage: PixelImage = new PixelImage(this);
@@ -145,6 +159,14 @@ export class GraphicModes {
       return pixelImage;
     });
     result.pixelWidth = 2;
+    result.bytesPerCellRow = 3;
+    result.rowsPerCell = 21;
+    result.indexMap = {
+      0: 0,
+      1: 1,
+      2: 3,
+      3: 2
+    };
     return result;
   })();
 
@@ -162,6 +184,7 @@ export class GraphicModes {
     c64HiresFake: GraphicModes.c64HiresFake,
     c64HiresMono: GraphicModes.c64HiresMono,
     c64HiresSprites: GraphicModes.c64HiresSprites,
+    c64TwocolorSprites: GraphicModes.c64TwocolorSprites,
     c64Multicolor: GraphicModes.c64Multicolor,
     c64MulticolorFake: GraphicModes.c64MulticolorFake,
     c64MulticolorSprites: GraphicModes.c64MulticolorSprites,

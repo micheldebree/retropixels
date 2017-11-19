@@ -14,7 +14,7 @@ import { IC64Format } from './IC64Format';
  */
 export class FLIPicture implements IC64Format {
   public formatName: string = 'FLI';
-  public mode: GraphicMode = GraphicModes.c64FLI;
+  public supportedModes: GraphicMode[] = [GraphicModes.c64FLI];
   private loadAddress: Uint8Array;
   private colorRam: Uint8Array;
   private screenRam: Uint8Array[];

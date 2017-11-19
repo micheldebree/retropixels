@@ -8,7 +8,12 @@ import { IC64Format } from './IC64Format';
 
 export class SpritePad implements IC64Format {
   public formatName: string = 'Sprite Pad';
-  public mode: GraphicMode = GraphicModes.c64HiresSprites;
+  public supportedModes: GraphicMode[] = [
+    GraphicModes.c64HiresSprites,
+    GraphicModes.c64MulticolorSprites,
+    GraphicModes.c64ThreecolorSprites,
+    GraphicModes.c64TwocolorSprites
+  ];
 
   // $d021, bitmask 00
   private backgroundColor: number;
@@ -26,11 +31,15 @@ export class SpritePad implements IC64Format {
 
   public fromPixelImage(pixelImage: PixelImage) {
     const bitmap: Uint8Array = C64Layout.convertBitmap(pixelImage);
+
+    const isMulticolor: boolean =
+      pixelImage.mode === GraphicModes.c64MulticolorSprites || pixelImage.mode === GraphicModes.c64ThreecolorSprites;
+
     this.backgroundColor = pixelImage.colorMaps[0].get(0, 0);
-    this.multiColor1 = this.mode === GraphicModes.c64MulticolorSprites ? pixelImage.colorMaps[1].get(0, 0) : 0;
-    this.multiColor2 = this.mode === GraphicModes.c64MulticolorSprites ? pixelImage.colorMaps[2].get(0, 0) : 0;
+    this.multiColor1 = isMulticolor ? pixelImage.colorMaps[1].get(0, 0) : 0;
+    this.multiColor2 = isMulticolor ? pixelImage.colorMaps[2].get(0, 0) : 0;
     // this colormap holds colors for individual sprites
-    const spriteColorMapIndex: number = this.mode === GraphicModes.c64HiresSprites ? 1 : 3;
+    const spriteColorMapIndex: number = isMulticolor ? 3 : 1;
 
     // each cell is a sprite
     let byteCounter: number = 0;
@@ -41,7 +50,7 @@ export class SpritePad implements IC64Format {
       }
       // last byte is mode (bit 7: 1 = multi 0 = hires), and sprite color
 
-      const modeFlag: number = this.mode === GraphicModes.c64MulticolorSprites ? 0x80 : 0;
+      const modeFlag: number = isMulticolor ? 0x80 : 0;
       const spriteColor: number = pixelImage.colorMaps[spriteColorMapIndex].get(x, y) & 0x0f;
 
       this.sprites[this.nrOfSprites][63] = modeFlag | spriteColor;

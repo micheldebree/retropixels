@@ -8,7 +8,7 @@ import { IC64Format } from './IC64Format';
 
 export class AFLIPicture implements IC64Format {
   public formatName: string = 'AFLI';
-  public mode: GraphicMode = GraphicModes.c64AFLI;
+  public supportedModes: GraphicMode[] = [GraphicModes.c64AFLI];
   private loadAddress: Uint8Array;
   private screenRam: Uint8Array[];
   private bitmap: Uint8Array;

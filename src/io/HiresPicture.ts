@@ -8,7 +8,7 @@ import { IC64Format } from './IC64Format';
 
 export class HiresPicture implements IC64Format {
   public formatName: string = 'Hires';
-  public mode: GraphicMode = GraphicModes.c64Hires;
+  public supportedModes: GraphicMode[] = [GraphicModes.c64Hires];
 
   private bitmap: Uint8Array;
   private screenRam: Uint8Array;

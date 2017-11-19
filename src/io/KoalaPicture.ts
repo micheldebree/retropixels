@@ -11,7 +11,7 @@ import { IC64Format } from './IC64Format';
  */
 export class KoalaPicture implements IC64Format {
   public formatName: string = 'Koala';
-  public mode: GraphicMode = GraphicModes.c64Multicolor;
+  public supportedModes: GraphicMode[] = [GraphicModes.c64Multicolor];
   private loadAddress: Uint8Array;
   private bitmap: Uint8Array;
   private screenRam: Uint8Array;
