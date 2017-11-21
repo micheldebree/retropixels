@@ -64,74 +64,14 @@ if (outFile === undefined) {
   cli.help();
 }
 
-// Save PixelImage as a c64 native .PRG executable.
-function savePrg(pixelImage) {
-
-  // TODO: convert ifs into a map
-
-  if (cli.mode === 'c64Multicolor') {
-    let picture = new KoalaPicture.KoalaPicture();
-    picture.fromPixelImage(pixelImage);
-    return saveExecutable(picture);
-  }
-
-  if (cli.mode === 'c64FLI') {
-    let picture = new FLIPicture.FLIPicture();
-    picture.fromPixelImage(pixelImage);
-    return saveExecutable(picture);
-  }
-
-  if (cli.mode === 'c64AFLI') {
-    let picture = new AFLIPicture.AFLIPicture();
-    picture.fromPixelImage(pixelImage);
-    return saveExecutable(picture);
-  }
-
-  if (cli.mode == 'c64Hires' || cli.mode == 'c64HiresMono') {
-    let picture = new HiresPicture.HiresPicture();
-    picture.fromPixelImage(pixelImage);
-    return saveExecutable(picture);
-  }
-
-  if (cli.mode == 'c64HiresSprites') {
-    let picture = new HiresSprites.HiresSprites();
-    picture.fromPixelImage(pixelImage);
-    return saveExecutable(picture);
-  }
-
-  throw 'Commodore 64 executable format is not supported for mode ' + cli.mode + '.';
-}
-
-function saveExecutable(nativeImage) {
-  C64Writer.C64Writer.saveExecutable(nativeImage, outFile, () => {
-    console.log('Written Commodore 64 executable ' + outFile);
-  });
-}
-
-// Save PixelImage as a KoalaPaint image.
-function saveKoala(pixelImage) {
-  saveBinary(new KoalaPicture.KoalaPicture(), pixelImage);
-}
-
-function saveSpritePad(pixelImage) {
-  let image = new SpritePad.SpritePad();
-  saveBinary(image, pixelImage);
-}
-
-function saveBinary(image, pixelImage) {
-  image.fromPixelImage(pixelImage);
-  C64Writer.C64Writer.save(image, outFile, () => {
-    console.log('Written ' + outFile + ' in ' + image.formatName + ' format.');
-  });
-}
-
 // Save PixelImage as a PNG image.
 function savePng(pixelImage, filename) {
   new jimp(pixelImage.mode.width, pixelImage.mode.height, function(err, image) {
     if (err) throw err;
     for (let y = 0; y < image.bitmap.height; y += 1) {
       for (let x = 0; x < image.bitmap.width; x += 1) {
-        ImageData.ImageData.poke(image.bitmap, x, y, Poker.Poker.peek(pixelImage, x, y));
+        let pixelValue = x >= pixelImage.mode.FLIBugSize ? Poker.Poker.peek(pixelImage, x, y) : [0, 0, 0, 0xff];
+        ImageData.ImageData.poke(image.bitmap, x, y, pixelValue);
       }
     }
     image.resize(
@@ -185,25 +125,18 @@ jimp.read(inFile, (err, jimpImage) => {
 
     const pixelImage = Converter.Converter.convert(jimpImage.bitmap, graphicMode);
 
-    // Show FLI bug by clearing first 12 pixels on each row.
-    if (cli.mode === 'c64FLI') {
-      for (y = 0; y < pixelImage.height; y++) {
-        for (x = 0; x < 12; x++) {
-          pixelImage.pixelIndex[y][x] = 0;
-        }
-      }
-    }
-
     outExtension = path.extname(outFile);
 
-    if ('.kla' === outExtension) {
-      saveKoala(pixelImage);
+    if ('.kla' === outExtension || '.spd' === outExtension) {
+      C64Writer.C64Writer.saveBinary(pixelImage, outFile, function() {
+        console.log('Written ' + outFile);
+      });
     } else if ('.prg' === outExtension) {
-      savePrg(pixelImage);
+      C64Writer.C64Writer.savePrg(pixelImage, outFile, function() {
+        console.log('Written ' + outFile);
+      });
     } else if ('.png' === outExtension) {
       savePng(pixelImage, outFile);
-    } else if ('.spd' == outExtension) {
-      saveSpritePad(pixelImage);
     } else {
       throw 'Unknown file extension ' + outExtension + ', valid extensions are .png, .kla and .prg';
     }

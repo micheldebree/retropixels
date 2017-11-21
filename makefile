@@ -59,8 +59,6 @@ samples: compile
 	$(LOCALCMD) -m c64HiresSprites paintface.jpg ./samples/paintface-HiresSprites.spd
 	$(LOCALCMD) -m c64MulticolorSprites paintface.jpg ./samples/paintface-MulticolorSprites.spd
 
-
-
 testdocker: dockerimage
 	docker run -v "$$PWD":/data micheldebree/retropixels-cli -m c64FLI paintface.jpg ./samples/paintface-FLI.prg
 
@@ -72,5 +70,4 @@ testfli: compile
 	$(LOCALCMD) -m c64FLI "$(EXAMPLE).jpg" "$(EXAMPLE).png"
 	open "$(EXAMPLE).png"
 	x64sc "$(EXAMPLE).prg"
-
 
