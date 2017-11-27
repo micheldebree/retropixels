@@ -1,5 +1,5 @@
 ; vim:set ft=acme:
-!source "basic_upstart.asm"
+!source <basic_upstart.asm>
 
 bitmap = $2000
 screenRam = bitmap + 8000

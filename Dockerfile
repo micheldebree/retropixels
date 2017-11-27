@@ -1,18 +1,22 @@
 # Build Docker image with the retropixels cli application in it.
 # Builds everything from source code.
-FROM node:6.11.0-alpine
+FROM node:8.9-alpine
 MAINTAINER michel@micheldebree.nl
 
 # install gcc, make and wget
 RUN apk update && apk add gcc g++ make ca-certificates wget && update-ca-certificates
-
-# install typescript
+RUN wget https://github.com/meonwax/acme/archive/master.zip \
+    && unzip master.zip \
+    && rm master.zip \
+    && cd acme-master/src \
+    && make \
+    && mv acme /usr/local/bin/ \
+    && rm -rf /acme-master
 RUN npm install -g typescript@2.3.3
 
 COPY . /retropixels
-WORKDIR /retropixels
 
-RUN make clean compile && rm -rf ./src
+RUN cd /retropixels && make clean compile
 
 WORKDIR /data
 ENTRYPOINT ["node", "/retropixels/index.js"]

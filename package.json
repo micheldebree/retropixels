@@ -15,7 +15,7 @@
     "devDependencies": {
         "@types/commander": "2.11.0",
         "@types/fs-extra": "4.0.2",
-        "@types/node": "8.0.50",
+        "@types/node": "8.0.53",
         "del": "3.0.0",
         "tslint": "5.8.0",
         "typescript": "2.6.1",

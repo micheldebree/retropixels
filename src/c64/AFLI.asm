@@ -1,4 +1,4 @@
-!source "basic_upstart.asm"
+!source <basic_upstart.asm>
 
 tab18   = $0e00
 tab11   = $0f00
