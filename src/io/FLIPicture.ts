@@ -4,7 +4,7 @@ import { PixelImage } from '../model/PixelImage';
 import { GraphicMode } from '../profiles/GraphicMode';
 import { GraphicModes } from '../profiles/GraphicModes';
 import { C64Layout } from './C64Layout';
-import { IC64Format } from './IC64Format';
+import { IBinaryFormat } from './IBinaryFormat';
 
 /**
  * A FLI picture.
@@ -12,7 +12,7 @@ import { IC64Format } from './IC64Format';
  * $4000-$5fff screen ram data
  * $6000-      bitmap data
  */
-export class FLIPicture implements IC64Format {
+export class FLIPicture implements IBinaryFormat {
   public formatName: string = 'FLI';
   public supportedModes: GraphicMode[] = [GraphicModes.c64FLI];
   private loadAddress: Uint8Array;

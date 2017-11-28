@@ -4,12 +4,12 @@ import { PixelImage } from '../model/PixelImage';
 import { GraphicMode } from '../profiles/GraphicMode';
 import { GraphicModes } from '../profiles/GraphicModes';
 import { C64Layout } from './C64Layout';
-import { IC64Format } from './IC64Format';
+import { IBinaryFormat } from './IBinaryFormat';
 
 /**
  * A Koala Painter compatible picture.
  */
-export class KoalaPicture implements IC64Format {
+export class KoalaPicture implements IBinaryFormat {
   public formatName: string = 'Koala';
   public supportedModes: GraphicMode[] = [GraphicModes.c64Multicolor];
   private loadAddress: Uint8Array;

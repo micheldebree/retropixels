@@ -4,9 +4,9 @@ import { PixelImage } from '../model/PixelImage';
 import { GraphicMode } from '../profiles/GraphicMode';
 import { GraphicModes } from '../profiles/GraphicModes';
 import { C64Layout } from './C64Layout';
-import { IC64Format } from './IC64Format';
+import { IBinaryFormat } from './IBinaryFormat';
 
-export class SpritePad implements IC64Format {
+export class SpritePad implements IBinaryFormat {
   public formatName: string = 'Sprite Pad';
   public supportedModes: GraphicMode[] = [
     GraphicModes.c64HiresSprites,

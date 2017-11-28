@@ -8,18 +8,18 @@ import { SpritePad } from '../io/SpritePad';
 import { PixelImage } from '../model/PixelImage';
 import { GraphicModes } from '../profiles/GraphicModes';
 import { C64Layout } from './C64Layout';
-import { IC64Format } from './IC64Format';
+import { IBinaryFormat } from './IBinaryFormat';
 
 export class C64Writer {
   // Save PixelImage as a c64 native .PRG executable.
   public static savePrg(pixelImage: PixelImage, outFile: string, callback: () => {}) {
-    const picture: IC64Format = C64Writer.getFormat(pixelImage);
+    const picture: IBinaryFormat = C64Writer.getFormat(pixelImage);
     picture.fromPixelImage(pixelImage);
     C64Writer.saveExecutable(picture, outFile, callback);
   }
 
   public static saveBinary(pixelImage: PixelImage, outFile: string, callback: () => {}) {
-    const picture: IC64Format = C64Writer.getFormat(pixelImage);
+    const picture: IBinaryFormat = C64Writer.getFormat(pixelImage);
     picture.fromPixelImage(pixelImage);
     C64Writer.save(picture, outFile, callback);
   }
@@ -27,7 +27,7 @@ export class C64Writer {
   private static viewersFolder: string = '/target/c64/';
 
   // TODO: support multiple output formats per GraphicMode
-  private static getFormat(pixelImage: PixelImage): IC64Format {
+  private static getFormat(pixelImage: PixelImage): IBinaryFormat {
     if (pixelImage.mode === GraphicModes.c64Multicolor) {
       return new KoalaPicture();
     }
@@ -50,11 +50,11 @@ export class C64Writer {
     throw new Error('Output format is not supported for mode ' + pixelImage.mode);
   }
 
-  private static save(image: IC64Format, outFile: string, callback: () => {}) {
+  private static save(image: IBinaryFormat, outFile: string, callback: () => {}) {
     C64Writer.writeFile(outFile, new Buffer(C64Layout.concat(image.toMemoryMap())), callback);
   }
 
-  private static saveExecutable(image: IC64Format, outFile: string, callback: () => {}) {
+  private static saveExecutable(image: IBinaryFormat, outFile: string, callback: () => {}) {
     // https://stackoverflow.com/questions/10265798/determine-project-root-from-a-running-node-js-application
     const appDir: string = path.dirname(require.main.filename);
     const viewerFile: string = path.join(appDir, this.viewersFolder + image.formatName + '.prg');

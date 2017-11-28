@@ -1,7 +1,7 @@
 import { PixelImage } from '../model/PixelImage';
 import { GraphicMode } from '../profiles/GraphicMode';
 
-export interface IC64Format {
+export interface IBinaryFormat {
   formatName: string;
   supportedModes: GraphicMode[];
 
