@@ -12,16 +12,16 @@ import { IBinaryFormat } from './IBinaryFormat';
 
 export class C64Writer {
   // Save PixelImage as a c64 native .PRG executable.
-  public static savePrg(pixelImage: PixelImage, outFile: string, callback: () => {}) {
+  public static async savePrg(pixelImage: PixelImage, outFile: string) {
     const picture: IBinaryFormat = C64Writer.getFormat(pixelImage);
     picture.fromPixelImage(pixelImage);
-    C64Writer.saveExecutable(picture, outFile, callback);
+    return await C64Writer.saveExecutable(picture, outFile);
   }
 
-  public static saveBinary(pixelImage: PixelImage, outFile: string, callback: () => {}) {
+  public static async saveBinary(pixelImage: PixelImage, outFile: string) {
     const picture: IBinaryFormat = C64Writer.getFormat(pixelImage);
     picture.fromPixelImage(pixelImage);
-    C64Writer.save(picture, outFile, callback);
+    return await C64Writer.save(picture, outFile);
   }
 
   private static viewersFolder: string = '/target/c64/';
@@ -50,33 +50,18 @@ export class C64Writer {
     throw new Error('Output format is not supported for mode ' + pixelImage.mode);
   }
 
-  private static save(image: IBinaryFormat, outFile: string, callback: () => {}) {
-    C64Writer.writeFile(outFile, new Buffer(C64Layout.concat(image.toMemoryMap())), callback);
+  private static async save(image: IBinaryFormat, outFile: string) {
+    return await fs.writeFile(outFile, new Buffer(C64Layout.concat(image.toMemoryMap())));
   }
 
-  private static saveExecutable(image: IBinaryFormat, outFile: string, callback: () => {}) {
+  private static async saveExecutable(image: IBinaryFormat, outFile: string) {
     // https://stackoverflow.com/questions/10265798/determine-project-root-from-a-running-node-js-application
     const appDir: string = path.dirname(require.main.filename);
     const viewerFile: string = path.join(appDir, this.viewersFolder + image.formatName + '.prg');
+    const viewerCode = await fs.readFile(viewerFile);
+    const buffer: Buffer = new Buffer(C64Layout.concat(image.toMemoryMap()));
+    const writeBuffer = Buffer.concat([viewerCode, buffer]);
 
-    fs.readFile(viewerFile, (readError, viewerCode) => {
-      if (readError) {
-        throw readError;
-      }
-      const buffer: Buffer = new Buffer(C64Layout.concat(image.toMemoryMap()));
-      const writeBuffer: Buffer = Buffer.concat([viewerCode, buffer]);
-      C64Writer.writeFile(outFile, writeBuffer, callback);
-    });
-  }
-
-  private static writeFile(filename: string, buffer: Buffer, callback: () => {}) {
-    fs.writeFile(filename, buffer, writeError => {
-      if (writeError) {
-        throw writeError;
-      }
-      if (callback) {
-        return callback();
-      }
-    });
+    return await fs.writeFile(outFile, writeBuffer);
   }
 }

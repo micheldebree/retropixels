@@ -128,13 +128,9 @@ jimp.read(inFile, (err, jimpImage) => {
     outExtension = path.extname(outFile);
 
     if ('.kla' === outExtension || '.spd' === outExtension) {
-      C64Writer.C64Writer.saveBinary(pixelImage, outFile, function() {
-        console.log('Written ' + outFile);
-      });
+      C64Writer.C64Writer.saveBinary(pixelImage, outFile).then(console.log('Written ' + outFile));
     } else if ('.prg' === outExtension) {
-      C64Writer.C64Writer.savePrg(pixelImage, outFile, function() {
-        console.log('Written ' + outFile);
-      });
+      C64Writer.C64Writer.savePrg(pixelImage, outFile).then(console.log('Written ' + outFile));
     } else if ('.png' === outExtension) {
       savePng(pixelImage, outFile);
     } else {
