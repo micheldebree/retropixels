@@ -4,12 +4,14 @@ DOCKERIMAGE=micheldebree/retropixels-cli:$(VERSION)
 DOCKERCMD=docker run -t --rm -v "$$PWD":/data $(DOCKERIMAGE)
 C64CODE=target/c64/Koala.prg target/c64/AFLI.prg target/c64/FLI.prg target/c64/Hires.prg
 
-target/c64/%.prg: src/c64/%.asm
-	mkdir -p target/c64
+target/c64/%.prg: src/c64/%.asm target/c64/
 	export ACME=./src/c64 && acme -f cbm -o "$@" "$<"
 
 compile: node_modules $(C64CODE)
 	npm run prepare
+
+target/c64/:
+	mkdir -p target/c64
 
 clean:
 	npm run clean
@@ -25,7 +27,11 @@ release: publish
 	git push
 	git push --tags
 
-publish:
+snapshot: compile
+	git clean -d -f
+	npm publish --tag snapshot
+
+publish: compile
 	git clean -d -f
 	npm publish
 

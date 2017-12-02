@@ -12,7 +12,7 @@ RUN wget https://github.com/meonwax/acme/archive/master.zip \
     && make \
     && mv acme /usr/local/bin/ \
     && rm -rf /acme-master
-RUN npm install -g typescript@2.3.3
+RUN npm install -g typescript@2.6.2
 
 COPY . /retropixels
 

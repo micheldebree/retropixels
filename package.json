@@ -18,7 +18,7 @@
         "@types/node": "8.0.53",
         "del": "3.0.0",
         "tslint": "5.8.0",
-        "typescript": "2.6.1",
+        "typescript": "2.6.2",
         "webpack": "3.8.1"
     },
     "scripts": {

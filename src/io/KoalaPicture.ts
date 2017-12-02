@@ -42,11 +42,11 @@ export class KoalaPicture implements IBinaryFormat {
    * @param  {Uint8Array} arrayBuffer The buffer to read.
    */
   public read(arrayBuffer: Uint8Array): void {
-    this.loadAddress = new Uint8Array(arrayBuffer, 0, 2);
-    this.bitmap = new Uint8Array(arrayBuffer, 2, 8000);
-    this.screenRam = new Uint8Array(arrayBuffer, 8002, 1000);
-    this.colorRam = new Uint8Array(arrayBuffer, 9002, 1000);
-    this.background = new Uint8Array(arrayBuffer, 10002, 1);
+    this.loadAddress = arrayBuffer.slice(0, 2);
+    this.bitmap = arrayBuffer.slice(2, 2 + 8000);
+    this.screenRam = arrayBuffer.slice(8002, 8002 + 1000);
+    this.colorRam = arrayBuffer.slice(9002, 9002 + 1000);
+    this.background = arrayBuffer.slice(10002, 10003);
   }
 
   /**
