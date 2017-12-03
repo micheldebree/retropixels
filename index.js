@@ -16,6 +16,7 @@ const cli = require('commander'),
   ImageData = require('./target/model/ImageData.js'),
   OrderedDither = require('./target/conversion/OrderedDither.js'),
   C64Writer = require('./target/io/C64Writer.js');
+ImageEncoder = require('./target/io/ImageEncoder.js');
 
 // defaults
 let graphicMode = GraphicModes.GraphicModes.c64Multicolor;
@@ -68,19 +69,7 @@ if (outFile === undefined) {
 function savePng(pixelImage, filename) {
   new jimp(pixelImage.mode.width, pixelImage.mode.height, function(err, image) {
     if (err) throw err;
-    for (let y = 0; y < image.bitmap.height; y += 1) {
-      for (let x = 0; x < image.bitmap.width; x += 1) {
-        let pixelValue = x >= pixelImage.mode.FLIBugSize ? Poker.Poker.peek(pixelImage, x, y) : [0, 0, 0, 0xff];
-        ImageData.ImageData.poke(image.bitmap, x, y, pixelValue);
-      }
-    }
-    image.resize(
-      pixelImage.mode.width * pixelImage.mode.pixelWidth,
-      pixelImage.mode.height * pixelImage.mode.pixelHeight
-    );
-    image.write(filename, function() {
-      console.log('Written PNG image ' + filename);
-    });
+    ImageEncoder.ImageEncoder.write(pixelImage, image, filename);
   });
 }
 
@@ -92,28 +81,10 @@ function saveDebugMaps(pixelImage) {
   }
 }
 
-// Crop a JIMP Image to fill up a specific ratio. Ratio is passed as relative width and height.
-function cropFill(jimpImage, relativeWidth, relativeHeight) {
-  const srcWidth = jimpImage.bitmap.width,
-    srcHeight = jimpImage.bitmap.height,
-    destratio = relativeWidth / relativeHeight,
-    srcratio = srcWidth / srcHeight,
-    cropwidth = Math.round(srcratio > destratio ? srcHeight * destratio : srcWidth),
-    cropheight = Math.round(srcratio > destratio ? srcHeight : srcWidth / destratio),
-    sourceLeft = Math.round((srcWidth - cropwidth) / 2),
-    sourceTop = Math.round((srcHeight - cropheight) / 2);
-  jimpImage.crop(sourceLeft, sourceTop, cropwidth, cropheight);
-}
-
 // Main {{{
 
-jimp.read(inFile, (err, jimpImage) => {
+ImageEncoder.ImageEncoder.read(inFile, graphicMode).then(jimpImage => {
   try {
-    if (err) throw err;
-
-    cropFill(jimpImage, graphicMode.width * graphicMode.pixelWidth, graphicMode.height * graphicMode.pixelHeight);
-    jimpImage.resize(graphicMode.width, graphicMode.height);
-
     // jimpImage.normalize();
 
     const ditherPreset = OrderedDither.OrderedDither.presets[ditherMode];
@@ -121,9 +92,9 @@ jimp.read(inFile, (err, jimpImage) => {
       throw new Error('Unknown dithering mode: ' + ditherPreset);
     }
 
-    new OrderedDither.OrderedDither(ditherPreset, ditherRadius).dither(jimpImage.bitmap);
+    new OrderedDither.OrderedDither(ditherPreset, ditherRadius).dither(jimpImage);
 
-    const pixelImage = Converter.Converter.convert(jimpImage.bitmap, graphicMode);
+    const pixelImage = Converter.Converter.convert(jimpImage, graphicMode);
 
     outExtension = path.extname(outFile);
 

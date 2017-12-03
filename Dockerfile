@@ -5,6 +5,7 @@ MAINTAINER michel@micheldebree.nl
 
 # install gcc, make and wget
 RUN apk update && apk add gcc g++ make ca-certificates wget && update-ca-certificates
+# install acme
 RUN wget https://github.com/meonwax/acme/archive/master.zip \
     && unzip master.zip \
     && rm master.zip \

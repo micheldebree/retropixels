@@ -7,6 +7,9 @@ C64CODE=target/c64/Koala.prg target/c64/AFLI.prg target/c64/FLI.prg target/c64/H
 target/c64/%.prg: src/c64/%.asm target/c64/
 	export ACME=./src/c64 && acme -f cbm -o "$@" "$<"
 
+build: dockerimage
+	docker run -it --entrypoint make -w /retropixels -v "$$PWD":/retropixels $(DOCKERIMAGE) compile
+
 compile: node_modules $(C64CODE)
 	npm run prepare
 
@@ -35,7 +38,7 @@ publish: compile
 	git clean -d -f
 	npm publish
 
-dockerimage: Dockerfile clean
+dockerimage: Dockerfile
 	docker build -t $(DOCKERIMAGE) .
 
 docker_debug: dockerimage
