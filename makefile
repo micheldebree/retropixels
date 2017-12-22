@@ -62,6 +62,9 @@ samples: dockerimage
 testdocker: dockerimage
 	docker run -v "$$PWD":/data $(DOCKERIMAGE) -m c64FLI paintface.jpg ./samples/paintface-FLI.prg
 
+test: compile
+	node index.js $(EXAMPLE).jpg $(EXAMPLE).prg
+
 test64: $(EXAMPLE).prg
 	x64sc $(EXAMPLE).prg
 

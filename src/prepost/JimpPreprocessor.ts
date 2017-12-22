@@ -6,7 +6,7 @@ import { Poker } from '../conversion/Poker';
 import { PixelImage } from '../model/PixelImage';
 import { GraphicMode } from '../profiles/GraphicMode';
 
-export class ImageEncoder {
+export class JimpPreprocessor {
   public static async justRead(filename: string): Promise<ImageDataInterface> {
     return (await Jimp.read(filename)).bitmap;
   }

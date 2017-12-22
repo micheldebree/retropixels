@@ -16,7 +16,7 @@ const cli = require('commander'),
   ImageData = require('./target/model/ImageData.js'),
   OrderedDither = require('./target/conversion/OrderedDither.js'),
   C64Writer = require('./target/io/C64Writer.js');
-ImageEncoder = require('./target/io/ImageEncoder.js');
+  JimpPreprocessor = require('./target/prepost/JimpPreprocessor.js');
 
 // defaults
 let graphicMode = GraphicModes.GraphicModes.c64Multicolor;
@@ -69,7 +69,7 @@ if (outFile === undefined) {
 function savePng(pixelImage, filename) {
   new jimp(pixelImage.mode.width, pixelImage.mode.height, function(err, image) {
     if (err) throw err;
-    ImageEncoder.ImageEncoder.write(pixelImage, image, filename);
+    JimpPreprocessor.JimpPreprocessor.write(pixelImage, image, filename);
   });
 }
 
@@ -83,7 +83,7 @@ function saveDebugMaps(pixelImage) {
 
 // Main {{{
 
-ImageEncoder.ImageEncoder.read(inFile, graphicMode).then(jimpImage => {
+JimpPreprocessor.JimpPreprocessor.read(inFile, graphicMode).then(jimpImage => {
   try {
     // jimpImage.normalize();
 
