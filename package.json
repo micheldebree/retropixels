@@ -7,20 +7,20 @@
         "retropixels": "./index.js"
     },
     "dependencies": {
-        "commander": "2.11.0",
-        "fs-extra": "4.0.2",
+        "commander": "2.16.0",
+        "fs-extra": "7.0.0",
         "jimp": "0.2.28",
-        "npm": "5.8.0",
+        "npm": "6.2.0",
         "path": "0.12.7"
     },
     "devDependencies": {
-        "@types/commander": "2.11.0",
-        "@types/fs-extra": "4.0.2",
-        "@types/node": "8.0.53",
+        "@types/fs-extra": "5.0.4",
+        "@types/node": "10.5.2",
+        "ajv": "6.5.2",
         "del": "3.0.0",
-        "tslint": "5.8.0",
-        "typescript": "2.6.2",
-        "webpack": "3.8.1"
+        "tslint": "5.11.0",
+        "typescript": "2.9.2",
+        "webpack": "4.16.2"
     },
     "repository": {
         "type": "git",
