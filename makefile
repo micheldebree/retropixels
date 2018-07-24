@@ -1,23 +1,23 @@
-VERSION=0.7.0
+VERSION=$(shell git describe --always --tags)
 EXAMPLE=paintface
 DOCKERIMAGE=micheldebree/retropixels-cli:$(VERSION)
 DOCKERCMD=docker run -t --rm -v "$$PWD":/data $(DOCKERIMAGE)
 C64CODE=target/c64/Koala.prg target/c64/AFLI.prg target/c64/FLI.prg target/c64/Hires.prg
 
 target/c64/%.prg: src/c64/%.asm target/c64/
-	export ACME=./src/c64 && acme -f cbm -o "$@" "$<"
+	ACME=./src/c64 acme -f cbm -o "$@" "$<"
 
 build: dockerimage
 	docker run -it --entrypoint make -w /retropixels -v "$$PWD":/retropixels $(DOCKERIMAGE) compile
 
 compile: node_modules $(C64CODE)
-	npm run prepare
+	tsc
 
 target/c64/:
 	mkdir -p target/c64
 
 clean:
-	npm run clean
+	rm -rf target && rm -f *.png && rm -f *.prg
 
 node_modules:
 	npm install
@@ -26,7 +26,6 @@ install: clean compile
 	npm install -g
 
 release: publish
-	git tag $(VERSION)
 	git push
 	git push --tags
 
@@ -73,4 +72,3 @@ testfli: compile
 	$(DOCKERCMD) -m c64FLI "$(EXAMPLE).jpg" "$(EXAMPLE).png"
 	open "$(EXAMPLE).png"
 	x64sc "$(EXAMPLE).prg"
-

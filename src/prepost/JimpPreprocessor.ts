@@ -28,17 +28,22 @@ export class JimpPreprocessor {
   }
 
   public static async write(pixelImage: PixelImage, image: Jimp, filename: string): Promise<Jimp> {
-    for (let y: number = 0; y < image.bitmap.height; y += 1) {
-      for (let x: number = 0; x < image.bitmap.width; x += 1) {
+    this.toJimpImage(pixelImage, image);
+    this.resize(image, pixelImage.mode);
+    return await image.write(filename);
+  }
+
+  private static toJimpImage(pixelImage: PixelImage, result: Jimp) {
+    for (let y: number = 0; y < result.bitmap.height; y += 1) {
+      for (let x: number = 0; x < result.bitmap.width; x += 1) {
         const pixelValue: number[] = x >= pixelImage.mode.FLIBugSize ? Poker.peek(pixelImage, x, y) : [0, 0, 0, 0xff];
-        ImageData.poke(image.bitmap, x, y, pixelValue);
+        ImageData.poke(result.bitmap, x, y, pixelValue);
       }
     }
-    image.resize(
-      pixelImage.mode.width * pixelImage.mode.pixelWidth,
-      pixelImage.mode.height * pixelImage.mode.pixelHeight
-    );
-    return await image.write(filename);
+  }
+
+  private static resize(jimpImage: Jimp, graphicMode: GraphicMode): void {
+    jimpImage.resize(graphicMode.width * graphicMode.pixelWidth, graphicMode.height * graphicMode.pixelHeight);
   }
 
   // Crop a JIMP Image to fill up a specific ratio. Ratio is passed as relative width and height.
