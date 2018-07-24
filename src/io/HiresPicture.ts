@@ -1,5 +1,3 @@
-import { ColorMap } from '../model/ColorMap';
-import { Palette } from '../model/Palette';
 import { PixelImage } from '../model/PixelImage';
 import { GraphicMode } from '../profiles/GraphicMode';
 import { GraphicModes } from '../profiles/GraphicModes';

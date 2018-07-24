@@ -1,5 +1,4 @@
 import { PixelImage } from '../model/PixelImage';
-import { GraphicMode } from '../profiles/GraphicMode';
 
 export class C64Layout {
   public static concat(arrayBuffers: Uint8Array[]): Uint8Array {

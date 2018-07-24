@@ -1,5 +1,3 @@
-import { Pixels } from './Pixels';
-
 export class Palette {
   public pixels: number[][];
 

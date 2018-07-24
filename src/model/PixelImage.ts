@@ -1,7 +1,5 @@
-import { Quantizer } from '../conversion/Quantizer';
 import { GraphicMode } from '../profiles/GraphicMode';
 import { ColorMap } from './ColorMap';
-import { Palette } from './Palette';
 
 export class PixelImage {
   public colorMaps: ColorMap[];
