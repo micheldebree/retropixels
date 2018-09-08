@@ -68,7 +68,7 @@ ntsc3:   lda #$ea       ; modified to NOP NOP on NTSC
         ; Following here is the main FLI loop which forces the VIC-II to read
         ; new color data each rasterline. The loop is exactly 23 clock cycles
         ; long so together with 40 cycles of color DMA this will result in
-        ; 63 clock cycles which is exactly the length of a PAL C64 rasterline. 
+        ; 63 clock cycles which is exactly the length of a PAL C64 rasterline.
 
         nop
         nop

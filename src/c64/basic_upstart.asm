@@ -22,7 +22,6 @@
          sta $dd00
 }
 
-
 ;$D018/53272/VIC+24:   Memory Control Register
 ;
 ;   +----------+---------------------------------------------------+
@@ -66,16 +65,18 @@
 ;$D018 = %1110xxxx -> screenmem is at $3800
 ;$D018 = %1111xxxx -> screenmem is at $3c00
 
-
+; .matrix_base: screenmem is at value * $0400
+; .bitmap_base: 0: bitmap is at $0000
+;               1: bitmap is at $2000
+; .charset_base: charmem is at value * $0800
+; All values are relative to VIC bank
 !macro d018_vic_mem .matrix_base, .bitmap_base, .charset_base {
-
          .matrix_base_mask = (.matrix_base & %1111) << 4
          .bitmap_base_mask = (.bitmap_base & 1) << 3
          .charset_base_mask = (.charset_base & %111) << 1
 
          lda #.matrix_base_mask | .bitmap_base_mask | .charset_base_mask
          sta $d018
-
 }
 
 ; .multicolor: 0 = off, 1 = on

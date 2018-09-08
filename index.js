@@ -1,19 +1,10 @@
 #!/usr/bin/env node
 /* jshint esversion: 6 */
 const cli = require('commander'),
-  fs = require('fs-extra'),
   path = require('path'),
   jimp = require('jimp'),
   GraphicModes = require('./target/profiles/GraphicModes.js'),
-  KoalaPicture = require('./target/io/KoalaPicture.js'),
-  SpritePad = require('./target/io/SpritePad.js'),
-  HiresPicture = require('./target/io/HiresPicture.js'),
-  FLIPicture = require('./target/io/FLIPicture.js'),
-  AFLIPicture = require('./target/io/AFLIPicture.js'),
-  PNGPicture = require('./target/io/PNGPicture.js'),
   Converter = require('./target/conversion/Converter.js'),
-  Poker = require('./target/conversion/Poker.js'),
-  ImageData = require('./target/model/ImageData.js'),
   OrderedDither = require('./target/conversion/OrderedDither.js'),
   C64Writer = require('./target/io/C64Writer.js');
   JimpPreprocessor = require('./target/prepost/JimpPreprocessor.js');
