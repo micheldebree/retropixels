@@ -51,7 +51,6 @@ export class Pixels {
     return Math.min(255, Math.max(0, pixelChannel));
   }
 
-  public emptyPixel: number[] = [0, 0, 0, 0];
+  public static emptyPixel: number[] = [0, 0, 0, 0];
 
-  private constructor() {}
 }

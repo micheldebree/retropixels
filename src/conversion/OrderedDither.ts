@@ -44,7 +44,7 @@ export class OrderedDither {
     ]
   };
 
-  private matrix: number[][] = [];
+  private readonly matrix: number[][] = [];
 
   constructor(normalizedMatrix: number[][], depth: number) {
     const factor: number = 1 / (normalizedMatrix.length * normalizedMatrix[0].length);

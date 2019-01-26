@@ -16,6 +16,7 @@ export class Converter {
 
   /**
    * Map ImageData on the PixelImage
+   * @param {PixelImage} image The PixelImage to map image data to.
    * @param  {ImageDataInterface} imageData The ImageData to map
    */
   private static drawImageData(image: PixelImage, imageData: ImageDataInterface): void {

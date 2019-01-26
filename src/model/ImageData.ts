@@ -1,6 +1,7 @@
 import { Poker } from '../conversion/Poker';
 import { ImageDataInterface } from './ImageDataInterface';
 import { PixelImage } from './PixelImage';
+import { Pixels } from "./Pixels";
 
 export class ImageData {
   // Set the pixel at (x,y)
@@ -22,7 +23,7 @@ export class ImageData {
     if (i !== undefined) {
       return [imageData.data[i], imageData.data[i + 1], imageData.data[i + 2], imageData.data[i + 3]];
     }
-    return [0, 0, 0, 0]; // TODO: is emptyPixel defined?
+    return Pixels.emptyPixel;
   }
 
   // Draw ImageData onto a PixelImage

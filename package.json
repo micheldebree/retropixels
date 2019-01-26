@@ -6,21 +6,25 @@
     "bin": {
         "retropixels": "./index.js"
     },
+    "scripts": {
+        "build": "tsc",
+        "test": "node index.js paintface.jpg paintface.prg"
+    },
     "dependencies": {
-        "commander": "2.16.0",
-        "fs-extra": "7.0.0",
+        "commander": "2.19.0",
+        "fs-extra": "7.0.1",
         "jimp": "0.2.28",
         "npm": "6.2.0",
         "path": "0.12.7"
     },
     "devDependencies": {
         "@types/fs-extra": "5.0.4",
-        "@types/node": "10.5.2",
-        "ajv": "6.5.2",
+        "@types/node": "10.12.18",
+        "ajv": "6.7.0",
         "del": "3.0.0",
-        "tslint": "5.11.0",
-        "typescript": "2.9.2",
-        "webpack": "4.16.2"
+        "tslint": "5.12.1",
+        "typescript": "3.2.4",
+        "webpack": "4.29.0"
     },
     "repository": {
         "type": "git",

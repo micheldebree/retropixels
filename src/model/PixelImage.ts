@@ -11,7 +11,7 @@ export class PixelImage {
     // public properties
     this.mode = mode;
     this.colorMaps = []; // maps x,y to a color
-    this.pixelIndex = []; // maps pixel x,y to a colormap
+    this.pixelIndex = []; // maps pixel x,y to a ColorMap
     for (let y = 0; y < mode.height; y++) {
       this.pixelIndex[y] = [];
     }

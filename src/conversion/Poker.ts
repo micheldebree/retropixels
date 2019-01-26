@@ -90,10 +90,10 @@ export class Poker {
   }
 
   /**
-   * Map a pixel to the closest available Colormap.
+   * Map a pixel to the closest available ColorMap.
    * @param {int} x X coordinate
    * @param {int} y Y coordinate
-   * @returns {int} Colormap index for the closest Colormap
+   * @returns {int} ColorMap index for the closest ColorMap
    */
   private static map(image: PixelImage, x: number, y: number, pixel: number[]): number {
     // determine closest pixel in palette (ignoring alpha)
