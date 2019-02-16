@@ -51,7 +51,7 @@ export class C64Writer {
   }
 
   private static async save(image: IBinaryFormat, outFile: string) {
-    return await fs.writeFile(outFile, new Buffer(C64Layout.concat(image.toMemoryMap())));
+    return await fs.writeFile(outFile, Buffer.from(C64Layout.concat(image.toMemoryMap())));
   }
 
   private static async saveExecutable(image: IBinaryFormat, outFile: string) {
@@ -59,7 +59,7 @@ export class C64Writer {
     const appDir: string = path.dirname(require.main.filename);
     const viewerFile: string = path.join(appDir, this.viewersFolder + image.formatName + '.prg');
     const viewerCode = await fs.readFile(viewerFile);
-    const buffer: Buffer = new Buffer(C64Layout.concat(image.toMemoryMap()));
+    const buffer: Buffer = Buffer.from(C64Layout.concat(image.toMemoryMap()));
     const writeBuffer = Buffer.concat([viewerCode, buffer]);
 
     return await fs.writeFile(outFile, writeBuffer);
