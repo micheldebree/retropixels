@@ -1,11 +1,11 @@
 import { Poker } from '../conversion/Poker';
-import { ImageDataInterface } from './ImageDataInterface';
+import { IImageData } from './ImageDataInterface';
 import { PixelImage } from './PixelImage';
-import { Pixels } from "./Pixels";
+import { Pixels } from './Pixels';
 
 export class ImageData {
   // Set the pixel at (x,y)
-  public static poke(imageData: ImageDataInterface, x: number, y: number, pixel: number[]): void {
+  public static poke(imageData: IImageData, x: number, y: number, pixel: number[]): void {
     if (pixel !== undefined) {
       const i: number = this.coordsToindex(imageData, x, y);
       if (i !== undefined) {
@@ -18,7 +18,7 @@ export class ImageData {
   }
 
   // Get the pixel at (x,y)
-  public static peek(imageData: ImageDataInterface, x: number, y: number): number[] {
+  public static peek(imageData: IImageData, x: number, y: number): number[] {
     const i: number = this.coordsToindex(imageData, x, y);
     if (i !== undefined) {
       return [imageData.data[i], imageData.data[i + 1], imageData.data[i + 2], imageData.data[i + 3]];
@@ -27,7 +27,7 @@ export class ImageData {
   }
 
   // Draw ImageData onto a PixelImage
-  public static drawImageData(imageData: ImageDataInterface, pixelImage: PixelImage) {
+  public static drawImageData(imageData: IImageData, pixelImage: PixelImage) {
     for (let y: number = 0; y < pixelImage.mode.height; y += 1) {
       for (let x: number = 0; x < pixelImage.mode.width; x += 1) {
         const pixel: number[] = this.peek(imageData, x, y);
@@ -36,7 +36,7 @@ export class ImageData {
     }
   }
 
-  private static coordsToindex(imageData: ImageDataInterface, x: number, y: number): number {
+  private static coordsToindex(imageData: IImageData, x: number, y: number): number {
     const result: number = Math.floor(y) * (imageData.width << 2) + (x << 2);
     return result < imageData.data.length ? result : undefined;
   }

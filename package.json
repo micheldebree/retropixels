@@ -1,38 +1,40 @@
 {
-    "name": "retropixels",
-    "version": "0.7.0",
-    "description": "A cross platform command line tool to convert images to Commodore 64 format.",
-    "main": "index.js",
-    "bin": {
-        "retropixels": "./index.js"
-    },
-    "scripts": {
-        "build": "tsc",
-        "test": "node index.js paintface.jpg paintface.prg"
-    },
-    "dependencies": {
-        "commander": "2.20.0",
-        "fs-extra": "7.0.1",
-        "jimp": "0.6.1",
-        "path": "0.12.7"
-    },
-    "devDependencies": {
-        "@types/fs-extra": "5.0.5",
-        "@types/node": "11.13.0",
-        "ajv": "6.10.0",
-        "del": "3.0.0",
-        "retire": "2.0.2",
-        "tslint": "5.15.0",
-        "typescript": "3.4.1"
-    },
-    "repository": {
-        "type": "git",
-        "url": "git+https://github.com/micheldebree/retropixels.git"
-    },
-    "author": "Michel de Bree",
-    "license": "MIT",
-    "bugs": {
-        "url": "https://github.com/micheldebree/retropixels/issues"
-    },
-    "homepage": "https://github.com/micheldebree/retropixels#readme"
+  "name": "retropixels",
+  "version": "0.7.0",
+  "description": "A cross platform command line tool to convert images to Commodore 64 format.",
+  "main": "index.js",
+  "bin": {
+    "retropixels": "./index.js"
+  },
+  "scripts": {
+    "build": "npx tsc",
+    "test": "node index.js paintface.jpg paintface.prg",
+    "lint": "npx tslint --project .",
+    "fix": "npx tslint --project . --fix"
+  },
+  "dependencies": {
+    "commander": "2.20.0",
+    "fs-extra": "7.0.1",
+    "jimp": "0.6.1",
+    "path": "0.12.7"
+  },
+  "devDependencies": {
+    "@types/fs-extra": "5.0.5",
+    "@types/node": "11.13.0",
+    "ajv": "6.10.0",
+    "del": "3.0.0",
+    "retire": "2.0.2",
+    "tslint": "5.15.0",
+    "typescript": "3.4.1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/micheldebree/retropixels.git"
+  },
+  "author": "Michel de Bree",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/micheldebree/retropixels/issues"
+  },
+  "homepage": "https://github.com/micheldebree/retropixels#readme"
 }

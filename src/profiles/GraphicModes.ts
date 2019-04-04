@@ -120,7 +120,7 @@ export class GraphicModes {
   })();
 
   public static c64MulticolorSprites: GraphicMode = (() => {
-    const result: GraphicMode = new GraphicMode(8 * 24 / 2, 3 * 21, Palettes.peptoPalette, function() {
+    const result: GraphicMode = new GraphicMode((8 * 24) / 2, 3 * 21, Palettes.peptoPalette, function() {
       const pixelImage: PixelImage = new PixelImage(this);
       // background
       pixelImage.colorMaps.push(new ColorMap(this.width, this.height, Palettes.peptoPalette));
@@ -145,7 +145,7 @@ export class GraphicModes {
   })();
 
   public static c64ThreecolorSprites: GraphicMode = (() => {
-    const result: GraphicMode = new GraphicMode(8 * 24 / 2, 3 * 21, Palettes.peptoPalette, function() {
+    const result: GraphicMode = new GraphicMode((8 * 24) / 2, 3 * 21, Palettes.peptoPalette, function() {
       const pixelImage: PixelImage = new PixelImage(this);
       // background
       pixelImage.colorMaps.push(new ColorMap(this.width, this.height, Palettes.peptoPalette));
@@ -183,10 +183,10 @@ export class GraphicModes {
     c64HiresFake: GraphicModes.c64HiresFake,
     c64HiresMono: GraphicModes.c64HiresMono,
     c64HiresSprites: GraphicModes.c64HiresSprites,
-    c64TwocolorSprites: GraphicModes.c64TwocolorSprites,
     c64Multicolor: GraphicModes.c64Multicolor,
     c64MulticolorFake: GraphicModes.c64MulticolorFake,
     c64MulticolorSprites: GraphicModes.c64MulticolorSprites,
-    c64ThreecolorSprites: GraphicModes.c64ThreecolorSprites
+    c64ThreecolorSprites: GraphicModes.c64ThreecolorSprites,
+    c64TwocolorSprites: GraphicModes.c64TwocolorSprites
   };
 }

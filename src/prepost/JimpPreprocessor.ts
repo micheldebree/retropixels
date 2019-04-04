@@ -1,17 +1,17 @@
 import * as Jimp from 'jimp';
 import { ImageData } from '../model/ImageData';
-import { ImageDataInterface } from '../model/ImageDataInterface';
+import { IImageData } from '../model/ImageDataInterface';
 
 import { Poker } from '../conversion/Poker';
 import { PixelImage } from '../model/PixelImage';
 import { GraphicMode } from '../profiles/GraphicMode';
 
 export class JimpPreprocessor {
-  public static async justRead(filename: string): Promise<ImageDataInterface> {
+  public static async justRead(filename: string): Promise<IImageData> {
     return (await Jimp.read(filename)).bitmap;
   }
 
-  public static async read(filename: string, graphicMode: GraphicMode): Promise<ImageDataInterface> {
+  public static async read(filename: string, graphicMode: GraphicMode): Promise<IImageData> {
     const jimpImage: Jimp = await Jimp.read(filename);
     this.cropFill(jimpImage, graphicMode);
     return jimpImage.bitmap;

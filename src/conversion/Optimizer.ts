@@ -1,10 +1,10 @@
 import { ColorMap } from '../model/ColorMap';
 import { ImageData } from '../model/ImageData';
-import { ImageDataInterface } from '../model/ImageDataInterface';
+import { IImageData } from '../model/ImageDataInterface';
 import { PixelImage } from '../model/PixelImage';
 
 export class Optimizer {
-  public static optimizeColorMaps(pixelImage: PixelImage, imageData: ImageDataInterface): void {
+  public static optimizeColorMaps(pixelImage: PixelImage, imageData: IImageData): void {
     const colorMap: ColorMap = this.getColorMap(imageData, pixelImage);
     // fill up the colormaps in the restricted image based on the colors in the unrestricted image
     for (const map of pixelImage.colorMaps) {
@@ -13,7 +13,7 @@ export class Optimizer {
   }
 
   // TODO: now uses palette of first color map only
-  private static getColorMap(imageData: ImageDataInterface, targetPixelImage: PixelImage): ColorMap {
+  private static getColorMap(imageData: IImageData, targetPixelImage: PixelImage): ColorMap {
     const w: number = imageData.width;
     const h: number = imageData.height;
     const unrestrictedImage: PixelImage = new PixelImage(targetPixelImage.mode);

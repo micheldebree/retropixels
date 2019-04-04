@@ -2,6 +2,8 @@
  * Utility for calculations involving pixels
  */
 export class Pixels {
+
+  public static emptyPixel: number[] = [0, 0, 0, 0];
   /**
    * Add one pixel to another by adding all channels.
    * @param  {number[]} one   One pixel
@@ -50,7 +52,5 @@ export class Pixels {
   private static cap(pixelChannel: number) {
     return Math.min(255, Math.max(0, pixelChannel));
   }
-
-  public static emptyPixel: number[] = [0, 0, 0, 0];
 
 }
