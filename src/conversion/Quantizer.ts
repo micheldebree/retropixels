@@ -6,19 +6,19 @@ import { Pixels } from '../model/Pixels';
  */
 export class Quantizer {
   public static distanceYUV = (onePixel: number[], otherPixel: number[]) => {
-    onePixel = Pixels.toYUV(onePixel);
-    otherPixel = Pixels.toYUV(otherPixel);
+    const onePixelConverted = Pixels.toYUV(onePixel);
+    const otherPixelConverted = Pixels.toYUV(otherPixel);
     // const weight: number[] = [1, 0, 0.25];
     // const weight: number[] = [1, 0.5, 0];
     const weight: number[] = [1, 1, 1];
     // const weight: number[] = [1, 0, 0];
 
     return Math.sqrt(
-      weight[0] * Math.pow(onePixel[0] - otherPixel[0], 2) +
-        weight[1] * Math.pow(onePixel[1] - otherPixel[1], 2) +
-        weight[2] * Math.pow(onePixel[2] - otherPixel[2], 2)
+      weight[0] * Math.pow(onePixelConverted[0] - otherPixelConverted[0], 2) +
+        weight[1] * Math.pow(onePixelConverted[1] - otherPixelConverted[1], 2) +
+        weight[2] * Math.pow(onePixelConverted[2] - otherPixelConverted[2], 2)
     );
-  };
+  }
 
   public static distanceRGB = (onePixel: number[], otherPixel: number[]) => {
     return Math.sqrt(
@@ -26,11 +26,11 @@ export class Quantizer {
         Math.pow(onePixel[1] - otherPixel[1], 2) +
         Math.pow(onePixel[2] - otherPixel[2], 2)
     );
-  };
+  }
 
   public static distanceRainbow = (onePixel: number[], otherPixel: number[]) => {
     return Math.abs(Pixels.toYUV(onePixel)[0] - Pixels.toYUV(otherPixel)[0]);
-  };
+  }
 
   /**
    * Get the best match for a pixel from a palette.
@@ -48,8 +48,12 @@ export class Quantizer {
 
     return palette.pixels
       .map((palettePixel, index) => [index, this.measurer(pixel, palettePixel)])
-      .reduce((acc, current) => (current[1] < acc[1] ? current : acc), [null, Number.POSITIVE_INFINITY])[0];
+      .reduce((acc, current) => (current[1] < acc[1] ? current : acc), [
+        null,
+        Number.POSITIVE_INFINITY
+      ])[0];
   }
 
-  private static measurer: (onePixel: number[], otherPixel: number[]) => number = Quantizer.distanceYUV;
+  private static measurer: (onePixel: number[], otherPixel: number[]) => number =
+    Quantizer.distanceYUV;
 }

@@ -1,13 +1,9 @@
 {
   "defaultSeverity": "error",
-  "extends": ["tslint:recommended"],
+  "extends": ["tslint-config-airbnb"],
   "jsRules": {},
   "rules": {
-    "quotemark": [true, "single", "jsx-double"],
-    "no-bitwise": false,
-    "trailing-comma": [true, { "multiline": "never", "singleline": "never" }],
-    "arrow-parens": false,
-    "semicolon": [true, "always", "ignore-bound-class-methods"]
+    "trailing-comma": [true, { "multiline": "never", "singleline": "never" }]
   },
   "rulesDirectory": []
 }

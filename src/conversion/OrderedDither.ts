@@ -54,8 +54,8 @@ export class OrderedDither {
   }
 
   public dither(image: IImageData) {
-    for (let y = 0; y < image.height; y++) {
-      for (let x = 0; x < image.width; x++) {
+    for (let y = 0; y < image.height; y += 1) {
+      for (let x = 0; x < image.width; x += 1) {
         ImageData.poke(image, x, y, this.offsetColor(ImageData.peek(image, x, y), x, y));
       }
     }

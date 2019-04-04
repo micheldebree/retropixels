@@ -5,6 +5,6 @@ export interface IBinaryFormat {
   formatName: string;
   supportedModes: GraphicMode[];
 
-  fromPixelImage(pixelImage: PixelImage);
+  fromPixelImage(pixelImage: PixelImage): void;
   toMemoryMap(): Uint8Array[];
 }

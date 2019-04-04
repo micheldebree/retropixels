@@ -25,6 +25,7 @@
     "del": "3.0.0",
     "retire": "2.0.2",
     "tslint": "5.15.0",
+    "tslint-config-airbnb": "5.11.1",
     "typescript": "3.4.1"
   },
   "repository": {

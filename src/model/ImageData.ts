@@ -21,7 +21,12 @@ export class ImageData {
   public static peek(imageData: IImageData, x: number, y: number): number[] {
     const i: number = this.coordsToindex(imageData, x, y);
     if (i !== undefined) {
-      return [imageData.data[i], imageData.data[i + 1], imageData.data[i + 2], imageData.data[i + 3]];
+      return [
+        imageData.data[i],
+        imageData.data[i + 1],
+        imageData.data[i + 2],
+        imageData.data[i + 3]
+      ];
     }
     return Pixels.emptyPixel;
   }

@@ -23,7 +23,13 @@ export class Optimizer {
     return unrestrictedImage.colorMaps[0];
   }
 
-  private static reduceToMax(colorMap: ColorMap, x: number, y: number, w: number, h: number): number {
+  private static reduceToMax(
+    colorMap: ColorMap,
+    x: number,
+    y: number,
+    w: number,
+    h: number
+  ): number {
     const weights: number[] = [];
     let maxWeight: number;
     let maxColor: number;

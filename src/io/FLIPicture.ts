@@ -28,7 +28,7 @@ export class FLIPicture implements IBinaryFormat {
     this.bitmap = C64Layout.convertBitmap(pixelImage);
 
     this.screenRam = [];
-    for (let i: number = 0; i < 8; i++) {
+    for (let i: number = 0; i < 8; i += 1) {
       this.screenRam[i] = C64Layout.convertScreenram(pixelImage, 2, 3, i);
     }
 

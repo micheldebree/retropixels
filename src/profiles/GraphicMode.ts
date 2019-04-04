@@ -19,7 +19,7 @@ export class GraphicMode {
   public rowsPerCell: number = 8;
   public bytesPerCellRow: number = 1;
 
-  public FLIBugSize: number = 0;
+  public fliBugSize: number = 0;
 
   public indexMap = {
     0: 0,
@@ -45,10 +45,10 @@ export class GraphicMode {
 
   public mapPixelIndex(pixelImage: PixelImage, x: number, y: number) {
     if (x >= pixelImage.mode.width || x < 0) {
-      throw new Error('x value out of bounds: ' + x);
+      throw new Error(`x value out of bounds: ${x}`);
     }
     if (y >= pixelImage.mode.height || y < 0) {
-      throw new Error('y value out of bounds: ' + y);
+      throw new Error(`y value out of bounds: ${y}`);
     }
     return this.indexMap[pixelImage.pixelIndex[y][x]];
   }
@@ -70,7 +70,8 @@ export class GraphicMode {
     let index: number = 0;
 
     this.forEachCell(yOffset, (x, y) => {
-      result[index++] = x >= this.FLIBugSize ? callback(x, y) : 0;
+      result[index] = x >= this.fliBugSize ? callback(x, y) : 0;
+      index += 1;
     });
     return result;
   }
@@ -83,7 +84,7 @@ export class GraphicMode {
    * @param callback
    */
   public forEachCellRow(cellY: number, callback: (y) => void) {
-    for (let rowY = cellY; rowY < cellY + this.rowsPerCell; rowY++) {
+    for (let rowY = cellY; rowY < cellY + this.rowsPerCell; rowY += 1) {
       callback(rowY);
     }
   }
@@ -106,7 +107,11 @@ export class GraphicMode {
 
   public forEachByte(cellX: number, callback: (x) => void) {
     const pixelsPerByte: number = this.pixelsPerByte();
-    for (let byteX = cellX; byteX < cellX + this.bytesPerCellRow * pixelsPerByte; byteX += pixelsPerByte) {
+    for (
+      let byteX = cellX;
+      byteX < cellX + this.bytesPerCellRow * pixelsPerByte;
+      byteX += pixelsPerByte
+    ) {
       callback(byteX);
     }
   }
@@ -114,7 +119,7 @@ export class GraphicMode {
   public forEachPixel(byteX: number, callback: (x: number, shiftTimes: number) => void) {
     const pixelsPerByte: number = this.pixelsPerByte();
 
-    for (let pixelX: number = 0; pixelX < pixelsPerByte; pixelX++) {
+    for (let pixelX: number = 0; pixelX < pixelsPerByte; pixelX += 1) {
       const shiftTimes = (pixelsPerByte - 1 - pixelX) * this.pixelWidth;
       callback(byteX + pixelX, shiftTimes);
     }

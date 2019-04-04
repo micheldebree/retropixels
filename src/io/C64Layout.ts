@@ -24,16 +24,19 @@ export class C64Layout {
     let bitmapIndex: number = 0;
 
     pixelImage.mode.forEachCell(0, (x, y) => {
-      pixelImage.mode.forEachCellRow(y, rowY => {
+      pixelImage.mode.forEachCellRow(y, (rowY) => {
         // pack one character's row worth of pixels into one byte
-        pixelImage.mode.forEachByte(x, byteX => {
+        pixelImage.mode.forEachByte(x, (byteX) => {
           let packedByte: number = 0;
-          if (byteX >= pixelImage.mode.FLIBugSize) {
+          if (byteX >= pixelImage.mode.fliBugSize) {
             pixelImage.mode.forEachPixel(byteX, (pixelX, shiftTimes) => {
-              packedByte = packedByte | (pixelImage.mode.mapPixelIndex(pixelImage, pixelX, rowY) << shiftTimes);
+              packedByte =
+                packedByte |
+                (pixelImage.mode.mapPixelIndex(pixelImage, pixelX, rowY) << shiftTimes);
             });
           }
-          bitmap[bitmapIndex++] = packedByte;
+          bitmap[bitmapIndex] = packedByte;
+          bitmapIndex += 1;
         });
       });
     });

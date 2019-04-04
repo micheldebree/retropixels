@@ -25,13 +25,14 @@ export class SpritePad implements IBinaryFormat {
 
   // sprite data
   private nrOfSprites: number = 0;
-  private sprites: Uint8Array[] = new Array<Uint8Array>();
+  private sprites: Uint8Array[] = [];
 
   public fromPixelImage(pixelImage: PixelImage) {
     const bitmap: Uint8Array = C64Layout.convertBitmap(pixelImage);
 
     const isMulticolor: boolean =
-      pixelImage.mode === GraphicModes.c64MulticolorSprites || pixelImage.mode === GraphicModes.c64ThreecolorSprites;
+      pixelImage.mode === GraphicModes.c64MulticolorSprites ||
+      pixelImage.mode === GraphicModes.c64ThreecolorSprites;
 
     this.backgroundColor = pixelImage.colorMaps[0].get(0, 0);
     this.multiColor1 = isMulticolor ? pixelImage.colorMaps[1].get(0, 0) : 0;
@@ -43,8 +44,9 @@ export class SpritePad implements IBinaryFormat {
     let byteCounter: number = 0;
     pixelImage.mode.forEachCell(0, (x, y) => {
       this.sprites[this.nrOfSprites] = new Uint8Array(64);
-      for (let i = 0; i < 63; i++) {
-        this.sprites[this.nrOfSprites][i] = bitmap[byteCounter++];
+      for (let i = 0; i < 63; i += 1) {
+        this.sprites[this.nrOfSprites][i] = bitmap[byteCounter];
+        byteCounter += 1;
       }
       // last byte is mode (bit 7: 1 = multi 0 = hires), and sprite color
 
@@ -52,12 +54,14 @@ export class SpritePad implements IBinaryFormat {
       const spriteColor: number = pixelImage.colorMaps[spriteColorMapIndex].get(x, y) & 0x0f;
 
       this.sprites[this.nrOfSprites][63] = modeFlag | spriteColor;
-      this.nrOfSprites++;
+      this.nrOfSprites += 1;
     });
   }
 
   public toMemoryMap(): Uint8Array[] {
-    const result: Uint8Array[] = [new Uint8Array([this.backgroundColor, this.multiColor1, this.multiColor2])];
+    const result: Uint8Array[] = [
+      new Uint8Array([this.backgroundColor, this.multiColor1, this.multiColor2])
+    ];
     return result.concat(this.sprites);
   }
 }

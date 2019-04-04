@@ -32,7 +32,8 @@ export class ColorMap {
     this.height = heightVal;
     this.resX = resXVal;
     this.resY = resYVal;
-    for (let x = 0; x < this.width; x++) {
+    for (let x = 0; x < this.width; x += 1) {
+      // tslint:disable-next-line:prefer-array-literal
       this.colors[x] = new Array(this.height);
     }
   }

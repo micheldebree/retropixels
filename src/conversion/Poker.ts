@@ -2,12 +2,12 @@ import { Palette } from '../model/Palette';
 import { PixelImage } from '../model/PixelImage';
 import { Quantizer } from './Quantizer';
 export class Poker {
- /**
-  * Map a 'real' color to the best match in the image.
-  * @param {number} x - x coordinate
-  * @param {number} y - y coordinate
-  * @param {Array} pixel - Pixel values [r, g, b]
-  */
+  /**
+   * Map a 'real' color to the best match in the image.
+   * @param {number} x - x coordinate
+   * @param {number} y - y coordinate
+   * @param {Array} pixel - Pixel values [r, g, b]
+   */
   public static poke(image: PixelImage, x: number, y: number, realColor: number[]): void {
     // idea: do 'smart' poking in a separate class, with dependency to dithering
 
@@ -57,7 +57,12 @@ export class Poker {
      ColorMap has that mapped color at the specified position.
      Returns the index of the ColorMap
   */
-  private static findColorInMap(image: PixelImage, x: number, y: number, realColor: number[]): number {
+  private static findColorInMap(
+    image: PixelImage,
+    x: number,
+    y: number,
+    realColor: number[]
+  ): number {
     let i: number = 0;
 
     for (const colorMap of image.colorMaps) {
@@ -65,7 +70,7 @@ export class Poker {
       if (mappedIndex === colorMap.get(x, y)) {
         return i;
       }
-      i++;
+      i += 1;
     }
     return undefined;
   }
@@ -75,7 +80,12 @@ export class Poker {
     If found, map realColor to the ColorMap's palette and claim the area.
     Returns index into the found ColorMap.
   */
-  private static tryClaimUnusedInMap(image: PixelImage, x: number, y: number, realColor: number[]): number {
+  private static tryClaimUnusedInMap(
+    image: PixelImage,
+    x: number,
+    y: number,
+    realColor: number[]
+  ): number {
     let i: number = 0;
 
     for (const colorMap of image.colorMaps) {
@@ -84,7 +94,7 @@ export class Poker {
         colorMap.put(x, y, color);
         return i;
       }
-      i++;
+      i += 1;
     }
     return undefined;
   }

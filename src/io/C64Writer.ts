@@ -40,14 +40,20 @@ export class C64Writer {
       return new AFLIPicture();
     }
 
-    if (pixelImage.mode === GraphicModes.c64Hires || pixelImage.mode === GraphicModes.c64HiresMono) {
+    if (
+      pixelImage.mode === GraphicModes.c64Hires ||
+      pixelImage.mode === GraphicModes.c64HiresMono
+    ) {
       return new HiresPicture();
     }
 
-    if (pixelImage.mode === GraphicModes.c64HiresSprites || pixelImage.mode === GraphicModes.c64MulticolorSprites) {
+    if (
+      pixelImage.mode === GraphicModes.c64HiresSprites ||
+      pixelImage.mode === GraphicModes.c64MulticolorSprites
+    ) {
       return new SpritePad();
     }
-    throw new Error('Output format is not supported for mode ' + pixelImage.mode);
+    throw new Error(`Output format is not supported for mode ${pixelImage.mode}`);
   }
 
   private static async save(image: IBinaryFormat, outFile: string) {
@@ -55,9 +61,8 @@ export class C64Writer {
   }
 
   private static async saveExecutable(image: IBinaryFormat, outFile: string) {
-    // https://stackoverflow.com/questions/10265798/determine-project-root-from-a-running-node-js-application
     const appDir: string = path.dirname(require.main.filename);
-    const viewerFile: string = path.join(appDir, this.viewersFolder + image.formatName + '.prg');
+    const viewerFile: string = path.join(appDir, `${this.viewersFolder}${image.formatName}.prg`);
     const viewerCode = await fs.readFile(viewerFile);
     const buffer: Buffer = Buffer.from(C64Layout.concat(image.toMemoryMap()));
     const writeBuffer = Buffer.concat([viewerCode, buffer]);
