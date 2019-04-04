@@ -11,18 +11,19 @@
         "test": "node index.js paintface.jpg paintface.prg"
     },
     "dependencies": {
-        "commander": "2.19.0",
+        "commander": "2.20.0",
         "fs-extra": "7.0.1",
-        "jimp": "0.6.0",
+        "jimp": "0.6.1",
         "path": "0.12.7"
     },
     "devDependencies": {
         "@types/fs-extra": "5.0.5",
-        "@types/node": "11.9.4",
-        "ajv": "6.9.1",
+        "@types/node": "11.13.0",
+        "ajv": "6.10.0",
         "del": "3.0.0",
-        "tslint": "5.12.1",
-        "typescript": "3.3.3"
+        "retire": "2.0.2",
+        "tslint": "5.15.0",
+        "typescript": "3.4.1"
     },
     "repository": {
         "type": "git",
