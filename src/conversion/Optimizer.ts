@@ -1,10 +1,16 @@
 import { ColorMap } from '../model/ColorMap';
-import { ImageData } from '../model/ImageData';
 import { IImageData } from '../model/ImageDataInterface';
 import { PixelImage } from '../model/PixelImage';
+import { Poker } from './Poker';
 
 export class Optimizer {
-  public static optimizeColorMaps(pixelImage: PixelImage, imageData: IImageData): void {
+  public poker: Poker;
+
+  constructor(poker: Poker) {
+    this.poker = poker;
+  }
+
+  public optimizeColorMaps(pixelImage: PixelImage, imageData: IImageData): void {
     const colorMap: ColorMap = this.getColorMap(imageData, pixelImage);
     // fill up the colormaps in the restricted image based on the colors in the unrestricted image
     for (const map of pixelImage.colorMaps) {
@@ -13,23 +19,17 @@ export class Optimizer {
   }
 
   // TODO: now uses palette of first color map only
-  private static getColorMap(imageData: IImageData, targetPixelImage: PixelImage): ColorMap {
+  private getColorMap(imageData: IImageData, targetPixelImage: PixelImage): ColorMap {
     const w: number = imageData.width;
     const h: number = imageData.height;
     const unrestrictedImage: PixelImage = new PixelImage(targetPixelImage.mode);
     const palette = targetPixelImage.colorMaps[0].palette;
     unrestrictedImage.colorMaps.push(new ColorMap(w, h, palette, 1, 1));
-    ImageData.drawImageData(imageData, unrestrictedImage);
+    this.poker.drawImageData(imageData, unrestrictedImage);
     return unrestrictedImage.colorMaps[0];
   }
 
-  private static reduceToMax(
-    colorMap: ColorMap,
-    x: number,
-    y: number,
-    w: number,
-    h: number
-  ): number {
+  private reduceToMax(colorMap: ColorMap, x: number, y: number, w: number, h: number): number {
     const weights: number[] = [];
     let maxWeight: number;
     let maxColor: number;
@@ -52,7 +52,7 @@ export class Optimizer {
   /**
    * Delete colors from one colorMap and put them in another.
    */
-  private static extractColorMap(fromColorMap: ColorMap, toColorMap: ColorMap): void {
+  private extractColorMap(fromColorMap: ColorMap, toColorMap: ColorMap): void {
     const rx: number = toColorMap.resX;
     const ry: number = toColorMap.resY;
 

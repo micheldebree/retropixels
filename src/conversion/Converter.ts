@@ -6,10 +6,18 @@ import { Optimizer } from './Optimizer';
 import { Poker } from './Poker';
 
 export class Converter {
-  public static convert(imageData: IImageData, graphicMode: GraphicMode): PixelImage {
+  public poker: Poker;
+  public optimizer: Optimizer;
+
+  constructor() {
+    this.poker = new Poker();
+    this.optimizer = new Optimizer(this.poker);
+  }
+
+  public convert(imageData: IImageData, graphicMode: GraphicMode): PixelImage {
     const pixelImage: PixelImage = graphicMode.factory();
 
-    Optimizer.optimizeColorMaps(pixelImage, imageData);
+    this.optimizer.optimizeColorMaps(pixelImage, imageData);
     this.drawImageData(pixelImage, imageData);
     return pixelImage;
   }
@@ -19,10 +27,10 @@ export class Converter {
    * @param {PixelImage} image The PixelImage to map image data to.
    * @param  {IImageData} imageData The ImageData to map
    */
-  private static drawImageData(image: PixelImage, imageData: IImageData): void {
+  private drawImageData(image: PixelImage, imageData: IImageData): void {
     for (let y: number = 0; y < image.mode.height; y += 1) {
       for (let x: number = 0; x < image.mode.width; x += 1) {
-        Poker.poke(image, x, y, ImageData.peek(imageData, x, y));
+        this.poker.poke(image, x, y, ImageData.peek(imageData, x, y));
       }
     }
   }

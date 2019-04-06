@@ -121,6 +121,12 @@ Be patient. Next time it will get it from your local cache.
 
 ## Changelog
 
+### 0.6.2
+
+Added:
+
+- Unicorn mode
+
 ### 0.6.1
 
 Fixes:

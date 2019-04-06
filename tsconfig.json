@@ -1,24 +1,19 @@
 {
-    "compilerOptions": {
-        "target": "es2017",
-        "module": "commonjs",
-        "moduleResolution": "node",
-        "noImplicitAny": false,
-        "noImplicitThis": false,
-        "noImplicitReturns": false,
-        "removeComments": true,
-        "preserveConstEnums": true,
-        "outDir": "target",
-        "sourceMap": true,
-        "allowJs": false,
-        "strictNullChecks": false,
-        "alwaysStrict": true
-    },
-    "include": [
-        "**/*.ts"
-    ],
-    "exclude": [
-        "node_modules",
-        "**/*.spec.ts"
-    ]
+  "compilerOptions": {
+    "target": "es2017",
+    "module": "commonjs",
+    "moduleResolution": "node",
+    "noImplicitAny": false,
+    "noImplicitThis": false,
+    "noImplicitReturns": false,
+    "removeComments": true,
+    "preserveConstEnums": true,
+    "outDir": "target",
+    "sourceMap": true,
+    "allowJs": false,
+    "strictNullChecks": false,
+    "alwaysStrict": true
+  },
+  "include": ["**/*.ts"],
+  "exclude": ["node_modules", "**/*.spec.ts"]
 }

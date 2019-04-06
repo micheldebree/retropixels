@@ -8,6 +8,7 @@ const cli = require('commander'),
   OrderedDither = require('./target/conversion/OrderedDither.js'),
   C64Writer = require('./target/io/C64Writer.js');
   JimpPreprocessor = require('./target/prepost/JimpPreprocessor.js');
+  Quantizer = require('./target/conversion/Quantizer.js');
 
 // defaults
 let graphicMode = GraphicModes.GraphicModes.c64Multicolor;
@@ -15,11 +16,15 @@ let ditherMode = 'bayer4x4';
 let ditherRadius = 32;
 
 cli
-  .version('0.7.0')
+  .version('0.6.2')
   .usage('[options] <infile> <outfile>')
-  .option('-m, --mode <graphicMode>', 'c64Multicolor (default), c64Hires, c64HiresMono, c64FLI, c64AFLI')
+  .option(
+    '-m, --mode <graphicMode>',
+    'c64Multicolor (default), c64Hires, c64HiresMono, c64FLI, c64AFLI'
+  )
   .option('-d, --ditherMode <ditherMode>', 'bayer2x2, bayer4x4 (default), bayer8x8')
   .option('-r, --ditherRadius [0-64]', '0 = no dithering, 32 = default', parseInt)
+  .option('--unicorn', 'Only for unicorns')
   .parse(process.argv);
 
 if (!cli.mode) {
@@ -74,6 +79,12 @@ function saveDebugMaps(pixelImage) {
 
 // Main {{{
 
+const converter = new Converter.Converter();
+
+if (cli.unicorn) {
+  converter.poker.quantizer.measurer = converter.poker.quantizer.distanceRainbow;
+}
+
 JimpPreprocessor.JimpPreprocessor.read(inFile, graphicMode).then(jimpImage => {
   try {
     // jimpImage.normalize();
@@ -85,7 +96,7 @@ JimpPreprocessor.JimpPreprocessor.read(inFile, graphicMode).then(jimpImage => {
 
     new OrderedDither.OrderedDither(ditherPreset, ditherRadius).dither(jimpImage);
 
-    const pixelImage = Converter.Converter.convert(jimpImage, graphicMode);
+    const pixelImage = converter.convert(jimpImage, graphicMode);
 
     outExtension = path.extname(outFile);
 

@@ -1,12 +1,11 @@
 import * as Jimp from 'jimp';
 import { ImageData } from '../model/ImageData';
 import { IImageData } from '../model/ImageDataInterface';
-
-import { Poker } from '../conversion/Poker';
 import { PixelImage } from '../model/PixelImage';
 import { GraphicMode } from '../profiles/GraphicMode';
 
 export class JimpPreprocessor {
+
   public static async justRead(filename: string): Promise<IImageData> {
     return (await Jimp.read(filename)).bitmap;
   }
@@ -25,7 +24,7 @@ export class JimpPreprocessor {
     for (let y: number = 0; y < image.bitmap.height; y += 1) {
       for (let x: number = 0; x < image.bitmap.width; x += 1) {
         const pixelValue: number[] =
-          x >= pixelImage.mode.fliBugSize ? Poker.peek(pixelImage, x, y) : [0, 0, 0, 0xff];
+          x >= pixelImage.mode.fliBugSize ? pixelImage.peek(x, y) : [0, 0, 0, 0xff];
         ImageData.poke(image.bitmap, x, y, pixelValue);
       }
     }
@@ -42,7 +41,7 @@ export class JimpPreprocessor {
     for (let y: number = 0; y < result.bitmap.height; y += 1) {
       for (let x: number = 0; x < result.bitmap.width; x += 1) {
         const pixelValue: number[] =
-          x >= pixelImage.mode.fliBugSize ? Poker.peek(pixelImage, x, y) : [0, 0, 0, 0xff];
+          x >= pixelImage.mode.fliBugSize ? pixelImage.peek(x, y) : [0, 0, 0, 0xff];
         ImageData.poke(result.bitmap, x, y, pixelValue);
       }
     }

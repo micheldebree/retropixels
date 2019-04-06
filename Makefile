@@ -1,17 +1,17 @@
-VERSION=$(shell git describe --always --tags)
 EXAMPLE=paintface
-DOCKERIMAGE=micheldebree/retropixels-cli:$(VERSION)
+#BUILDIMAGE=micheldebree/retropixels-build
+
 CMD=node index.js
 C64CODE=target/c64/Koala.prg target/c64/AFLI.prg target/c64/FLI.prg target/c64/Hires.prg
 
 target/c64/%.prg: src/c64/%.asm target/c64/
 	ACME=./src/c64 acme -f cbm -o "$@" "$<"
 
-build: dockerimage
-	docker run -it -w /retropixels -v "$$PWD":/retropixels $(DOCKERIMAGE)
+build: node_modules $(C64CODE)
+	yarn build
 
-compile: node_modules $(C64CODE)
-	tsc
+#build:
+	#docker run -it -w /retropixels -v "$$PWD":/retropixels $(DOCKERIMAGE)
 
 target/c64/:
 	mkdir -p target/c64
@@ -37,13 +37,7 @@ publish: compile
 	git clean -d -f
 	npm publish
 
-dockerimage: Dockerfile
-	docker build -t $(DOCKERIMAGE) .
-
-docker_debug: dockerimage
-	docker run -it --entrypoint /bin/sh $(DOCKERIMAGE)
-
-samples:
+samples: build
 	$(CMD) paintface.jpg ./samples/paintface-Multicolor.png
 	$(CMD) paintface.jpg ./samples/paintface-Multicolor.prg
 	$(CMD) paintface.jpg ./samples/paintface-Multicolor.kla

@@ -1,6 +1,4 @@
-import { Poker } from '../conversion/Poker';
 import { IImageData } from './ImageDataInterface';
-import { PixelImage } from './PixelImage';
 import { Pixels } from './Pixels';
 
 export class ImageData {
@@ -29,16 +27,6 @@ export class ImageData {
       ];
     }
     return Pixels.emptyPixel;
-  }
-
-  // Draw ImageData onto a PixelImage
-  public static drawImageData(imageData: IImageData, pixelImage: PixelImage) {
-    for (let y: number = 0; y < pixelImage.mode.height; y += 1) {
-      for (let x: number = 0; x < pixelImage.mode.width; x += 1) {
-        const pixel: number[] = this.peek(imageData, x, y);
-        Poker.poke(pixelImage, x, y, pixel);
-      }
-    }
   }
 
   private static coordsToindex(imageData: IImageData, x: number, y: number): number {
