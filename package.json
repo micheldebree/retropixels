@@ -8,7 +8,7 @@
   },
   "scripts": {
     "build": "npx tsc",
-    "test": "node index.js paintface.jpg paintface.prg",
+    "test": "npx jest",
     "lint": "npx tslint --project .",
     "fix": "npx tslint --project . --fix"
   },
@@ -23,10 +23,23 @@
     "@types/node": "11.13.0",
     "ajv": "6.10.0",
     "del": "3.0.0",
+    "jest": "24.7.1",
     "retire": "2.0.2",
+    "ts-jest": "24.0.2",
     "tslint": "5.15.0",
     "tslint-config-airbnb": "5.11.1",
     "typescript": "3.4.1"
+  },
+  "jest": {
+    "moduleFileExtensions": [
+      "ts",
+      "tsx",
+      "js"
+    ],
+    "transform": {
+      "\\.(ts|tsx)$": "<rootDir>/node_modules/ts-jest/preprocessor.js"
+    },
+    "testRegex": "/test/.*\\.(ts|tsx|js)$"
   },
   "repository": {
     "type": "git",

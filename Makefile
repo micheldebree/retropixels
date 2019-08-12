@@ -29,11 +29,11 @@ release: publish
 	git push
 	git push --tags
 
-snapshot: compile
+snapshot: build
 	git clean -d -f
 	npm publish --tag snapshot
 
-publish: compile
+publish: build
 	git clean -d -f
 	npm publish
 
