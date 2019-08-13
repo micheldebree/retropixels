@@ -1,12 +1,13 @@
-!source <basic_upstart.asm>
+!include "macros.asm"
 
-tab18   = $0e00
-tab11   = $0f00
-fli = $4000
-bgcolor = $7f40
+!let tab18   = $0e00
+!let tab11   = $0f00
+!let fli = $4000
+!let bgcolor = $7f40
 
-+start_at $1000
++start_at(begin)
 
+begin:
          jmp start
 irq0:    pha
          lda $d019
@@ -126,7 +127,8 @@ start:
         lda $d019
         dec $d019      ; clear raster IRQ flag
         cli
-        jmp *          ; that's it, no more action needed
+forever:
+        jmp forever          ; that's it, no more action needed
 
 initgfx:
          lda #$00
@@ -148,9 +150,9 @@ initgfx:
 
          rts
 
-inittables:
+inittables: {
          ldx #$00
--        txa
+loop:    txa
          asl
          asl
          asl
@@ -163,29 +165,37 @@ inittables:
          ora #$38       ; bitmap
          sta tab11,x    ; calculate $D011 table
          inx
-         bne -
+         bne loop
          rts
+}
 
-ntscfix:
+ntscfix: {
          bit $d011
-         bmi *-3
+         bmi ntscfix
+waitforrasterline256:
          bit $d011      ; wait for rasterline 256
-         bpl *-3
+         bpl waitforrasterline256
          lda #$00
--        cmp $d012
-         bcs +
+waitforrasterlineupper:
+         cmp $d012
+         bcs waitforrasterlinelower
          lda $d012      ; get rasterline low byte
-+        bit $d011
-         bmi -
+waitforrasterlinelower:
+         bit $d011
+         bmi waitforrasterlineupper
          cmp #$20       ; PAL: $37, NTSC: $05 or $06
-         bcs +
+         bcs done
 
          lda #$ea
          sta ntsc1
          sta ntsc2
          sta ntsc3
          dec ntsc4+1
-+        rts
+done:
+         rts
+}
 
-!fill fli - * - 2
+fillfromhere:
+
+!fill fli - fillfromhere - 2, 0
 

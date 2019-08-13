@@ -5,7 +5,7 @@ CMD=node index.js
 C64CODE=target/c64/Koala.prg target/c64/AFLI.prg target/c64/FLI.prg target/c64/Hires.prg
 
 target/c64/%.prg: src/c64/%.asm target/c64/
-	ACME=./src/c64 acme -f cbm -o "$@" "$<"
+	npx c64jasm --out "$@" "$<"
 
 build: node_modules $(C64CODE)
 	yarn build
@@ -58,7 +58,7 @@ test: build
 test64: $(EXAMPLE).prg
 	x64sc $(EXAMPLE).prg
 
-testfli: compile
+testfli: build
 	$(CMD) -m c64FLI "$(EXAMPLE).jpg" "$(EXAMPLE).prg"
 	$(CMD) -m c64FLI "$(EXAMPLE).jpg" "$(EXAMPLE).png"
 	open "$(EXAMPLE).png"

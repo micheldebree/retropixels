@@ -77,8 +77,6 @@ function saveDebugMaps(pixelImage) {
   }
 }
 
-// Main {{{
-
 const converter = new Converter.Converter();
 
 if (cli.unicorn) {
@@ -87,8 +85,6 @@ if (cli.unicorn) {
 
 JimpPreprocessor.JimpPreprocessor.read(inFile, graphicMode).then(jimpImage => {
   try {
-    // jimpImage.normalize();
-
     const ditherPreset = OrderedDither.OrderedDither.presets[ditherMode];
     if (!ditherPreset) {
       throw new Error('Unknown dithering mode: ' + ditherPreset);
@@ -115,5 +111,3 @@ JimpPreprocessor.JimpPreprocessor.read(inFile, graphicMode).then(jimpImage => {
     process.exit(1);
   }
 });
-
-// }}}
