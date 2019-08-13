@@ -16,7 +16,7 @@
 !macro vic_bank(bank) {
   lda $dd00
   and #%11111100
-  ora #((bank & %11) | %11)
+  ora #((bank & %11) ^ %11)
   sta $dd00
 }
 

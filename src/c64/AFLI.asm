@@ -2,7 +2,7 @@
 
 !let tab18   = $0e00
 !let tab11   = $0f00
-!let fli = $4000
+!let fli     = $4000
 !let bgcolor = $7f40
 
 +start_at(begin)

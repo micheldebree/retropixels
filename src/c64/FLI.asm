@@ -7,8 +7,6 @@
 
 +start_at(begin)
 
-* = $1000
-
 begin:
          jmp start
 irq0:    pha
@@ -208,5 +206,4 @@ done:
 fillfromhere:
 
 !fill fli - fillfromhere - 2, 0
-
 

@@ -4,10 +4,12 @@
 !let screenRam = bitmap + 8000
 
 +start_at(begin)
+
+begin:
+
 +d018_vic_mem(1,1,0)
 +d016_screen_control(0,1,0)
 
-begin:
     lda #$3b
     sta $d011
     lda #0
