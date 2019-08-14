@@ -1,4 +1,4 @@
-!macro start_at (address) {
+!macro basic_upstart (address) {
   * = $0801
   !byte $0c,$08,$00,$00,$9e
   !if (address >= 10000) { !byte $30 + ((address / 10000) % 10) }

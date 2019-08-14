@@ -3,7 +3,7 @@
 !let bitmap = $2000
 !let screenRam = bitmap + 8000
 
-+start_at(begin)
++basic_upstart(begin)
 
 begin:
 

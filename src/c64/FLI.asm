@@ -5,7 +5,7 @@
 !let fli     = $3c00
 !let bgcolor = $7f40
 
-+start_at(begin)
++basic_upstart(begin)
 
 begin:
          jmp start

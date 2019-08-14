@@ -5,7 +5,7 @@
 !let colorRam = screenRam + 1000
 !let background = colorRam + 1000
 
-+start_at(start)
++basic_upstart(start)
 
 start:
 

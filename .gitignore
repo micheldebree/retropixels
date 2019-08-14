@@ -11,5 +11,4 @@ target
 **/*.iml
 .idea
 acme-master
-dockerimage
 src/c64/*.txt

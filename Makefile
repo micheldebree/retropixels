@@ -1,5 +1,4 @@
 EXAMPLE=paintface
-#BUILDIMAGE=micheldebree/retropixels-build
 
 CMD=node index.js
 C64CODE=target/c64/Koala.prg target/c64/AFLI.prg target/c64/FLI.prg target/c64/Hires.prg
@@ -10,9 +9,6 @@ target/c64/%.prg: src/c64/%.asm target/c64/
 build: node_modules $(C64CODE)
 	yarn build
 
-#build:
-	#docker run -it -w /retropixels -v "$$PWD":/retropixels $(DOCKERIMAGE)
-
 target/c64/:
 	mkdir -p target/c64
 
@@ -21,9 +17,6 @@ clean:
 
 node_modules:
 	yarn install
-
-install: clean compile
-	yarn global install
 
 release: publish
 	git push
@@ -54,9 +47,6 @@ samples: build
 
 test: build
 	$(CMD) $(EXAMPLE).jpg $(EXAMPLE).prg
-
-test64: $(EXAMPLE).prg
-	x64sc $(EXAMPLE).prg
 
 testfli: build
 	$(CMD) -m c64FLI "$(EXAMPLE).jpg" "$(EXAMPLE).prg"
