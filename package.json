@@ -1,6 +1,6 @@
 {
   "name": "retropixels",
-  "version": "0.6.2",
+  "version": "0.6.3",
   "description": "A cross platform command line tool to convert images to Commodore 64 format.",
   "main": "index.js",
   "bin": {
@@ -8,25 +8,39 @@
   },
   "scripts": {
     "build": "npx tsc",
-    "test": "node index.js paintface.jpg paintface.prg",
+    "test": "npx jest",
     "lint": "npx tslint --project .",
     "fix": "npx tslint --project . --fix"
   },
   "dependencies": {
-    "commander": "2.20.0",
-    "fs-extra": "7.0.1",
-    "jimp": "0.6.1",
+    "commander": "3.0.0",
+    "fs-extra": "8.1.0",
+    "jimp": "0.6.4",
     "path": "0.12.7"
   },
   "devDependencies": {
-    "@types/fs-extra": "5.0.5",
-    "@types/node": "11.13.0",
-    "ajv": "6.10.0",
-    "del": "3.0.0",
-    "retire": "2.0.2",
-    "tslint": "5.15.0",
+    "@types/fs-extra": "8.0.0",
+    "@types/node": "12.7.2",
+    "ajv": "6.10.2",
+    "c64jasm": "0.7.0",
+    "del": "5.0.0",
+    "jest": "24.8.0",
+    "retire": "2.0.3",
+    "ts-jest": "24.0.2",
+    "tslint": "5.18.0",
     "tslint-config-airbnb": "5.11.1",
-    "typescript": "3.4.1"
+    "typescript": "3.5.3"
+  },
+  "jest": {
+    "moduleFileExtensions": [
+      "ts",
+      "tsx",
+      "js"
+    ],
+    "transform": {
+      "\\.(ts|tsx)$": "<rootDir>/node_modules/ts-jest/preprocessor.js"
+    },
+    "testRegex": "/test/.*\\.(ts|tsx|js)$"
   },
   "repository": {
     "type": "git",

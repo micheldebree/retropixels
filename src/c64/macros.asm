@@ -1,13 +1,11 @@
-; vim:set ft=acme:
-!macro start_at .address {
+!macro basic_upstart (address) {
   * = $0801
   !byte $0c,$08,$00,$00,$9e
-  !if .address >= 10000 { !byte 48 + ((.address / 10000) % 10) }
-  !if .address >=  1000 { !byte 48 + ((.address /  1000) % 10) }
-  !if .address >=   100 { !byte 48 + ((.address /   100) % 10) }
-  !if .address >=    10 { !byte 48 + ((.address /    10) % 10) }
-  !byte $30 + (.address % 10), $00, $00, $00
-  * = .address
+  !if (address >= 10000) { !byte $30 + ((address / 10000) % 10) }
+  !if (address >=  1000) { !byte $30 + ((address /  1000) % 10) }
+  !if (address >=   100) { !byte $30 + ((address /   100) % 10) }
+  !if (address >=    10) { !byte $30 + ((address /    10) % 10) }
+  !byte $30 + (address % 10), $00, $00, $00
 }
 
 ; Set the memory bank the VIC 'sees'
@@ -15,11 +13,23 @@
 ; bank=1: $4000-$7fff
 ; bank=2: $8000-$bfff
 ; bank=3: $c000-$ffff
-!macro vic_bank .bank {
-         lda $dd00
-         and #%11111100
-         ora #(.bank AND %11) XOR %11
-         sta $dd00
+!macro vic_bank(bank) {
+  lda $dd00
+  and #%11111100
+  ora #((bank & %11) ^ %11)
+  sta $dd00
+}
+
+; .multicolor: 0 = off, 1 = on
+; .screen_width: 0 = 38 columns, 1 = 40 columns
+; .scroll: 0-7 horizontal scroll
+!macro d016_screen_control(multicolor, screen_width, scroll) {
+  !let multicolor_mask = (multicolor & 1) << 4
+  !let screen_width_mask = (screen_width & 1) << 3
+  !let scroll_mask = (scroll & %111)
+
+  lda #(multicolor_mask | screen_width_mask | scroll_mask)
+  sta $d016
 }
 
 ;$D018/53272/VIC+24:   Memory Control Register
@@ -70,24 +80,12 @@
 ;               1: bitmap is at $2000
 ; .charset_base: charmem is at value * $0800
 ; All values are relative to VIC bank
-!macro d018_vic_mem .matrix_base, .bitmap_base, .charset_base {
-         .matrix_base_mask = (.matrix_base & %1111) << 4
-         .bitmap_base_mask = (.bitmap_base & 1) << 3
-         .charset_base_mask = (.charset_base & %111) << 1
+!macro d018_vic_mem(matrix_base, bitmap_base, charset_base) {
+  !let matrix_base_mask = (matrix_base & %1111) << 4
+  !let bitmap_base_mask = (bitmap_base & 1) << 3
+  !let charset_base_mask = (charset_base & %111) << 1
 
-         lda #.matrix_base_mask | .bitmap_base_mask | .charset_base_mask
-         sta $d018
-}
-
-; .multicolor: 0 = off, 1 = on
-; .screen_width: 0 = 38 columns, 1 = 40 columns
-; .scroll: 0-7 horizontal scroll
-!macro d016_screen_control .multicolor, .screen_width, .scroll {
-         .multicolor_mask = (.multicolor & 1) << 4
-         .screen_width_mask = (.screen_width & 1) << 3
-         .scroll_mask = (.scroll & %111)
-
-         lda #.multicolor_mask | .screen_width_mask | .scroll_mask
-         sta $d016
+  lda #(matrix_base_mask | bitmap_base_mask | charset_base_mask)
+  sta $d018
 }
 

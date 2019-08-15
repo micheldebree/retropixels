@@ -1,25 +1,29 @@
-; vim:set ft=acme:
-!source <basic_upstart.asm>
+!include "macros.asm"
 
-bitmap = $2000
-screenRam = bitmap + 8000
+!let bitmap = $2000
+!let screenRam = bitmap + 8000
 
-+start_at $0810
-+d018_vic_mem 1,1,0
-+d016_screen_control 0,1,0
++basic_upstart(begin)
+
+begin:
+
++d018_vic_mem(1,1,0)
++d016_screen_control(0,1,0)
 
     lda #$3b
     sta $d011
     lda #0
     sta $d020
     ldx #0
--
-    !for i, 0, 3 {
+loop:
+    !for i in range(4) {
         lda i * $100 + screenRam,x
         sta i * $100 + $0400,x
     }
     inx
-    bne -
-    jmp *
+    bne loop
+forever:
+    jmp forever
 
-!fill bitmap - * - 2
+fillfromhere:
+!fill bitmap - fillfromhere - 2, 0

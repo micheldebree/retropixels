@@ -1,11 +1,13 @@
-!source <basic_upstart.asm>
+!include "macros.asm"
 
-bitmap = $2000
-screenRam = bitmap + 8000
-colorRam = screenRam + 1000
-background = colorRam + 1000
+!let bitmap = $2000
+!let screenRam = bitmap + 8000
+!let colorRam = screenRam + 1000
+!let background = colorRam + 1000
 
-+start_at $0810
++basic_upstart(start)
+
+start:
 
     lda #$18
     sta $d018
@@ -18,15 +20,20 @@ background = colorRam + 1000
     lda background
     sta $d021
     ldx #0
--
-    !for i, 0, 3 {
+loop:
+    !for i in range(4) {
         lda i * $100 + screenRam,x
         sta i * $100 + $0400,x
         lda i * $100 + colorRam,x
         sta i * $100 + $d800,x
     }
     inx
-    bne -
-    jmp *
+    bne loop
 
-!fill bitmap - * - 2
+forever:
+    jmp forever
+
+
+fillfromhere:
+
+!fill bitmap - fillfromhere - 2, 0

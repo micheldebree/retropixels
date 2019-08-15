@@ -6,20 +6,21 @@ A cross platform command line tool to convert images to Commodore 64 format.
 
 ![Input](paintface.jpg)
 
-``retropixels paintface.jpg paintface.png``
+`retropixels paintface.jpg paintface.png`
 
 ![Output](samples/paintface-Multicolor.png)
 
-## For users
+## Installation
 
-### Installation
+Note: you do **not** need to download retropixels to install it. The `npm` command
+below will do that for you.
 
 - Install [NodeJS](https://nodejs.org)
-- Run ``npm install -g retropixels``
+- Run `npm install -g retropixels`
 
-You now have a new shell command called ``retropixels``
+You now have a new shell command called `retropixels`
 
-### Usage
+## Usage
 
 ```sh
 retropixels [options] <infile> <outfile>
@@ -27,24 +28,24 @@ retropixels [options] <infile> <outfile>
 
 With
 
-- ``<infile>``: the image to convert
-- ``<outfile>``: the converted image. The extension determines the format:
-  - ``<outfile>.png`` produces a PNG file
-  - ``<outfile>.kla`` produces a Koala Painter file
-                      (only supported for c64Multicolor mode)
-  - ``<outfile>.prg`` produces a Commodore 64 executable
-- ``[options]``:
-  - ``-m <mode>`` with ``<mode>``:
-    - ``c64Multicolor`` (default)
-    - ``c64Hires``
-    - ``c64HiresMono``
-    - ``c64FLI``
-    - ``c64AFLI``
-  - ``-d <ditherMode>`` with ``<ditherMode>``:
-    - ``bayer2x2``
-    - ``bayer4x4`` (default)
-    - ``bayer8x8``
-  - ``-r <ditherRadius>`` with ``<ditherRadius>``:
+- `<infile>`: the image to convert
+- `<outfile>`: the converted image. The extension determines the format:
+  - `<outfile>.png` produces a PNG file
+  - `<outfile>.kla` produces a Koala Painter file
+    (only supported for c64Multicolor mode)
+  - `<outfile>.prg` produces a Commodore 64 executable
+- `[options]`:
+  - `-m <mode>` with `<mode>`:
+    - `c64Multicolor` (default)
+    - `c64Hires`
+    - `c64HiresMono`
+    - `c64FLI`
+    - `c64AFLI`
+  - `-d <ditherMode>` with `<ditherMode>`:
+    - `bayer2x2`
+    - `bayer4x4` (default)
+    - `bayer8x8`
+  - `-r <ditherRadius>` with `<ditherRadius>`:
     - A number between 0 (no dithering) and 64 (heavy dithering). Default is 32.
 
 Notes:
@@ -56,7 +57,7 @@ Notes:
   Commodore 64 VIC chip hacking
   involved in creating this artificial mode, and is not a bug in retropixels
 
-### Example
+## Example
 
 Convert an image to a Commodore 64 executable:
 
@@ -71,55 +72,42 @@ View the result by running it in the
 x64 eye.prg
 ```
 
-### Uninstall
+## Uninstall
 
 ```sh
 npm uninstall -g retropixels
 ```
 
-## For developers
+## Development
 
 The build process has been tested on macOS.
 It should work on other platforms but you're on your own there.
 
 ### Prerequisites
 
-- [NodeJS](https://nodejs.org) (latest LTE version)
 - [Git](https://git-scm.com)
-- GCC
+- [NodeJS](https://nodejs.org) (latest LTE version)
+- [Yarn](https://yarnpkg.com/en/docs/install#mac-stable)
 - GNU make
 
-#### Build
-
-- Clone or unzip this project
+### Build
 
 ```sh
+git clone https://github.com/micheldebree/retropixels.git
 cd retropixels
-npm install -g typescript@2.3.3
 make
 ```
 
-Run with ``node index.js [options] <infile> <outfile>``
-
-### Build Docker image
-
-```sh
-docker build -t micheldebree/retropixels-cli .
-```
-
-### Run the conversion tool with [Docker](https://www.docker.com)
-
-The command line tool can be run with docker.
-The only prerequisite for this is Docker itself:
-
-```sh
-docker run --rm -v "$PWD":/data micheldebree/retropixels-cli [options] <infile> <outfile>
-```
-
-The first time docker will download the image.
-Be patient. Next time it will get it from your local cache.
+Run with `node index.js [options] <infile> <outfile>`
 
 ## Changelog
+
+### 0.6.3
+
+Changed:
+
+- [#28](https://github.com/micheldebree/retropixels/issues/28):
+  Replaced ACME compiler with c64jasm to support JS only build.
 
 ### 0.6.2
 
@@ -192,7 +180,7 @@ Optimized dithering, with better default setting.
 
 ### 0.2.1
 
-- Fixes in ``README.md``
+- Fixes in `README.md`
 
 ### 0.2.0
 
