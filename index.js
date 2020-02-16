@@ -3,15 +3,10 @@
 const cli = require('commander'),
   path = require('path'),
   jimp = require('jimp'),
-  GraphicModes = require('./target/profiles/GraphicModes.js'),
-  Converter = require('./target/conversion/Converter.js'),
-  OrderedDither = require('./target/conversion/OrderedDither.js'),
-  C64Writer = require('./target/io/C64Writer.js');
-  JimpPreprocessor = require('./target/prepost/JimpPreprocessor.js');
-  Quantizer = require('./target/conversion/Quantizer.js');
+  retropixels = require('.');
 
 // defaults
-let graphicMode = GraphicModes.GraphicModes.c64Multicolor;
+let graphicMode = retropixels.GraphicModes.c64Multicolor;
 let ditherMode = 'bayer4x4';
 let ditherRadius = 32;
 
@@ -31,9 +26,9 @@ if (!cli.mode) {
   cli.mode = 'c64Multicolor';
 }
 
-if (cli.mode in GraphicModes.GraphicModes.all) {
+if (cli.mode in retropixels.GraphicModes.all) {
   console.log('Using graphicMode ' + cli.mode);
-  graphicMode = GraphicModes.GraphicModes.all[cli.mode];
+  graphicMode = retropixels.GraphicModes.all[cli.mode];
 } else {
   console.error('Unknown Graphicmode: ' + cli.mode);
   cli.help();
@@ -65,7 +60,7 @@ if (outFile === undefined) {
 function savePng(pixelImage, filename) {
   new jimp(pixelImage.mode.width, pixelImage.mode.height, function(err, image) {
     if (err) throw err;
-    JimpPreprocessor.JimpPreprocessor.write(pixelImage, image, filename);
+    retropixels.JimpPreprocessor.write(pixelImage, image, filename);
   });
 }
 
@@ -77,29 +72,29 @@ function saveDebugMaps(pixelImage) {
   }
 }
 
-const converter = new Converter.Converter();
+const converter = new retropixels.Converter();
 
 if (cli.unicorn) {
   converter.poker.quantizer.measurer = converter.poker.quantizer.distanceRainbow;
 }
 
-JimpPreprocessor.JimpPreprocessor.read(inFile, graphicMode).then(jimpImage => {
+retropixels.JimpPreprocessor.read(inFile, graphicMode).then(jimpImage => {
   try {
-    const ditherPreset = OrderedDither.OrderedDither.presets[ditherMode];
+    const ditherPreset = retropixels.OrderedDither.presets[ditherMode];
     if (!ditherPreset) {
       throw new Error('Unknown dithering mode: ' + ditherPreset);
     }
 
-    new OrderedDither.OrderedDither(ditherPreset, ditherRadius).dither(jimpImage);
+    new retropixels.OrderedDither(ditherPreset, ditherRadius).dither(jimpImage);
 
     const pixelImage = converter.convert(jimpImage, graphicMode);
 
     outExtension = path.extname(outFile);
 
     if ('.kla' === outExtension || '.spd' === outExtension) {
-      C64Writer.C64Writer.saveBinary(pixelImage, outFile).then(console.log('Written ' + outFile));
+      retropixels.C64Writer.saveBinary(pixelImage, outFile).then(console.log('Written ' + outFile));
     } else if ('.prg' === outExtension) {
-      C64Writer.C64Writer.savePrg(pixelImage, outFile).then(console.log('Written ' + outFile));
+      retropixels.C64Writer.savePrg(pixelImage, outFile).then(console.log('Written ' + outFile));
     } else if ('.png' === outExtension) {
       savePng(pixelImage, outFile);
     } else {
