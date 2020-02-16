@@ -11,7 +11,7 @@ let ditherMode = 'bayer4x4';
 let ditherRadius = 32;
 
 cli
-  .version('0.6.3')
+  .version('0.6.4-snapshot')
   .usage('[options] <infile> <outfile>')
   .option(
     '-m, --mode <graphicMode>',

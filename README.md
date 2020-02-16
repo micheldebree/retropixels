@@ -98,7 +98,7 @@ cd retropixels
 make
 ```
 
-Run with `node index.js [options] <infile> <outfile>`
+Run with `node cli.js [options] <infile> <outfile>`
 
 ## Changelog
 

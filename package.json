@@ -1,10 +1,10 @@
 {
   "name": "retropixels",
-  "version": "0.6.3",
+  "version": "0.6.4-snapshot",
   "description": "A cross platform command line tool to convert images to Commodore 64 format.",
   "main": "target/index.js",
   "bin": {
-    "retropixels": "./index.js"
+    "retropixels": "./cli.js"
   },
   "scripts": {
     "build": "npx tsc",
@@ -19,8 +19,8 @@
     "path": "0.12.7"
   },
   "devDependencies": {
-    "@types/fs-extra": "8.0.0",
-    "@types/node": "12.7.2",
+    "@types/fs-extra": "8.0.1",
+    "@types/node": "13.7.1",
     "ajv": "6.11.0",
     "c64jasm": "0.8.1",
     "del": "5.1.0",

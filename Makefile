@@ -1,6 +1,6 @@
 EXAMPLE=paintface
 
-CMD=node index.js
+CMD=node cli.js
 C64CODE=target/c64/Koala.prg target/c64/AFLI.prg target/c64/FLI.prg target/c64/Hires.prg
 
 target/c64/%.prg: src/c64/%.asm target/c64/

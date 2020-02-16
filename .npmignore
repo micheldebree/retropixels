@@ -1,5 +1,6 @@
 node_modules
-*.kla
+src
+Makefile
 *.sym
 *.vs
 *.log
@@ -10,3 +11,10 @@ tags
 *.png
 *.jpg
 *.kla
+*.map
+*.un~
+.idea
+.vscode
+.*.json
+.eslintignore
+ts*.json
