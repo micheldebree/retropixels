@@ -22,8 +22,7 @@ loop:
     }
     inx
     bne loop
-forever:
-    jmp forever
+    jmp *
 
 fillfromhere:
 !fill bitmap - fillfromhere - 2, 0

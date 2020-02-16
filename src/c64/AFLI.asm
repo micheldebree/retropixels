@@ -127,8 +127,7 @@ start:
         lda $d019
         dec $d019      ; clear raster IRQ flag
         cli
-forever:
-        jmp forever          ; that's it, no more action needed
+        jmp *          ; that's it, no more action needed
 
 initgfx:
          lda #$00
@@ -195,7 +194,5 @@ done:
          rts
 }
 
-fillfromhere:
-
-!fill fli - fillfromhere - 2, 0
+!fill fli - * - 2, 0
 
