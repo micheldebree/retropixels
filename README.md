@@ -102,6 +102,13 @@ Run with `node cli.js [options] <infile> <outfile>`
 
 ## Changelog
 
+### 0.6.4
+
+Changed:
+
+- [#31](https://github.com/micheldebree/retropixels/issues/31):
+  More developer friendly importing of library.
+
 ### 0.6.3
 
 Changed:

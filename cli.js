@@ -3,7 +3,8 @@
 const cli = require('commander'),
   path = require('path'),
   jimp = require('jimp'),
-  retropixels = require('.');
+  retropixels = require('.'),
+  version = require('./package').version;
 
 // defaults
 let graphicMode = retropixels.GraphicModes.c64Multicolor;
@@ -11,7 +12,7 @@ let ditherMode = 'bayer4x4';
 let ditherRadius = 32;
 
 cli
-  .version('0.6.4-snapshot')
+  .version(version)
   .usage('[options] <infile> <outfile>')
   .option(
     '-m, --mode <graphicMode>',

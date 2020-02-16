@@ -24,5 +24,4 @@ loop:
     bne loop
     jmp *
 
-fillfromhere:
-!fill bitmap - fillfromhere - 2, 0
+!fill bitmap - * - 2, 0
