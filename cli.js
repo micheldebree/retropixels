@@ -28,10 +28,10 @@ if (!cli.mode) {
 }
 
 if (cli.mode in retropixels.GraphicModes.all) {
-  console.log('Using graphicMode ' + cli.mode);
+  console.log(`Using graphicMode ${cli.mode}`);
   graphicMode = retropixels.GraphicModes.all[cli.mode];
 } else {
-  console.error('Unknown Graphicmode: ' + cli.mode);
+  console.error(`Unknown graphicmode: ${cli.mode}`);
   cli.help();
   process.exit(1);
 }
@@ -43,6 +43,13 @@ if (cli.ditherRadius !== undefined) {
 if (cli.ditherMode !== undefined) {
   ditherMode = cli.ditherMode;
 }
+
+const ditherPreset = retropixels.OrderedDither.presets[ditherMode];
+if (!ditherPreset) {
+  console.error(`Unknown ditherMode: ${ditherMode}`);
+  cli.help();
+}
+const ditherer = new retropixels.OrderedDither(ditherPreset, ditherRadius);
 
 const inFile = cli.args[0],
   outFile = cli.args[1];
@@ -81,25 +88,20 @@ if (cli.unicorn) {
 
 retropixels.JimpPreprocessor.read(inFile, graphicMode).then(jimpImage => {
   try {
-    const ditherPreset = retropixels.OrderedDither.presets[ditherMode];
-    if (!ditherPreset) {
-      throw new Error('Unknown dithering mode: ' + ditherPreset);
-    }
-
-    new retropixels.OrderedDither(ditherPreset, ditherRadius).dither(jimpImage);
+    ditherer.dither(jimpImage);
 
     const pixelImage = converter.convert(jimpImage, graphicMode);
 
     outExtension = path.extname(outFile);
 
     if ('.kla' === outExtension || '.spd' === outExtension) {
-      retropixels.C64Writer.saveBinary(pixelImage, outFile).then(console.log('Written ' + outFile));
+      retropixels.C64Writer.saveBinary(pixelImage, outFile).then(console.log(`Written ${outFile}`));
     } else if ('.prg' === outExtension) {
-      retropixels.C64Writer.savePrg(pixelImage, outFile).then(console.log('Written ' + outFile));
+      retropixels.C64Writer.savePrg(pixelImage, outFile).then(console.log(`Written ${outFile}`));
     } else if ('.png' === outExtension) {
       savePng(pixelImage, outFile);
     } else {
-      throw 'Unknown file extension ' + outExtension + ', valid extensions are .png, .kla and .prg';
+      throw `Unknown file extension ${outExtension}, valid extensions are .png, .kla and .prg`;
     }
   } catch (e) {
     console.error(e);
