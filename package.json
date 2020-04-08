@@ -13,23 +13,23 @@
     "fix": "npx tslint --project . --fix"
   },
   "dependencies": {
-    "commander": "4.1.1",
-    "fs-extra": "8.1.0",
-    "jimp": "0.9.3",
+    "commander": "5.0.0",
+    "fs-extra": "9.0.0",
+    "jimp": "0.10.1",
     "path": "0.12.7"
   },
   "devDependencies": {
-    "@types/fs-extra": "8.0.1",
-    "@types/node": "13.7.1",
-    "ajv": "6.11.0",
+    "@types/fs-extra": "8.1.0",
+    "@types/node": "13.11.0",
+    "ajv": "6.12.0",
     "c64jasm": "0.8.1",
     "del": "5.1.0",
-    "jest": "25.1.0",
-    "retire": "2.0.3",
-    "ts-jest": "25.2.0",
-    "tslint": "6.0.0",
+    "jest": "25.2.7",
+    "retire": "2.2.0",
+    "ts-jest": "25.3.1",
+    "tslint": "6.1.1",
     "tslint-config-airbnb": "5.11.2",
-    "typescript": "3.7.5"
+    "typescript": "3.8.3"
   },
   "jest": {
     "moduleFileExtensions": [
