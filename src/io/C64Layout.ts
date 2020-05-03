@@ -1,6 +1,6 @@
-import { PixelImage } from '../model/PixelImage';
+import PixelImage from '../model/PixelImage';
 
-export class C64Layout {
+export default class C64Layout {
   public static concat(arrayBuffers: Uint8Array[]): Uint8Array {
     if (arrayBuffers.length === 1) {
       return arrayBuffers[0];
@@ -21,18 +21,16 @@ export class C64Layout {
   public static convertBitmap(pixelImage: PixelImage): Uint8Array {
     // TODO: calculate size of bitmap
     const bitmap: Uint8Array = new Uint8Array(8000);
-    let bitmapIndex: number = 0;
+    let bitmapIndex = 0;
 
     pixelImage.mode.forEachCell(0, (x, y) => {
-      pixelImage.mode.forEachCellRow(y, (rowY) => {
+      pixelImage.mode.forEachCellRow(y, rowY => {
         // pack one character's row worth of pixels into one byte
-        pixelImage.mode.forEachByte(x, (byteX) => {
-          let packedByte: number = 0;
+        pixelImage.mode.forEachByte(x, byteX => {
+          let packedByte = 0;
           if (byteX >= pixelImage.mode.fliBugSize) {
             pixelImage.mode.forEachPixel(byteX, (pixelX, shiftTimes) => {
-              packedByte =
-                packedByte |
-                (pixelImage.mode.mapPixelIndex(pixelImage, pixelX, rowY) << shiftTimes);
+              packedByte |= pixelImage.mode.mapPixelIndex(pixelImage, pixelX, rowY) << shiftTimes;
             });
           }
           bitmap[bitmapIndex] = packedByte;
@@ -48,7 +46,7 @@ export class C64Layout {
     pixelImage: PixelImage,
     lowerColorIndex: number,
     upperColorIndex: number,
-    yOffset: number = 0
+    yOffset = 0
   ): Uint8Array {
     return pixelImage.mode.extractAttributeData(pixelImage, yOffset, (x, y) => {
       // pack two colors in one byte

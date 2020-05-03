@@ -1,12 +1,13 @@
-import { ImageData } from '../model/ImageData';
-import { IImageData } from '../model/ImageDataInterface';
-import { PixelImage } from '../model/PixelImage';
-import { GraphicMode } from '../profiles/GraphicMode';
-import { Optimizer } from './Optimizer';
-import { Poker } from './Poker';
+import ImageData from '../model/ImageData';
+import IImageData from '../model/ImageDataInterface';
+import PixelImage from '../model/PixelImage';
+import GraphicMode from '../profiles/GraphicMode';
+import Optimizer from './Optimizer';
+import Poker from './Poker';
 
-export class Converter {
+export default class Converter {
   public poker: Poker;
+
   public optimizer: Optimizer;
 
   constructor() {
@@ -28,8 +29,8 @@ export class Converter {
    * @param  {IImageData} imageData The ImageData to map
    */
   private drawImageData(image: PixelImage, imageData: IImageData): void {
-    for (let y: number = 0; y < image.mode.height; y += 1) {
-      for (let x: number = 0; x < image.mode.width; x += 1) {
+    for (let y = 0; y < image.mode.height; y += 1) {
+      for (let x = 0; x < image.mode.width; x += 1) {
         this.poker.poke(image, x, y, ImageData.peek(imageData, x, y));
       }
     }

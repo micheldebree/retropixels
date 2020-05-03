@@ -1,9 +1,10 @@
-import { GraphicMode } from '../profiles/GraphicMode';
-import { ColorMap } from './ColorMap';
-import { Pixels } from './Pixels';
+import GraphicMode from '../profiles/GraphicMode';
+import ColorMap from './ColorMap';
+import Pixels from './Pixels';
 
-export class PixelImage {
+export default class PixelImage {
   public colorMaps: ColorMap[];
+
   public mode: GraphicMode;
 
   public pixelIndex: number[][];
@@ -40,9 +41,7 @@ export class PixelImage {
   }
 
   public addColorMap(resXVal: number = this.mode.width, resYVal: number = this.mode.height): void {
-    this.colorMaps.push(
-      new ColorMap(this.mode.width, this.mode.height, this.mode.palette, resXVal, resYVal)
-    );
+    this.colorMaps.push(new ColorMap(this.mode.width, this.mode.height, this.mode.palette, resXVal, resYVal));
   }
 
   public debugColorMaps(): PixelImage[] {

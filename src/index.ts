@@ -1,5 +1,5 @@
-export * from './conversion/Converter';
-export * from './profiles/GraphicModes';
-export * from './conversion/OrderedDither';
-export * from './io/C64Writer';
-export * from './prepost/JimpPreprocessor';
+export { default as Converter } from './conversion/Converter';
+export { default as GraphicModes } from './profiles/GraphicModes';
+export { default as OrderedDither } from './conversion/OrderedDither';
+export { default as C64Writer } from './io/C64Writer';
+export { default as JimpPreprocessor } from './prepost/JimpPreprocessor';

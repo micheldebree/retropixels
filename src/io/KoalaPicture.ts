@@ -1,20 +1,27 @@
-import { PixelImage } from '../model/PixelImage';
-import { GraphicMode } from '../profiles/GraphicMode';
-import { GraphicModes } from '../profiles/GraphicModes';
-import { C64Layout } from './C64Layout';
-import { IBinaryFormat } from './IBinaryFormat';
+import PixelImage from '../model/PixelImage';
+import GraphicMode from '../profiles/GraphicMode';
+import GraphicModes from '../profiles/GraphicModes';
+import C64Layout from './C64Layout';
+import IBinaryFormat from './IBinaryFormat';
 
 /**
  * A Koala Painter compatible picture.
  */
-export class KoalaPicture implements IBinaryFormat {
-  public formatName: string = 'Koala';
+export default class KoalaPicture implements IBinaryFormat {
+  public formatName = 'Koala';
+
   public supportedModes: GraphicMode[] = [GraphicModes.c64Multicolor];
+
   private loadAddress: Uint8Array;
+
   private bitmap: Uint8Array;
+
   private screenRam: Uint8Array;
+
   private colorRam: Uint8Array;
+
   private background: Uint8Array;
+
   /**
    * Convert a pixelImage to a KoalaPic
    * PixelImage must have the following specs:
@@ -23,7 +30,7 @@ export class KoalaPicture implements IBinaryFormat {
    * - colormap 1 and 2 have the screenram
    * - colormap 3 has the colorram
    */
-  public fromPixelImage(pixelImage: PixelImage) {
+  public fromPixelImage(pixelImage: PixelImage): void {
     this.loadAddress = new Uint8Array(2);
     this.loadAddress[0] = 0;
     this.loadAddress[1] = 0x60;

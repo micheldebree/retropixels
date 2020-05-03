@@ -1,7 +1,7 @@
-import { IImageData } from './ImageDataInterface';
-import { Pixels } from './Pixels';
+import IImageData from './ImageDataInterface';
+import Pixels from './Pixels';
 
-export class ImageData {
+export default class ImageData {
   // Set the pixel at (x,y)
   public static poke(imageData: IImageData, x: number, y: number, pixel: number[]): void {
     if (pixel !== undefined) {
@@ -19,12 +19,7 @@ export class ImageData {
   public static peek(imageData: IImageData, x: number, y: number): number[] {
     const i: number = this.coordsToindex(imageData, x, y);
     if (i !== undefined) {
-      return [
-        imageData.data[i],
-        imageData.data[i + 1],
-        imageData.data[i + 2],
-        imageData.data[i + 3]
-      ];
+      return [imageData.data[i], imageData.data[i + 1], imageData.data[i + 2], imageData.data[i + 3]];
     }
     return Pixels.emptyPixel;
   }

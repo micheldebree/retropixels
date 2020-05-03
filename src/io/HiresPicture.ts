@@ -1,17 +1,19 @@
-import { PixelImage } from '../model/PixelImage';
-import { GraphicMode } from '../profiles/GraphicMode';
-import { GraphicModes } from '../profiles/GraphicModes';
-import { C64Layout } from './C64Layout';
-import { IBinaryFormat } from './IBinaryFormat';
+import PixelImage from '../model/PixelImage';
+import GraphicMode from '../profiles/GraphicMode';
+import GraphicModes from '../profiles/GraphicModes';
+import C64Layout from './C64Layout';
+import IBinaryFormat from './IBinaryFormat';
 
-export class HiresPicture implements IBinaryFormat {
-  public formatName: string = 'Hires';
+export default class HiresPicture implements IBinaryFormat {
+  public formatName = 'Hires';
+
   public supportedModes: GraphicMode[] = [GraphicModes.c64Hires];
 
   private bitmap: Uint8Array;
+
   private screenRam: Uint8Array;
 
-  public fromPixelImage(pixelImage: PixelImage) {
+  public fromPixelImage(pixelImage: PixelImage): void {
     this.bitmap = C64Layout.convertBitmap(pixelImage);
     this.screenRam = C64Layout.convertScreenram(pixelImage, 0, 1);
   }

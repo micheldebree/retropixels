@@ -1,11 +1,10 @@
-import { Palette } from '../model/Palette';
-import { PixelImage } from '../model/PixelImage';
-import { Quantizer } from './Quantizer';
-import { Pixels } from '../model/Pixels';
-import { IImageData } from '../model/ImageDataInterface';
-import { ImageData } from '../model/ImageData';
-export class Poker {
+import Palette from '../model/Palette';
+import PixelImage from '../model/PixelImage';
+import Quantizer from './Quantizer';
+import IImageData from '../model/ImageDataInterface';
+import ImageData from '../model/ImageData';
 
+export default class Poker {
   public quantizer: Quantizer = new Quantizer();
 
   /**
@@ -36,11 +35,11 @@ export class Poker {
     image.pixelIndex[y][x] = colorMapIndex;
   }
 
-   // Draw ImageData onto a PixelImage
-  public drawImageData(imageData: IImageData, pixelImage: PixelImage) {
-    for (let y: number = 0; y < pixelImage.mode.height; y += 1) {
-      for (let x: number = 0; x < pixelImage.mode.width; x += 1) {
-        const pixel: number[] =  ImageData.peek(imageData, x, y);
+  // Draw ImageData onto a PixelImage
+  public drawImageData(imageData: IImageData, pixelImage: PixelImage): void {
+    for (let y = 0; y < pixelImage.mode.height; y += 1) {
+      for (let x = 0; x < pixelImage.mode.width; x += 1) {
+        const pixel: number[] = ImageData.peek(imageData, x, y);
         this.poke(pixelImage, x, y, pixel);
       }
     }
@@ -52,13 +51,8 @@ export class Poker {
      ColorMap has that mapped color at the specified position.
      Returns the index of the ColorMap
   */
-  private findColorInMap(
-    image: PixelImage,
-    x: number,
-    y: number,
-    realColor: number[]
-  ): number {
-    let i: number = 0;
+  private findColorInMap(image: PixelImage, x: number, y: number, realColor: number[]): number {
+    let i = 0;
 
     for (const colorMap of image.colorMaps) {
       const mappedIndex: number = this.quantizer.mapPixel(x, y, realColor, colorMap.palette);
@@ -75,13 +69,8 @@ export class Poker {
     If found, map realColor to the ColorMap's palette and claim the area.
     Returns index into the found ColorMap.
   */
-  private tryClaimUnusedInMap(
-    image: PixelImage,
-    x: number,
-    y: number,
-    realColor: number[]
-  ): number {
-    let i: number = 0;
+  private tryClaimUnusedInMap(image: PixelImage, x: number, y: number, realColor: number[]): number {
+    let i = 0;
 
     for (const colorMap of image.colorMaps) {
       if (colorMap.get(x, y) === undefined) {

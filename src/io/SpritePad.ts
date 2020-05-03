@@ -1,11 +1,12 @@
-import { PixelImage } from '../model/PixelImage';
-import { GraphicMode } from '../profiles/GraphicMode';
-import { GraphicModes } from '../profiles/GraphicModes';
-import { C64Layout } from './C64Layout';
-import { IBinaryFormat } from './IBinaryFormat';
+import PixelImage from '../model/PixelImage';
+import GraphicMode from '../profiles/GraphicMode';
+import GraphicModes from '../profiles/GraphicModes';
+import C64Layout from './C64Layout';
+import IBinaryFormat from './IBinaryFormat';
 
-export class SpritePad implements IBinaryFormat {
-  public formatName: string = 'Sprite Pad';
+export default class SpritePad implements IBinaryFormat {
+  public formatName = 'Sprite Pad';
+
   public supportedModes: GraphicMode[] = [
     GraphicModes.c64HiresSprites,
     GraphicModes.c64MulticolorSprites,
@@ -24,15 +25,15 @@ export class SpritePad implements IBinaryFormat {
   // private spriteColor: number;
 
   // sprite data
-  private nrOfSprites: number = 0;
+  private nrOfSprites = 0;
+
   private sprites: Uint8Array[] = [];
 
-  public fromPixelImage(pixelImage: PixelImage) {
+  public fromPixelImage(pixelImage: PixelImage): void {
     const bitmap: Uint8Array = C64Layout.convertBitmap(pixelImage);
 
     const isMulticolor: boolean =
-      pixelImage.mode === GraphicModes.c64MulticolorSprites ||
-      pixelImage.mode === GraphicModes.c64ThreecolorSprites;
+      pixelImage.mode === GraphicModes.c64MulticolorSprites || pixelImage.mode === GraphicModes.c64ThreecolorSprites;
 
     this.backgroundColor = pixelImage.colorMaps[0].get(0, 0);
     this.multiColor1 = isMulticolor ? pixelImage.colorMaps[1].get(0, 0) : 0;
@@ -41,7 +42,7 @@ export class SpritePad implements IBinaryFormat {
     const spriteColorMapIndex: number = isMulticolor ? 3 : 1;
 
     // each cell is a sprite
-    let byteCounter: number = 0;
+    let byteCounter = 0;
     pixelImage.mode.forEachCell(0, (x, y) => {
       this.sprites[this.nrOfSprites] = new Uint8Array(64);
       for (let i = 0; i < 63; i += 1) {
@@ -59,9 +60,7 @@ export class SpritePad implements IBinaryFormat {
   }
 
   public toMemoryMap(): Uint8Array[] {
-    const result: Uint8Array[] = [
-      new Uint8Array([this.backgroundColor, this.multiColor1, this.multiColor2])
-    ];
+    const result: Uint8Array[] = [new Uint8Array([this.backgroundColor, this.multiColor1, this.multiColor2])];
     return result.concat(this.sprites);
   }
 }

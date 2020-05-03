@@ -1,4 +1,4 @@
-export class Palette {
+export default class Palette {
   public pixels: number[][];
 
   constructor(pixels: number[][]) {

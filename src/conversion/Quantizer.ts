@@ -1,36 +1,38 @@
-import { Palette } from '../model/Palette';
-import { Pixels } from '../model/Pixels';
+import Palette from '../model/Palette';
+import Pixels from '../model/Pixels';
+
+// https://www.easyrgb.com/en/math.php
+// https://stackoverflow.com/questions/15408522/rgb-to-xyz-and-lab-colours-conversion
+// https://stackoverflow.com/questions/6242114/how-much-worse-is-srgb-than-lab-when-computing-the-eucleidan-distance-between
+// https://www.compuphase.com/cmetric.htm
+// https://godsnotwheregodsnot.blogspot.com/2012/09/color-space-comparisons.html
+// https://en.wikipedia.org/wiki/Color_difference
 
 /**
  * Maps a color to a palette.
  */
-export class Quantizer {
-  public distanceYUV = (onePixel: number[], otherPixel: number[]) => {
-    const onePixelConverted = Pixels.toYUV(onePixel);
-    const otherPixelConverted = Pixels.toYUV(otherPixel);
-    // const weight: number[] = [1, 0, 0.25];
-    // const weight: number[] = [1, 0.5, 0];
-    const weight: number[] = [1, 1, 1];
-    // const weight: number[] = [1, 0, 0];
-
+export default class Quantizer {
+  public distance = (onePixel: number[], otherPixel: number[]): number => {
     return Math.sqrt(
-      weight[0] * Math.pow(onePixelConverted[0] - otherPixelConverted[0], 2) +
-        weight[1] * Math.pow(onePixelConverted[1] - otherPixelConverted[1], 2) +
-        weight[2] * Math.pow(onePixelConverted[2] - otherPixelConverted[2], 2)
+      (onePixel[0] - otherPixel[0]) ** 2 + (onePixel[1] - otherPixel[1]) ** 2 + (onePixel[2] - otherPixel[2]) ** 2
     );
-  }
+  };
 
-  public distanceRGB = (onePixel: number[], otherPixel: number[]) => {
-    return Math.sqrt(
-      Math.pow(onePixel[0] - otherPixel[0], 2) +
-        Math.pow(onePixel[1] - otherPixel[1], 2) +
-        Math.pow(onePixel[2] - otherPixel[2], 2)
-    );
-  }
+  public distanceYUV = (onePixel: number[], otherPixel: number[]): number => {
+    return this.distance(Pixels.toYUV(onePixel), Pixels.toYUV(otherPixel));
+  };
 
-  public distanceRainbow = (onePixel: number[], otherPixel: number[]) => {
+  public distanceRainbow = (onePixel: number[], otherPixel: number[]): number => {
     return Math.abs(Pixels.toYUV(onePixel)[0] - Pixels.toYUV(otherPixel)[0]);
-  }
+  };
+
+  public distanceXYZ = (onePixel: number[], otherPixel: number[]): number => {
+    return this.distance(Pixels.sRGBtoXYZ(onePixel), Pixels.sRGBtoXYZ(otherPixel));
+  };
+
+  public distanceLAB = (onePixel: number[], otherPixel: number[]): number => {
+    return this.distance(Pixels.XYZtoLAB(Pixels.sRGBtoXYZ(onePixel)), Pixels.XYZtoLAB(Pixels.sRGBtoXYZ(otherPixel)));
+  };
 
   // function to measure distance between two pixels
   public measurer: (onePixel: number[], otherPixel: number[]) => number = this.distanceYUV;
@@ -51,9 +53,6 @@ export class Quantizer {
 
     return palette.pixels
       .map((palettePixel, index) => [index, this.measurer(pixel, palettePixel)])
-      .reduce((acc, current) => (current[1] < acc[1] ? current : acc), [
-        null,
-        Number.POSITIVE_INFINITY
-      ])[0];
+      .reduce((acc, current) => (current[1] < acc[1] ? current : acc), [null, Number.POSITIVE_INFINITY])[0];
   }
 }

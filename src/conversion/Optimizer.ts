@@ -1,9 +1,9 @@
-import { ColorMap } from '../model/ColorMap';
-import { IImageData } from '../model/ImageDataInterface';
-import { PixelImage } from '../model/PixelImage';
-import { Poker } from './Poker';
+import ColorMap from '../model/ColorMap';
+import IImageData from '../model/ImageDataInterface';
+import PixelImage from '../model/PixelImage';
+import Poker from './Poker';
 
-export class Optimizer {
+export default class Optimizer {
   public poker: Poker;
 
   constructor(poker: Poker) {
@@ -23,7 +23,7 @@ export class Optimizer {
     const w: number = imageData.width;
     const h: number = imageData.height;
     const unrestrictedImage: PixelImage = new PixelImage(targetPixelImage.mode);
-    const palette = targetPixelImage.colorMaps[0].palette;
+    const { palette } = targetPixelImage.colorMaps[0];
     unrestrictedImage.colorMaps.push(new ColorMap(w, h, palette, 1, 1));
     this.poker.drawImageData(imageData, unrestrictedImage);
     return unrestrictedImage.colorMaps[0];
@@ -56,8 +56,8 @@ export class Optimizer {
     const rx: number = toColorMap.resX;
     const ry: number = toColorMap.resY;
 
-    for (let x: number = 0; x < toColorMap.width; x += rx) {
-      for (let y: number = 0; y < toColorMap.height; y += ry) {
+    for (let x = 0; x < toColorMap.width; x += rx) {
+      for (let y = 0; y < toColorMap.height; y += ry) {
         toColorMap.put(x, y, this.reduceToMax(fromColorMap, x, y, rx, ry));
       }
     }

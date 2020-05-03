@@ -2,15 +2,21 @@
   "env": {
     "node": true
   },
+  "parser": "@typescript-eslint/parser",
   "parserOptions": {
     "ecmaVersion": 7,
     "sourceType": "module",
-    "ecmaFeatures": {
-      "jsx": true
-    }
+    "project": "./tsconfig.json"
   },
+  "extends": [
+    "plugin:@typescript-eslint/recommended",
+    "airbnb-typescript/base",
+    "plugin:prettier/recommended",
+    "prettier/@typescript-eslint"
+  ],
   "rules": {
     "semi": 2,
-    "quotes": [2, "single"]
+    "quotes": [2, "single"],
+    "@typescript-eslint/interface-name-prefix": ["warn", { "prefixWithI": "always" }]
   }
 }

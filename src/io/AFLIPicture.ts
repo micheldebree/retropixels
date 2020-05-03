@@ -1,17 +1,21 @@
-import { PixelImage } from '../model/PixelImage';
-import { GraphicMode } from '../profiles/GraphicMode';
-import { GraphicModes } from '../profiles/GraphicModes';
-import { C64Layout } from './C64Layout';
-import { IBinaryFormat } from './IBinaryFormat';
+import PixelImage from '../model/PixelImage';
+import GraphicMode from '../profiles/GraphicMode';
+import GraphicModes from '../profiles/GraphicModes';
+import C64Layout from './C64Layout';
+import IBinaryFormat from './IBinaryFormat';
 
-export class AFLIPicture implements IBinaryFormat {
-  public formatName: string = 'AFLI';
+export default class AFLIPicture implements IBinaryFormat {
+  public formatName = 'AFLI';
+
   public supportedModes: GraphicMode[] = [GraphicModes.c64AFLI];
+
   private loadAddress: Uint8Array;
+
   private screenRam: Uint8Array[];
+
   private bitmap: Uint8Array;
 
-  public fromPixelImage(pixelImage: PixelImage) {
+  public fromPixelImage(pixelImage: PixelImage): void {
     this.loadAddress = new Uint8Array(2);
     this.loadAddress[0] = 0;
     this.loadAddress[1] = 0x40;
@@ -19,7 +23,7 @@ export class AFLIPicture implements IBinaryFormat {
     this.bitmap = C64Layout.convertBitmap(pixelImage);
     this.screenRam = [];
 
-    for (let i: number = 0; i < 8; i += 1) {
+    for (let i = 0; i < 8; i += 1) {
       this.screenRam[i] = C64Layout.convertScreenram(pixelImage, 0, 1, i);
     }
   }

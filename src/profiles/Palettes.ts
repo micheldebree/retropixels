@@ -1,6 +1,6 @@
-import { Palette } from '../model/Palette';
+import Palette from '../model/Palette';
 
-export class Palettes {
+class Palettes {
   public static colodore1 = new Palette([
     [0, 0, 0, 0xff], // black
     [0xff, 0xff, 0xff, 0xff], // white
@@ -121,3 +121,4 @@ export class Palettes {
     [0x13, 0x13, 0x13, 0xff] // black
   ]);
 }
+export default Palettes;

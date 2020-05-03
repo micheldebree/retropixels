@@ -5,6 +5,5 @@
 		"tomconte.kickassembler",
 		"rbbit.typescript-hero",
 		"esbenp.prettier-vscode",
-		"ms-vscode.vscode-typescript-tslint-plugin"
 	]
 }

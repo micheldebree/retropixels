@@ -1,8 +1,8 @@
-import { PixelImage } from '../model/PixelImage';
-import { GraphicMode } from '../profiles/GraphicMode';
-import { GraphicModes } from '../profiles/GraphicModes';
-import { C64Layout } from './C64Layout';
-import { IBinaryFormat } from './IBinaryFormat';
+import PixelImage from '../model/PixelImage';
+import GraphicMode from '../profiles/GraphicMode';
+import GraphicModes from '../profiles/GraphicModes';
+import C64Layout from './C64Layout';
+import IBinaryFormat from './IBinaryFormat';
 
 /**
  * A FLI picture.
@@ -10,16 +10,22 @@ import { IBinaryFormat } from './IBinaryFormat';
  * $4000-$5fff screen ram data
  * $6000-      bitmap data
  */
-export class FLIPicture implements IBinaryFormat {
-  public formatName: string = 'FLI';
+export default class FLIPicture implements IBinaryFormat {
+  public formatName = 'FLI';
+
   public supportedModes: GraphicMode[] = [GraphicModes.c64FLI];
+
   private loadAddress: Uint8Array;
+
   private colorRam: Uint8Array;
+
   private screenRam: Uint8Array[];
+
   private bitmap: Uint8Array;
+
   private background: Uint8Array;
 
-  public fromPixelImage(pixelImage: PixelImage) {
+  public fromPixelImage(pixelImage: PixelImage): void {
     this.loadAddress = new Uint8Array(2);
     this.loadAddress[0] = 0;
     this.loadAddress[1] = 0x3c;
@@ -28,7 +34,7 @@ export class FLIPicture implements IBinaryFormat {
     this.bitmap = C64Layout.convertBitmap(pixelImage);
 
     this.screenRam = [];
-    for (let i: number = 0; i < 8; i += 1) {
+    for (let i = 0; i < 8; i += 1) {
       this.screenRam[i] = C64Layout.convertScreenram(pixelImage, 2, 3, i);
     }
 

@@ -1,14 +1,22 @@
-import { ImageData } from '../model/ImageData';
-import { IImageData } from '../model/ImageDataInterface';
-import { Pixels } from '../model/Pixels';
+import ImageData from '../model/ImageData';
+import IImageData from '../model/ImageDataInterface';
+import Pixels from '../model/Pixels';
 
 /**
  * Apply ordered dithering to an image.
  */
-export class OrderedDither {
+export default class OrderedDither {
   public static presets: { [key: string]: number[][] } = {
-    bayer2x2: [[1, 3], [4, 2]],
-    bayer4x4: [[1, 9, 3, 11], [13, 5, 15, 7], [4, 12, 2, 10], [16, 8, 14, 6]],
+    bayer2x2: [
+      [1, 3],
+      [4, 2]
+    ],
+    bayer4x4: [
+      [1, 9, 3, 11],
+      [13, 5, 15, 7],
+      [4, 12, 2, 10],
+      [16, 8, 14, 6]
+    ],
     bayer8x8: [
       [1, 49, 13, 61, 4, 52, 16, 64],
       [33, 17, 45, 29, 36, 20, 48, 31],
@@ -20,8 +28,18 @@ export class OrderedDither {
       [43, 27, 39, 23, 42, 26, 38, 22]
     ],
     none: [[0]],
-    test: [[1, 2, 3, 4], [12, 13, 14, 5], [11, 16, 15, 6], [10, 9, 8, 7]],
-    test2: [[1, 5, 6, 2], [9, 13, 14, 11], [10, 16, 15, 12], [3, 7, 8, 4]],
+    test: [
+      [1, 2, 3, 4],
+      [12, 13, 14, 5],
+      [11, 16, 15, 6],
+      [10, 9, 8, 7]
+    ],
+    test2: [
+      [1, 5, 6, 2],
+      [9, 13, 14, 11],
+      [10, 16, 15, 12],
+      [3, 7, 8, 4]
+    ],
     test3: [
       [1, 2, 3, 4, 33, 34, 35, 36],
       [5, 6, 7, 8, 37, 38, 39, 40],

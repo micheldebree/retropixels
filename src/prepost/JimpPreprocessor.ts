@@ -1,11 +1,10 @@
 import * as Jimp from 'jimp';
-import { ImageData } from '../model/ImageData';
-import { IImageData } from '../model/ImageDataInterface';
-import { PixelImage } from '../model/PixelImage';
-import { GraphicMode } from '../profiles/GraphicMode';
+import ImageData from '../model/ImageData';
+import IImageData from '../model/ImageDataInterface';
+import PixelImage from '../model/PixelImage';
+import GraphicMode from '../profiles/GraphicMode';
 
-export class JimpPreprocessor {
-
+export default class JimpPreprocessor {
   public static async justRead(filename: string): Promise<IImageData> {
     return (await Jimp.read(filename)).bitmap;
   }
@@ -16,42 +15,33 @@ export class JimpPreprocessor {
     return jimpImage.bitmap;
   }
 
-  public static async justwrite(
-    pixelImage: PixelImage,
-    image: Jimp,
-    filename: string
-  ): Promise<Jimp> {
-    for (let y: number = 0; y < image.bitmap.height; y += 1) {
-      for (let x: number = 0; x < image.bitmap.width; x += 1) {
-        const pixelValue: number[] =
-          x >= pixelImage.mode.fliBugSize ? pixelImage.peek(x, y) : [0, 0, 0, 0xff];
+  public static async justwrite(pixelImage: PixelImage, image: Jimp, filename: string): Promise<Jimp> {
+    for (let y = 0; y < image.bitmap.height; y += 1) {
+      for (let x = 0; x < image.bitmap.width; x += 1) {
+        const pixelValue: number[] = x >= pixelImage.mode.fliBugSize ? pixelImage.peek(x, y) : [0, 0, 0, 0xff];
         ImageData.poke(image.bitmap, x, y, pixelValue);
       }
     }
-    return await image.write(filename);
+    return image.write(filename);
   }
 
   public static async write(pixelImage: PixelImage, image: Jimp, filename: string): Promise<Jimp> {
     this.toJimpImage(pixelImage, image);
     this.resize(image, pixelImage.mode);
-    return await image.write(filename);
+    return image.write(filename);
   }
 
-  private static toJimpImage(pixelImage: PixelImage, result: Jimp) {
-    for (let y: number = 0; y < result.bitmap.height; y += 1) {
-      for (let x: number = 0; x < result.bitmap.width; x += 1) {
-        const pixelValue: number[] =
-          x >= pixelImage.mode.fliBugSize ? pixelImage.peek(x, y) : [0, 0, 0, 0xff];
+  private static toJimpImage(pixelImage: PixelImage, result: Jimp): void {
+    for (let y = 0; y < result.bitmap.height; y += 1) {
+      for (let x = 0; x < result.bitmap.width; x += 1) {
+        const pixelValue: number[] = x >= pixelImage.mode.fliBugSize ? pixelImage.peek(x, y) : [0, 0, 0, 0xff];
         ImageData.poke(result.bitmap, x, y, pixelValue);
       }
     }
   }
 
   private static resize(jimpImage: Jimp, graphicMode: GraphicMode): void {
-    jimpImage.resize(
-      graphicMode.width * graphicMode.pixelWidth,
-      graphicMode.height * graphicMode.pixelHeight
-    );
+    jimpImage.resize(graphicMode.width * graphicMode.pixelWidth, graphicMode.height * graphicMode.pixelHeight);
   }
 
   // Crop a JIMP Image to fill up a specific ratio. Ratio is passed as relative width and height.

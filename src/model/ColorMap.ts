@@ -9,14 +9,19 @@
  *
  * A color is an index into a palette. A pixel is a set of RGBA values.
  */
-import { Palette } from './Palette';
+import Palette from './Palette';
 
-export class ColorMap {
+export default class ColorMap {
   public colors: number[][];
+
   public palette: Palette;
+
   public width: number;
+
   public height: number;
+
   public resX: number;
+
   public resY: number;
 
   constructor(
@@ -86,8 +91,8 @@ export class ColorMap {
   }
 
   public subtract(colorMap: ColorMap): void {
-    for (let x: number = 0; x < this.width; x += this.resX) {
-      for (let y: number = 0; y < this.height; y += this.resY) {
+    for (let x = 0; x < this.width; x += this.resX) {
+      for (let y = 0; y < this.height; y += this.resY) {
         if (this.get(x, y) === colorMap.get(x, y)) {
           this.put(x, y, undefined);
         }
