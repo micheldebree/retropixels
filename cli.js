@@ -83,7 +83,7 @@ function saveDebugMaps(pixelImage) {
 const converter = new retropixels.Converter();
 
 if (cli.unicorn) {
-  converter.poker.quantizer.measurer = converter.poker.quantizer.distanceRainbow;
+  converter.poker.quantizer.colorspace = retropixels.Quantizer.colorspaces.Unicorn;
 }
 
 retropixels.JimpPreprocessor.read(inFile, graphicMode).then(jimpImage => {
