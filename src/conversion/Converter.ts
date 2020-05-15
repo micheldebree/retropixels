@@ -1,10 +1,10 @@
 import ImageData from '../model/ImageData';
 import IImageData from '../model/ImageDataInterface';
 import PixelImage from '../model/PixelImage';
-import GraphicMode from '../profiles/GraphicMode';
 import Optimizer from './Optimizer';
 import Poker from './Poker';
 
+// TODO: this doesn't really do much..
 export default class Converter {
   public poker: Poker;
 
@@ -15,12 +15,9 @@ export default class Converter {
     this.optimizer = new Optimizer(this.poker);
   }
 
-  public convert(imageData: IImageData, graphicMode: GraphicMode): PixelImage {
-    const pixelImage: PixelImage = graphicMode.factory();
-
+  public convert(imageData: IImageData, pixelImage: PixelImage): void {
     this.optimizer.optimizeColorMaps(pixelImage, imageData);
     this.drawImageData(pixelImage, imageData);
-    return pixelImage;
   }
 
   /**

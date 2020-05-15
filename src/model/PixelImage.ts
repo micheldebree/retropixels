@@ -44,6 +44,27 @@ export default class PixelImage {
     this.colorMaps.push(new ColorMap(this.mode.width, this.mode.height, this.mode.palette, resXVal, resYVal));
   }
 
+  public mapPixelIndex(x: number, y: number): number {
+    if (x >= this.mode.width || x < 0) {
+      throw new Error(`x value out of bounds: ${x}`);
+    }
+    if (y >= this.mode.height || y < 0) {
+      throw new Error(`y value out of bounds: ${y}`);
+    }
+    return this.mode.indexMap[this.pixelIndex[y][x]];
+  }
+
+  public extractAttributeData(yOffset: number, callback: (x: number, y: number) => number): Uint8Array {
+    const result: Uint8Array = new Uint8Array(1000).fill(0);
+    let index = 0;
+
+    this.mode.forEachCell(yOffset, (x, y) => {
+      result[index] = x >= this.mode.fliBugSize ? callback(x, y) : 0;
+      index += 1;
+    });
+    return result;
+  }
+
   public debugColorMaps(): PixelImage[] {
     const result: PixelImage[] = [];
 

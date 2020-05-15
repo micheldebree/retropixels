@@ -1,6 +1,4 @@
 import PixelImage from '../model/PixelImage';
-import GraphicMode from '../profiles/GraphicMode';
-import GraphicModes from '../profiles/GraphicModes';
 import C64Layout from './C64Layout';
 import IBinaryFormat from './IBinaryFormat';
 
@@ -13,7 +11,7 @@ import IBinaryFormat from './IBinaryFormat';
 export default class FLIPicture implements IBinaryFormat {
   public formatName = 'FLI';
 
-  public supportedModes: GraphicMode[] = [GraphicModes.c64FLI];
+  public supportedModes: string[] = ['c64FLI'];
 
   private loadAddress: Uint8Array;
 

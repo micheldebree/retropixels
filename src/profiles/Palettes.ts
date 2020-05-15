@@ -39,7 +39,7 @@ class Palettes {
     [0xae, 0xae, 0xae, 0xff]
   ]);
 
-  public static peptoPalette = new Palette([
+  public static pepto = new Palette([
     [0, 0, 0, 0xff], // black
     [0xff, 0xff, 0xff, 0xff], // white
     [0x68, 0x37, 0x2b, 0xff], // red

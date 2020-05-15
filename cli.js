@@ -14,10 +14,7 @@ let ditherRadius = 32;
 cli
   .version(version)
   .usage('[options] <infile> <outfile>')
-  .option(
-    '-m, --mode <graphicMode>',
-    'c64Multicolor (default), c64Hires, c64HiresMono, c64FLI, c64AFLI'
-  )
+  .option('-m, --mode <graphicMode>', 'c64Multicolor (default), c64Hires, c64HiresMono, c64FLI, c64AFLI')
   .option('-d, --ditherMode <ditherMode>', 'bayer2x2, bayer4x4 (default), bayer8x8')
   .option('-r, --ditherRadius [0-64]', '0 = no dithering, 32 = default', parseInt)
   .option('--unicorn', 'Only for unicorns')
@@ -66,7 +63,7 @@ if (outFile === undefined) {
 
 // Save PixelImage as a PNG image.
 function savePng(pixelImage, filename) {
-  new jimp(pixelImage.mode.width, pixelImage.mode.height, function(err, image) {
+  new jimp(pixelImage.mode.width, pixelImage.mode.height, function (err, image) {
     if (err) throw err;
     retropixels.JimpPreprocessor.write(pixelImage, image, filename);
   });
@@ -86,11 +83,14 @@ if (cli.unicorn) {
   converter.poker.quantizer.colorspace = retropixels.Quantizer.colorspaces.Unicorn;
 }
 
-retropixels.JimpPreprocessor.read(inFile, graphicMode).then(jimpImage => {
+const pixelImage = graphicMode.builder(retropixels.Palettes.pepto);
+
+retropixels.JimpPreprocessor.read(inFile, pixelImage.mode).then(jimpImage => {
   try {
+
     ditherer.dither(jimpImage);
 
-    const pixelImage = converter.convert(jimpImage, graphicMode);
+    converter.convert(jimpImage, pixelImage);
 
     outExtension = path.extname(outFile);
 

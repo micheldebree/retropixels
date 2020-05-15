@@ -6,7 +6,6 @@ import HiresPicture from './HiresPicture';
 import KoalaPicture from './KoalaPicture';
 import SpritePad from './SpritePad';
 import PixelImage from '../model/PixelImage';
-import GraphicModes from '../profiles/GraphicModes';
 import C64Layout from './C64Layout';
 import IBinaryFormat from './IBinaryFormat';
 
@@ -28,26 +27,26 @@ export default class C64Writer {
 
   // TODO: support multiple output formats per GraphicMode
   private static getFormat(pixelImage: PixelImage): IBinaryFormat {
-    if (pixelImage.mode === GraphicModes.c64Multicolor) {
+    if (pixelImage.mode.id === 'c64Multicolor') {
       return new KoalaPicture();
     }
 
-    if (pixelImage.mode === GraphicModes.c64FLI) {
+    if (pixelImage.mode.id === 'c64FLI') {
       return new FLIPicture();
     }
 
-    if (pixelImage.mode === GraphicModes.c64AFLI) {
+    if (pixelImage.mode.id === 'c64AFLI') {
       return new AFLIPicture();
     }
 
-    if (pixelImage.mode === GraphicModes.c64Hires || pixelImage.mode === GraphicModes.c64HiresMono) {
+    if (pixelImage.mode.id === 'c64Hires' || pixelImage.mode.id === 'c64HiresMono') {
       return new HiresPicture();
     }
 
-    if (pixelImage.mode === GraphicModes.c64HiresSprites || pixelImage.mode === GraphicModes.c64MulticolorSprites) {
+    if (pixelImage.mode.id === 'c64HiresSprites' || pixelImage.mode.id === 'c64MulticolorSprites') {
       return new SpritePad();
     }
-    throw new Error(`Output format is not supported for mode ${pixelImage.mode}`);
+    throw new Error(`Output format is not supported for mode ${pixelImage.mode.id}`);
   }
 
   private static async save(image: IBinaryFormat, outFile: string): Promise<void> {

@@ -1,17 +1,15 @@
 import PixelImage from '../model/PixelImage';
-import GraphicMode from '../profiles/GraphicMode';
-import GraphicModes from '../profiles/GraphicModes';
 import C64Layout from './C64Layout';
 import IBinaryFormat from './IBinaryFormat';
 
 export default class SpritePad implements IBinaryFormat {
   public formatName = 'Sprite Pad';
 
-  public supportedModes: GraphicMode[] = [
-    GraphicModes.c64HiresSprites,
-    GraphicModes.c64MulticolorSprites,
-    GraphicModes.c64ThreecolorSprites,
-    GraphicModes.c64TwocolorSprites
+  public supportedModes: string[] = [
+    'c64HiresSprites',
+    'c64MulticolorSprites',
+    'c64ThreecolorSprites',
+    'c64TwocolorSprites'
   ];
 
   // $d021, bitmask 00
@@ -33,7 +31,7 @@ export default class SpritePad implements IBinaryFormat {
     const bitmap: Uint8Array = C64Layout.convertBitmap(pixelImage);
 
     const isMulticolor: boolean =
-      pixelImage.mode === GraphicModes.c64MulticolorSprites || pixelImage.mode === GraphicModes.c64ThreecolorSprites;
+      pixelImage.mode.id === 'c64MulticolorSprites' || pixelImage.mode.id === 'c64ThreecolorSprites';
 
     this.backgroundColor = pixelImage.colorMaps[0].get(0, 0);
     this.multiColor1 = isMulticolor ? pixelImage.colorMaps[1].get(0, 0) : 0;

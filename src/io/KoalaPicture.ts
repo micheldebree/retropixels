@@ -1,6 +1,4 @@
 import PixelImage from '../model/PixelImage';
-import GraphicMode from '../profiles/GraphicMode';
-import GraphicModes from '../profiles/GraphicModes';
 import C64Layout from './C64Layout';
 import IBinaryFormat from './IBinaryFormat';
 
@@ -10,7 +8,7 @@ import IBinaryFormat from './IBinaryFormat';
 export default class KoalaPicture implements IBinaryFormat {
   public formatName = 'Koala';
 
-  public supportedModes: GraphicMode[] = [GraphicModes.c64Multicolor];
+  public supportedModes: string[] = ['c64Multicolor'];
 
   private loadAddress: Uint8Array;
 

@@ -1,13 +1,11 @@
 import PixelImage from '../model/PixelImage';
-import GraphicMode from '../profiles/GraphicMode';
-import GraphicModes from '../profiles/GraphicModes';
 import C64Layout from './C64Layout';
 import IBinaryFormat from './IBinaryFormat';
 
 export default class AFLIPicture implements IBinaryFormat {
   public formatName = 'AFLI';
 
-  public supportedModes: GraphicMode[] = [GraphicModes.c64AFLI];
+  public supportedModes: string[] = ['c64AFLI'];
 
   private loadAddress: Uint8Array;
 

@@ -30,7 +30,7 @@ export default class C64Layout {
           let packedByte = 0;
           if (byteX >= pixelImage.mode.fliBugSize) {
             pixelImage.mode.forEachPixel(byteX, (pixelX, shiftTimes) => {
-              packedByte |= pixelImage.mode.mapPixelIndex(pixelImage, pixelX, rowY) << shiftTimes;
+              packedByte |= pixelImage.mapPixelIndex(pixelX, rowY) << shiftTimes;
             });
           }
           bitmap[bitmapIndex] = packedByte;
@@ -48,7 +48,7 @@ export default class C64Layout {
     upperColorIndex: number,
     yOffset = 0
   ): Uint8Array {
-    return pixelImage.mode.extractAttributeData(pixelImage, yOffset, (x, y) => {
+    return pixelImage.extractAttributeData(yOffset, (x, y) => {
       // pack two colors in one byte
       return (
         ((pixelImage.colorMaps[upperColorIndex].get(x, y) << 4) & 0xf0) |
@@ -58,7 +58,7 @@ export default class C64Layout {
   }
 
   public static convertColorram(pixelImage: PixelImage, colorMapIndex: number): Uint8Array {
-    return pixelImage.mode.extractAttributeData(pixelImage, 0, (x, y) => {
+    return pixelImage.extractAttributeData(0, (x, y) => {
       return pixelImage.colorMaps[colorMapIndex].get(x, y) & 0x0f;
     });
   }

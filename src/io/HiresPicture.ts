@@ -1,13 +1,11 @@
 import PixelImage from '../model/PixelImage';
-import GraphicMode from '../profiles/GraphicMode';
-import GraphicModes from '../profiles/GraphicModes';
 import C64Layout from './C64Layout';
 import IBinaryFormat from './IBinaryFormat';
 
 export default class HiresPicture implements IBinaryFormat {
   public formatName = 'Hires';
 
-  public supportedModes: GraphicMode[] = [GraphicModes.c64Hires];
+  public supportedModes: string[] = ['c64Hires'];
 
   private bitmap: Uint8Array;
 

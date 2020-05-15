@@ -42,8 +42,6 @@ samples: build
 	$(CMD) -m c64FLI paintface.jpg ./samples/paintface-FLI.prg
 	$(CMD) -m c64AFLI paintface.jpg ./samples/paintface-AFLI.png
 	$(CMD) -m c64AFLI paintface.jpg ./samples/paintface-AFLI.prg
-	$(CMD) -m c64HiresSprites paintface.jpg ./samples/paintface-HiresSprites.spd
-	$(CMD) -m c64MulticolorSprites paintface.jpg ./samples/paintface-MulticolorSprites.spd
 
 test: build
 	$(CMD) $(EXAMPLE).jpg $(EXAMPLE).prg

@@ -1,11 +1,12 @@
 import Palette from '../model/Palette';
-import PixelImage from '../model/PixelImage';
 
 /**
  * A specific Graphic Mode.
  * Includes a factory for creating new PixelImages in this mode.
  */
 export default class GraphicMode {
+  public id: string;
+
   // width and height in pixels
   public width: number;
 
@@ -31,29 +32,16 @@ export default class GraphicMode {
     3: 3
   };
 
-  // creates an empty PixelImage for this GraphicMode.
-  public factory: () => PixelImage;
-
-  constructor(width: number, height: number, palette: Palette, factory: () => PixelImage) {
+  constructor(id: string, width: number, height: number, palette: Palette) {
+    this.id = id;
     this.width = width;
     this.height = height;
     this.palette = palette;
-    this.factory = factory;
 
     // console.log('Graphicmode:');
     // console.log('------------');
     // console.log(width + ' x ' + height + ' pixels');
     // console.log(this.pixelsPerByte() + ' pixels per byte');
-  }
-
-  public mapPixelIndex(pixelImage: PixelImage, x: number, y: number): number {
-    if (x >= pixelImage.mode.width || x < 0) {
-      throw new Error(`x value out of bounds: ${x}`);
-    }
-    if (y >= pixelImage.mode.height || y < 0) {
-      throw new Error(`y value out of bounds: ${y}`);
-    }
-    return this.indexMap[pixelImage.pixelIndex[y][x]];
   }
 
   public pixelsPerByte(): number {
@@ -62,21 +50,6 @@ export default class GraphicMode {
 
   public pixelsPerCellRow(): number {
     return this.bytesPerCellRow * this.pixelsPerByte();
-  }
-
-  public extractAttributeData(
-    pixelImage: PixelImage,
-    yOffset: number,
-    callback: (x: number, y: number) => number
-  ): Uint8Array {
-    const result: Uint8Array = new Uint8Array(1000).fill(0);
-    let index = 0;
-
-    this.forEachCell(yOffset, (x, y) => {
-      result[index] = x >= this.fliBugSize ? callback(x, y) : 0;
-      index += 1;
-    });
-    return result;
   }
 
   /**
