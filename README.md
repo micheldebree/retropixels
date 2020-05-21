@@ -123,8 +123,9 @@ Run with `node cli.js [options] <infile> <outfile>`
 
 #### Changed
 
-- Default color palette changed from Pepto to Colodore. You can still chose
-  `pepto` with the new `--palette` argument.
+- [#15](https://github.com/micheldebree/retropixels/issues/15): Default color
+  palette changed from Pepto to Colodore. You can still chose `pepto` with the
+  new `--palette` argument.
 - Default color space conversion changed from YUV to XYZ. You can still choose
   `yuv` with the new `--colorspace` argument.
 
