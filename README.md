@@ -111,7 +111,7 @@ Run with `node cli.js [options] <infile> <outfile>`
 
 ## Changelog
 
-### 0.7.0
+### 0.7.1
 
 #### Added
 
