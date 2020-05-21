@@ -9,6 +9,9 @@ import Palette from '../model/Palette';
 // https://bisqwit.iki.fi/jutut/colorquant/
 // https://sistenix.com/rgb2ycbcr.html
 // https://stackoverflow.com/questions/7086820/convert-rgb-to-ycbcr-c-code
+// https://github.com/usolved/cie-rgb-converter/blob/master/cie_rgb_converter.js
+// https://gist.github.com/manojpandey/f5ece715132c572c80421febebaf66ae
+// https://ninedegreesbelow.com/photography/xyz-rgb.html
 
 /**
  * Maps a color to a palette.
@@ -25,7 +28,7 @@ export default class Quantizer {
     );
   };
 
-  public colorspace: (pixel: number[]) => number[] = Quantizer.colorspaceRGB;
+  public colorspace: (pixel: number[]) => number[] = Quantizer.colorspaceXYZ;
 
   // converters from RGB to other colorspace
   public static colorspaceRGB = (pixel: number[]): number[] => {
@@ -75,20 +78,21 @@ export default class Quantizer {
     ];
   };
 
-  public static colorspacLAB = (pixel: number[]): number[] => {
+  public static colorspaceLAB = (pixel: number[]): number[] => {
     const xyzPixel = Quantizer.colorspaceXYZ(pixel);
     const refX = 95.047;
     const refY = 100.0;
     const refZ = 108.883;
     const pow = 1 / 3;
+    const bla = 16 / 116;
 
     let x = xyzPixel[0] / refX; // ref_X =  95.047   Observer= 2°, Illuminant= D65
     let y = xyzPixel[1] / refY; // ref_Y = 100.000
     let z = xyzPixel[2] / refZ; // ref_Z = 108.883
 
-    x = x > 0.008856 ? x ** pow : 7.787 * x + 16 / 116;
-    y = y > 0.008856 ? y ** pow : 7.787 * y + 16 / 116;
-    z = z > 0.008856 ? z ** pow : 7.787 * z + 16 / 116;
+    x = x > 0.008856 ? x ** pow : 7.787 * x + bla;
+    y = y > 0.008856 ? y ** pow : 7.787 * y + bla;
+    z = z > 0.008856 ? z ** pow : 7.787 * z + bla;
 
     return [116 * y - 16, 500 * (x - y), 200 * (y - z)];
   };
@@ -113,11 +117,11 @@ export default class Quantizer {
   }
 
   public static colorspaces = {
-    RGB: Quantizer.colorspaceRGB,
-    YUV: Quantizer.colorspaceYUV,
-    Unicorn: Quantizer.colorspaceRainbow,
-    YCbCr: Quantizer.colorspaceYCbCr,
-    XYZ: Quantizer.colorspaceXYZ,
-    LAB: Quantizer.colorspacLAB
+    rgb: Quantizer.colorspaceRGB,
+    yuv: Quantizer.colorspaceYUV,
+    rainbow: Quantizer.colorspaceRainbow,
+    ycbcr: Quantizer.colorspaceYCbCr,
+    xyz: Quantizer.colorspaceXYZ,
+    lab: Quantizer.colorspaceLAB
   };
 }

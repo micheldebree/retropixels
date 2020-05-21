@@ -4,6 +4,8 @@ import IImageData from '../model/ImageDataInterface';
 import PixelImage from '../model/PixelImage';
 import GraphicMode from '../profiles/GraphicMode';
 
+// https://github.com/oliver-moran/jimp
+
 export default class JimpPreprocessor {
   public static async justRead(filename: string): Promise<IImageData> {
     return (await Jimp.read(filename)).bitmap;
@@ -25,19 +27,25 @@ export default class JimpPreprocessor {
     return image.write(filename);
   }
 
-  public static async write(pixelImage: PixelImage, image: Jimp, filename: string): Promise<Jimp> {
-    this.toJimpImage(pixelImage, image);
+  public static async write(pixelImage: PixelImage, filename: string): Promise<Jimp> {
+    const image: Jimp = await this.toJimpImage(pixelImage);
     this.resize(image, pixelImage.mode);
     return image.write(filename);
   }
 
-  private static toJimpImage(pixelImage: PixelImage, result: Jimp): void {
-    for (let y = 0; y < result.bitmap.height; y += 1) {
-      for (let x = 0; x < result.bitmap.width; x += 1) {
-        const pixelValue: number[] = x >= pixelImage.mode.fliBugSize ? pixelImage.peek(x, y) : [0, 0, 0, 0xff];
-        ImageData.poke(result.bitmap, x, y, pixelValue);
-      }
-    }
+  private static toJimpImage(pixelImage: PixelImage): Promise<Jimp> {
+    return new Promise((resolve, reject) => {
+      new Jimp(pixelImage.mode.width, pixelImage.mode.height, (err, image) => {
+        for (let y = 0; y < image.bitmap.height; y += 1) {
+          for (let x = 0; x < image.bitmap.width; x += 1) {
+            const pixelValue: number[] = x >= pixelImage.mode.fliBugSize ? pixelImage.peek(x, y) : [0, 0, 0, 0xff];
+            ImageData.poke(image.bitmap, x, y, pixelValue);
+          }
+        }
+        if (err) reject(err);
+        resolve(image);
+      });
+    });
   }
 
   private static resize(jimpImage: Jimp, graphicMode: GraphicMode): void {
