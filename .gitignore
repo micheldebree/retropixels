@@ -12,3 +12,4 @@ target
 .idea
 acme-master
 src/c64/*.txt
+.run

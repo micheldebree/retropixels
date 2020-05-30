@@ -1,5 +1,4 @@
-import ImageData from '../model/ImageData';
-import IImageData from '../model/ImageDataInterface';
+import IImageData from '../model/IImageData';
 import Pixels from '../model/Pixels';
 
 /**
@@ -124,7 +123,7 @@ export default class OrderedDither {
   public dither(image: IImageData): void {
     for (let y = 0; y < image.height; y += 1) {
       for (let x = 0; x < image.width; x += 1) {
-        ImageData.poke(image, x, y, this.offsetColor(ImageData.peek(image, x, y), x, y));
+        Pixels.poke(image, x, y, this.offsetColor(Pixels.peek(image, x, y), x, y));
       }
     }
   }

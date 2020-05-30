@@ -1,3 +1,5 @@
+import IImageData from './IImageData';
+
 /**
  * Utility for calculations involving pixels
  */
@@ -19,16 +21,31 @@ export default class Pixels {
     ];
   }
 
-  // HDTV with BT.709
-  public static toYUV2(pixel: number[]): number[] {
-    if (pixel === undefined) {
-      throw new Error('Pixel is mandatory.');
+  // Set the pixel at (x,y)
+  public static poke(imageData: IImageData, x: number, y: number, pixel: number[]): void {
+    if (pixel !== undefined) {
+      const i: number = this.coordsToindex(imageData, x, y);
+      if (i !== undefined) {
+        imageData.data[i] = pixel[0];
+        imageData.data[i + 1] = pixel[1];
+        imageData.data[i + 2] = pixel[2];
+        imageData.data[i + 3] = pixel[3];
+      }
     }
-    return [
-      pixel[0] * 0.2126 + pixel[1] * 0.7152 + pixel[2] * 0.0722,
-      pixel[0] * -0.09991 + pixel[1] * -0.33609 + pixel[2] * 0.436,
-      pixel[0] * 0.615 + pixel[1] * -0.55861 + pixel[2] * -0.05639
-    ];
+  }
+
+  // Get the pixel at (x,y)
+  public static peek(imageData: IImageData, x: number, y: number): number[] {
+    const i: number = this.coordsToindex(imageData, x, y);
+    if (i !== undefined) {
+      return [imageData.data[i], imageData.data[i + 1], imageData.data[i + 2], imageData.data[i + 3]];
+    }
+    return Pixels.emptyPixel;
+  }
+
+  private static coordsToindex(imageData: IImageData, x: number, y: number): number {
+    const result: number = Math.floor(y) * (imageData.width << 2) + (x << 2);
+    return result < imageData.data.length ? result : undefined;
   }
 
   private static cap(pixelChannel: number): number {

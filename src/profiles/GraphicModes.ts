@@ -6,8 +6,6 @@ import Palette from '../model/Palette';
 export default class GraphicModes {
   // C64 modes {{{
 
-  // TODO: GraphicMode is not factory but just property of PixelImage.
-
   public static c64Multicolor: GraphicModeFactory = new GraphicModeFactory(
     (palette: Palette): PixelImage => {
       const gm: GraphicMode = new GraphicMode('c64Multicolor', 160, 200, palette);
@@ -73,90 +71,90 @@ export default class GraphicModes {
     }
   );
 
-  //public static c64HiresSprites: GraphicMode = ((): GraphicMode => {
-  //const result = new GraphicMode(8 * 24, 3 * 21, Palettes.peptoPalette, function () {
-  //const pixelImage: PixelImage = new PixelImage(this);
-  //background
-  //pixelImage.colorMaps.push(new ColorMap(this.width, this.height, Palettes.peptoPalette));
-  //foreground
-  //pixelImage.colorMaps.push(new ColorMap(this.width, this.height, Palettes.peptoPalette, 24, 21));
-  //return pixelImage;
-  //});
-  //result.bytesPerCellRow = 3;
-  //result.rowsPerCell = 21;
-  //return result;
-  //})();
+  // public static c64HiresSprites: GraphicMode = ((): GraphicMode => {
+  // const result = new GraphicMode(8 * 24, 3 * 21, Palettes.peptoPalette, function () {
+  // const pixelImage: PixelImage = new PixelImage(this);
+  // background
+  // pixelImage.colorMaps.push(new ColorMap(this.width, this.height, Palettes.peptoPalette));
+  // foreground
+  // pixelImage.colorMaps.push(new ColorMap(this.width, this.height, Palettes.peptoPalette, 24, 21));
+  // return pixelImage;
+  // });
+  // result.bytesPerCellRow = 3;
+  // result.rowsPerCell = 21;
+  // return result;
+  // })();
 
-  //public static c64TwocolorSprites: GraphicMode = ((): GraphicMode => {
-  //const result = new GraphicMode(8 * 24, 3 * 21, Palettes.peptoPalette, function () {
-  //const pixelImage: PixelImage = new PixelImage(this);
-  //background
-  //pixelImage.colorMaps.push(new ColorMap(this.width, this.height, Palettes.peptoPalette));
-  //foreground
-  //pixelImage.colorMaps.push(new ColorMap(this.width, this.height, Palettes.peptoPalette));
-  //return pixelImage;
-  //});
-  //result.bytesPerCellRow = 3;
-  //result.rowsPerCell = 21;
-  //return result;
-  //})();
+  // public static c64TwocolorSprites: GraphicMode = ((): GraphicMode => {
+  // const result = new GraphicMode(8 * 24, 3 * 21, Palettes.peptoPalette, function () {
+  // const pixelImage: PixelImage = new PixelImage(this);
+  // background
+  // pixelImage.colorMaps.push(new ColorMap(this.width, this.height, Palettes.peptoPalette));
+  // foreground
+  // pixelImage.colorMaps.push(new ColorMap(this.width, this.height, Palettes.peptoPalette));
+  // return pixelImage;
+  // });
+  // result.bytesPerCellRow = 3;
+  // result.rowsPerCell = 21;
+  // return result;
+  // })();
 
-  //public static c64MulticolorSprites: GraphicMode = ((): GraphicMode => {
-  //const result: GraphicMode = new GraphicMode((8 * 24) / 2, 3 * 21, Palettes.peptoPalette, function () {
-  //const pixelImage: PixelImage = new PixelImage(this);
-  //background
-  //pixelImage.colorMaps.push(new ColorMap(this.width, this.height, Palettes.peptoPalette));
-  //d025
-  //pixelImage.colorMaps.push(new ColorMap(this.width, this.height, Palettes.peptoPalette));
-  //d026
-  //pixelImage.colorMaps.push(new ColorMap(this.width, this.height, Palettes.peptoPalette));
-  //d027..d02e
-  //pixelImage.colorMaps.push(new ColorMap(this.width, this.height, Palettes.peptoPalette, 24 / 2, 21));
-  //return pixelImage;
-  //});
-  //result.pixelWidth = 2;
-  //result.bytesPerCellRow = 3;
-  //result.rowsPerCell = 21;
-  //result.indexMap = {
-  //0: 0,
-  //1: 1,
-  //2: 3,
-  //3: 2
-  //};
-  //return result;
-  //})();
+  // public static c64MulticolorSprites: GraphicMode = ((): GraphicMode => {
+  // const result: GraphicMode = new GraphicMode((8 * 24) / 2, 3 * 21, Palettes.peptoPalette, function () {
+  // const pixelImage: PixelImage = new PixelImage(this);
+  // background
+  // pixelImage.colorMaps.push(new ColorMap(this.width, this.height, Palettes.peptoPalette));
+  // d025
+  // pixelImage.colorMaps.push(new ColorMap(this.width, this.height, Palettes.peptoPalette));
+  // d026
+  // pixelImage.colorMaps.push(new ColorMap(this.width, this.height, Palettes.peptoPalette));
+  // d027..d02e
+  // pixelImage.colorMaps.push(new ColorMap(this.width, this.height, Palettes.peptoPalette, 24 / 2, 21));
+  // return pixelImage;
+  // });
+  // result.pixelWidth = 2;
+  // result.bytesPerCellRow = 3;
+  // result.rowsPerCell = 21;
+  // result.indexMap = {
+  // 0: 0,
+  // 1: 1,
+  // 2: 3,
+  // 3: 2
+  // };
+  // return result;
+  // })();
 
-  //public static c64ThreecolorSprites: GraphicMode = ((): GraphicMode => {
-  //const result: GraphicMode = new GraphicMode((8 * 24) / 2, 3 * 21, Palettes.peptoPalette, function () {
-  //const pixelImage: PixelImage = new PixelImage(this);
-  //background
-  //pixelImage.colorMaps.push(new ColorMap(this.width, this.height, Palettes.peptoPalette));
-  //d025
-  //pixelImage.colorMaps.push(new ColorMap(this.width, this.height, Palettes.peptoPalette));
-  //d026
-  //pixelImage.colorMaps.push(new ColorMap(this.width, this.height, Palettes.peptoPalette));
-  //d027..d02e
-  //pixelImage.colorMaps.push(new ColorMap(this.width, this.height, Palettes.peptoPalette));
-  //return pixelImage;
-  //});
-  //result.pixelWidth = 2;
-  //result.bytesPerCellRow = 3;
-  //result.rowsPerCell = 21;
-  //result.indexMap = {
-  //0: 0,
-  //1: 1,
-  //2: 3,
-  //3: 2
-  //};
-  //return result;
-  //})();
+  // public static c64ThreecolorSprites: GraphicMode = ((): GraphicMode => {
+  // const result: GraphicMode = new GraphicMode((8 * 24) / 2, 3 * 21, Palettes.peptoPalette, function () {
+  // const pixelImage: PixelImage = new PixelImage(this);
+  // background
+  // pixelImage.colorMaps.push(new ColorMap(this.width, this.height, Palettes.peptoPalette));
+  // d025
+  // pixelImage.colorMaps.push(new ColorMap(this.width, this.height, Palettes.peptoPalette));
+  // d026
+  // pixelImage.colorMaps.push(new ColorMap(this.width, this.height, Palettes.peptoPalette));
+  // d027..d02e
+  // pixelImage.colorMaps.push(new ColorMap(this.width, this.height, Palettes.peptoPalette));
+  // return pixelImage;
+  // });
+  // result.pixelWidth = 2;
+  // result.bytesPerCellRow = 3;
+  // result.rowsPerCell = 21;
+  // result.indexMap = {
+  // 0: 0,
+  // 1: 1,
+  // 2: 3,
+  // 3: 2
+  // };
+  // return result;
+  // })();
 
-  //public static spectrumStandard: GraphicMode = new GraphicMode(256, 192, Palettes.spectrumPallete, function () {
-  //const pixelImage: PixelImage = new PixelImage(this);
-  //pixelImage.addColorMap(8, 8);
-  //pixelImage.addColorMap(8, 8);
-  //return pixelImage;
-  //});
+  // public static spectrumStandard: GraphicMode = new GraphicMode(256, 192, Palettes.spectrumPallete, function () {
+  // const pixelImage: PixelImage = new PixelImage(this);
+  // pixelImage.addColorMap(8, 8);
+  // pixelImage.addColorMap(8, 8);
+  // return pixelImage;
+  // });
 
   public static all = {
     c64AFLI: GraphicModes.c64AFLI,

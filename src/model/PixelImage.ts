@@ -68,7 +68,7 @@ export default class PixelImage {
   public debugColorMaps(): PixelImage[] {
     const result: PixelImage[] = [];
 
-    for (const colorMap of this.colorMaps) {
+    this.colorMaps.forEach(colorMap => {
       const pixelImage = new PixelImage(this.mode);
       pixelImage.colorMaps.push(colorMap);
       for (let x = 0; x < this.mode.width; x += 1) {
@@ -77,7 +77,7 @@ export default class PixelImage {
         }
       }
       result.push(pixelImage);
-    }
+    });
     return result;
   }
 }

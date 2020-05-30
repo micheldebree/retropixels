@@ -1,17 +1,18 @@
 import Palette from '../model/Palette';
 import PixelImage from '../model/PixelImage';
 import Quantizer from './Quantizer';
-import IImageData from '../model/ImageDataInterface';
-import ImageData from '../model/ImageData';
+import IImageData from '../model/IImageData';
+import Pixels from '../model/Pixels';
 
 export default class Poker {
   public quantizer: Quantizer = new Quantizer();
 
   /**
    * Map a 'real' color to the best match in the image.
+   * @param {PixelImage} image The image to poke to
    * @param {number} x - x coordinate
    * @param {number} y - y coordinate
-   * @param {Array} pixel - Pixel values [r, g, b]
+   * @param {number[]} realColor The color to poke into the image
    */
   public poke(image: PixelImage, x: number, y: number, realColor: number[]): void {
     // idea: do 'smart' poking in a separate class, with dependency to dithering
@@ -39,7 +40,7 @@ export default class Poker {
   public drawImageData(imageData: IImageData, pixelImage: PixelImage): void {
     for (let y = 0; y < pixelImage.mode.height; y += 1) {
       for (let x = 0; x < pixelImage.mode.width; x += 1) {
-        const pixel: number[] = ImageData.peek(imageData, x, y);
+        const pixel: number[] = Pixels.peek(imageData, x, y);
         this.poke(pixelImage, x, y, pixel);
       }
     }
@@ -83,12 +84,6 @@ export default class Poker {
     return undefined;
   }
 
-  /**
-   * Map a pixel to the closest available ColorMap.
-   * @param {int} x X coordinate
-   * @param {int} y Y coordinate
-   * @returns {int} ColorMap index for the closest ColorMap
-   */
   private map(image: PixelImage, x: number, y: number, pixel: number[]): number {
     // determine closest pixel in palette (ignoring alpha)
     const palette = new Palette([]);
