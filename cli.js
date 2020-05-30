@@ -93,26 +93,37 @@ converter.poker.quantizer.colorspace = colorspace;
 
 const pixelImage = graphicMode.builder(palette);
 
-retropixels.JimpPreprocessor.read(inFile, pixelImage.mode).then(jimpImage => {
-  try {
-    ditherer.dither(jimpImage);
+retropixels.JimpPreprocessor.read(inFile, pixelImage.mode)
+  .then(jimpImage => {
+    try {
+      ditherer.dither(jimpImage);
 
-    converter.convert(jimpImage, pixelImage);
+      converter.convert(jimpImage, pixelImage);
 
-    outExtension = path.extname(outFile);
+      outExtension = path.extname(outFile);
 
-    if ('.kla' === outExtension || '.spd' === outExtension) {
-      retropixels.C64Writer.saveBinary(pixelImage, outFile).then(console.log(`${outFile}`));
-    } else if ('.prg' === outExtension) {
-      retropixels.C64Writer.savePrg(pixelImage, outFile).then(console.log(`${outFile}`));
-    } else if ('.png' === outExtension) {
-      retropixels.JimpPreprocessor.write(pixelImage, outFile).then(console.log(`${outFile}`));
-    } else {
-      throw `Unknown file extension ${outExtension}, valid extensions are .png, .kla and .prg`;
+      if ('.kla' === outExtension || '.spd' === outExtension) {
+        retropixels.C64Writer.saveBinary(pixelImage, outFile).then(console.log(`${outFile}`));
+      } else if ('.prg' === outExtension) {
+        retropixels.C64Writer.savePrg(pixelImage, outFile).then(console.log(`${outFile}`));
+      } else if ('.png' === outExtension) {
+        retropixels.JimpPreprocessor.write(pixelImage, outFile).then(console.log(`${outFile}`));
+      } else {
+        throw `Unknown file extension ${outExtension}, valid extensions are .png, .kla and .prg`;
+      }
+    } catch (e) {
+      console.error(e);
+      cli.help();
+      process.exit(1);
     }
-  } catch (e) {
-    console.error(e);
+  })
+  .catch(error => {
+    if (error.code === 'ENOENT') {
+      console.error(`\nERROR: ${error.path} does not exist.\n`);
+    }
+    else {
+      console.error(error);
+    }
     cli.help();
-    process.exit(1);
-  }
-});
+    process.exit(error.errno);
+  });
