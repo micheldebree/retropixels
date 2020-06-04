@@ -2,7 +2,7 @@ import Palette from '../model/Palette';
 import PixelImage from '../model/PixelImage';
 import Quantizer from './Quantizer';
 import IImageData from '../model/IImageData';
-import Pixels from '../model/Pixels';
+import Pixels from "../model/Pixels";
 
 export default class Poker {
   public quantizer: Quantizer = new Quantizer();
@@ -17,15 +17,18 @@ export default class Poker {
   public poke(image: PixelImage, x: number, y: number, realColor: number[]): void {
     // idea: do 'smart' poking in a separate class, with dependency to dithering
 
+    // optimization, assuming all colorMaps have the same palette, do quantization only once
+    const mappedIndex: number = this.quantizer.mapPixel(x, y, realColor, image.colorMaps[0].palette);
+
     // try to reuse existing color map that has an exact fit for this color
-    let colorMapIndex: number = this.findColorInMap(image, x, y, realColor);
+    let colorMapIndex: number = this.findColorInMap(image, x, y, mappedIndex);
     if (colorMapIndex !== undefined) {
       image.pixelIndex[y][x] = colorMapIndex;
       return;
     }
 
     // else see if there is a map with an empty attribute that we can claim
-    colorMapIndex = this.tryClaimUnusedInMap(image, x, y, realColor);
+    colorMapIndex = this.tryClaimUnusedInMap(image, x, y, mappedIndex);
     if (colorMapIndex !== undefined) {
       image.pixelIndex[y][x] = colorMapIndex;
       return;
@@ -52,11 +55,10 @@ export default class Poker {
      ColorMap has that mapped color at the specified position.
      Returns the index of the ColorMap
   */
-  private findColorInMap(image: PixelImage, x: number, y: number, realColor: number[]): number {
+  private findColorInMap(image: PixelImage, x: number, y: number, mappedIndex: number): number {
     let i = 0;
 
     for (const colorMap of image.colorMaps) {
-      const mappedIndex: number = this.quantizer.mapPixel(x, y, realColor, colorMap.palette);
       if (mappedIndex === colorMap.get(x, y)) {
         return i;
       }
@@ -70,13 +72,12 @@ export default class Poker {
     If found, map realColor to the ColorMap's palette and claim the area.
     Returns index into the found ColorMap.
   */
-  private tryClaimUnusedInMap(image: PixelImage, x: number, y: number, realColor: number[]): number {
+  private tryClaimUnusedInMap(image: PixelImage, x: number, y: number, mappedIndex: number): number {
     let i = 0;
 
     for (const colorMap of image.colorMaps) {
       if (colorMap.get(x, y) === undefined) {
-        const color = this.quantizer.mapPixel(x, y, realColor, colorMap.palette);
-        colorMap.put(x, y, color);
+        colorMap.put(x, y, mappedIndex);
         return i;
       }
       i += 1;
@@ -84,12 +85,12 @@ export default class Poker {
     return undefined;
   }
 
-  private map(image: PixelImage, x: number, y: number, pixel: number[]): number {
+  private map(image: PixelImage, x: number, y: number, realColor: number[]): number {
     // determine closest pixel in palette (ignoring alpha)
     const palette = new Palette([]);
     for (const colorMap of image.colorMaps) {
       palette.pixels.push(colorMap.getColor(x, y));
     }
-    return this.quantizer.mapPixel(x, y, pixel, palette);
+    return this.quantizer.mapPixel(x, y, realColor, palette);
   }
 }
