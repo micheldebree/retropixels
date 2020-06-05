@@ -23,17 +23,17 @@ export default class Quantizer {
 
   constructor(palette: Palette, colorspace: (pixel: number[]) => number[]) {
     this.colorspace = colorspace;
-    this.palette = palette;
+    // convert palette to colorspace first
+    this.palette = new Palette(palette.pixels.map(p => colorspace(p)));
   }
 
-  private distance = (onePixel: number[], otherPixel: number[]): number => {
-    const onePixelConverted = this.colorspace(onePixel);
-    const otherPixelConverted = this.colorspace(otherPixel);
+  private distance = (realPixel: number[], palettePixel: number[]): number => {
+    const realPixelConverted = this.colorspace(realPixel);
 
     return Math.sqrt(
-      (onePixelConverted[0] - otherPixelConverted[0]) ** 2 +
-        (onePixelConverted[1] - otherPixelConverted[1]) ** 2 +
-        (onePixelConverted[2] - otherPixelConverted[2]) ** 2
+      (realPixelConverted[0] - palettePixel[0]) ** 2 +
+        (realPixelConverted[1] - palettePixel[1]) ** 2 +
+        (realPixelConverted[2] - palettePixel[2]) ** 2
     );
   };
 
