@@ -17,7 +17,16 @@ import Palette from '../model/Palette';
  * Maps a color to a palette.
  */
 export default class Quantizer {
-  public distance = (onePixel: number[], otherPixel: number[]): number => {
+  public colorspace: (pixel: number[]) => number[];
+
+  private palette: Palette;
+
+  constructor(palette: Palette, colorspace: (pixel: number[]) => number[]) {
+    this.colorspace = colorspace;
+    this.palette = palette;
+  }
+
+  private distance = (onePixel: number[], otherPixel: number[]): number => {
     const onePixelConverted = this.colorspace(onePixel);
     const otherPixelConverted = this.colorspace(otherPixel);
 
@@ -27,8 +36,6 @@ export default class Quantizer {
         (onePixelConverted[2] - otherPixelConverted[2]) ** 2
     );
   };
-
-  public colorspace: (pixel: number[]) => number[] = Quantizer.colorspaceXYZ;
 
   // converters from RGB to other colorspace
   public static colorspaceRGB = (pixel: number[]): number[] => {
@@ -95,12 +102,12 @@ export default class Quantizer {
    * @param palette The palette to map the pixel to
    * @returns The index of the palette entry that contains the best match.
    */
-  public mapPixel(pixel: number[], palette: Palette): number {
+  public mapPixel(pixel: number[]): number {
     // map pixels to [index, distance to pixel],
     // then reduce to just the element with the lowest distance,
     // and return just the index.
 
-    return palette.pixels
+    return this.palette.pixels
       .map((palettePixel, index) => [index, this.distance(pixel, palettePixel)])
       .reduce((acc, current) => (current[1] < acc[1] ? current : acc), [null, Number.POSITIVE_INFINITY])[0];
   }

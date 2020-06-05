@@ -5,7 +5,11 @@ import IImageData from '../model/IImageData';
 import Pixels from '../model/Pixels';
 
 export default class Poker {
-  public quantizer: Quantizer = new Quantizer();
+  private quantizer: Quantizer;
+
+  constructor(quantizer: Quantizer) {
+    this.quantizer = quantizer;
+  }
 
   /**
    * Map a 'real' color to the best match in the image.
@@ -18,7 +22,7 @@ export default class Poker {
     // idea: do 'smart' poking in a separate class, with dependency to dithering
 
     // optimization, assuming all colorMaps have the same palette, do quantization only once
-    const mappedIndex: number = this.quantizer.mapPixel(realColor, image.colorMaps[0].palette);
+    const mappedIndex: number = this.quantizer.mapPixel(realColor);
 
     // try to reuse existing color map that has an exact fit for this color
     let colorMapIndex: number = Poker.findColorInMap(image, x, y, mappedIndex);
@@ -87,10 +91,13 @@ export default class Poker {
 
   private map(image: PixelImage, x: number, y: number, realColor: number[]): number {
     // determine closest pixel in palette (ignoring alpha)
+
     const palette = new Palette([]);
     for (const colorMap of image.colorMaps) {
       palette.pixels.push(colorMap.getColor(x, y));
     }
-    return this.quantizer.mapPixel(realColor, palette);
+
+    const quantizer: Quantizer = new Quantizer(palette, this.quantizer.colorspace);
+    return quantizer.mapPixel(realColor);
   }
 }

@@ -87,9 +87,9 @@ function saveDebugMaps(pixelImage) {
   }
 }
 
-const converter = new retropixels.Converter();
-
-converter.poker.quantizer.colorspace = colorspace;
+const quantizer = new retropixels.Quantizer(palette, colorspace);
+const poker = new retropixels.Poker(quantizer);
+const converter = new retropixels.Converter(poker);
 
 const pixelImage = graphicMode.builder(palette);
 

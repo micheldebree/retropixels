@@ -7,12 +7,12 @@ import Pixels from '../model/Pixels';
 // TODO: this doesn't really do much..
 // Maybe make this part of the cli
 export default class Converter {
-  public poker: Poker;
+  private poker: Poker;
 
-  public optimizer: Optimizer;
+  private optimizer: Optimizer;
 
-  constructor() {
-    this.poker = new Poker();
+  constructor(poker: Poker) {
+    this.poker = poker;
     this.optimizer = new Optimizer(this.poker);
   }
 

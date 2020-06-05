@@ -2,7 +2,6 @@ import ColorMap from '../model/ColorMap';
 import IImageData from '../model/IImageData';
 import PixelImage from '../model/PixelImage';
 import Poker from './Poker';
-import Quantizer from './Quantizer';
 
 export default class Optimizer {
   public poker: Poker;
@@ -43,29 +42,6 @@ export default class Optimizer {
       }
     });
     return maxColor;
-  }
-
-  private static reduceToMedian(colorMap: ColorMap, x: number, y: number, w: number, h: number): number {
-    const quantizer: Quantizer = new Quantizer();
-    const distances: number[] = colorMap.palette.pixels.map(p => quantizer.distance([0, 0, 0, 0], p));
-
-    const dinges: number[][] = [];
-    for (let ix: number = x; ix < x + w; ix += 1) {
-      for (let iy: number = y; iy < y + h; iy += 1) {
-        const colorIndex: number = colorMap.get(ix, iy);
-
-        if (colorIndex !== undefined) {
-          dinges.push([colorIndex, distances[colorIndex]]);
-        }
-      }
-    }
-
-    dinges.sort((first, second) => second[1] - first[1]);
-
-    if (dinges.length > 1) {
-      return dinges[Math.round(dinges.length / 2)][0];
-    }
-    return undefined;
   }
 
   /**

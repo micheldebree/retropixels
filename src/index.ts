@@ -5,3 +5,4 @@ export { default as OrderedDither } from './conversion/OrderedDither';
 export { default as C64Writer } from './io/C64Writer';
 export { default as JimpPreprocessor } from './prepost/JimpPreprocessor';
 export { default as Quantizer } from './conversion/Quantizer';
+export { default as Poker } from './conversion/Poker';
