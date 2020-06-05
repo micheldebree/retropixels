@@ -87,11 +87,25 @@ export default class ColorMap {
   }
 
   public subtract(colorMap: ColorMap): void {
+    this.forEachCell((x, y) => {
+      if (this.get(x, y) === colorMap.get(x, y)) {
+        this.put(x, y, undefined);
+      }
+    });
+  }
+
+  public forEachCell(callback: (x: number, y: number) => void): void {
     for (let x = 0; x < this.width; x += this.resX) {
       for (let y = 0; y < this.height; y += this.resY) {
-        if (this.get(x, y) === colorMap.get(x, y)) {
-          this.put(x, y, undefined);
-        }
+        callback(x, y);
+      }
+    }
+  }
+
+  public forEachPixel(x: number, y: number, callback: (x: number, y: number) => void): void {
+    for (let ix: number = x; ix < x + this.resX; ix += 1) {
+      for (let iy: number = y; iy < y + this.resY; iy += 1) {
+        callback(ix, iy);
       }
     }
   }

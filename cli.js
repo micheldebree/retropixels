@@ -80,9 +80,9 @@ if (outFile === undefined) {
 }
 
 function saveDebugMaps(pixelImage) {
-  var mapimages = pixelImage.debugColorMaps();
-  var i = 0;
-  for (var mapimage of mapimages) {
+  const mapimages = pixelImage.debugColorMaps();
+  let i = 0;
+  for (let mapimage of mapimages) {
     savePng(mapimage, outFile + '-map' + i++ + '.png');
   }
 }
@@ -120,8 +120,7 @@ retropixels.JimpPreprocessor.read(inFile, pixelImage.mode)
   .catch(error => {
     if (error.code === 'ENOENT') {
       console.error(`\nERROR: ${error.path} does not exist.\n`);
-    }
-    else {
+    } else {
       console.error(error);
     }
     cli.help();

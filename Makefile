@@ -44,16 +44,16 @@ samples: build
 	$(CMD) -m c64AFLI paintface.jpg ./samples/paintface-AFLI.prg
 
 test: build
-	rm $(EXAMPLE).png
-	rm $(EXAMPLE).prg
+	rm $(EXAMPLE).png || true
+	rm $(EXAMPLE).prg || true
 	$(CMD) $(EXAMPLE).jpg $(EXAMPLE).prg
 	$(CMD) $(EXAMPLE).jpg $(EXAMPLE).png
 	open "$(EXAMPLE).png"
 	x64sc "$(EXAMPLE).prg"
 
 testfli: build
-	rm $(EXAMPLE).png
-	rm $(EXAMPLE).prg
+	rm $(EXAMPLE).png || true
+	rm $(EXAMPLE).prg || true
 	$(CMD) -m c64FLI "$(EXAMPLE).jpg" "$(EXAMPLE).prg"
 	$(CMD) -m c64FLI "$(EXAMPLE).jpg" "$(EXAMPLE).png"
 	open "$(EXAMPLE).png"

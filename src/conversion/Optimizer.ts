@@ -2,6 +2,7 @@ import ColorMap from '../model/ColorMap';
 import IImageData from '../model/IImageData';
 import PixelImage from '../model/PixelImage';
 import Poker from './Poker';
+import Quantizer from './Quantizer';
 
 export default class Optimizer {
   public poker: Poker;
@@ -29,38 +30,58 @@ export default class Optimizer {
     return unrestrictedImage.colorMaps[0];
   }
 
-  private static reduceToMax(colorMap: ColorMap, x: number, y: number, w: number, h: number): number {
+  private static reduceToMax(colors: number[]): number {
     const weights: number[] = [];
     let maxWeight: number;
     let maxColor: number;
 
+    colors.forEach(c => {
+      weights[c] = weights[c] === undefined ? 1 : weights[c] + 1;
+      if (maxWeight === undefined || weights[c] > maxWeight) {
+        maxWeight = weights[c];
+        maxColor = c;
+      }
+    });
+    return maxColor;
+  }
+
+  private static reduceToMedian(colorMap: ColorMap, x: number, y: number, w: number, h: number): number {
+    const quantizer: Quantizer = new Quantizer();
+    const distances: number[] = colorMap.palette.pixels.map(p => quantizer.distance([0, 0, 0, 0], p));
+
+    const dinges: number[][] = [];
     for (let ix: number = x; ix < x + w; ix += 1) {
       for (let iy: number = y; iy < y + h; iy += 1) {
         const colorIndex: number = colorMap.get(ix, iy);
+
         if (colorIndex !== undefined) {
-          weights[colorIndex] = weights[colorIndex] === undefined ? 1 : weights[colorIndex] + 1;
-          if (maxWeight === undefined || weights[colorIndex] > maxWeight) {
-            maxWeight = weights[colorIndex];
-            maxColor = colorIndex;
-          }
+          dinges.push([colorIndex, distances[colorIndex]]);
         }
       }
     }
-    return maxColor;
+
+    dinges.sort((first, second) => second[1] - first[1]);
+
+    if (dinges.length > 1) {
+      return dinges[Math.round(dinges.length / 2)][0];
+    }
+    return undefined;
   }
 
   /**
    * Delete colors from one colorMap and put them in another.
    */
   private static extractColorMap(fromColorMap: ColorMap, toColorMap: ColorMap): void {
-    const rx: number = toColorMap.resX;
-    const ry: number = toColorMap.resY;
-
-    for (let x = 0; x < toColorMap.width; x += rx) {
-      for (let y = 0; y < toColorMap.height; y += ry) {
-        toColorMap.put(x, y, Optimizer.reduceToMax(fromColorMap, x, y, rx, ry));
-      }
-    }
+    toColorMap.forEachCell((x, y) => {
+      const colors: number[] = [];
+      toColorMap.forEachPixel(x, y, (xx, yy) => {
+        const colorIndex: number = fromColorMap.get(xx, yy);
+        if (colorIndex !== undefined) {
+          colors.push(colorIndex);
+        }
+      });
+      toColorMap.put(x, y, Optimizer.reduceToMax(colors));
+    });
     fromColorMap.subtract(toColorMap);
   }
 }

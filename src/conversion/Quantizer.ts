@@ -39,7 +39,7 @@ export default class Quantizer {
     return [Quantizer.colorspaceYUV(pixel)[0], 0, 0];
   };
 
-  // SDTV with BT.601
+  // SDTV with BT.602
   // https://en.wikipedia.org/wiki/YUV
   public static colorspaceYUV = (pixel: number[]): number[] => {
     return [
@@ -67,15 +67,7 @@ export default class Quantizer {
     g = g > 0.04045 ? (g = ((g + 0.055) / 1.055) ** 2.4) : g / 12.92;
     b = b > 0.04045 ? (b = ((b + 0.055) / 1.055) ** 2.4) : b / 12.92;
 
-    r *= 100;
-    g *= 100;
-    b *= 100;
-
-    return [
-      r * 0.4124 + g * 0.3576 + b * 0.1805,
-      r * 0.2126 + g * 0.7152 + b * 0.0722,
-      r * 0.0193 + g * 0.1192 + b * 0.9505
-    ];
+    return [r * 41.24 + g * 35.76 + b * 18.05, r * 21.26 + g * 71.52 + b * 7.22, r * 1.93 + g * 11.92 + b * 95.05];
   };
 
   public static colorspaceLAB = (pixel: number[]): number[] => {
@@ -99,14 +91,11 @@ export default class Quantizer {
 
   /**
    * Get the best match for a pixel from a palette.
-   * X and Y coordinates are provided for dithering.
-   * @param x X coordinate of the pixel
-   * @param y Y coordinate of the pixel
    * @param pixel The pixel color
    * @param palette The palette to map the pixel to
    * @returns The index of the palette entry that contains the best match.
    */
-  public mapPixel(x: number, y: number, pixel: number[], palette: Palette): number {
+  public mapPixel(pixel: number[], palette: Palette): number {
     // map pixels to [index, distance to pixel],
     // then reduce to just the element with the lowest distance,
     // and return just the index.
