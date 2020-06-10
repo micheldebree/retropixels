@@ -1,5 +1,5 @@
 | Command | Mean [ms] | Min [ms] | Max [ms] | Relative |
 |:---|---:|---:|---:|---:|
-| `node cli.js paintface.jpg -c rgb c64Multicolor ./tmp.png` | 446.7 ± 6.1 | 435.1 | 453.6 | 1.01 ± 0.02 |
-| `node cli.js paintface.jpg -c yuv c64Multicolor ./tmp.png` | 443.2 ± 9.1 | 436.7 | 468.0 | 1.00 |
-| `node cli.js paintface.jpg -c xyz c64Multicolor ./tmp.png` | 695.8 ± 20.4 | 670.1 | 730.8 | 1.57 ± 0.06 |
+| `node cli.js paintface.jpg -c rgb c64Multicolor ./tmp.png` | 450.9 ± 16.8 | 438.4 | 494.8 | 1.00 ± 0.04 |
+| `node cli.js paintface.jpg -c yuv c64Multicolor ./tmp.png` | 448.7 ± 5.7 | 441.2 | 459.5 | 1.00 |
+| `node cli.js paintface.jpg -c xyz c64Multicolor ./tmp.png` | 701.5 ± 23.8 | 675.0 | 730.8 | 1.56 ± 0.06 |
