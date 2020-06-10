@@ -94,20 +94,23 @@ const converter = new retropixels.Converter(poker);
 const pixelImage = graphicMode.builder(palette);
 
 retropixels.JimpPreprocessor.read(inFile, pixelImage.mode)
-  .then(jimpImage => {
+  .then(async jimpImage => {
     try {
       ditherer.dither(jimpImage);
 
       converter.convert(jimpImage, pixelImage);
 
-      outExtension = path.extname(outFile);
+      const outExtension = path.extname(outFile);
 
       if ('.kla' === outExtension || '.spd' === outExtension) {
-        retropixels.C64Writer.saveBinary(pixelImage, outFile).then(console.log(`${outFile}`));
+        await retropixels.C64Writer.saveBinary(pixelImage, outFile);
+        console.log(`${outFile}`);
       } else if ('.prg' === outExtension) {
-        retropixels.C64Writer.savePrg(pixelImage, outFile).then(console.log(`${outFile}`));
+        await retropixels.C64Writer.savePrg(pixelImage, outFile);
+        console.log(`${outFile}`);
       } else if ('.png' === outExtension) {
-        retropixels.JimpPreprocessor.write(pixelImage, outFile).then(console.log(`${outFile}`));
+        await retropixels.JimpPreprocessor.write(pixelImage, outFile);
+        console.log(`${outFile}`);
       } else {
         throw `Unknown file extension ${outExtension}, valid extensions are .png, .kla and .prg`;
       }

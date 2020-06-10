@@ -7,7 +7,7 @@ import Pixels from '../model/Pixels';
 // TODO: this doesn't really do much..
 // Maybe make this part of the cli
 export default class Converter {
-  private poker: Poker;
+  private readonly poker: Poker;
 
   private optimizer: Optimizer;
 

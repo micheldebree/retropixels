@@ -7,19 +7,10 @@ import Pixels from '../model/Pixels';
 // https://github.com/oliver-moran/jimp
 
 export default class JimpPreprocessor {
-  public static async justRead(filename: string): Promise<IImageData> {
-    return (await Jimp.read(filename)).bitmap;
-  }
-
   public static async read(filename: string, graphicMode: GraphicMode): Promise<IImageData> {
     const jimpImage: Jimp = await Jimp.read(filename);
     this.cropFill(jimpImage, graphicMode);
     return jimpImage.bitmap;
-  }
-
-  public static async justwrite(pixelImage: PixelImage, image: Jimp, filename: string): Promise<Jimp> {
-    this.pokeToJimp(image, pixelImage);
-    return image.write(filename);
   }
 
   public static async write(pixelImage: PixelImage, filename: string): Promise<Jimp> {

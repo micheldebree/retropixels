@@ -1,0 +1,5 @@
+{
+	"request": "launch",
+	"program": "${workspaceFolder}/cli.js",
+	"args": ["paintface.jpg", "paintface.png"]
+}

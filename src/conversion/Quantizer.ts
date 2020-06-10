@@ -70,9 +70,9 @@ export default class Quantizer {
     let g = pixel[1] / 255;
     let b = pixel[2] / 255;
 
-    r = r > 0.04045 ? (r = ((r + 0.055) / 1.055) ** 2.4) : r / 12.92;
-    g = g > 0.04045 ? (g = ((g + 0.055) / 1.055) ** 2.4) : g / 12.92;
-    b = b > 0.04045 ? (b = ((b + 0.055) / 1.055) ** 2.4) : b / 12.92;
+    r = r > 0.04045 ? ((r + 0.055) / 1.055) ** 2.4 : r / 12.92;
+    g = g > 0.04045 ? ((g + 0.055) / 1.055) ** 2.4 : g / 12.92;
+    b = b > 0.04045 ? ((b + 0.055) / 1.055) ** 2.4 : b / 12.92;
 
     return [r * 41.24 + g * 35.76 + b * 18.05, r * 21.26 + g * 71.52 + b * 7.22, r * 1.93 + g * 11.92 + b * 95.05];
   };
@@ -99,7 +99,6 @@ export default class Quantizer {
   /**
    * Get the best match for a pixel from a palette.
    * @param pixel The pixel color
-   * @param palette The palette to map the pixel to
    * @returns The index of the palette entry that contains the best match.
    */
   public mapPixel(pixel: number[]): number {

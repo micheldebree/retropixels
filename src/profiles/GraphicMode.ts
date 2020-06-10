@@ -54,8 +54,6 @@ export default class GraphicMode {
 
   /**
    * Execute for each row in a cell.
-   * @param pixelImage The image
-   * @param cellX The left of the cell
    * @param cellY The top of the cell
    * @param callback
    */
@@ -67,9 +65,8 @@ export default class GraphicMode {
 
   /**
    * Execute for each cell in the image.
-   * @param pixelImage The image
    * @param yOffset Added to the y coordinate of the cell top
-   * @param callback Called with the topleft position in the image of the cell.
+   * @param callback Called with the top left position in the image of the cell.
    */
   public forEachCell(yOffset = 0, callback: (x: number, y: number) => void): void {
     const pixelsPerCellRow: number = this.pixelsPerCellRow();
