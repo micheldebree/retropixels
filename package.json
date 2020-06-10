@@ -1,6 +1,6 @@
 {
   "name": "retropixels",
-  "version": "0.7.2-SNAPSHOT",
+  "version": "0.7.2",
   "description": "A cross platform command line tool to convert images to Commodore 64 format.",
   "main": "target/index.js",
   "bin": {
@@ -10,7 +10,7 @@
     "build": "npx tsc",
     "test": "npx jest",
     "lint": "npx eslint '*/**/*.{js,ts}' --quiet",
-    "fix": "npx eslint '*/**/*.{js,ts}' --quiet --fix"
+    "fix": "npx eslint '*/**/*.{js,ts}' --quiet --fix && npx prettier cli.js --write"
   },
   "dependencies": {
     "commander": "5.1.0",

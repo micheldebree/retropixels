@@ -9,26 +9,30 @@ target/c64/%.prg: src/c64/%.asm target/c64/
 build: node_modules $(C64CODE)
 	yarn build
 
+cleanbuild: clean node_modules format build samples
+
 target/c64/:
 	mkdir -p target/c64
 
 clean:
 	rm -rf target && rm -f *.png && rm -f *.prg && rm -rf samples && rm -rf node_modules
 
+format:
+	yarn fix || true
+
 node_modules:
 	yarn install
 
-release: publish
+# Be careful: when you release everything that is not in Git is deleted.
+release: build
+	git clean -d -f
+	npm publish
 	git push
 	git push --tags
 
-snapshot: build
+snapshot: cleanbuild
 	git clean -d -f
 	npm publish --tag snapshot
-
-publish: build
-	git clean -d -f
-	npm publish
 
 samples: build
 	$(CMD) paintface.jpg ./samples/paintface-Multicolor.png
@@ -58,3 +62,19 @@ testfli: build
 	$(CMD) -m c64FLI "$(EXAMPLE).jpg" "$(EXAMPLE).png"
 	open "$(EXAMPLE).png"
 	x64sc "$(EXAMPLE).prg"
+
+benchmark: build
+	hyperfine --export-markdown Benchmark-formats.md \
+		"$(CMD) paintface.jpg ./tmp.png" \
+		"$(CMD) paintface.jpg ./tmp.prg" \
+		"$(CMD) paintface.jpg ./tmp.kla"
+	hyperfine --export-markdown Benchmark-modes.md \
+		"$(CMD) paintface.jpg -m c64Multicolor ./tmp.png" \
+		"$(CMD) paintface.jpg -m c64Hires ./tmp.png" \
+		"$(CMD) paintface.jpg -m c64HiresMono ./tmp.png" \
+		"$(CMD) paintface.jpg -m c64FLI ./tmp.png" \
+		"$(CMD) paintface.jpg -m c64AFLI ./tmp.png" 
+	hyperfine --export-markdown Benchmark-colorspaces.md \
+		"$(CMD) paintface.jpg -c rgb c64Multicolor ./tmp.png" \
+		"$(CMD) paintface.jpg -c yuv c64Multicolor ./tmp.png" \
+		"$(CMD) paintface.jpg -c xyz c64Multicolor ./tmp.png" 

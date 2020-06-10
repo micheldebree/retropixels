@@ -111,6 +111,15 @@ Run with `node cli.js [options] <infile> <outfile>`
 
 ## Changelog
 
+### 0.7.2
+
+#### Changed
+
+- Fixed [#37](https://github.com/micheldebree/retropixels/issues/37):
+  Unfriendly error message when file not found
+- [#38](https://github.com/micheldebree/retropixels/issues/38):
+  Improve performance of quantizing
+
 ### 0.7.1
 
 #### Added
