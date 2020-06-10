@@ -17,7 +17,6 @@
   "rules": {
     "semi": 2,
     "quotes": [2, "single"],
-    "no-bitwise": "off",
-    "@typescript-eslint/interface-name-prefix": ["warn", { "prefixWithI": "always" }]
+    "no-bitwise": "off"
   }
 }
