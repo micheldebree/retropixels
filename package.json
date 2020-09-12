@@ -13,29 +13,29 @@
     "fix": "npx eslint '*/**/*.{js,ts}' --quiet --fix && npx prettier cli.js --write"
   },
   "dependencies": {
-    "commander": "5.1.0",
+    "commander": "6.1.0",
     "fs-extra": "9.0.1",
-    "jimp": "0.13.0",
+    "jimp": "0.16.1",
     "path": "0.12.7"
   },
   "devDependencies": {
     "@types/fs-extra": "9.0.1",
-    "@types/node": "14.0.13",
-    "@typescript-eslint/eslint-plugin": "3.2.0",
-    "@typescript-eslint/parser": "3.2.0",
-    "ajv": "6.12.2",
+    "@types/node": "14.10.1",
+    "@typescript-eslint/eslint-plugin": "4.1.0",
+    "@typescript-eslint/parser": "4.1.0",
+    "ajv": "6.12.4",
     "c64jasm": "0.8.1",
     "del": "5.1.0",
-    "eslint": "7.2.0",
-    "eslint-config-airbnb-typescript": "8.0.2",
+    "eslint": "7.8.1",
+    "eslint-config-airbnb-typescript": "10.0.0",
     "eslint-config-prettier": "6.11.0",
-    "eslint-plugin-import": "2.21.2",
-    "eslint-plugin-prettier": "3.1.3",
-    "jest": "26.0.1",
-    "prettier": "2.0.5",
-    "retire": "2.2.1",
-    "ts-jest": "26.1.0",
-    "typescript": "3.9.5"
+    "eslint-plugin-import": "2.22.0",
+    "eslint-plugin-prettier": "3.1.4",
+    "jest": "26.4.2",
+    "prettier": "2.1.1",
+    "retire": "2.2.2",
+    "ts-jest": "26.3.0",
+    "typescript": "4.0.2"
   },
   "jest": {
     "moduleFileExtensions": [
