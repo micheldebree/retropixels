@@ -12,6 +12,7 @@ import Palette from '../model/Palette';
 // https://github.com/usolved/cie-rgb-converter/blob/master/cie_rgb_converter.js
 // https://gist.github.com/manojpandey/f5ece715132c572c80421febebaf66ae
 // https://ninedegreesbelow.com/photography/xyz-rgb.html
+// https://bottosson.github.io/posts/oklab/
 
 /**
  * Maps a color to a palette.
@@ -66,9 +67,9 @@ export default class Quantizer {
   };
 
   public static colorspaceXYZ = (pixel: number[]): number[] => {
-    let r = pixel[0] / 255;
-    let g = pixel[1] / 255;
-    let b = pixel[2] / 255;
+    let r = pixel[0];
+    let g = pixel[1];
+    let b = pixel[2];
 
     r = r > 0.04045 ? ((r + 0.055) / 1.055) ** 2.4 : r / 12.92;
     g = g > 0.04045 ? ((g + 0.055) / 1.055) ** 2.4 : g / 12.92;
@@ -96,6 +97,22 @@ export default class Quantizer {
     return [116 * y - 16, 500 * (x - y), 200 * (y - z)];
   };
 
+  public static colorspaceOklab = (pixel: number[]): number[] => {
+    const r: number = pixel[0];
+    const g: number = pixel[1];
+    const b: number = pixel[2];
+
+    const l: number = 0.412165612 * r + 0.536275208 * g + 0.0514575653 * b;
+    const m: number = 0.211859107 * r + 0.6807189584 * g + 0.107406579 * b;
+    const s: number = 0.0883097947 * r + 0.2818474174 * g + 0.6302613616 * b;
+
+    return [
+      0.2104542553 * l + 0.793617785 * m - 0.0040720468 * s,
+      1.9779984951 * l - 2.428592205 * m + 0.4505937099 * s,
+      0.0259040371 * l + 0.7827717662 * m - 0.808675766 * s
+    ];
+  };
+
   /**
    * Get the best match for a pixel from a palette.
    * @param pixel The pixel color
@@ -117,6 +134,7 @@ export default class Quantizer {
     rainbow: Quantizer.colorspaceRainbow,
     ycbcr: Quantizer.colorspaceYCbCr,
     xyz: Quantizer.colorspaceXYZ,
-    lab: Quantizer.colorspaceLAB
+    lab: Quantizer.colorspaceLAB,
+    oklab: Quantizer.colorspaceOklab
   };
 }
