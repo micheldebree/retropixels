@@ -17,10 +17,8 @@ export default class Converter {
   }
 
   public convert(imageData: IImageData, pixelImage: PixelImage): void {
-    console.time('Converter::convert');
     this.optimizer.optimizeColorMaps(pixelImage, imageData);
     this.drawImageData(pixelImage, imageData);
-    console.timeEnd('Converter::convert');
   }
 
   /**

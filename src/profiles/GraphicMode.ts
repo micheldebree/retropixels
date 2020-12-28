@@ -57,7 +57,7 @@ export default class GraphicMode {
    * @param cellY The top of the cell
    * @param callback
    */
-  public forEachCellRow(cellY: number, callback: (y) => void): void {
+  public forEachCellRow(cellY: number, callback: (y: number) => void): void {
     for (let rowY = cellY; rowY < cellY + this.rowsPerCell; rowY += 1) {
       callback(rowY);
     }
@@ -78,7 +78,7 @@ export default class GraphicMode {
     }
   }
 
-  public forEachByte(cellX: number, callback: (x) => void): void {
+  public forEachByte(cellX: number, callback: (x: number) => void): void {
     const pixelsPerByte: number = this.pixelsPerByte();
     for (let byteX = cellX; byteX < cellX + this.bytesPerCellRow * pixelsPerByte; byteX += pixelsPerByte) {
       callback(byteX);
