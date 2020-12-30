@@ -27,8 +27,11 @@ export default class C64Writer {
 
   // TODO: support multiple output formats per GraphicMode
   private static getFormat(pixelImage: PixelImage): IBinaryFormat {
-    if (pixelImage.mode.id === 'c64Multicolor') {
-      return new KoalaPicture();
+    if (pixelImage.mode.id === 'bitmap') {
+      if (pixelImage.mode.pixelWidth === 2) {
+        return new KoalaPicture();
+      }
+      return new HiresPicture();
     }
 
     if (pixelImage.mode.id === 'c64FLI') {
@@ -39,13 +42,10 @@ export default class C64Writer {
       return new AFLIPicture();
     }
 
-    if (pixelImage.mode.id === 'c64Hires' || pixelImage.mode.id === 'c64HiresMono') {
-      return new HiresPicture();
-    }
-
-    if (pixelImage.mode.id === 'c64HiresSprites' || pixelImage.mode.id === 'c64MulticolorSprites') {
+    if (pixelImage.mode.id === 'c64Sprites') {
       return new SpritePad();
     }
+
     throw new Error(`Output format is not supported for mode ${pixelImage.mode.id}`);
   }
 

@@ -6,8 +6,8 @@
     "name": "Launch Program",
     "program": "${workspaceRoot}/cli.js",
     "args": [
-      "-c", "oklab",
-      "paintface.jpg", "paintface.png"
+      "-m", "c64Sprites",
+      "paintface.jpg", "paintface.spd"
     ]
   }]
 }

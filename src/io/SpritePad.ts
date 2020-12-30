@@ -30,8 +30,7 @@ export default class SpritePad implements IBinaryFormat {
   public fromPixelImage(pixelImage: PixelImage): void {
     const bitmap: Uint8Array = C64Layout.convertBitmap(pixelImage);
 
-    const isMulticolor: boolean =
-      pixelImage.mode.id === 'c64MulticolorSprites' || pixelImage.mode.id === 'c64ThreecolorSprites';
+    const isMulticolor: boolean = pixelImage.mode.pixelWidth === 2;
 
     this.backgroundColor = pixelImage.colorMaps[0].get(0, 0);
     this.multiColor1 = isMulticolor ? pixelImage.colorMaps[1].get(0, 0) : 0;

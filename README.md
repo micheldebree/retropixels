@@ -22,9 +22,7 @@ You now have a new shell command called `retropixels`
 
 ## Usage
 
-```sh
-retropixels [options] <infile> <outfile>
-```
+    retropixels [options] <infile> <outfile>
 
 With
 
@@ -32,15 +30,14 @@ With
 - `<outfile>`: the converted image. The extension determines the format:
   - `<outfile>.png` produces a PNG file
   - `<outfile>.kla` produces a Koala Painter file
-    (only supported for c64Multicolor mode)
+    (only supported for bitmap mode without `--hires`)
   - `<outfile>.prg` produces a Commodore 64 executable
 - `[options]`:
   - `-m <mode>` with `<mode>`:
-    - `c64Multicolor` (default)
-    - `c64Hires`
-    - `c64HiresMono`
+    - `bitmap` (default)
     - `c64FLI`
     - `c64AFLI`
+    - 'c64Sprites`
   - `-d <ditherMode>` with `<ditherMode>`:
     - `bayer2x2`
     - `bayer4x4` (default)
@@ -56,6 +53,13 @@ With
     - `yuv`
     - `rainbow`
     - `rgb` (no conversion)
+  - `--cols <columns>` with `<columns>`:
+    - The number of sprites in horizontal direction. `c64Sprites` mode only.
+  - `--rows <rows>` with `<rows>`:
+    - The number of sprites in vertical direction. `c64Sprites` mode only.
+  - `--hires`: use hires mode instead of multicolor
+  - `--nomaps`: restrict to a single color per attribute, even if a different
+    color per attribute cell is allowed. Especially useful in hires mode.
 
 Notes:
 
@@ -70,22 +74,16 @@ Notes:
 
 Convert an image to a Commodore 64 executable:
 
-```sh
-retropixels -b bayer8x8 -r 64 eye.jpg eye.prg
-```
+    retropixels -b bayer8x8 -r 64 eye.jpg eye.prg
 
 View the result by running it in the
 [VICE](http://vice-emu.sourceforge.net) emulator:
 
-```sh
-x64 eye.prg
-```
+    x64 eye.prg
 
 ## Uninstall
 
-```sh
-npm uninstall -g retropixels
-```
+    npm uninstall -g retropixels
 
 ## Development
 
@@ -101,11 +99,9 @@ It should work on other platforms but you're on your own there.
 
 ### Build
 
-```sh
-git clone https://github.com/micheldebree/retropixels.git
-cd retropixels
-make
-```
+    git clone https://github.com/micheldebree/retropixels.git
+    cd retropixels
+    make
 
 Run with `node cli.js [options] <infile> <outfile>`
 

@@ -8,16 +8,20 @@ const { version } = require('./package');
 cli
   .version(version)
   .usage('[options] <infile> <outfile>')
-  .option('-m, --mode <graphicMode>', 'c64Multicolor (default), c64Hires, c64HiresMono, c64FLI, c64AFLI')
+  .option('-m, --mode <graphicMode>', 'bitmap (default), c64FLI, c64AFLI, c64Sprites')
   .option('-d, --ditherMode <ditherMode>', 'bayer2x2, bayer4x4 (default), bayer8x8')
   .option('-r, --ditherRadius [0-64]', '0 = no dithering, 32 = default', parseInt)
   .option('-p, --palette <palette>', 'colodore (default), pepto, deekay, rainbow')
   .option('-c, --colorspace <colorspace>', 'xyz (default), yuv, rgb (no conversion)')
+  .option('--cols <columns>', 'number of columns of sprites', parseInt)
+  .option('--rows <rows>', 'number of rows of sprites', parseInt)
+  .option('--hires', 'hires mode')
+  .option('--nomaps', 'use one color per attribute instead of a map')
   .parse(process.argv);
 
 // defaults
 if (!cli.mode) {
-  cli.mode = 'c64Multicolor';
+  cli.mode = 'bitmap';
 }
 
 if (!cli.ditherMode) {
@@ -34,6 +38,14 @@ if (!cli.palette) {
 
 if (!cli.colorspace) {
   cli.colorspace = 'xyz';
+}
+
+if (!cli.cols) {
+  cli.cols = 8;
+}
+
+if (!cli.rows) {
+  cli.rows = 8;
 }
 
 const graphicMode = retropixels.GraphicModes.all[cli.mode];
@@ -91,7 +103,13 @@ const quantizer = new retropixels.Quantizer(palette, colorspace);
 const poker = new retropixels.Poker(quantizer);
 const converter = new retropixels.Converter(poker);
 
-const pixelImage = graphicMode.builder(palette);
+// props are only used in sprite mode for now
+const pixelImage = graphicMode.builder(palette, {
+  rows: cli.rows,
+  columns: cli.cols,
+  multicolor: !cli.hires,
+  nomaps: cli.nomaps
+});
 
 retropixels.JimpPreprocessor.read(inFile, pixelImage.mode)
   .then(async jimpImage => {

@@ -5,7 +5,7 @@ import IBinaryFormat from './IBinaryFormat';
 export default class HiresPicture implements IBinaryFormat {
   public formatName = 'Hires';
 
-  public supportedModes: string[] = ['c64Hires'];
+  public supportedModes: string[] = ['bitmap'];
 
   private bitmap: Uint8Array;
 
