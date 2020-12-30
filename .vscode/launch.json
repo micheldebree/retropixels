@@ -4,10 +4,10 @@
     "type": "node",
     "request": "launch",
     "name": "Launch Program",
-    "program": "${workspaceRoot}/index.js",
+    "program": "${workspaceRoot}/cli.js",
     "args": [
-      "-m", "c64Hires",
-      "paintface.jpg", "paintface.prg"
+      "-c", "oklab",
+      "paintface.jpg", "paintface.png"
     ]
   }]
 }

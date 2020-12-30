@@ -26,10 +26,12 @@ export default class Pixels {
     if (pixel !== undefined) {
       const i: number = this.coordsToindex(imageData, x, y);
       if (i !== undefined) {
+        /* eslint-disable no-param-reassign,prefer-destructuring */
         imageData.data[i] = pixel[0];
         imageData.data[i + 1] = pixel[1];
         imageData.data[i + 2] = pixel[2];
         imageData.data[i + 3] = pixel[3];
+        /* eslint-enable no-param-reassign,prefer-destructuring */
       }
     }
   }

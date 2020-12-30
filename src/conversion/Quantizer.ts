@@ -13,6 +13,9 @@ import Palette from '../model/Palette';
 // https://gist.github.com/manojpandey/f5ece715132c572c80421febebaf66ae
 // https://ninedegreesbelow.com/photography/xyz-rgb.html
 // https://bottosson.github.io/posts/oklab/
+// https://stackoverflow.com/questions/9018016/how-to-compare-two-colors-for-similarity-difference
+// http://www.colorwiki.com/wiki/Delta_E:_The_Color_Difference
+// https://techkonusa.com/a-simple-review-of-cie-%CE%B4e-color-difference-equations/
 
 /**
  * Maps a color to a palette.

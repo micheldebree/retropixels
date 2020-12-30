@@ -20,6 +20,7 @@ export default class Poker {
    */
   public poke(image: PixelImage, x: number, y: number, realColor: number[]): void {
     // idea: do 'smart' poking in a separate class, with dependency to dithering
+    /* eslint-disable no-param-reassign */
 
     // optimization, assuming all colorMaps have the same palette, do quantization only once
     const mappedIndex: number = this.quantizer.mapPixel(realColor);
@@ -41,6 +42,8 @@ export default class Poker {
     // otherwise just map to the ColorMap that has the closest match at x,y
     colorMapIndex = this.map(image, x, y, realColor);
     image.pixelIndex[y][x] = colorMapIndex;
+
+    /* eslint-disable no-param-reassign */
   }
 
   // Draw ImageData onto a PixelImage
@@ -62,12 +65,14 @@ export default class Poker {
   private static findColorInMap(image: PixelImage, x: number, y: number, mappedIndex: number): number {
     let i = 0;
 
+    /* eslint-disable no-restricted-syntax */
     for (const colorMap of image.colorMaps) {
       if (mappedIndex === colorMap.get(x, y)) {
         return i;
       }
       i += 1;
     }
+    /* eslint-enable no-restricted-syntax */
     return undefined;
   }
 
@@ -79,6 +84,7 @@ export default class Poker {
   private static tryClaimUnusedInMap(image: PixelImage, x: number, y: number, mappedIndex: number): number {
     let i = 0;
 
+    /* eslint-disable no-restricted-syntax */
     for (const colorMap of image.colorMaps) {
       if (colorMap.get(x, y) === undefined) {
         colorMap.put(x, y, mappedIndex);
@@ -86,6 +92,7 @@ export default class Poker {
       }
       i += 1;
     }
+    /* eslint-enable no-restricted-syntax */
     return undefined;
   }
 
@@ -93,9 +100,11 @@ export default class Poker {
     // determine closest pixel in palette (ignoring alpha)
 
     const palette = new Palette([]);
+    /* eslint-disable no-restricted-syntax */
     for (const colorMap of image.colorMaps) {
       palette.pixels.push(colorMap.getColor(x, y));
     }
+    /* eslint-enable no-restricted-syntax */
 
     const quantizer: Quantizer = new Quantizer(palette, this.quantizer.colorspace);
     return quantizer.mapPixel(realColor);

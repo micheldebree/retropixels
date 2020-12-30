@@ -9,8 +9,8 @@
   "scripts": {
     "build": "npx tsc",
     "test": "npx jest",
-    "lint": "npx eslint '*/**/*.{js,ts}' --quiet",
-    "fix": "npx eslint '*/**/*.{js,ts}' --quiet --fix && npx prettier cli.js --write"
+    "lint": "npx eslint '*/**/*.{js,ts}' --quiet -c .eslintrc.json --no-eslintrc",
+    "fix": "npx eslint '*/**/*.{js,ts}' --quiet --fix -c .eslintrc.json --no-eslintrc && npx prettier cli.js --write"
   },
   "dependencies": {
     "commander": "6.2.1",
