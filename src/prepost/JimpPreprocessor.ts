@@ -7,9 +7,13 @@ import Pixels from '../model/Pixels';
 // https://github.com/oliver-moran/jimp
 
 export default class JimpPreprocessor {
-  public static async read(filename: string, graphicMode: GraphicMode): Promise<IImageData> {
+  public static async read(filename: string, graphicMode: GraphicMode, noscale: boolean): Promise<IImageData> {
     const jimpImage: Jimp = await Jimp.read(filename);
-    this.cropFill(jimpImage, graphicMode);
+    if (noscale) {
+      this.crop(jimpImage, graphicMode);
+    } else {
+      this.cropFill(jimpImage, graphicMode);
+    }
     return jimpImage.bitmap;
   }
 
@@ -42,18 +46,12 @@ export default class JimpPreprocessor {
     jimpImage.resize(graphicMode.width * graphicMode.pixelWidth, graphicMode.height * graphicMode.pixelHeight);
   }
 
-  // Crop a JIMP Image to fill up a specific ratio. Ratio is passed as relative width and height.
+  private static crop(jimpImage: Jimp, graphicMode: GraphicMode): void {
+    jimpImage.crop(0, 0, graphicMode.width, graphicMode.height);
+  }
+
   private static cropFill(jimpImage: Jimp, graphicMode: GraphicMode): void {
-    const srcWidth: number = jimpImage.bitmap.width;
-    const srcHeight: number = jimpImage.bitmap.height;
-    const destRatio: number =
-      (graphicMode.width * graphicMode.pixelWidth) / (graphicMode.height * graphicMode.pixelHeight);
-    const srcRatio: number = srcWidth / srcHeight;
-    const cropWidth: number = Math.round(srcRatio > destRatio ? srcHeight * destRatio : srcWidth);
-    const cropHeight: number = Math.round(srcRatio > destRatio ? srcHeight : srcWidth / destRatio);
-    const sourceLeft: number = Math.round((srcWidth - cropWidth) / 2);
-    const sourceTop: number = Math.round((srcHeight - cropHeight) / 2);
-    jimpImage.crop(sourceLeft, sourceTop, cropWidth, cropHeight);
+    jimpImage.cover(graphicMode.width * graphicMode.pixelWidth, graphicMode.height * graphicMode.pixelHeight);
     jimpImage.resize(graphicMode.width, graphicMode.height);
   }
 }

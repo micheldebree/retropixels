@@ -11,8 +11,6 @@ import IBinaryFormat from './IBinaryFormat';
 export default class FLIPicture implements IBinaryFormat {
   public formatName = 'FLI';
 
-  public supportedModes: string[] = ['c64FLI'];
-
   private loadAddress: Uint8Array;
 
   private colorRam: Uint8Array;

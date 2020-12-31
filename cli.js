@@ -17,6 +17,7 @@ cli
   .option('--rows <rows>', 'number of rows of sprites', parseInt)
   .option('--hires', 'hires mode')
   .option('--nomaps', 'use one color per attribute instead of a map')
+  .option('--noscale', 'do not automatically scale the input image')
   .parse(process.argv);
 
 // defaults
@@ -111,7 +112,7 @@ const pixelImage = graphicMode.builder(palette, {
   nomaps: cli.nomaps
 });
 
-retropixels.JimpPreprocessor.read(inFile, pixelImage.mode)
+retropixels.JimpPreprocessor.read(inFile, pixelImage.mode, cli.noscale)
   .then(async jimpImage => {
     try {
       ditherer.dither(jimpImage);
@@ -130,7 +131,7 @@ retropixels.JimpPreprocessor.read(inFile, pixelImage.mode)
         await retropixels.JimpPreprocessor.write(pixelImage, outFile);
         console.log(`${outFile}`);
       } else {
-        throw `Unknown file extension ${outExtension}, valid extensions are .png, .kla and .prg`;
+        throw `Unknown file extension ${outExtension}, valid extensions are .png, .kla, .spd and .prg`;
       }
     } catch (e) {
       console.error(e);

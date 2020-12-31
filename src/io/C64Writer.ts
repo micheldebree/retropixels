@@ -34,15 +34,15 @@ export default class C64Writer {
       return new HiresPicture();
     }
 
-    if (pixelImage.mode.id === 'c64FLI') {
+    if (pixelImage.mode.id === 'fli') {
       return new FLIPicture();
     }
 
-    if (pixelImage.mode.id === 'c64AFLI') {
+    if (pixelImage.mode.id === 'afli') {
       return new AFLIPicture();
     }
 
-    if (pixelImage.mode.id === 'c64Sprites') {
+    if (pixelImage.mode.id === 'sprites') {
       return new SpritePad();
     }
 

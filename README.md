@@ -6,7 +6,7 @@ A cross platform command line tool to convert images to Commodore 64 format.
 
 ![Input](paintface.jpg)
 
-`retropixels paintface.jpg paintface.png`
+    retropixels paintface.jpg paintface.png
 
 ![Output](samples/paintface-Multicolor.png)
 
@@ -31,13 +31,16 @@ With
   - `<outfile>.png` produces a PNG file
   - `<outfile>.kla` produces a Koala Painter file
     (only supported for bitmap mode without `--hires`)
+  - `<outfile>.spd` produces a Spritepad file
+    (only supported for `--mode sprites`)
   - `<outfile>.prg` produces a Commodore 64 executable
+    (not supported for `--mode sprites`)
 - `[options]`:
   - `-m <mode>` with `<mode>`:
     - `bitmap` (default)
-    - `c64FLI`
-    - `c64AFLI`
-    - 'c64Sprites`
+    - `fli`
+    - `afli`
+    - `sprites`
   - `-d <ditherMode>` with `<ditherMode>`:
     - `bayer2x2`
     - `bayer4x4` (default)
@@ -54,12 +57,16 @@ With
     - `rainbow`
     - `rgb` (no conversion)
   - `--cols <columns>` with `<columns>`:
-    - The number of sprites in horizontal direction. `c64Sprites` mode only.
+    - The number of sprites in horizontal direction. `sprites` mode only.
   - `--rows <rows>` with `<rows>`:
-    - The number of sprites in vertical direction. `c64Sprites` mode only.
+    - The number of sprites in vertical direction. `sprites` mode only.
   - `--hires`: use hires mode instead of multicolor
   - `--nomaps`: restrict to a single color per attribute, even if a different
     color per attribute cell is allowed. Especially useful in hires mode.
+  - `--noscale`: do not scale the image to fit the output dimensions, only crop.
+    Useful for images that are already pixel perfect. In multicolor mode, one
+    pixel will end up twice as wide in the output, so your input picture for
+    `koala` format for example, should be 160x200 pixels.
 
 Notes:
 
@@ -69,6 +76,8 @@ Notes:
   You will see a blank space in the image. This is a limitation of the
   Commodore 64 VIC chip hacking
   involved in creating this artificial mode, and is not a bug in retropixels
+- Spritepad files can be viewed and edited online at
+  [spritemate.com](https://www.spritemate.com)
 
 ## Example
 
@@ -107,57 +116,55 @@ Run with `node cli.js [options] <infile> <outfile>`
 
 ## Changelog
 
-### 0.7.2
+### 0.8.0
 
-#### Changed
+This is a **backwards incompatible** release.
+
+- Added `sprites` mode.
+- Added options for `sprites` mode:
+  - `--cols`: number of sprites in horizontal direction.
+  - `--rows`: number of sprites in vertical direction.
+- Changed all the options for `--mode`. `c64Multicolor`, `c64Hires` and
+  `c64HiresMono` are now `bitmap` mode. `c64FLI` and `c64AFLI` are now `fli`
+  and `afli`. - Added option `--hires` for hires images. Default when not
+  supplied is multicolor images.
+- Added option `--nomaps` for limiting attribute maps to one single color.
+
+### 0.7.2
 
 - Fixed [#37](https://github.com/micheldebree/retropixels/issues/37):
   Unfriendly error message when file not found
-- [#38](https://github.com/micheldebree/retropixels/issues/38):
+- Changed [#38](https://github.com/micheldebree/retropixels/issues/38):
   Improve performance of quantizing
 
 ### 0.7.1
 
-#### Added
-
-- [#35](https://github.com/micheldebree/retropixels/issues/35):
-  `--palette` argument to choose a color palette. New default is `colodore`.
-- [#36](https://github.com/micheldebree/retropixels/issues/36):
-  `--colorspace` argument to choose the color space to convert to before
-  quantizing. New default is `xyz`.
-
-#### Changed
-
-- [#15](https://github.com/micheldebree/retropixels/issues/15): Default color
+- Changed [#15](https://github.com/micheldebree/retropixels/issues/15): Default color
   palette changed from Pepto to Colodore. You can still chose `pepto` with the
   new `--palette` argument.
-- Default color space conversion changed from YUV to XYZ. You can still choose
+- Changed default color space conversion changed from YUV to XYZ. You can still choose
   `yuv` with the new `--colorspace` argument.
-
-#### Removed
-
-- `--unicorn` argument. It is replaced by the `rainbow` option in the new `-colorspace`
-  argument. It is a secret option so don't tell anyone!
+- Added [#35](https://github.com/micheldebree/retropixels/issues/35):
+  `--palette` argument to choose a color palette. New default is `colodore`.
+- Added [#36](https://github.com/micheldebree/retropixels/issues/36):
+  `--colorspace` argument to choose the color space to convert to before
+  quantizing. New default is `xyz`.
+- Removed `--unicorn` argument. It is replaced by the `rainbow` option in the
+  new `-colorspace` argument. It is a secret option so don't tell anyone!
 
 ### 0.6.4
 
-Changed:
-
-- [#31](https://github.com/micheldebree/retropixels/issues/31):
+- Changed [#31](https://github.com/micheldebree/retropixels/issues/31):
   More developer friendly importing of library.
 
 ### 0.6.3
 
-Changed:
-
-- [#28](https://github.com/micheldebree/retropixels/issues/28):
+- Changed [#28](https://github.com/micheldebree/retropixels/issues/28):
   Replaced ACME compiler with c64jasm to support JS only build.
 
 ### 0.6.2
 
-Added:
-
-- Unicorn mode
+- Added Unicorn mode
 
 ### 0.6.1
 

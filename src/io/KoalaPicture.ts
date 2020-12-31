@@ -8,8 +8,6 @@ import IBinaryFormat from './IBinaryFormat';
 export default class KoalaPicture implements IBinaryFormat {
   public formatName = 'Koala';
 
-  public supportedModes: string[] = ['bitmap'];
-
   private loadAddress: Uint8Array;
 
   private bitmap: Uint8Array;

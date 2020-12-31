@@ -5,8 +5,6 @@ import IBinaryFormat from './IBinaryFormat';
 export default class AFLIPicture implements IBinaryFormat {
   public formatName = 'AFLI';
 
-  public supportedModes: string[] = ['c64AFLI'];
-
   private loadAddress: Uint8Array;
 
   private screenRam: Uint8Array[];

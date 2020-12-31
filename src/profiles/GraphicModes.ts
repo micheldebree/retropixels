@@ -36,43 +36,9 @@ export default class GraphicModes {
     }
   );
 
-  // public static c64Multicolor: GraphicModeFactory = new GraphicModeFactory(
-  //   (palette: Palette): PixelImage => {
-  //     const gm: GraphicMode = new GraphicMode('c64Multicolor', 160, 200, palette);
-  //     gm.pixelWidth = 2;
-
-  //     const result = new PixelImage(gm);
-  //     result.addColorMap();
-  //     result.addColorMap(4, 8);
-  //     result.addColorMap(4, 8);
-  //     result.addColorMap(4, 8);
-  //     return result;
-  //   }
-  // );
-
-  // public static c64Hires: GraphicModeFactory = new GraphicModeFactory(
-  //   (palette: Palette): PixelImage => {
-  //     const gm: GraphicMode = new GraphicMode('c64Hires', 320, 200, palette);
-  //     const result = new PixelImage(gm);
-  //     result.addColorMap(8, 8);
-  //     result.addColorMap(8, 8);
-  //     return result;
-  //   }
-  // );
-
-  // public static c64HiresMono: GraphicModeFactory = new GraphicModeFactory(
-  //   (palette: Palette): PixelImage => {
-  //     const gm: GraphicMode = new GraphicMode('c64HiresMono', 320, 200, palette);
-  //     const result = new PixelImage(gm);
-  //     result.addColorMap();
-  //     result.addColorMap();
-  //     return result;
-  //   }
-  // );
-
   public static c64FLI: GraphicModeFactory = new GraphicModeFactory(
     (palette: Palette): PixelImage => {
-      const gm: GraphicMode = new GraphicMode('c64FLI', 160, 200, palette);
+      const gm: GraphicMode = new GraphicMode('fli', 160, 200, palette);
       gm.pixelWidth = 2;
       gm.fliBugSize = 3 * 4;
       gm.indexMap = {
@@ -92,7 +58,7 @@ export default class GraphicModes {
 
   public static c64AFLI: GraphicModeFactory = new GraphicModeFactory(
     (palette: Palette): PixelImage => {
-      const gm: GraphicMode = new GraphicMode('c64AFLI', 320, 200, palette);
+      const gm: GraphicMode = new GraphicMode('afli', 320, 200, palette);
       gm.fliBugSize = 3 * 8;
       const result = new PixelImage(gm);
       result.addColorMap(8, 1);
@@ -112,7 +78,7 @@ export default class GraphicModes {
       const height: number = nrRows * 21;
       const width: number = nrColumns * pixelsPerColumn;
 
-      const gm: GraphicMode = new GraphicMode('c64Sprites', width, height, palette);
+      const gm: GraphicMode = new GraphicMode('sprites', width, height, palette);
       gm.pixelWidth = multicolor ? 2 : 1;
       gm.bytesPerCellRow = 3;
       gm.rowsPerCell = 21;
@@ -144,8 +110,8 @@ export default class GraphicModes {
 
   public static all = {
     bitmap: GraphicModes.bitmap,
-    c64AFLI: GraphicModes.c64AFLI,
-    c64FLI: GraphicModes.c64FLI,
-    c64Sprites: GraphicModes.c64Sprites
+    afli: GraphicModes.c64AFLI,
+    fli: GraphicModes.c64FLI,
+    sprites: GraphicModes.c64Sprites
   };
 }
