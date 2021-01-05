@@ -121,7 +121,7 @@ retropixels.JimpPreprocessor.read(inFile, pixelImage.mode, cli.noscale)
 
       const outExtension = path.extname(outFile);
 
-      if ('.kla' === outExtension || '.spd' === outExtension) {
+      if ('.kla' === outExtension || '.spd' === outExtension | '.art' === outExtension) {
         await retropixels.C64Writer.saveBinary(pixelImage, outFile);
         console.log(`${outFile}`);
       } else if ('.prg' === outExtension) {
@@ -131,7 +131,7 @@ retropixels.JimpPreprocessor.read(inFile, pixelImage.mode, cli.noscale)
         await retropixels.JimpPreprocessor.write(pixelImage, outFile);
         console.log(`${outFile}`);
       } else {
-        throw `Unknown file extension ${outExtension}, valid extensions are .png, .kla, .spd and .prg`;
+        throw `Unknown file extension ${outExtension}, valid extensions are .png, .kla, .art, .spd and .prg`;
       }
     } catch (e) {
       console.error(e);

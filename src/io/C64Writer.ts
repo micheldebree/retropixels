@@ -2,7 +2,7 @@ import * as fs from 'fs-extra';
 import * as path from 'path';
 import AFLIPicture from './AFLIPicture';
 import FLIPicture from './FLIPicture';
-import HiresPicture from './HiresPicture';
+import ArtStudioPicture from './ArtStudioPicture';
 import KoalaPicture from './KoalaPicture';
 import SpritePad from './SpritePad';
 import PixelImage from '../model/PixelImage';
@@ -31,7 +31,7 @@ export default class C64Writer {
       if (pixelImage.mode.pixelWidth === 2) {
         return new KoalaPicture();
       }
-      return new HiresPicture();
+      return new ArtStudioPicture();
     }
 
     if (pixelImage.mode.id === 'fli') {

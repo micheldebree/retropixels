@@ -19,8 +19,8 @@ export default class C64Layout {
   }
 
   public static convertBitmap(pixelImage: PixelImage): Uint8Array {
-    // TODO: calculate size of bitmap
-    const bitmap: Uint8Array = new Uint8Array(8000);
+    const bitmapSize: number = (pixelImage.mode.width * pixelImage.mode.height) / pixelImage.mode.pixelsPerByte();
+    const bitmap: Uint8Array = new Uint8Array(bitmapSize);
     let bitmapIndex = 0;
 
     pixelImage.mode.forEachCell(0, (x, y) => {

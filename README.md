@@ -31,6 +31,8 @@ With
   - `<outfile>.png` produces a PNG file
   - `<outfile>.kla` produces a Koala Painter file
     (only supported for bitmap mode without `--hires`)
+  - `<outfile>.art` produces an Advanced Art Studio file
+    (only supported for bitmap mode with `--hires`)
   - `<outfile>.spd` produces a Spritepad file
     (only supported for `--mode sprites`)
   - `<outfile>.prg` produces a Commodore 64 executable
