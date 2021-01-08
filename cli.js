@@ -10,6 +10,7 @@ const { version } = require('./package');
 cli
   .version(version)
   .usage('[options] <infile>')
+  .option('-o, --outfile <outfile>')
   .option('-m, --mode <graphicMode>', 'bitmap (default), fli, afli, sprites')
   .option('-f, --format <output format>', 'png, prg')
   .option('-d, --ditherMode <ditherMode>', 'bayer2x2, bayer4x4 (default), bayer8x8')
@@ -114,6 +115,15 @@ async function checkOverwrite(filename) {
   });
 }
 
+function getOutFile(extension) {
+  if (cli.outfile) {
+    return cli.outfile;
+  }
+
+  const baseName = path.basename(inFile, path.extname(inFile));
+  return `${baseName}.${extension}`;
+}
+
 const quantizer = new retropixels.Quantizer(palette, colorspace);
 const poker = new retropixels.Poker(quantizer);
 const converter = new retropixels.Converter(poker);
@@ -135,21 +145,19 @@ retropixels.JimpPreprocessor.read(inFile, pixelImage.mode, cli.scale)
 
       converter.convert(jimpImage, pixelImage);
 
-      const baseName = path.basename(inFile, path.extname(inFile));
-      let outfile;
-
+      let outFile;
       if (!cli.format) {
         const outputFormat = retropixels.C64Writer.getFormat(pixelImage);
-        outFile = `${baseName}.${outputFormat.defaultExtension}`;
+        outFile = getOutFile(outputFormat.defaultExtension);
         await checkOverwrite(outFile);
         outputFormat.fromPixelImage(pixelImage);
         await retropixels.C64Writer.save(outputFormat, outFile);
       } else if (cli.format === 'prg') {
-        outFile = `${baseName}.prg`;
+        outFile = getOutFile('prg');
         checkOverwrite(outFile);
         await retropixels.C64Writer.savePrg(pixelImage, outFile);
       } else if (cli.format === 'png') {
-        outFile = `${baseName}.png`;
+        outFile = getOutFile('png');
         checkOverwrite(outFile);
         await retropixels.JimpPreprocessor.write(pixelImage, outFile);
       }

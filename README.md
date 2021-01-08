@@ -22,12 +22,13 @@ You now have a new shell command called `retropixels`
 
 ## Usage
 
-    retropixels [options] <infile> <outfile>
+    retropixels [options] <infile>
 
 With
 
 - `<infile>`: the image to convert
 - `[options]`:
+  - `--outfile, -o: output filename`
   - `--mode, -m <mode>` with `<mode>`:
     - `bitmap` (default)
     - `sprites`
@@ -60,6 +61,7 @@ With
     - `fill` (default): scale and crop to fill output dimensions
     - `none`: do not scale, only crop
   - `--nomaps`: restrict to a single color per attribute type or sprite
+  - `--overwrite`: overwrite if output file already exists
 
 Notes:
 
@@ -148,10 +150,14 @@ though. Also keep in mind to use `-d none` to avoid dithering.
 ### --nomaps
 
 Instead of different colors per attribute type, or sprite, use only one color
-per attribute type or sprite.  Results in less colors but can look more uniform,
+per attribute type or sprite. Results in less colors but can look more uniform,
 and can be used to boost performance on a Commodore 64.
 
 **Note**: This option is ignored in `-m fli` mode.
+
+### --outfile
+
+The name of the output file. Will not be overwritten unless `--overwrite` is specified.
 
 ### --overwrite
 
@@ -159,6 +165,9 @@ Exisiting files are not overwritten by default. This option overrides that
 behaviour and will overwrite the output file if it exists.
 
 ## Output formats
+
+The following output formats describe the bytes in the output file in the order
+they appear.
 
 | format               | size in bytes         | data                                       |
 | -------------------- | --------------------- | ------------------------------------------ |
@@ -236,7 +245,7 @@ It should work on other platforms but you're on your own there.
     cd retropixels
     make
 
-Run with `node cli.js [options] <infile> <outfile>`
+Run with `node cli.js [options] <infile>`
 
 ## Changelog
 
@@ -252,9 +261,12 @@ This is a **backwards incompatible** release.
   `c64HiresMono` are now `bitmap` mode. `c64FLI` and `c64AFLI` are now `fli`.
 - Added option `--hires` for hires images. Default when not
   supplied is multicolor images.
+- Added option `--format` for outputting the special `png` and `prg` formats.
 - Added option `--nomaps` for limiting attribute maps to one single color.
 - Added option `--scale` to disable rescaling of the input image.
-- Added option `--overwrite` to force overwriting output file
+- Added option `--scale` to disable rescaling of the input image.
+- Added option `--outfile` for setting output filename.
+- Added option `--overwrite` to force overwriting output file.
 
 ### 0.7.2
 
