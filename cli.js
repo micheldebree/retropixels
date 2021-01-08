@@ -2,6 +2,7 @@
 /* jshint esversion: 6 */
 const cli = require('commander');
 const path = require('path');
+const fs = require('fs');
 const retropixels = require('.');
 
 const { version } = require('./package');
@@ -20,6 +21,7 @@ cli
   .option('-h, --hires', 'hires mode')
   .option('--nomaps', 'use one color per attribute instead of a map')
   .option('-s, --scale <mode>', 'none, fill (default)')
+  .option('--overwrite', 'force overwrite of existing output file')
   .parse(process.argv);
 
 // defaults
@@ -101,6 +103,17 @@ function saveDebugMaps(pixelImage) {
   }
 }
 
+async function checkOverwrite(filename) {
+  return fs.stat(filename, (err, stat) => {
+    if (err === null && !cli.overwrite) {
+      throw new Error(`Output file ${filename} already exists. Use --overwrite to force overwriting output file.`);
+    }
+    if (err !== null && err.code !== 'ENOENT') {
+      throw new Error('Could not write file ${filename}: ${err.code}');
+    }
+  });
+}
+
 const quantizer = new retropixels.Quantizer(palette, colorspace);
 const poker = new retropixels.Poker(quantizer);
 const converter = new retropixels.Converter(poker);
@@ -128,13 +141,16 @@ retropixels.JimpPreprocessor.read(inFile, pixelImage.mode, cli.scale)
       if (!cli.format) {
         const outputFormat = retropixels.C64Writer.getFormat(pixelImage);
         outFile = `${baseName}.${outputFormat.defaultExtension}`;
+        await checkOverwrite(outFile);
         outputFormat.fromPixelImage(pixelImage);
         await retropixels.C64Writer.save(outputFormat, outFile);
       } else if (cli.format === 'prg') {
         outFile = `${baseName}.prg`;
+        checkOverwrite(outFile);
         await retropixels.C64Writer.savePrg(pixelImage, outFile);
       } else if (cli.format === 'png') {
         outFile = `${baseName}.png`;
+        checkOverwrite(outFile);
         await retropixels.JimpPreprocessor.write(pixelImage, outFile);
       }
 

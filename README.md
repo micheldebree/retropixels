@@ -153,6 +153,11 @@ and can be used to boost performance on a Commodore 64.
 
 **Note**: This option is ignored in `-m fli` mode.
 
+### --overwrite
+
+Exisiting files are not overwritten by default. This option overrides that
+behaviour and will overwrite the output file if it exists.
+
 ## Output formats
 
 | format               | size in bytes         | data                                       |
@@ -249,6 +254,7 @@ This is a **backwards incompatible** release.
   supplied is multicolor images.
 - Added option `--nomaps` for limiting attribute maps to one single color.
 - Added option `--scale` to disable rescaling of the input image.
+- Added option `--overwrite` to force overwriting output file
 
 ### 0.7.2
 
