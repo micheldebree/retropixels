@@ -6,13 +6,20 @@ import Pixels from '../model/Pixels';
 
 // https://github.com/oliver-moran/jimp
 
+enum ScaleMode {
+  none = 'none',
+  fill = 'fill'
+}
+
 export default class JimpPreprocessor {
-  public static async read(filename: string, graphicMode: GraphicMode, noscale: boolean): Promise<IImageData> {
+  public static async read(filename: string, graphicMode: GraphicMode, scaleMode: ScaleMode): Promise<IImageData> {
     const jimpImage: Jimp = await Jimp.read(filename);
-    if (noscale) {
+    if (scaleMode === ScaleMode.none) {
       this.crop(jimpImage, graphicMode);
-    } else {
+    } else if (scaleMode === ScaleMode.fill) {
       this.cropFill(jimpImage, graphicMode);
+    } else {
+      throw new Error(`Unknown scale mode: ${scaleMode}`);
     }
     return jimpImage.bitmap;
   }
@@ -47,6 +54,13 @@ export default class JimpPreprocessor {
   }
 
   private static crop(jimpImage: Jimp, graphicMode: GraphicMode): void {
+    if (graphicMode.pixelWidth !== 1) {
+      jimpImage.resize(
+        jimpImage.bitmap.width / graphicMode.pixelWidth,
+        jimpImage.bitmap.height,
+        Jimp.RESIZE_NEAREST_NEIGHBOR
+      );
+    }
     jimpImage.crop(0, 0, graphicMode.width, graphicMode.height);
   }
 

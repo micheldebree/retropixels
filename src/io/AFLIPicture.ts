@@ -3,7 +3,9 @@ import C64Layout from './C64Layout';
 import IBinaryFormat from './IBinaryFormat';
 
 export default class AFLIPicture implements IBinaryFormat {
-  public formatName = 'AFLI';
+  public formatName = 'afli';
+
+  public defaultExtension = 'afli';
 
   private loadAddress: Uint8Array;
 

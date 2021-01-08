@@ -65,6 +65,10 @@ export default class PixelImage {
     return result;
   }
 
+  public isHires(): boolean {
+    return this.mode.pixelWidth === 1;
+  }
+
   public debugColorMaps(): PixelImage[] {
     const result: PixelImage[] = [];
 

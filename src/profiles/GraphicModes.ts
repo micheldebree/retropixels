@@ -8,27 +8,27 @@ export default class GraphicModes {
 
   public static bitmap: GraphicModeFactory = new GraphicModeFactory(
     (palette: Palette, props: Record<string, unknown>): PixelImage => {
-      const { multicolor, nomaps } = props;
-      const width = multicolor ? 160 : 320;
+      const { hires, nomaps } = props;
+      const width = hires ? 320 : 160;
 
       const gm: GraphicMode = new GraphicMode('bitmap', width, 200, palette);
-      gm.pixelWidth = multicolor ? 2 : 1;
+      gm.pixelWidth = hires ? 1 : 2;
 
       const result = new PixelImage(gm);
-      if (multicolor) {
+      if (!hires) {
         // background
         result.addColorMap();
       }
       if (nomaps) {
         result.addColorMap();
         result.addColorMap();
-        if (multicolor) {
+        if (!hires) {
           result.addColorMap();
         }
       } else {
         result.addColorMap(gm.pixelsPerByte(), gm.rowsPerCell);
         result.addColorMap(gm.pixelsPerByte(), gm.rowsPerCell);
-        if (multicolor) {
+        if (!hires) {
           result.addColorMap(gm.pixelsPerByte(), gm.rowsPerCell);
         }
       }
@@ -37,35 +37,41 @@ export default class GraphicModes {
   );
 
   public static c64FLI: GraphicModeFactory = new GraphicModeFactory(
-    (palette: Palette): PixelImage => {
-      const gm: GraphicMode = new GraphicMode('fli', 160, 200, palette);
-      gm.pixelWidth = 2;
-      gm.fliBugSize = 3 * 4;
-      gm.indexMap = {
-        0: 0,
-        1: 3,
-        2: 2,
-        3: 1
-      };
-      const result = new PixelImage(gm);
-      result.addColorMap();
-      result.addColorMap(4, 8);
-      result.addColorMap(4, 1);
-      result.addColorMap(4, 1);
-      return result;
+    (palette: Palette, props: Record<string, unknown>): PixelImage => {
+      if (props.hires) {
+        return GraphicModes.createHiresFLI(palette);
+      }
+
+      return GraphicModes.createMulticolorFLI(palette);
     }
   );
 
-  public static c64AFLI: GraphicModeFactory = new GraphicModeFactory(
-    (palette: Palette): PixelImage => {
-      const gm: GraphicMode = new GraphicMode('afli', 320, 200, palette);
-      gm.fliBugSize = 3 * 8;
-      const result = new PixelImage(gm);
-      result.addColorMap(8, 1);
-      result.addColorMap(8, 1);
-      return result;
-    }
-  );
+  private static createMulticolorFLI(palette: Palette): PixelImage {
+    const gm: GraphicMode = new GraphicMode('fli', 160, 200, palette);
+    gm.pixelWidth = 2;
+    gm.fliBugSize = 3 * 4;
+    gm.indexMap = {
+      0: 0,
+      1: 3,
+      2: 2,
+      3: 1
+    };
+    const result = new PixelImage(gm);
+    result.addColorMap();
+    result.addColorMap(4, 8);
+    result.addColorMap(4, 1);
+    result.addColorMap(4, 1);
+    return result;
+  }
+
+  private static createHiresFLI(palette: Palette): PixelImage {
+    const gm: GraphicMode = new GraphicMode('afli', 320, 200, palette);
+    gm.fliBugSize = 3 * 8;
+    const result = new PixelImage(gm);
+    result.addColorMap(8, 1);
+    result.addColorMap(8, 1);
+    return result;
+  }
 
   public static c64Sprites: GraphicModeFactory = new GraphicModeFactory(
     (palette: Palette, props: Record<string, unknown>): PixelImage => {
@@ -110,7 +116,6 @@ export default class GraphicModes {
 
   public static all = {
     bitmap: GraphicModes.bitmap,
-    afli: GraphicModes.c64AFLI,
     fli: GraphicModes.c64FLI,
     sprites: GraphicModes.c64Sprites
   };

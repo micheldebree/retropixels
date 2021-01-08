@@ -2,7 +2,6 @@
 	"recommendations": [
 		"EditorConfig.editorconfig",
 		"dbaeumer.vscode-eslint",
-		"tomconte.kickassembler",
 		"rbbit.typescript-hero",
 		"esbenp.prettier-vscode"
 	]

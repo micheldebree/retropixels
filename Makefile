@@ -1,7 +1,7 @@
 EXAMPLE=paintface
 
 CMD=node cli.js
-C64CODE=target/c64/Koala.prg target/c64/AFLI.prg target/c64/FLI.prg target/c64/ArtStudio.prg
+C64CODE=target/c64/koala.prg target/c64/afli.prg target/c64/fli.prg target/c64/artstudio.prg
 
 target/c64/%.prg: src/c64/%.asm target/c64/
 	npx c64jasm --out "$@" "$<"

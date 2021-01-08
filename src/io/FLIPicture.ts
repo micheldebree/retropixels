@@ -9,7 +9,9 @@ import IBinaryFormat from './IBinaryFormat';
  * $6000-      bitmap data
  */
 export default class FLIPicture implements IBinaryFormat {
-  public formatName = 'FLI';
+  public formatName = 'fli';
+
+  public defaultExtension = 'fli';
 
   private loadAddress: Uint8Array;
 

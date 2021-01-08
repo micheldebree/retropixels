@@ -3,30 +3,37 @@
 const cli = require('commander');
 const path = require('path');
 const retropixels = require('.');
+
 const { version } = require('./package');
 
 cli
   .version(version)
-  .usage('[options] <infile> <outfile>')
-  .option('-m, --mode <graphicMode>', 'bitmap (default), c64FLI, c64AFLI, c64Sprites')
+  .usage('[options] <infile>')
+  .option('-m, --mode <graphicMode>', 'bitmap (default), fli, afli, sprites')
+  .option('-f, --format <output format>', 'png, prg')
   .option('-d, --ditherMode <ditherMode>', 'bayer2x2, bayer4x4 (default), bayer8x8')
   .option('-r, --ditherRadius [0-64]', '0 = no dithering, 32 = default', parseInt)
   .option('-p, --palette <palette>', 'colodore (default), pepto, deekay, rainbow')
   .option('-c, --colorspace <colorspace>', 'xyz (default), yuv, rgb (no conversion)')
-  .option('--cols <columns>', 'number of columns of sprites', parseInt)
-  .option('--rows <rows>', 'number of rows of sprites', parseInt)
-  .option('--hires', 'hires mode')
+  .option('--cols <columns>', 'number of columns of sprites, default = 8', parseInt)
+  .option('--rows <rows>', 'number of rows of sprites, default = 8', parseInt)
+  .option('-h, --hires', 'hires mode')
   .option('--nomaps', 'use one color per attribute instead of a map')
-  .option('--noscale', 'do not automatically scale the input image')
+  .option('-s, --scale <mode>', 'none, fill (default)')
   .parse(process.argv);
 
 // defaults
+
 if (!cli.mode) {
   cli.mode = 'bitmap';
 }
 
 if (!cli.ditherMode) {
   cli.ditherMode = 'bayer4x4';
+}
+
+if (!cli.scale) {
+  cli.scale = 'fill';
 }
 
 if (cli.ditherRadius === undefined) {
@@ -80,15 +87,9 @@ if (colorspace === undefined) {
 const ditherer = new retropixels.OrderedDither(ditherPreset, cli.ditherRadius);
 
 const inFile = cli.args[0];
-const outFile = cli.args[1];
 
 if (inFile === undefined) {
   console.error('Input file missing.');
-  cli.help();
-}
-
-if (outFile === undefined) {
-  console.error('Output file missing.');
   cli.help();
 }
 
@@ -108,31 +109,36 @@ const converter = new retropixels.Converter(poker);
 const pixelImage = graphicMode.builder(palette, {
   rows: cli.rows,
   columns: cli.cols,
-  multicolor: !cli.hires,
+  hires: cli.hires,
   nomaps: cli.nomaps
 });
 
-retropixels.JimpPreprocessor.read(inFile, pixelImage.mode, cli.noscale)
+retropixels.JimpPreprocessor.read(inFile, pixelImage.mode, cli.scale)
   .then(async jimpImage => {
     try {
-      ditherer.dither(jimpImage);
+      if (cli.ditherMode !== 'none') {
+        ditherer.dither(jimpImage);
+      }
 
       converter.convert(jimpImage, pixelImage);
 
-      const outExtension = path.extname(outFile);
+      const baseName = path.basename(inFile, path.extname(inFile));
+      let outfile;
 
-      if ('.kla' === outExtension || '.spd' === outExtension | '.art' === outExtension) {
-        await retropixels.C64Writer.saveBinary(pixelImage, outFile);
-        console.log(`${outFile}`);
-      } else if ('.prg' === outExtension) {
+      if (!cli.format) {
+        const outputFormat = retropixels.C64Writer.getFormat(pixelImage);
+        outFile = `${baseName}.${outputFormat.defaultExtension}`;
+        outputFormat.fromPixelImage(pixelImage);
+        await retropixels.C64Writer.save(outputFormat, outFile);
+      } else if (cli.format === 'prg') {
+        outFile = `${baseName}.prg`;
         await retropixels.C64Writer.savePrg(pixelImage, outFile);
-        console.log(`${outFile}`);
-      } else if ('.png' === outExtension) {
+      } else if (cli.format === 'png') {
+        outFile = `${baseName}.png`;
         await retropixels.JimpPreprocessor.write(pixelImage, outFile);
-        console.log(`${outFile}`);
-      } else {
-        throw `Unknown file extension ${outExtension}, valid extensions are .png, .kla, .art, .spd and .prg`;
       }
+
+      console.log(outFile);
     } catch (e) {
       console.error(e);
       cli.help();

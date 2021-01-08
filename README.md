@@ -6,7 +6,7 @@ A cross platform command line tool to convert images to Commodore 64 format.
 
 ![Input](paintface.jpg)
 
-    retropixels paintface.jpg paintface.png
+    retropixels --format png paintface.jpg
 
 ![Output](samples/paintface-Multicolor.png)
 
@@ -27,33 +27,26 @@ You now have a new shell command called `retropixels`
 With
 
 - `<infile>`: the image to convert
-- `<outfile>`: the converted image. The extension determines the format:
-  - `<outfile>.png` produces a PNG file
-  - `<outfile>.kla` produces a Koala Painter file
-    (only supported for bitmap mode without `--hires`)
-  - `<outfile>.art` produces an Advanced Art Studio file
-    (only supported for bitmap mode with `--hires`)
-  - `<outfile>.spd` produces a Spritepad file
-    (only supported for `--mode sprites`)
-  - `<outfile>.prg` produces a Commodore 64 executable
-    (not supported for `--mode sprites`)
 - `[options]`:
-  - `-m <mode>` with `<mode>`:
+  - `--mode, -m <mode>` with `<mode>`:
     - `bitmap` (default)
-    - `fli`
-    - `afli`
     - `sprites`
-  - `-d <ditherMode>` with `<ditherMode>`:
+    - `fli`
+  - `--format, -f <format>` with `<format>`:
+    - `png`: preview image
+    - `prg`: c64 executable
+  - `--ditherMode, -d <ditherMode>` with `<ditherMode>`:
+    - `none`
     - `bayer2x2`
     - `bayer4x4` (default)
     - `bayer8x8`
-  - `-r <ditherRadius>` with `<ditherRadius>`:
+  - `--ditherRadius, r <ditherRadius>` with `<ditherRadius>`:
     - A number between 0 (no dithering) and 64 (heavy dithering). Default is 32.
-  - `-p <palette>` with `<palette>`:
+  - `--palette, -p <palette>` with `<palette>`:
     - `colodore` (default)
     - `pepto`
     - `deekay`
-  - `-c <colorspace>` with `<colorspace>`:
+  - `--colorspace, -c <colorspace>` with `<colorspace>`:
     - `xyz` (default)
     - `yuv`
     - `rainbow`
@@ -62,13 +55,11 @@ With
     - The number of sprites in horizontal direction. `sprites` mode only.
   - `--rows <rows>` with `<rows>`:
     - The number of sprites in vertical direction. `sprites` mode only.
-  - `--hires`: use hires mode instead of multicolor
-  - `--nomaps`: restrict to a single color per attribute, even if a different
-    color per attribute cell is allowed. Especially useful in hires mode.
-  - `--noscale`: do not scale the image to fit the output dimensions, only crop.
-    Useful for images that are already pixel perfect. In multicolor mode, one
-    pixel will end up twice as wide in the output, so your input picture for
-    `koala` format for example, should be 160x200 pixels.
+  - `--hires, -h`: use hires mode instead of multicolor
+  - `--scale, -s <mode>` with `<mode>`:
+    - `fill` (default): scale and crop to fill output dimensions
+    - `none`: do not scale, only crop
+  - `--nomaps`: restrict to a single color per attribute type or sprite
 
 Notes:
 
@@ -81,11 +72,139 @@ Notes:
 - Spritepad files can be viewed and edited online at
   [spritemate.com](https://www.spritemate.com)
 
-## Example
+### infile
 
-Convert an image to a Commodore 64 executable:
+An image file in `.jpg` or `.png` format. Other formats are supported, just give it a try.
 
-    retropixels -b bayer8x8 -r 64 eye.jpg eye.prg
+### --mode, -m < bitmap | sprites | fli >
+
+A c64 graphic mode:
+
+| value              | description                 |
+| ------------------ | --------------------------- |
+| `bitmap` (default) | A fullscreen bitmap         |
+| `sprites`          | A grid of sprites           |
+| `fli`              | A fullscreen (A)FLI picture |
+
+When this option is not supplied, `bitmap` is used.
+
+The output is multicolor by default. To get high resolution output, use `--hires` together with this option.
+
+The format of the output file is determined automatically:
+
+| options              | output format                  |
+| -------------------- | ------------------------------ |
+| `-m bitmap`          | Koala painter (`.kla`)         |
+| `-m bitmap --hires`  | Art studio (`.art`)            |
+| `-m sprites`         | Spritepad (`.spd`)             |
+| `-m sprites --hires` | Spritepad (`.spd`)             |
+| `-m fli`             | Retropixels raw FLI (`.fli`)   |
+| `-m fli --hires`     | Retropixels raw AFLI (`.afli`) |
+
+### --format, -f < png | prg >
+
+Two special formats can be supplied for the output:
+
+- `png`: A PNG image of how the image will look on a Commodore 64
+- `prg`: An executable that can be run on a Commodore 64
+
+When omitted, the format of the output file will be determined automatically as described for the `--mode` option.
+
+**Note**: `prg` is not supported for `-m sprites` mode.
+
+### --ditherMode, -m < none | bayer2x2  | bayer4x4 | bayer8x8 >
+
+The mode to use for dithering. Default is `bayer4x4`
+
+### --ditherRadius, -r < 0-64 >
+
+The dithering strength. Default is `32`.
+
+### --palette, -p < colodore | pepto | deekay >
+
+The predefined palette to use. Default is `colodore`.
+
+### --colorspace -s < rgb | yuv | xyz >
+
+Convert colors to this colorspace before quantizing. Default is `xyz`.
+`rgb` means no colorspace conversion takes place.
+
+### --rows < number >, --columns < number >
+
+Number of rows and columns in the grid when using `-m sprites`.
+
+**Note**: Ignored in other modes.
+
+### --scale < none | fill >
+
+Sets the way the input image is scaled before converting:
+
+- `fill` (default): scale to fill output dimensions, and crop if necessary
+- `none` : only crop to output dimensions
+
+**Note**: Mode `none` in multicolor mode _does_ rescale double-width pixels to one pixel,
+to preserve the original aspect ratio. This is useful for pixel-perfect input images. Keep in
+mind these should have double width pixels though. Also keep in mind to use `-d none` to avoid dithering.
+
+### --nomaps
+
+Instead of different colors per attribute type, or sprite, use only one color per attribute
+type or sprite.
+Results in less colors but can look more uniform, and can be used to boost performance
+on a Commodore 64.
+
+**Note**: This option is ignored in `-m fli` mode.
+
+## Output formats
+
+| format               | size in bytes         | data                                       |
+| -------------------- | --------------------- | ------------------------------------------ |
+| Koala painter        | 2                     | load address ($6000)                       |
+|                      | 8000                  | bitmap                                     |
+|                      | 1000                  | screen ram                                 |
+|                      | 1000                  | color ram                                  |
+|                      | 1                     | background color                           |
+| Art studio           | 2                     | load address ($2000)                       |
+|                      | 8000                  | bitmap                                     |
+|                      | 1000                  | screen ram                                 |
+|                      | 7                     | $00 padding                                |
+| Spritepad            | 1                     | background color                           |
+|                      | 1                     | multicolor 1                               |
+|                      | 1                     | multicolor 2                               |
+|                      | _nr of sprites_ \* 64 | 63 bytes sprite data                       |
+|                      |                       | 1 packed info byte: %m000cccc              |
+|                      |                       | m: hires (0) / multicolor (1)              |
+|                      |                       | cccc: sprite color                         |
+| Retropixels raw FLI  | 2                     | load addres ($3c00)                        |
+|                      | 1024                  | color ram (1000) + zero padding (24)       |
+|                      | 8 \* 1024             | 8 \* screen ram (1000) + zero padding (24) |
+|                      | 8000                  | bitmap                                     |
+|                      | 1                     | background color                           |
+| Retropixels raw AFLI | 2                     | load addres ($4000)                        |
+|                      | 8 \* 1024             | 8 \* screen ram (1000) + zero padding (24) |
+|                      | 8000                  | bitmap                                     |
+
+## Examples
+
+Convert a image to a (multicolor bitmap) Koala picture:
+
+    retropixels paintface.jpg
+
+Convert an image to a (hires bitmap) Art studio picture:
+
+    retropixels --hires paintface.jpg
+
+Convert an image to a (2 color hires bitmap) Art studio picture:
+
+    retropixels --hires --nomaps paintface.jpg
+
+Convert an already pixel-perfect image to (8x4 multicolor) Spritepad sprites:
+
+    retropixels -m sprites --cols 8 --rows 4 -s none -d none sprites.png
+
+Convert an image to a Commodore 64 executable, and use heavy dithering
+
+    retropixels -b bayer8x8 -r 64 --format prg eye.jpg
 
 View the result by running it in the
 [VICE](http://vice-emu.sourceforge.net) emulator:
@@ -104,7 +223,7 @@ It should work on other platforms but you're on your own there.
 ### Prerequisites
 
 - [Git](https://git-scm.com)
-- [NodeJS](https://nodejs.org) (latest LTE version)
+- [NodeJS](https://nodejs.org) (latest LTS version)
 - [Yarn](https://yarnpkg.com/en/docs/install#mac-stable)
 - GNU make
 
@@ -127,10 +246,11 @@ This is a **backwards incompatible** release.
   - `--cols`: number of sprites in horizontal direction.
   - `--rows`: number of sprites in vertical direction.
 - Changed all the options for `--mode`. `c64Multicolor`, `c64Hires` and
-  `c64HiresMono` are now `bitmap` mode. `c64FLI` and `c64AFLI` are now `fli`
-  and `afli`. - Added option `--hires` for hires images. Default when not
+  `c64HiresMono` are now `bitmap` mode. `c64FLI` and `c64AFLI` are now `fli`.
+- Added option `--hires` for hires images. Default when not
   supplied is multicolor images.
 - Added option `--nomaps` for limiting attribute maps to one single color.
+- Added option `--scale` to disable rescaling of the input image.
 
 ### 0.7.2
 

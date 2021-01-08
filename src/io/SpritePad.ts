@@ -3,7 +3,9 @@ import C64Layout from './C64Layout';
 import IBinaryFormat from './IBinaryFormat';
 
 export default class SpritePad implements IBinaryFormat {
-  public formatName = 'Sprite Pad';
+  public formatName = 'spritepad';
+
+  public defaultExtension = 'spd';
 
   public supportedModes: string[] = [
     'c64HiresSprites',
