@@ -72,9 +72,7 @@ Notes:
 - Spritepad files can be viewed and edited online at
   [spritemate.com](https://www.spritemate.com)
 
-### infile
-
-An image file in `.jpg` or `.png` format. Other formats are supported, just give it a try.
+## Options
 
 ### --mode, -m < bitmap | sprites | fli >
 
@@ -86,9 +84,8 @@ A c64 graphic mode:
 | `sprites`          | A grid of sprites           |
 | `fli`              | A fullscreen (A)FLI picture |
 
-When this option is not supplied, `bitmap` is used.
-
-The output is multicolor by default. To get high resolution output, use `--hires` together with this option.
+The output is multicolor by default. To get high resolution output, use
+`--hires` together with this option.
 
 The format of the output file is determined automatically:
 
@@ -108,11 +105,12 @@ Two special formats can be supplied for the output:
 - `png`: A PNG image of how the image will look on a Commodore 64
 - `prg`: An executable that can be run on a Commodore 64
 
-When omitted, the format of the output file will be determined automatically as described for the `--mode` option.
+When omitted, the format of the output file will be determined automatically as
+described for the `--mode` option.
 
 **Note**: `prg` is not supported for `-m sprites` mode.
 
-### --ditherMode, -m < none | bayer2x2  | bayer4x4 | bayer8x8 >
+### --ditherMode, -m < none | bayer2x2 | bayer4x4 | bayer8x8 >
 
 The mode to use for dithering. Default is `bayer4x4`
 
@@ -142,16 +140,16 @@ Sets the way the input image is scaled before converting:
 - `fill` (default): scale to fill output dimensions, and crop if necessary
 - `none` : only crop to output dimensions
 
-**Note**: Mode `none` in multicolor mode _does_ rescale double-width pixels to one pixel,
-to preserve the original aspect ratio. This is useful for pixel-perfect input images. Keep in
-mind these should have double width pixels though. Also keep in mind to use `-d none` to avoid dithering.
+**Note**: Mode `none` in multicolor mode _does_ rescale double-width pixels to
+one pixel, to preserve the original aspect ratio. This is useful for
+pixel-perfect input images. Keep in mind these should have double width pixels
+though. Also keep in mind to use `-d none` to avoid dithering.
 
 ### --nomaps
 
-Instead of different colors per attribute type, or sprite, use only one color per attribute
-type or sprite.
-Results in less colors but can look more uniform, and can be used to boost performance
-on a Commodore 64.
+Instead of different colors per attribute type, or sprite, use only one color
+per attribute type or sprite.  Results in less colors but can look more uniform,
+and can be used to boost performance on a Commodore 64.
 
 **Note**: This option is ignored in `-m fli` mode.
 
