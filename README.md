@@ -28,7 +28,7 @@ With
 
 - `<infile>`: the image to convert
 - `[options]`:
-  - `--outfile, -o: output filename`
+  - `--outfile, -o`: output filename
   - `--mode, -m <mode>` with `<mode>`:
     - `bitmap` (default)
     - `sprites`
