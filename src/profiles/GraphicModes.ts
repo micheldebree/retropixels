@@ -65,7 +65,7 @@ export default class GraphicModes {
   }
 
   private static createHiresFLI(palette: Palette): PixelImage {
-    const gm: GraphicMode = new GraphicMode('afli', 320, 200, palette);
+    const gm: GraphicMode = new GraphicMode('fli', 320, 200, palette);
     gm.fliBugSize = 3 * 8;
     const result = new PixelImage(gm);
     result.addColorMap(8, 1);
@@ -75,17 +75,17 @@ export default class GraphicModes {
 
   public static c64Sprites: GraphicModeFactory = new GraphicModeFactory(
     (palette: Palette, props: Record<string, unknown>): PixelImage => {
-      const { rows, columns, multicolor, nomaps } = props;
+      const { rows, columns, hires, nomaps } = props;
       const nrRows = Number(rows);
       const nrColumns = Number(columns);
 
-      const pixelsPerColumn = multicolor ? 12 : 24;
+      const pixelsPerColumn = hires ? 24 : 12;
 
       const height: number = nrRows * 21;
       const width: number = nrColumns * pixelsPerColumn;
 
       const gm: GraphicMode = new GraphicMode('sprites', width, height, palette);
-      gm.pixelWidth = multicolor ? 2 : 1;
+      gm.pixelWidth = hires ? 1 : 2;
       gm.bytesPerCellRow = 3;
       gm.rowsPerCell = 21;
       gm.indexMap = {
@@ -98,7 +98,7 @@ export default class GraphicModes {
       const result = new PixelImage(gm);
       // background
       result.addColorMap();
-      if (multicolor) {
+      if (!hires) {
         // d025
         result.addColorMap();
         // d026

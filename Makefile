@@ -17,9 +17,6 @@ target/c64/:
 clean:
 	rm -rf target && rm -f *.png && rm -f *.prg && rm -rf samples && rm -rf node_modules
 
-format:
-	yarn fix || true
-
 node_modules:
 	yarn install
 
@@ -35,46 +32,46 @@ snapshot: cleanbuild
 	npm publish --tag snapshot
 
 samples: build
-	$(CMD) paintface.jpg ./samples/paintface-Multicolor.png
-	$(CMD) paintface.jpg ./samples/paintface-Multicolor.prg
-	$(CMD) paintface.jpg ./samples/paintface-Multicolor.kla
-	$(CMD) -m c64Hires paintface.jpg ./samples/paintface-Hires.png
-	$(CMD) -m c64Hires paintface.jpg ./samples/paintface-Hires.prg
-	$(CMD) -m c64HiresMono paintface.jpg ./samples/paintface-HiresMono.png
-	$(CMD) -m c64HiresMono paintface.jpg ./samples/paintface-HiresMono.prg
-	$(CMD) -m c64FLI paintface.jpg ./samples/paintface-FLI.png
-	$(CMD) -m c64FLI paintface.jpg ./samples/paintface-FLI.prg
-	$(CMD) -m c64AFLI paintface.jpg ./samples/paintface-AFLI.png
-	$(CMD) -m c64AFLI paintface.jpg ./samples/paintface-AFLI.prg
+	$(CMD) --overwrite -f png -o ./samples/$(EXAMPLE)-Multicolor.png $(EXAMPLE).jpg
+	$(CMD) --overwrite -f prg -o ./samples/$(EXAMPLE)-Multicolor.prg $(EXAMPLE).jpg
+	$(CMD) --overwrite -o ./samples/$(EXAMPLE)-Multicolor.kla $(EXAMPLE).jpg
+	$(CMD) --overwrite -f png -h -o ./samples/$(EXAMPLE)-Hires.png $(EXAMPLE).jpg
+	$(CMD) --overwrite -f prg -h -o ./samples/$(EXAMPLE)-Hires.prg $(EXAMPLE).jpg
+	$(CMD) --overwrite -f png -h --nomaps -o ./samples/$(EXAMPLE)-HiresMono.png $(EXAMPLE).jpg
+	$(CMD) --overwrite -f prg -h -o ./samples/$(EXAMPLE)-HiresMono.prg $(EXAMPLE).jpg
+	$(CMD) --overwrite -f png -m fli -o ./samples/$(EXAMPLE)-FLI.png $(EXAMPLE).jpg
+	$(CMD) --overwrite -f prg -m fli -o ./samples/$(EXAMPLE)-FLI.prg $(EXAMPLE).jpg
+	$(CMD) --overwrite -f png -m fli -h -o ./samples/$(EXAMPLE)-AFLI.png $(EXAMPLE).jpg
+	$(CMD) --overwrite -f prg -m fli -h -o ./samples/$(EXAMPLE)-AFLI.prg $(EXAMPLE).jpg
 
 test: build
 	rm $(EXAMPLE).png || true
 	rm $(EXAMPLE).prg || true
-	$(CMD) $(EXAMPLE).jpg $(EXAMPLE).prg
-	$(CMD) $(EXAMPLE).jpg $(EXAMPLE).png
+	$(CMD) --overwrite -f prg -o $(EXAMPLE).prg $(EXAMPLE).jpg
+	$(CMD) --overwrite -f png -o $(EXAMPLE).png $(EXAMPLE).jpg
 	open "$(EXAMPLE).png"
 	x64sc "$(EXAMPLE).prg"
 
 testfli: build
 	rm $(EXAMPLE).png || true
 	rm $(EXAMPLE).prg || true
-	$(CMD) -m c64FLI "$(EXAMPLE).jpg" "$(EXAMPLE).prg"
-	$(CMD) -m c64FLI "$(EXAMPLE).jpg" "$(EXAMPLE).png"
+	$(CMD) -f prg -m fli "$(EXAMPLE).jpg" "$(EXAMPLE).prg"
+	$(CMD) -f png -m fli "$(EXAMPLE).jpg" "$(EXAMPLE).png"
 	open "$(EXAMPLE).png"
 	x64sc "$(EXAMPLE).prg"
 
 benchmark: build
 	hyperfine --export-markdown Benchmark-formats.md \
-		"$(CMD) paintface.jpg ./tmp.png" \
-		"$(CMD) paintface.jpg ./tmp.prg" \
-		"$(CMD) paintface.jpg ./tmp.kla"
+		"$(CMD) --overwrite -f png -o ./tmp.png $(EXAMPLE).jpg"  \
+		"$(CMD) --overwrite -f prg -o ./tmp.prg $(EXAMPLE).jpg" \
+		"$(CMD) --overwrite -o ./tmp.kla $(EXAMPLE).jpg"
 	hyperfine --export-markdown Benchmark-modes.md \
-		"$(CMD) paintface.jpg -m c64Multicolor ./tmp.png" \
-		"$(CMD) paintface.jpg -m c64Hires ./tmp.png" \
-		"$(CMD) paintface.jpg -m c64HiresMono ./tmp.png" \
-		"$(CMD) paintface.jpg -m c64FLI ./tmp.png" \
-		"$(CMD) paintface.jpg -m c64AFLI ./tmp.png" 
+		"$(CMD) --overwrite -f png -o ./tmp.png $(EXAMPLE).jpg" \
+		"$(CMD) --overwrite -f png -h -o ./tmp.png $(EXAMPLE).jpg" \
+		"$(CMD) --overwrite -f png -h --nomaps -o ./tmp.png $(EXAMPLE).jpg" \
+		"$(CMD) --overwrite -f png -o ./tmp.png -m fli  $(EXAMPLE).jpg" \
+		"$(CMD) --overwrite -f png -o ./tmp.png -m afli -h $(EXAMPLE).jpg"
 	hyperfine --export-markdown Benchmark-colorspaces.md \
-		"$(CMD) paintface.jpg -c rgb c64Multicolor ./tmp.png" \
-		"$(CMD) paintface.jpg -c yuv c64Multicolor ./tmp.png" \
-		"$(CMD) paintface.jpg -c xyz c64Multicolor ./tmp.png" 
+		"$(CMD) --overwrite -c rgb -o ./tmp.png $(EXAMPLE).jpg" \
+		"$(CMD) --overwrite -c yuv -o ./tmp.png $(EXAMPLE).jpg" \
+		"$(CMD) --overwrite -c xyz -o ./tmp.png $(EXAMPLE).jpg"

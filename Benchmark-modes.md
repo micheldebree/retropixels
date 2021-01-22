@@ -1,7 +1,7 @@
 | Command | Mean [ms] | Min [ms] | Max [ms] | Relative |
 |:---|---:|---:|---:|---:|
-| `node cli.js paintface.jpg -m c64Multicolor ./tmp.png` | 762.0 ± 21.5 | 734.4 | 793.4 | 1.02 ± 0.04 |
-| `node cli.js paintface.jpg -m c64Hires ./tmp.png` | 1055.2 ± 21.0 | 1033.3 | 1099.6 | 1.41 ± 0.05 |
-| `node cli.js paintface.jpg -m c64HiresMono ./tmp.png` | 1068.0 ± 9.7 | 1053.6 | 1084.5 | 1.43 ± 0.05 |
-| `node cli.js paintface.jpg -m c64FLI ./tmp.png` | 748.0 ± 23.4 | 720.6 | 778.0 | 1.00 |
-| `node cli.js paintface.jpg -m c64AFLI ./tmp.png` | 1057.6 ± 21.8 | 1031.9 | 1100.0 | 1.41 ± 0.05 |
+| `node cli.js --overwrite -f png -o ./tmp.png paintface.jpg` | 768.2 ± 13.8 | 757.1 | 798.0 | 3.74 ± 0.18 |
+| `node cli.js --overwrite -f png -h -o ./tmp.png paintface.jpg` | 1074.3 ± 15.5 | 1050.9 | 1101.3 | 5.23 ± 0.25 |
+| `node cli.js --overwrite -f png -h --nomaps -o ./tmp.png paintface.jpg` | 1107.2 ± 15.6 | 1088.9 | 1131.1 | 5.39 ± 0.25 |
+| `node cli.js --overwrite -f png -o ./tmp.png -m fli  paintface.jpg` | 780.2 ± 17.8 | 748.6 | 810.1 | 3.80 ± 0.19 |
+| `node cli.js --overwrite -f png -o ./tmp.png -m afli -h paintface.jpg` | 205.5 ± 9.2 | 197.8 | 225.3 | 1.00 |

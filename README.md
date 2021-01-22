@@ -89,16 +89,7 @@ A c64 graphic mode:
 The output is multicolor by default. To get high resolution output, use
 `--hires` together with this option.
 
-The format of the output file is determined automatically:
-
-| options              | output format                  |
-| -------------------- | ------------------------------ |
-| `-m bitmap`          | Koala painter (`.kla`)         |
-| `-m bitmap --hires`  | Art studio (`.art`)            |
-| `-m sprites`         | Spritepad (`.spd`)             |
-| `-m sprites --hires` | Spritepad (`.spd`)             |
-| `-m fli`             | Retropixels raw FLI (`.fli`)   |
-| `-m fli --hires`     | Retropixels raw AFLI (`.afli`) |
+The format of the output file is determined automatically, see the section [Output formats](#output-formats) for details.
 
 ### --format, -f < png | prg >
 
@@ -169,36 +160,36 @@ behaviour and will overwrite the output file if it exists.
 The following output formats describe the bytes in the output file in the order
 they appear.
 
-| format               | size in bytes         | data                                       |
-| -------------------- | --------------------- | ------------------------------------------ |
-| Koala painter        | 2                     | load address ($6000)                       |
-|                      | 8000                  | bitmap                                     |
-|                      | 1000                  | screen ram                                 |
-|                      | 1000                  | color ram                                  |
-|                      | 1                     | background color                           |
-| Art studio           | 2                     | load address ($2000)                       |
-|                      | 8000                  | bitmap                                     |
-|                      | 1000                  | screen ram                                 |
-|                      | 7                     | $00 padding                                |
-| Spritepad            | 1                     | background color                           |
-|                      | 1                     | multicolor 1                               |
-|                      | 1                     | multicolor 2                               |
-|                      | _nr of sprites_ \* 64 | 63 bytes sprite data                       |
-|                      |                       | 1 packed info byte: %m000cccc              |
-|                      |                       | m: hires (0) / multicolor (1)              |
-|                      |                       | cccc: sprite color                         |
-| Retropixels raw FLI  | 2                     | load addres ($3c00)                        |
-|                      | 1024                  | color ram (1000) + zero padding (24)       |
-|                      | 8 \* 1024             | 8 \* screen ram (1000) + zero padding (24) |
-|                      | 8000                  | bitmap                                     |
-|                      | 1                     | background color                           |
-| Retropixels raw AFLI | 2                     | load addres ($4000)                        |
-|                      | 8 \* 1024             | 8 \* screen ram (1000) + zero padding (24) |
-|                      | 8000                  | bitmap                                     |
+| format                         | size in bytes         | data                                       |
+| ------------------------------ | --------------------- | ------------------------------------------ |
+| Koala painter (`.kla`)         | 2                     | load address ($6000)                       |
+| `-m bitmap`                    | 8000                  | bitmap                                     |
+|                                | 1000                  | screen ram                                 |
+|                                | 1000                  | color ram                                  |
+|                                | 1                     | background color                           |
+| Art studio (`.art`)            | 2                     | load address ($2000)                       |
+| `-m bitmap -h`                 | 8000                  | bitmap                                     |
+|                                | 1000                  | screen ram                                 |
+|                                | 7                     | $00 padding                                |
+| Spritepad (`.spd`)             | 1                     | background color                           |
+| `-m sprites`                   | 1                     | multicolor 1                               |
+| `-m sprites --h`               | 1                     | multicolor 2                               |
+|                                | _nr of sprites_ \* 64 | 63 bytes sprite data                       |
+|                                |                       | 1 packed info byte: %m000cccc              |
+|                                |                       | m: hires (0) / multicolor (1)              |
+|                                |                       | cccc: sprite color                         |
+| Retropixels raw FLI (`.fli`)   | 2                     | load addres ($3c00)                        |
+| `-m fli`                       | 1024                  | color ram (1000) + zero padding (24)       |
+|                                | 8 \* 1024             | 8 \* screen ram (1000) + zero padding (24) |
+|                                | 8000                  | bitmap                                     |
+|                                | 1                     | background color                           |
+| Retropixels raw AFLI (`.afli`) | 2                     | load addres ($4000)                        |
+| `-m fli -h`                    | 8 \* 1024             | 8 \* screen ram (1000) + zero padding (24) |
+|                                | 8000                  | bitmap                                     |
 
 ## Examples
 
-Convert a image to a (multicolor bitmap) Koala picture:
+Convert an image to a (multicolor bitmap) Koala picture:
 
     retropixels paintface.jpg
 
@@ -253,20 +244,24 @@ Run with `node cli.js [options] <infile>`
 
 This is a **backwards incompatible** release.
 
-- Added `sprites` mode.
-- Added options for `sprites` mode:
+- Added [#26](https://github.com/micheldebree/retropixels/issues/26) `sprites` mode.
+  - `--mode: sprites`
   - `--cols`: number of sprites in horizontal direction.
   - `--rows`: number of sprites in vertical direction.
+- Added [#44](https://github.com/micheldebree/retropixels/issues/44) save
+  hires bitmaps to Art Studio format
 - Changed all the options for `--mode`. `c64Multicolor`, `c64Hires` and
   `c64HiresMono` are now `bitmap` mode. `c64FLI` and `c64AFLI` are now `fli`.
 - Added option `--hires` for hires images. Default when not
   supplied is multicolor images.
-- Added option `--format` for outputting the special `png` and `prg` formats.
+- Added [#43](https://github.com/micheldebree/retropixels/issues/43) option
+  `--format` for outputting the special `png` and `prg` formats.
 - Added option `--nomaps` for limiting attribute maps to one single color.
-- Added option `--scale` to disable rescaling of the input image.
-- Added option `--scale` to disable rescaling of the input image.
+- Added option `--scale none` to disable rescaling of the input image.
+  Default behaviour is `--scale fill`
 - Added option `--outfile` for setting output filename.
-- Added option `--overwrite` to force overwriting output file.
+- Changed automatically overwriting of output file
+  Added option `--overwrite` to force overwriting output file.
 
 ### 0.7.2
 
