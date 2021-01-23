@@ -2,7 +2,9 @@
 /* jshint esversion: 6 */
 const cli = require('commander');
 const path = require('path');
+const { promisify } = require('util');
 const fs = require('fs');
+const fsStat = promisify(fs.stat);
 const retropixels = require('.');
 
 const { version } = require('./package');
@@ -105,14 +107,17 @@ function saveDebugMaps(pixelImage) {
 }
 
 async function checkOverwrite(filename) {
-  return fs.stat(filename, (err, stat) => {
-    if (err === null && !cli.overwrite) {
-      throw new Error(`Output file ${filename} already exists. Use --overwrite to force overwriting output file.`);
-    }
-    if (err !== null && err.code !== 'ENOENT') {
+  try {
+    await fsStat(filename);
+  } catch (err) {
+    if (err.code !== 'ENOENT') {
       throw new Error('Could not write file ${filename}: ${err.code}');
     }
-  });
+    return;
+  }
+  if (!cli.overwrite) {
+    throw new Error(`Output file ${filename} already exists. Use --overwrite to force overwriting output file.`);
+  }
 }
 
 function getOutFile(extension) {
@@ -138,36 +143,30 @@ const pixelImage = graphicMode.builder(palette, {
 
 retropixels.JimpPreprocessor.read(inFile, pixelImage.mode, cli.scale)
   .then(async jimpImage => {
-    try {
-      if (cli.ditherMode !== 'none') {
-        ditherer.dither(jimpImage);
-      }
-
-      converter.convert(jimpImage, pixelImage);
-
-      let outFile;
-      if (!cli.format) {
-        const outputFormat = retropixels.C64Writer.getFormat(pixelImage);
-        outFile = getOutFile(outputFormat.defaultExtension);
-        await checkOverwrite(outFile);
-        outputFormat.fromPixelImage(pixelImage);
-        await retropixels.C64Writer.save(outputFormat, outFile);
-      } else if (cli.format === 'prg') {
-        outFile = getOutFile('prg');
-        checkOverwrite(outFile);
-        await retropixels.C64Writer.savePrg(pixelImage, outFile);
-      } else if (cli.format === 'png') {
-        outFile = getOutFile('png');
-        checkOverwrite(outFile);
-        await retropixels.JimpPreprocessor.write(pixelImage, outFile);
-      }
-
-      console.log(outFile);
-    } catch (e) {
-      console.error(e);
-      cli.help();
-      process.exit(1);
+    if (cli.ditherMode !== 'none') {
+      ditherer.dither(jimpImage);
     }
+
+    converter.convert(jimpImage, pixelImage);
+
+    let outFile;
+    if (!cli.format) {
+      const outputFormat = retropixels.C64Writer.getFormat(pixelImage);
+      outFile = getOutFile(outputFormat.defaultExtension);
+      await checkOverwrite(outFile);
+      outputFormat.fromPixelImage(pixelImage);
+      await retropixels.C64Writer.save(outputFormat, outFile);
+    } else if (cli.format === 'prg') {
+      outFile = getOutFile('prg');
+      checkOverwrite(outFile);
+      await retropixels.C64Writer.savePrg(pixelImage, outFile);
+    } else if (cli.format === 'png') {
+      outFile = getOutFile('png');
+      checkOverwrite(outFile);
+      await retropixels.JimpPreprocessor.write(pixelImage, outFile);
+    }
+
+    console.log(outFile);
   })
   .catch(error => {
     if (error.code === 'ENOENT') {
@@ -176,5 +175,4 @@ retropixels.JimpPreprocessor.read(inFile, pixelImage.mode, cli.scale)
       console.error(`\nERROR: ${error.message}\n`);
     }
     cli.help();
-    process.exit(error.errno);
   });
