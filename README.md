@@ -187,6 +187,14 @@ they appear.
 | `-m fli -h`                    | 8 \* 1024             | 8 \* screen ram (1000) + zero padding (24) |
 |                                | 8000                  | bitmap                                     |
 
+## Pixel perfect input
+
+If you want to convert pixels one-on-one (for sheets of sprites for example), make sure to:
+
+- use the `--palette` option and make sure the input colors map correctly on the palette
+- use `--scale none`
+- use `--ditherMode none`
+
 ## Examples
 
 Convert an image to a (multicolor bitmap) Koala picture:

@@ -53,7 +53,17 @@ export default class JimpPreprocessor {
     jimpImage.resize(graphicMode.width * graphicMode.pixelWidth, graphicMode.height * graphicMode.pixelHeight);
   }
 
+  // crop to fill (--scale none)
+  // multicolor images are halved in width with nearest neighbor so there is no anti-aliasing
+  // this is for pixel perfect input images
   private static crop(jimpImage: Jimp, graphicMode: GraphicMode): void {
+    if (jimpImage.bitmap.width < graphicMode.width || jimpImage.bitmap.height < graphicMode.height) {
+      throw new Error(
+        `Image size (${jimpImage.bitmap.width}x${jimpImage.bitmap.height}) must be at least ${
+          graphicMode.width * graphicMode.pixelWidth
+        }x${graphicMode.height * graphicMode.pixelHeight}`
+      );
+    }
     if (graphicMode.pixelWidth !== 1) {
       jimpImage.resize(
         jimpImage.bitmap.width / graphicMode.pixelWidth,
@@ -64,6 +74,7 @@ export default class JimpPreprocessor {
     jimpImage.crop(0, 0, graphicMode.width, graphicMode.height);
   }
 
+  // resize to fill (--scale fill)
   private static cropFill(jimpImage: Jimp, graphicMode: GraphicMode): void {
     jimpImage.cover(graphicMode.width * graphicMode.pixelWidth, graphicMode.height * graphicMode.pixelHeight);
     jimpImage.resize(graphicMode.width, graphicMode.height);

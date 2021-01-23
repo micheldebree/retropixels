@@ -173,7 +173,7 @@ retropixels.JimpPreprocessor.read(inFile, pixelImage.mode, cli.scale)
     if (error.code === 'ENOENT') {
       console.error(`\nERROR: ${error.path} does not exist.\n`);
     } else {
-      console.error(error);
+      console.error(`\nERROR: ${error.message}\n`);
     }
     cli.help();
     process.exit(error.errno);
