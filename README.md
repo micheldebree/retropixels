@@ -248,6 +248,8 @@ Run with `node cli.js [options] <infile>`
 
 ## Changelog
 
+### 0.8.1
+
 ### 0.8.0
 
 This is a **backwards incompatible** release.
