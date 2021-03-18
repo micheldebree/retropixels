@@ -29,67 +29,69 @@ cli
 
 // defaults
 
-if (!cli.mode) {
-  cli.mode = 'bitmap';
+const options = cli.opts();
+
+if (!options.mode) {
+  options.mode = 'bitmap';
 }
 
-if (!cli.ditherMode) {
-  cli.ditherMode = 'bayer4x4';
+if (!options.ditherMode) {
+  options.ditherMode = 'bayer4x4';
 }
 
-if (!cli.scale) {
-  cli.scale = 'fill';
+if (!options.scale) {
+  options.scale = 'fill';
 }
 
-if (cli.ditherRadius === undefined) {
-  cli.ditherRadius = 32;
+if (options.ditherRadius === undefined) {
+  options.ditherRadius = 32;
 }
 
-if (!cli.palette) {
-  cli.palette = 'colodore';
+if (!options.palette) {
+  options.palette = 'colodore';
 }
 
-if (!cli.colorspace) {
-  cli.colorspace = 'xyz';
+if (!options.colorspace) {
+  options.colorspace = 'xyz';
 }
 
-if (!cli.cols) {
-  cli.cols = 8;
+if (!options.cols) {
+  options.cols = 8;
 }
 
-if (!cli.rows) {
-  cli.rows = 8;
+if (!options.rows) {
+  options.rows = 8;
 }
 
-const graphicMode = retropixels.GraphicModes.all[cli.mode];
+const graphicMode = retropixels.GraphicModes.all[options.mode];
 if (!graphicMode) {
-  console.error(`Unknown graphicmode: ${cli.mode}`);
+  console.error(`Unknown graphicMode: ${options.mode}`);
   cli.help();
   process.exit(1);
 }
 
-const ditherPreset = retropixels.OrderedDither.presets[cli.ditherMode];
+const ditherPreset = retropixels.OrderedDither.presets[options.ditherMode];
 if (!ditherPreset) {
-  console.error(`Unknown ditherMode: ${cli.ditherMode}`);
+  console.error(`Unknown ditherMode: ${options.ditherMode}`);
   cli.help();
   process.exit(1);
 }
 
-const palette = retropixels.Palettes.all[cli.palette];
+const palette = retropixels.Palettes.all[options.palette];
 if (palette === undefined) {
-  console.error(`Unknown palette: ${cli.palette}`);
+  console.error(`Unknown palette: ${options.palette}`);
   cli.help();
   process.exit(1);
 }
 
-const colorspace = retropixels.Quantizer.colorspaces[cli.colorspace];
+const colorspace = retropixels.Quantizer.colorspaces[options.colorspace];
 if (colorspace === undefined) {
-  console.error(`Unknown colorspace: ${cli.colorspace}`);
+  console.error(`Unknown colorspace: ${options.colorspace}`);
   cli.help();
   process.exit(1);
 }
 
-const ditherer = new retropixels.OrderedDither(ditherPreset, cli.ditherRadius);
+const ditherer = new retropixels.OrderedDither(ditherPreset, options.ditherRadius);
 
 const inFile = cli.args[0];
 
@@ -98,31 +100,31 @@ if (inFile === undefined) {
   cli.help();
 }
 
-function saveDebugMaps(pixelImage) {
-  const mapimages = pixelImage.debugColorMaps();
-  let i = 0;
-  for (let mapimage of mapimages) {
-    savePng(mapimage, outFile + '-map' + i++ + '.png');
-  }
-}
+// function saveDebugMaps(pixelImage) {
+//   const mapimages = pixelImage.debugColorMaps();
+//   let i = 0;
+//   for (let mapimage of mapimages) {
+//     savePng(mapimage, `${outFile}-map${i++}.png`);
+//   }
+// }
 
 async function checkOverwrite(filename) {
   try {
     await fsStat(filename);
   } catch (err) {
     if (err.code !== 'ENOENT') {
-      throw new Error('Could not write file ${filename}: ${err.code}');
+      throw new Error(`Could not write file ${filename}: ${err.code}`);
     }
     return;
   }
-  if (!cli.overwrite) {
+  if (!options.overwrite) {
     throw new Error(`Output file ${filename} already exists. Use --overwrite to force overwriting output file.`);
   }
 }
 
 function getOutFile(extension) {
-  if (cli.outfile) {
-    return cli.outfile;
+  if (options.outfile) {
+    return options.outfile;
   }
 
   const baseName = path.basename(inFile, path.extname(inFile));
@@ -135,32 +137,32 @@ const converter = new retropixels.Converter(poker);
 
 // props are only used in sprite mode for now
 const pixelImage = graphicMode.builder(palette, {
-  rows: cli.rows,
-  columns: cli.cols,
-  hires: cli.hires,
-  nomaps: cli.nomaps
+  rows: options.rows,
+  columns: options.cols,
+  hires: options.hires,
+  nomaps: options.nomaps
 });
 
-retropixels.JimpPreprocessor.read(inFile, pixelImage.mode, cli.scale)
+retropixels.JimpPreprocessor.read(inFile, pixelImage.mode, options.scale)
   .then(async jimpImage => {
-    if (cli.ditherMode !== 'none') {
+    if (options.ditherMode !== 'none') {
       ditherer.dither(jimpImage);
     }
 
     converter.convert(jimpImage, pixelImage);
 
     let outFile;
-    if (!cli.format) {
+    if (!options.format) {
       const outputFormat = retropixels.C64Writer.getFormat(pixelImage);
       outFile = getOutFile(outputFormat.defaultExtension);
       await checkOverwrite(outFile);
       outputFormat.fromPixelImage(pixelImage);
       await retropixels.C64Writer.save(outputFormat, outFile);
-    } else if (cli.format === 'prg') {
+    } else if (options.format === 'prg') {
       outFile = getOutFile('prg');
       checkOverwrite(outFile);
       await retropixels.C64Writer.savePrg(pixelImage, outFile);
-    } else if (cli.format === 'png') {
+    } else if (options.format === 'png') {
       outFile = getOutFile('png');
       checkOverwrite(outFile);
       await retropixels.JimpPreprocessor.write(pixelImage, outFile);

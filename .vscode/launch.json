@@ -6,7 +6,7 @@
       "request": "launch",
       "name": "Launch Program",
       "program": "${workspaceRoot}/cli.js",
-      "args": ["-m","sprites", "paintface.jpg"]
+      "args": ["-m", "sprites", "-h", "--overwrite", "paintface.jpg"]
     }
   ]
 }

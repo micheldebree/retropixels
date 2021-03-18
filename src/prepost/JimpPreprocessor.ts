@@ -26,7 +26,11 @@ export default class JimpPreprocessor {
 
   public static async write(pixelImage: PixelImage, filename: string): Promise<Jimp> {
     const image: Jimp = await this.toJimpImage(pixelImage);
-    this.resize(image, pixelImage.mode);
+    image.resize(
+      pixelImage.mode.width * pixelImage.mode.pixelWidth,
+      pixelImage.mode.height * pixelImage.mode.pixelHeight,
+      Jimp.RESIZE_NEAREST_NEIGHBOR
+    );
     return image.write(filename);
   }
 
@@ -47,10 +51,6 @@ export default class JimpPreprocessor {
         Pixels.poke(image.bitmap, x, y, pixelValue);
       }
     }
-  }
-
-  private static resize(jimpImage: Jimp, graphicMode: GraphicMode): void {
-    jimpImage.resize(graphicMode.width * graphicMode.pixelWidth, graphicMode.height * graphicMode.pixelHeight);
   }
 
   // crop to fill (--scale none)

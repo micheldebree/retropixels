@@ -14,6 +14,6 @@
     "strictNullChecks": false,
     "alwaysStrict": true
   },
-  "include": ["**/*.ts"],
+  "include": ["cli.js", "**/*.ts"],
   "exclude": ["node_modules", "**/*.spec.ts"]
 }

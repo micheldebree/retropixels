@@ -9,10 +9,10 @@
     "project": "./tsconfig.json"
   },
   "extends": [
+    "prettier",
     "plugin:@typescript-eslint/recommended",
     "airbnb-typescript/base",
-    "plugin:prettier/recommended",
-    "prettier/@typescript-eslint"
+    "plugin:prettier/recommended"
   ],
   "rules": {
     "semi": 2,
