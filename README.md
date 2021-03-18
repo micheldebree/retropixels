@@ -250,6 +250,9 @@ Run with `node cli.js [options] <infile>`
 
 ### 0.8.1
 
+- Fixed [[#53](https://github.com/micheldebree/retropixels/issues/53)]
+  multicolor PNG output is not pixel-perfect (Thanks to Rob for reporting)
+
 ### 0.8.0
 
 This is a **backwards incompatible** release.
