@@ -2,6 +2,15 @@
 
 A cross platform command line tool to convert images to Commodore 64 format.
 
+This is intended primarily for Commodore 64 graphicians and developers who want
+to:
+
+- Convert an image to a picture, or sprites, for use in a Commodore 64
+  production.
+- Pixel artists who want to use an existing image as a starting point.
+- People who like the Commodore 64 graphics esthetics and want to apply them to
+  an image and save it as a `.png` file.
+
 ## Summary
 
 ![Input](paintface.jpg)
@@ -10,12 +19,33 @@ A cross platform command line tool to convert images to Commodore 64 format.
 
 ![Output](samples/paintface-Multicolor.png)
 
+## Disclaimer
+
+This is a command line tool, meaning you have to be comfortable typing commands
+into a terminal, or not afraid to find out. Windows, macOS and Linux come with
+terminals pre-installed. How to use a terminal is beyond the scope of this
+document.
+
+The output of the tool consists of Commodore 64 format binaries, with the
+exception of `.png` files, which are normal cross-platform images. It is not
+explained what you can do with these output files, you are expected to know or
+to find out yourself.
+
+This tool contains bugs and is missing features; if you find any, you can report
+them in the [Github issue tracker for this
+project](https://github.com/micheldebree/retropixels/issues). There is no
+guarantee these will be addressed, because this is a hobby project for me. You
+are welcome to fork and submit merge requests.
+
+The tool has been tested on macOS but should work on all operating systems
+supporting NodeJS.
+
 ## Installation
 
 Note: you do **not** need to download retropixels to install it. The `npm` command
 below will do that for you.
 
-- Install [NodeJS](https://nodejs.org)
+- Install [NodeJS](https://nodejs.org) (v14 or higher. just use the defaults when asked)
 - Run `npm install -g retropixels`
 
 You now have a new shell command called `retropixels`
