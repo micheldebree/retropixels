@@ -2,12 +2,12 @@
 
 A cross platform command line tool to convert images to Commodore 64 format.
 
-This is intended primarily for Commodore 64 graphicians and developers who want
-to:
+This is intended primarily for:
 
-- Convert an image to a picture, or sprites, for use in a Commodore 64
-  production.
-- Pixel artists who want to use an existing image as a starting point.
+- Commodore 64 developers who want to convert an image to graphics data
+  for use in a Commodore 64 production.
+- Commodore 64 pixel artists who want to use an existing image as a starting
+  point.
 - People who like the Commodore 64 graphics esthetics and want to apply them to
   an image and save it as a `.png` file.
 
