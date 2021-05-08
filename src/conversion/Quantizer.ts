@@ -23,7 +23,7 @@ import Palette from '../model/Palette';
 export default class Quantizer {
   public colorspace: (pixel: number[]) => number[];
 
-  private palette: Palette;
+  public palette: Palette;
 
   constructor(palette: Palette, colorspace: (pixel: number[]) => number[]) {
     this.colorspace = colorspace;
@@ -31,7 +31,7 @@ export default class Quantizer {
     this.palette = new Palette(palette.pixels.map(p => colorspace(p)));
   }
 
-  private distance = (realPixel: number[], palettePixel: number[]): number => {
+  public distance = (realPixel: number[], palettePixel: number[]): number => {
     const realPixelConverted = this.colorspace(realPixel);
 
     return Math.sqrt(

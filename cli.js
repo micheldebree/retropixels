@@ -17,8 +17,8 @@ cli
   .option('-f, --format <output format>', 'png, prg')
   .option('-d, --ditherMode <ditherMode>', 'bayer2x2, bayer4x4 (default), bayer8x8')
   .option('-r, --ditherRadius [0-64]', '0 = no dithering, 32 = default', parseInt)
-  .option('-p, --palette <palette>', 'colodore (default), pepto, deekay, rainbow')
-  .option('-c, --colorspace <colorspace>', 'xyz (default), yuv, rgb (no conversion)')
+  .option('-p, --palette <palette>', 'colodore (default), pepto, deekay')
+  .option('-c, --colorspace <colorspace>', 'xyz (default), yuv, rgb (no conversion), rainbow')
   .option('--cols <columns>', 'number of columns of sprites, default = 8', parseInt)
   .option('--rows <rows>', 'number of rows of sprites, default = 8', parseInt)
   .option('-h, --hires', 'hires mode')
@@ -135,8 +135,7 @@ const quantizer = new retropixels.Quantizer(palette, colorspace);
 const poker = new retropixels.Poker(quantizer);
 const converter = new retropixels.Converter(poker);
 
-// props are only used in sprite mode for now
-const pixelImage = graphicMode.builder(palette, {
+const pixelImage = graphicMode.builder({
   rows: options.rows,
   columns: options.cols,
   hires: options.hires,
@@ -165,7 +164,7 @@ retropixels.JimpPreprocessor.read(inFile, pixelImage.mode, options.scale)
     } else if (options.format === 'png') {
       outFile = getOutFile('png');
       checkOverwrite(outFile);
-      await retropixels.JimpPreprocessor.write(pixelImage, outFile);
+      await retropixels.JimpPreprocessor.write(pixelImage, outFile, palette);
     }
 
     console.log(outFile);

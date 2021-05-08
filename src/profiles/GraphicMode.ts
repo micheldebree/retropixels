@@ -1,5 +1,3 @@
-import Palette from '../model/Palette';
-
 /**
  * A specific Graphic Mode.
  * Includes a factory for creating new PixelImages in this mode.
@@ -17,8 +15,6 @@ export default class GraphicMode {
 
   public pixelHeight = 1;
 
-  public palette: Palette;
-
   public rowsPerCell = 8;
 
   public bytesPerCellRow = 1;
@@ -32,11 +28,10 @@ export default class GraphicMode {
     3: 3
   };
 
-  constructor(id: string, width: number, height: number, palette: Palette) {
+  constructor(id: string, width: number, height: number) {
     this.id = id;
     this.width = width;
     this.height = height;
-    this.palette = palette;
 
     // console.log('Graphicmode:');
     // console.log('------------');

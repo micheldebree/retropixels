@@ -23,8 +23,7 @@ export default class Optimizer {
     const w: number = imageData.width;
     const h: number = imageData.height;
     const unrestrictedImage: PixelImage = new PixelImage(targetPixelImage.mode);
-    const { palette } = targetPixelImage.colorMaps[0];
-    unrestrictedImage.colorMaps.push(new ColorMap(w, h, palette, 1, 1));
+    unrestrictedImage.colorMaps.push(new ColorMap(w, h, 1, 1));
     this.poker.drawImageData(imageData, unrestrictedImage);
     return unrestrictedImage.colorMaps[0];
   }

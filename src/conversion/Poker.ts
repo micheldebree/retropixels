@@ -1,4 +1,3 @@
-import Palette from '../model/Palette';
 import PixelImage from '../model/PixelImage';
 import Quantizer from './Quantizer';
 import IImageData from '../model/IImageData';
@@ -22,7 +21,6 @@ export default class Poker {
     // idea: do 'smart' poking in a separate class, with dependency to dithering
     /* eslint-disable no-param-reassign */
 
-    // optimization, assuming all colorMaps have the same palette, do quantization only once
     const mappedIndex: number = this.quantizer.mapPixel(realColor);
 
     // try to reuse existing color map that has an exact fit for this color
@@ -96,17 +94,24 @@ export default class Poker {
     return undefined;
   }
 
+  // get the colormap that has the closest color at x,y to realColor
   private map(image: PixelImage, x: number, y: number, realColor: number[]): number {
-    // determine closest pixel in palette (ignoring alpha)
+    let closestMap = 0;
+    let minDistance;
+    for (let i = 0; i < image.colorMaps.length; i++) {
+      const paletteIndex = image.colorMaps[i].get(x, y);
 
-    const palette = new Palette([]);
-    /* eslint-disable no-restricted-syntax */
-    for (const colorMap of image.colorMaps) {
-      palette.pixels.push(colorMap.getColor(x, y));
+      if (paletteIndex !== undefined) {
+        const pixel = this.quantizer.palette.get(paletteIndex);
+        const distance = this.quantizer.distance(realColor, pixel);
+
+        if (minDistance === undefined || distance < minDistance) {
+          minDistance = distance;
+          closestMap = i;
+        }
+      }
     }
-    /* eslint-enable no-restricted-syntax */
 
-    const quantizer: Quantizer = new Quantizer(palette, this.quantizer.colorspace);
-    return quantizer.mapPixel(realColor);
+    return closestMap;
   }
 }

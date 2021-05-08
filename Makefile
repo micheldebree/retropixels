@@ -9,13 +9,13 @@ target/c64/%.prg: src/c64/%.asm target/c64/
 build: node_modules $(C64CODE)
 	yarn build
 
-cleanbuild: clean node_modules format build samples
+cleanbuild: clean node_modules samples
 
 target/c64/:
 	mkdir -p target/c64
 
 clean:
-	rm -rf target && rm -f *.png && rm -f *.prg && rm -rf samples && rm -rf node_modules
+	rm -rf target && rm -f *.png && rm -f *.prg && rm -rf *.kla && rm -rf samples && rm -rf node_modules
 
 node_modules:
 	yarn install
@@ -67,7 +67,8 @@ benchmark: build
 	hyperfine --export-markdown Benchmark-formats.md \
 		"$(CMD) --overwrite -f png -o ./tmp.png $(EXAMPLE).jpg"  \
 		"$(CMD) --overwrite -f prg -o ./tmp.prg $(EXAMPLE).jpg" \
-		"$(CMD) --overwrite -o ./tmp.kla $(EXAMPLE).jpg"
+		"$(CMD) --overwrite -o ./tmp.kla $(EXAMPLE).jpg" \
+		"$(CMD) --overwrite -h -o ./tmp.art $(EXAMPLE).jpg"
 	hyperfine --export-markdown Benchmark-modes.md \
 		"$(CMD) --overwrite -f png -o ./tmp.png $(EXAMPLE).jpg" \
 		"$(CMD) --overwrite -f png -h -o ./tmp.png $(EXAMPLE).jpg" \

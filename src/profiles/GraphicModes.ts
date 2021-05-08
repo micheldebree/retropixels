@@ -1,17 +1,16 @@
 import PixelImage from '../model/PixelImage';
 import GraphicMode from './GraphicMode';
 import GraphicModeFactory from './GraphicModeFactory';
-import Palette from '../model/Palette';
 
 export default class GraphicModes {
   // C64 modes {{{
 
   public static bitmap: GraphicModeFactory = new GraphicModeFactory(
-    (palette: Palette, props: Record<string, unknown>): PixelImage => {
+    (props: Record<string, unknown>): PixelImage => {
       const { hires, nomaps } = props;
       const width = hires ? 320 : 160;
 
-      const gm: GraphicMode = new GraphicMode('bitmap', width, 200, palette);
+      const gm: GraphicMode = new GraphicMode('bitmap', width, 200);
       gm.pixelWidth = hires ? 1 : 2;
 
       const result = new PixelImage(gm);
@@ -37,17 +36,17 @@ export default class GraphicModes {
   );
 
   public static c64FLI: GraphicModeFactory = new GraphicModeFactory(
-    (palette: Palette, props: Record<string, unknown>): PixelImage => {
+    (props: Record<string, unknown>): PixelImage => {
       if (props.hires) {
-        return GraphicModes.createHiresFLI(palette);
+        return GraphicModes.createHiresFLI();
       }
 
-      return GraphicModes.createMulticolorFLI(palette);
+      return GraphicModes.createMulticolorFLI();
     }
   );
 
-  private static createMulticolorFLI(palette: Palette): PixelImage {
-    const gm: GraphicMode = new GraphicMode('fli', 160, 200, palette);
+  private static createMulticolorFLI(): PixelImage {
+    const gm: GraphicMode = new GraphicMode('fli', 160, 200);
     gm.pixelWidth = 2;
     gm.fliBugSize = 3 * 4;
     gm.indexMap = {
@@ -64,8 +63,8 @@ export default class GraphicModes {
     return result;
   }
 
-  private static createHiresFLI(palette: Palette): PixelImage {
-    const gm: GraphicMode = new GraphicMode('fli', 320, 200, palette);
+  private static createHiresFLI(): PixelImage {
+    const gm: GraphicMode = new GraphicMode('fli', 320, 200);
     gm.fliBugSize = 3 * 8;
     const result = new PixelImage(gm);
     result.addColorMap(8, 1);
@@ -74,7 +73,7 @@ export default class GraphicModes {
   }
 
   public static c64Sprites: GraphicModeFactory = new GraphicModeFactory(
-    (palette: Palette, props: Record<string, unknown>): PixelImage => {
+    (props: Record<string, unknown>): PixelImage => {
       const { rows, columns, hires, nomaps } = props;
       const nrRows = Number(rows);
       const nrColumns = Number(columns);
@@ -84,7 +83,7 @@ export default class GraphicModes {
       const height: number = nrRows * 21;
       const width: number = nrColumns * pixelsPerColumn;
 
-      const gm: GraphicMode = new GraphicMode('sprites', width, height, palette);
+      const gm: GraphicMode = new GraphicMode('sprites', width, height);
       gm.pixelWidth = hires ? 1 : 2;
       gm.bytesPerCellRow = 3;
       gm.rowsPerCell = 21;

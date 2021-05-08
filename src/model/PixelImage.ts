@@ -1,6 +1,5 @@
 import GraphicMode from '../profiles/GraphicMode';
 import ColorMap from './ColorMap';
-import Pixels from './Pixels';
 
 export default class PixelImage {
   public colorMaps: ColorMap[];
@@ -20,28 +19,21 @@ export default class PixelImage {
   }
 
   /**
-   * Get the color of a particular pixel.
-   * @param {int} x X coordinate
-   * @param {int} y Y coordinate
-   * @returns {Array} Pixel values [r, g, b, a], or an empty pixel if x and y are out of range.
+   * Get the palette index of a particular pixel
+   * @param x X coordinate
+   * @param y Y coordinate
    */
-  public peek(x: number, y: number): number[] {
-    // get the ColorMap for the color
+  public peek(x: number, y: number): number {
     const colorMapIndex = this.pixelIndex[y][x];
     if (colorMapIndex === undefined) {
       return undefined;
     }
-
     // get the palette index from the ColorMap
-    const colorMap = this.colorMaps[colorMapIndex];
-    const paletteIndex = colorMap.get(x, y);
-
-    // return the color from the palette
-    return paletteIndex !== undefined ? colorMap.palette.get(paletteIndex) : Pixels.emptyPixel;
+    return this.colorMaps[colorMapIndex].get(x, y);
   }
 
   public addColorMap(resXVal: number = this.mode.width, resYVal: number = this.mode.height): void {
-    this.colorMaps.push(new ColorMap(this.mode.width, this.mode.height, this.mode.palette, resXVal, resYVal));
+    this.colorMaps.push(new ColorMap(this.mode.width, this.mode.height, resXVal, resYVal));
   }
 
   public mapPixelIndex(x: number, y: number): number {

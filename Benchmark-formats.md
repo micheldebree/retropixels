@@ -1,5 +1,6 @@
 | Command | Mean [ms] | Min [ms] | Max [ms] | Relative |
 |:---|---:|---:|---:|---:|
-| `node cli.js --overwrite -f png -o ./tmp.png paintface.jpg` | 790.9 ± 24.2 | 764.3 | 834.6 | 1.10 ± 0.04 |
-| `node cli.js --overwrite -f prg -o ./tmp.prg paintface.jpg` | 722.7 ± 11.8 | 706.6 | 737.9 | 1.00 ± 0.02 |
-| `node cli.js --overwrite -o ./tmp.kla paintface.jpg` | 720.3 ± 12.7 | 696.9 | 741.0 | 1.00 |
+| `node cli.js --overwrite -f png -o ./tmp.png paintface.jpg` | 797.0 ± 9.1 | 784.1 | 810.8 | 1.05 ± 0.01 |
+| `node cli.js --overwrite -f prg -o ./tmp.prg paintface.jpg` | 758.1 ± 6.1 | 747.1 | 764.8 | 1.00 |
+| `node cli.js --overwrite -o ./tmp.kla paintface.jpg` | 759.9 ± 9.5 | 738.6 | 772.5 | 1.00 ± 0.01 |
+| `node cli.js --overwrite -h -o ./tmp.art paintface.jpg` | 1048.5 ± 18.3 | 1024.5 | 1088.3 | 1.38 ± 0.03 |

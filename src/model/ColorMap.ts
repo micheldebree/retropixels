@@ -9,12 +9,9 @@
  *
  * A color is an index into a palette. A pixel is a set of RGBA values.
  */
-import Palette from './Palette';
 
 export default class ColorMap {
   public colors: number[][];
-
-  public palette: Palette;
 
   public width: number;
 
@@ -24,15 +21,8 @@ export default class ColorMap {
 
   public resY: number;
 
-  constructor(
-    widthVal: number,
-    heightVal: number,
-    palette: Palette,
-    resXVal: number = widthVal,
-    resYVal: number = heightVal
-  ) {
+  constructor(widthVal: number, heightVal: number, resXVal: number = widthVal, resYVal: number = heightVal) {
     this.colors = [];
-    this.palette = palette;
     this.width = widthVal;
     this.height = heightVal;
     this.resX = resXVal;
@@ -70,20 +60,6 @@ export default class ColorMap {
       return this.colors[mX][this.mapY(y)];
     }
     return undefined;
-  }
-
-  /**
-   * Get the color at x, y coordinate.
-   * @param  {number}   x [description]
-   * @param  {number}   y [description]
-   * @return {number[]}   [description]
-   */
-  public getColor(x: number, y: number): number[] {
-    const index: number = this.get(x, y);
-    if (index === undefined) {
-      return undefined;
-    }
-    return this.palette.get(index);
   }
 
   public subtract(colorMap: ColorMap): void {
