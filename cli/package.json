@@ -1,28 +1,22 @@
 {
   "name": "retropixels",
-  "version": "0.8.1",
+  "version": "0.9.0",
   "description": "A cross platform command line tool to convert images to Commodore 64 format.",
-  "main": "target/index.js",
   "bin": {
     "retropixels": "./cli.js"
   },
   "scripts": {
     "build": "npx tsc",
-    "test": "npx jest",
     "lint": "npx eslint '*/**/*.{js,ts}' --quiet -c .eslintrc.json --no-eslintrc",
     "fix": "npx eslint '*/**/*.{js,ts}' --quiet --fix -c .eslintrc.json --no-eslintrc && npx prettier cli.js --write"
   },
   "dependencies": {
     "commander": "7.2.0",
     "fs-extra": "10.0.0",
-    "jimp": "0.16.1",
+    "retropoxels": "../core",
     "path": "0.12.7"
   },
   "devDependencies": {
-    "@types/fs-extra": "9.0.11",
-    "@types/node": "15.0.2",
-    "@typescript-eslint/eslint-plugin": "4.22.1",
-    "@typescript-eslint/parser": "4.22.1",
     "c64jasm": "0.9.2",
     "del": "6.0.0",
     "dpdm": "3.6.1",
@@ -31,23 +25,9 @@
     "eslint-config-prettier": "8.3.0",
     "eslint-plugin-import": "2.22.1",
     "eslint-plugin-prettier": "3.4.0",
-    "jest": "26.6.3",
     "madge": "4.0.2",
     "prettier": "2.2.1",
-    "retire": "2.2.5",
-    "ts-jest": "26.5.6",
-    "typescript": "4.2.4"
-  },
-  "jest": {
-    "moduleFileExtensions": [
-      "ts",
-      "tsx",
-      "js"
-    ],
-    "transform": {
-      "\\.(ts|tsx)$": "<rootDir>/node_modules/ts-jest/preprocessor.js"
-    },
-    "testRegex": "/test/.*\\.(ts|tsx|js)$"
+    "retire": "2.2.5"
   },
   "repository": {
     "type": "git",

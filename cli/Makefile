@@ -3,13 +3,12 @@ EXAMPLE=paintface
 CMD=node cli.js
 C64CODE=target/c64/koala.prg target/c64/afli.prg target/c64/fli.prg target/c64/artstudio.prg
 
-target/c64/%.prg: src/c64/%.asm target/c64/
+target/c64/%.prg: c64/%.asm target/c64/
 	npx c64jasm --out "$@" "$<"
 
-build: node_modules $(C64CODE)
-	yarn build
+build: $(C64CODE)
 
-cleanbuild: clean node_modules samples
+cleanbuild: clean samples
 
 target/c64/:
 	mkdir -p target/c64
@@ -17,8 +16,6 @@ target/c64/:
 clean:
 	rm -rf target && rm -f *.png && rm -f *.prg && rm -rf *.kla && rm -rf samples && rm -rf node_modules
 
-node_modules:
-	yarn install
 
 # First:
 # - update package.json with <version>
