@@ -1,0 +1,36 @@
+{
+  "name": "retropixels-core",
+  "version": "0.1.0",
+  "description": "A javascript library to convert images to Commodore 64 format.",
+  "main": "target/index.js",
+  "scripts": {
+    "build": "npx tsc",
+    "lint": "npx eslint '*/**/*.{js,ts}' --quiet -c .eslintrc.json --no-eslintrc",
+    "fix": "npx eslint '*/**/*.{js,ts}' --quiet --fix -c .eslintrc.json --no-eslintrc && npx prettier cli.js --write"
+  },
+  "dependencies": {
+    "jimp": "0.16.1"
+  },
+  "devDependencies": {
+    "@types/node": "15.0.2",
+    "@typescript-eslint/eslint-plugin": "4.22.1",
+    "@typescript-eslint/parser": "4.22.1",
+    "eslint": "7.26.0",
+    "eslint-config-airbnb-typescript": "12.3.1",
+    "eslint-config-prettier": "8.3.0",
+    "eslint-plugin-import": "2.22.1",
+    "eslint-plugin-prettier": "3.4.0",
+    "prettier": "2.2.1",
+    "typescript": "4.2.4"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/micheldebree/retropixels.git"
+  },
+  "author": "Michel de Bree",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/micheldebree/retropixels/issues"
+  },
+  "homepage": "https://github.com/micheldebree/retropixels#readme"
+}
