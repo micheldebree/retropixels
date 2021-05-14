@@ -1,5 +1,3 @@
-import * as fs from 'fs-extra';
-import * as path from 'path';
 import AFLIPicture from './AFLIPicture';
 import FLIPicture from './FLIPicture';
 import ArtStudioPicture from './ArtStudioPicture';
@@ -10,55 +8,38 @@ import C64Layout from './C64Layout';
 import IBinaryFormat from './IBinaryFormat';
 
 export default class C64Writer {
-  // Save PixelImage as a c64 native .PRG executable.
-  public static async savePrg(pixelImage: PixelImage, outFile: string): Promise<void> {
-    const picture: IBinaryFormat = C64Writer.getFormat(pixelImage);
-    picture.fromPixelImage(pixelImage);
-    return C64Writer.saveExecutable(picture, outFile);
-  }
+  public static toBinary(pixelImage: PixelImage): IBinaryFormat {
+    let result: IBinaryFormat;
 
-  private static viewersFolder = '/target/c64/';
-
-  public static getFormat(pixelImage: PixelImage): IBinaryFormat {
     if (pixelImage.mode.id === 'bitmap') {
       if (pixelImage.isHires()) {
-        return new ArtStudioPicture();
+        result = new ArtStudioPicture();
+      } else {
+        result = new KoalaPicture();
       }
-      return new KoalaPicture();
     }
 
     if (pixelImage.mode.id === 'fli') {
       if (pixelImage.isHires()) {
-        return new AFLIPicture();
+        result = new AFLIPicture();
+      } else {
+        result = new FLIPicture();
       }
-      return new FLIPicture();
     }
 
     if (pixelImage.mode.id === 'sprites') {
-      return new SpritePad();
+      result = new SpritePad();
+    }
+
+    if (result !== undefined) {
+      result.fromPixelImage(pixelImage);
+      return result;
     }
 
     throw new Error(`Output format is not supported for mode ${pixelImage.mode.id}`);
   }
 
-  public static async save(image: IBinaryFormat, outFile: string): Promise<void> {
-    return fs.writeFile(outFile, Buffer.from(C64Layout.concat(image.toMemoryMap())));
-  }
-
-  private static async saveExecutable(image: IBinaryFormat, outFile: string): Promise<void> {
-    const appDir: string = path.dirname(require.main.filename);
-    const viewerFile: string = path.join(appDir, `${this.viewersFolder}${image.formatName}.prg`);
-    let viewerCode;
-
-    try {
-      viewerCode = await fs.readFile(viewerFile);
-    } catch (error) {
-      throw new Error(`Executable format is not supported for ${image.formatName}`);
-    }
-
-    const buffer: Buffer = Buffer.from(C64Layout.concat(image.toMemoryMap()));
-    const writeBuffer = Buffer.concat([viewerCode, buffer]);
-
-    return fs.writeFile(outFile, writeBuffer);
+  public static toBuffer(image: IBinaryFormat): Buffer {
+    return Buffer.from(C64Layout.concat(image.toMemoryMap()));
   }
 }
