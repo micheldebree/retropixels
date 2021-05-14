@@ -1,4 +1,4 @@
-import GraphicMode from '../profiles/GraphicMode';
+import GraphicMode from './GraphicMode';
 import ColorMap from './ColorMap';
 
 export default class PixelImage {

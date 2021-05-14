@@ -63,8 +63,8 @@ if (!options.rows) {
   options.rows = 8;
 }
 
-const graphicMode = retropixels.GraphicModes.all[options.mode];
-if (!graphicMode) {
+const pixelImageBuilder = retropixels.GraphicModes.all[options.mode];
+if (!pixelImageBuilder) {
   console.error(`Unknown graphicMode: ${options.mode}`);
   cli.help();
   process.exit(1);
@@ -84,7 +84,7 @@ if (palette === undefined) {
   process.exit(1);
 }
 
-const colorspace = retropixels.Quantizer.colorspaces[options.colorspace];
+const colorspace = retropixels.ColorSpaces.all[options.colorspace];
 if (colorspace === undefined) {
   console.error(`Unknown colorspace: ${options.colorspace}`);
   cli.help();
@@ -99,14 +99,6 @@ if (inFile === undefined) {
   console.error('Input file missing.');
   cli.help();
 }
-
-// function saveDebugMaps(pixelImage) {
-//   const mapimages = pixelImage.debugColorMaps();
-//   let i = 0;
-//   for (let mapimage of mapimages) {
-//     savePng(mapimage, `${outFile}-map${i++}.png`);
-//   }
-// }
 
 async function checkOverwrite(filename) {
   try {
@@ -132,10 +124,9 @@ function getOutFile(extension) {
 }
 
 const quantizer = new retropixels.Quantizer(palette, colorspace);
-const poker = new retropixels.Poker(quantizer);
-const converter = new retropixels.Converter(poker);
+const converter = new retropixels.Converter(quantizer);
 
-const pixelImage = graphicMode.builder({
+const pixelImage = pixelImageBuilder({
   rows: options.rows,
   columns: options.cols,
   hires: options.hires,

@@ -79,3 +79,6 @@ benchmark: build
 		"$(CMD) --overwrite -c rgb -o ./tmp.png $(EXAMPLE).jpg" \
 		"$(CMD) --overwrite -c yuv -o ./tmp.png $(EXAMPLE).jpg" \
 		"$(CMD) --overwrite -c xyz -o ./tmp.png $(EXAMPLE).jpg"
+
+graph:
+	npx madge --ts-config ./tsconfig.json -i  graph.png .
