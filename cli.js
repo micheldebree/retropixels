@@ -8,13 +8,16 @@ const fsStat = promisify(fs.stat);
 const retropixels = require('.');
 
 const { version } = require('./package');
+const { posix } = require('node:path');
+
+const viewersFolder = '/target/c64/';
 
 cli
   .version(version)
   .usage('[options] <infile>')
   .option('-o, --outfile <outfile>')
   .option('-m, --mode <graphicMode>', 'bitmap (default), fli, afli, sprites')
-  .option('-f, --format <output format>', 'png, prg')
+  .option('-f, --format <output format>', 'png')
   .option('-d, --ditherMode <ditherMode>', 'bayer2x2, bayer4x4 (default), bayer8x8')
   .option('-r, --ditherRadius [0-64]', '0 = no dithering, 32 = default', parseInt)
   .option('-p, --palette <palette>', 'colodore (default), pepto, deekay')
@@ -123,6 +126,26 @@ function getOutFile(extension) {
   return `${baseName}.${extension}`;
 }
 
+function saveExecutable(pixelImage, outFile) {
+  const binary = retropixels.C64Writer.toBinary(pixelImage);
+
+  const appDir = path.dirname(require.main.filename);
+  const viewerFile = path.join(appDir, `${viewersFolder}${binary.formatName}.prg`);
+  let viewerCode;
+
+  try {
+    viewerCode = fs.readFileSync(viewerFile);
+  } catch (error) {
+    throw (error);
+    // throw new Error(`Executable format is not supported for ${binary.formatName}`);
+  }
+
+  const buffer = retropixels.C64Writer.toBuffer(binary);
+  const writeBuffer = Buffer.concat([viewerCode, buffer]);
+
+  return fs.writeFileSync(outFile, writeBuffer);
+}
+
 const quantizer = new retropixels.Quantizer(palette, colorspace);
 const converter = new retropixels.Converter(quantizer);
 
@@ -143,15 +166,15 @@ retropixels.JimpPreprocessor.read(inFile, pixelImage.mode, options.scale)
 
     let outFile;
     if (!options.format) {
-      const outputFormat = retropixels.C64Writer.getFormat(pixelImage);
-      outFile = getOutFile(outputFormat.defaultExtension);
+      const binary = retropixels.C64Writer.toBinary(pixelImage);
+      outFile = getOutFile(binary.defaultExtension);
       await checkOverwrite(outFile);
-      outputFormat.fromPixelImage(pixelImage);
-      await retropixels.C64Writer.save(outputFormat, outFile);
+      const buffer = retropixels.C64Writer.toBuffer(binary);
+      fs.writeFileSync(outFile, buffer);
     } else if (options.format === 'prg') {
       outFile = getOutFile('prg');
       checkOverwrite(outFile);
-      await retropixels.C64Writer.savePrg(pixelImage, outFile);
+      saveExecutable(pixelImage, outFile);
     } else if (options.format === 'png') {
       outFile = getOutFile('png');
       checkOverwrite(outFile);
@@ -165,6 +188,7 @@ retropixels.JimpPreprocessor.read(inFile, pixelImage.mode, options.scale)
       console.error(`\nERROR: ${error.path} does not exist.\n`);
     } else {
       console.error(`\nERROR: ${error.message}\n`);
+      throw (error);
     }
     cli.help();
   });
