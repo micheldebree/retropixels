@@ -24,7 +24,7 @@ export default class Pixels {
   // Set the pixel at (x,y)
   public static poke(imageData: IImageData, x: number, y: number, pixel: number[]): void {
     if (pixel !== undefined) {
-      const i: number = this.coordsToindex(imageData, x, y);
+      const i: number = this.coordsToIndex(imageData, x, y);
       if (i !== undefined) {
         /* eslint-disable no-param-reassign,prefer-destructuring */
         imageData.data[i] = pixel[0];
@@ -38,14 +38,17 @@ export default class Pixels {
 
   // Get the pixel at (x,y)
   public static peek(imageData: IImageData, x: number, y: number): number[] {
-    const i: number = this.coordsToindex(imageData, x, y);
-    if (i !== undefined) {
-      return [imageData.data[i], imageData.data[i + 1], imageData.data[i + 2], imageData.data[i + 3]];
+    return this.peekAtIndex(imageData, this.coordsToIndex(imageData, x, y));
+  }
+
+  private static peekAtIndex(imageData: IImageData, index: number): number[] {
+    if (index !== undefined) {
+      return [imageData.data[index], imageData.data[index + 1], imageData.data[index + 2], imageData.data[index + 3]];
     }
     return Pixels.emptyPixel;
   }
 
-  private static coordsToindex(imageData: IImageData, x: number, y: number): number {
+  private static coordsToIndex(imageData: IImageData, x: number, y: number): number {
     const result: number = Math.floor(y) * (imageData.width << 2) + (x << 2);
     return result < imageData.data.length ? result : undefined;
   }

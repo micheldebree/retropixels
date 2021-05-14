@@ -1,7 +1,7 @@
 import * as Jimp from 'jimp';
 import IImageData from '../model/IImageData';
 import PixelImage from '../model/PixelImage';
-import GraphicMode from '../profiles/GraphicMode';
+import GraphicMode from '../model/GraphicMode';
 import Pixels from '../model/Pixels';
 import Palette from '../model/Palette';
 
