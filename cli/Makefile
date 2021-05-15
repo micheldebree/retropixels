@@ -1,3 +1,5 @@
+VERSION=$(shell cat package.json | jq -r .version) 
+
 EXAMPLE=paintface
 
 CMD=node cli.js
@@ -19,12 +21,12 @@ clean:
 
 # First:
 # - update package.json with <version>
-# - git tag <version>
 # Be careful: when you release, everything that is not in Git is deleted!
-release: build
+publish: build
 	git push
 	git clean -d -f
 	npm publish
+	git tag cli-$(VERSION)
 	git push --tags
 
 snapshot: cleanbuild
