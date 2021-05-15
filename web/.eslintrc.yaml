@@ -1,0 +1,45 @@
+extends:
+  - airbnb
+  - prettier
+plugins:
+  - react
+  - jsx-a11y
+  - import
+  - prettier
+  - react-hooks
+rules:
+  prefer-destructuring:
+    - warn
+  linebreak-style: "off"
+  jsx-a11y/label-has-associated-control:
+    - warn
+    - required:
+        some:
+          - nesting
+          - id
+  jsx-a11y/label-has-for: "off"
+  jsx-a11y/anchor-is-valid: "off"
+  react/jsx-props-no-spreading: "off"
+  no-plusplus:
+    - warn
+  no-bitwise:
+    - warn
+  max-len:
+    - 2
+    - 120
+    - code: 120
+      ignoreStrings: true
+      ignoreTemplateLiterals: true
+  no-param-reassign:
+    - warn
+    - props: false
+  no-unused-expressions: "off"
+  prettier/prettier: warn
+  react-hooks/rules-of-hooks: "warn"
+  react-hooks/exhaustive-deps: "warn"
+  react/no-unused-prop-types: "warn"
+  no-unused-vars: "warn"
+env:
+  jest: true
+  browser: true
+parser: babel-eslint
