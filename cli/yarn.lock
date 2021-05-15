@@ -3680,8 +3680,10 @@ retire@2.2.5:
     read-installed "^4.0.3"
     walkdir "0.4.1"
 
-retropixels-core@../core:
-  version "0.1.1"
+retropixels-core@0.1.2:
+  version "0.1.2"
+  resolved "https://registry.yarnpkg.com/retropixels-core/-/retropixels-core-0.1.2.tgz#5a3e51354ddbbb588b0d2ba6588f754cc104f9c9"
+  integrity sha512-0FMoBwzZi0oszTqafmceEVgCmawTM3KyTYXppj8lPILXxF0vvqvAR4w+z73hp+JWe7NSXv0mAtSZU95pGi+gOg==
   dependencies:
     jimp "0.16.1"
 

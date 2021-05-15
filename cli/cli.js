@@ -5,7 +5,7 @@ const path = require('path');
 const { promisify } = require('util');
 const fs = require('fs');
 const fsStat = promisify(fs.stat);
-const retropixels = require('../core');
+const retropixels = require('retropixels-core');
 
 const { version } = require('./package');
 const { posix } = require('node:path');

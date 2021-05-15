@@ -19,7 +19,7 @@ See [DEVELOPMENT.md](DEVELOPMENT.md)
 
 ## Changelog
 
-### 0.8.2
+### 0.8.5
 
 - Changed: Significantly improved conversion speed
 - Changed: (Internal) Split package into the command line tool (`retropixels`)

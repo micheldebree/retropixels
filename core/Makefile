@@ -5,6 +5,7 @@ build:
 
 # First:
 # - update package.json with <version>
+# - commit everything
 # Be careful: when you release, everything that is not in Git is deleted!
 publish: build
 	git push
