@@ -1,0 +1,14 @@
+{
+	"folders": [
+		{
+			"path": "web"
+		},
+		{
+			"path": "cli"
+		},
+		{
+			"path": "core"
+		}
+	],
+	"settings": {}
+}
