@@ -10,5 +10,10 @@
 			"path": "core"
 		}
 	],
-	"settings": {}
+	"settings": {
+		"cSpell.words": [
+			"Quantizer",
+			"colodore"
+		]
+	}
 }

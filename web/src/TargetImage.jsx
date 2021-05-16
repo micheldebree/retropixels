@@ -7,25 +7,36 @@ import Canvas from './Canvas';
 function TargetImage(props) {
   const graphicMode = GraphicModes.all.bitmap;
   const palette = Palettes.all.colodore;
-  const colorspace = ColorSpaces.all.xyz;
-  const quantizer = new Quantizer(palette, colorspace);
-  const converter = new Converter(quantizer);
 
-  const { jimpImage } = props;
+  const { jimpImage, hires, colorspaceId } = props;
 
   const [pixelImage, setPixelImage] = useState(undefined);
   const [imageData, setImageData] = useState(undefined);
 
+  const defaultQuantizer = new Quantizer(palette, ColorSpaces.all[colorspaceId]);
+  const defaultConverter = new Converter(defaultQuantizer);
+
+  const [quantizer, setQuantizer] = useState(defaultQuantizer);
+  const [converter, setConverter] = useState(defaultConverter);
+
+  useEffect(() => {
+    setQuantizer(new Quantizer(palette, ColorSpaces.all[colorspaceId]));
+  }, [colorspaceId, palette]);
+
+  useEffect(() => {
+    setConverter(new Converter(quantizer));
+  }, [quantizer]);
+
   useEffect(() => {
     if (jimpImage !== undefined) {
-      const newPixelImage = graphicMode({});
+      const newPixelImage = graphicMode({ hires });
       jimpImage.resize(newPixelImage.mode.width, newPixelImage.mode.height);
       converter.convert(jimpImage.bitmap, newPixelImage);
       setPixelImage(newPixelImage);
     } else {
       setPixelImage(undefined);
     }
-  }, [jimpImage]);
+  }, [jimpImage, hires, converter, graphicMode]);
 
   useEffect(() => {
     if (pixelImage === undefined) {
@@ -39,11 +50,15 @@ function TargetImage(props) {
 }
 
 TargetImage.propTypes = {
-  jimpImage: PropTypes.shape()
+  jimpImage: PropTypes.shape(),
+  hires: PropTypes.bool,
+  colorspaceId: PropTypes.string
 };
 
 TargetImage.defaultProps = {
-  jimpImage: undefined
+  jimpImage: undefined,
+  hires: false,
+  colorspaceId: 'xyz'
 };
 
 export default TargetImage;

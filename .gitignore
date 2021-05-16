@@ -13,3 +13,4 @@ target
 acme-master
 src/c64/*.txt
 .run
+web/build
