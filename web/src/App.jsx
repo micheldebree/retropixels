@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from 'react';
-import { ColorSpaces } from 'retropixels-core';
 import Grid from '@material-ui/core/Grid';
 import Paper from '@material-ui/core/Paper';
 import Canvas from './Canvas';
@@ -15,11 +14,14 @@ import ProfileSelection from './ProfileSelection';
 function App() {
   const colorspaceOptions = ['rgb', 'yuv', 'xyz', 'rainbow', 'oklab'];
   const colorspaceDefault = 'xyz';
+  const paletteOptions = ['colodore', 'pepto', 'deekay'];
+  const paletteDefault = 'colodore';
 
   const [sourceImage, setSourceImage] = useState(undefined);
   const [sourceImageData, setSourceImageData] = useState(undefined);
   const [hires, setHires] = useState(false);
-  const [colorspace, setColorSpace] = useState(ColorSpaces.all.colodore);
+  const [colorspace, setColorSpace] = useState(colorspaceDefault);
+  const [palette, setPalette] = useState(paletteDefault);
 
   function onImageLoad(jimpImage) {
     jimpImage.cover(320, 200);
@@ -52,10 +54,16 @@ function App() {
               items={colorspaceOptions}
               onChange={value => setColorSpace(value)}
             />
+            <ProfileSelection
+              label="palette"
+              initialValue={paletteDefault}
+              items={paletteOptions}
+              onChange={value => setPalette(value)}
+            />
           </Grid>
           <Grid item xs={4}>
             Output
-            <TargetImage jimpImage={sourceImage} hires={hires} colorspaceId={colorspace} />
+            <TargetImage jimpImage={sourceImage} hires={hires} colorspaceId={colorspace} paletteId={palette} />
           </Grid>
         </Grid>
       </body>
