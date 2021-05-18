@@ -1,15 +1,15 @@
 import React, { useState } from 'react';
-import Dropzone from 'react-dropzone';
+import { DropzoneArea } from 'material-ui-dropzone';
 import Jimp from 'jimp/es';
 import PropTypes from 'prop-types';
-import { Snackbar } from '@material-ui/core';
+import { Card, Snackbar } from '@material-ui/core';
 import { Alert } from '@material-ui/lab';
 
 // TODO: return Jimp Image
 // TODO: Only accept image types
 
 // Let's the user select an image file
-// When a valid image is selected, calls the "onload" callback with an ImageData object.
+// When a valid image is selected, calls the "onload" callback with a JimpImage object.
 function ImageUpload(props) {
   const { onload } = props;
 
@@ -39,21 +39,13 @@ function ImageUpload(props) {
 
   return (
     <>
-      <Dropzone
-        onDrop={acceptFiles}
-        maxFiles={1}
-        accept="image/jpeg, image/png, image/gif"
-        onDropRejected={() => setError('Not a supported image file.')}
-      >
-        {({ getRootProps, getInputProps }) => (
-          <section>
-            <div {...getRootProps()}>
-              <input {...getInputProps()} />
-              <p>Drag and drop image file, or click to select file</p>
-            </div>
-          </section>
-        )}
-      </Dropzone>
+      <DropzoneArea
+        onChange={acceptFiles}
+        acceptedFiles={['image/*']}
+        filesLimit={1}
+        showPreviewsInDropzone={false}
+        dropzoneText="Drag and drop an image here or click"
+      />
       <Snackbar open={error} autoHideDuration={6000} onClose={() => setError(undefined)}>
         <Alert severity="error">{error}</Alert>
       </Snackbar>

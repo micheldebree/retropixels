@@ -20,6 +20,7 @@ function Canvas(props) {
   return <canvas ref={canvasRef} width={width} height={height} />;
 }
 
+// TODO: get width and height from imagedata
 Canvas.propTypes = {
   width: PropTypes.number.isRequired,
   height: PropTypes.number.isRequired,

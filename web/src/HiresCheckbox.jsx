@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import FormControlLabel from '@material-ui/core/FormControlLabel';
-import Checkbox from '@material-ui/core/Checkbox';
+import { FormControlLabel, Checkbox } from '@material-ui/core';
 import PropTypes from 'prop-types';
 
 function HiresCheckbox(props) {

@@ -10,19 +10,21 @@ plugins:
 rules:
   prefer-destructuring:
     - warn
-  linebreak-style: "off"
+  linebreak-style: 'off'
   jsx-a11y/label-has-associated-control:
     - warn
     - required:
         some:
           - nesting
           - id
-  jsx-a11y/label-has-for: "off"
-  jsx-a11y/anchor-is-valid: "off"
-  react/jsx-props-no-spreading: "off"
+  jsx-a11y/label-has-for: 'off'
+  jsx-a11y/anchor-is-valid: 'off'
+  react/jsx-props-no-spreading: 'off'
   no-plusplus:
     - warn
   no-bitwise:
+    - warn
+  no-new:
     - warn
   max-len:
     - 2
@@ -33,12 +35,12 @@ rules:
   no-param-reassign:
     - warn
     - props: false
-  no-unused-expressions: "off"
+  no-unused-expressions: 'off'
   prettier/prettier: warn
-  react-hooks/rules-of-hooks: "warn"
-  react-hooks/exhaustive-deps: "warn"
-  react/no-unused-prop-types: "warn"
-  no-unused-vars: "warn"
+  react-hooks/rules-of-hooks: 'warn'
+  react-hooks/exhaustive-deps: 'warn'
+  react/no-unused-prop-types: 'warn'
+  no-unused-vars: 'warn'
 env:
   jest: true
   browser: true
