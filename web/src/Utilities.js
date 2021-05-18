@@ -1,3 +1,4 @@
+import { bitmap } from 'jimp';
 import { ColorSpaces, Quantizer, Converter, GraphicModes, Palettes } from 'retropixels-core';
 
 export function convertJimpImageToPixelImage(jimpImage) {
@@ -17,8 +18,21 @@ export function convertJimpImageToPixelImage(jimpImage) {
 }
 
 export function getImageDataFromJimpImage(jimpImage) {
-  return jimpImage
-    ? new ImageData(Uint8ClampedArray.from(jimpImage.bitmap.data), jimpImage.bitmap.width, jimpImage.bitmap.height)
+  if (jimpImage === undefined) {
+    return undefined;
+  }
+
+  // TODO: Jimp does not seem to shrink the data array when resizing picture to a smaller size... Confirm?
+  const dataSize = jimpImage.bitmap.width * jimpImage.bitmap.height * 4;
+  let data;
+  if (jimpImage.bitmap.data.length > dataSize) {
+    data = jimpImage.bitmap.data.slice(0, dataSize);
+  } else {
+    data = jimpImage.bitmap.data;
+  }
+
+  return jimpImage !== undefined
+    ? new ImageData(Uint8ClampedArray.from(data), jimpImage.bitmap.width, jimpImage.bitmap.height)
     : undefined;
 }
 

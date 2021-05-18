@@ -1,69 +1,29 @@
 import React, { useEffect, useState } from 'react';
-import Grid from '@material-ui/core/Grid';
-import Paper from '@material-ui/core/Paper';
-import Canvas from './Canvas';
-import ImageUpload from './ImageUpload';
+import { Grid, Card } from '@material-ui/core';
 import './App.css';
-import { getImageDataFromJimpImage } from './Utilities';
-import TargetImage from './TargetImage';
-import HiresCheckbox from './HiresCheckbox';
-import ProfileSelection from './ProfileSelection';
+import SourceImage from './SourceImage';
+import ImagePreProcessor from './ImagePreProcessor';
+import Retropixels from './Retropixels';
 
 // https://github.com/harishmahamure/photoCompress
 
 function App() {
-  const colorspaceOptions = ['rgb', 'yuv', 'xyz', 'rainbow', 'oklab'];
-  const colorspaceDefault = 'xyz';
-  const paletteOptions = ['colodore', 'pepto', 'deekay'];
-  const paletteDefault = 'colodore';
-
   const [sourceImage, setSourceImage] = useState(undefined);
-  const [sourceImageData, setSourceImageData] = useState(undefined);
-  const [hires, setHires] = useState(false);
-  const [colorspace, setColorSpace] = useState(colorspaceDefault);
-  const [palette, setPalette] = useState(paletteDefault);
-
-  function onImageLoad(jimpImage) {
-    jimpImage.cover(320, 200);
-    jimpImage.resize(160, 200);
-    setSourceImage(jimpImage);
-  }
-
-  useEffect(() => {
-    const imageData = getImageDataFromJimpImage(sourceImage);
-    setSourceImageData(imageData);
-  }, [sourceImage]);
+  const [processedImage, setProcessedImage] = useState(undefined);
 
   return (
     <div className="App">
       {/* <header className="App-header">Retropixels</header> */}
       <body className="App-body">
         <Grid container spacing={3}>
-          <Grid item xs={4}>
-            Input
-            <Paper elevation={3}>
-              <ImageUpload onload={onImageLoad} />
-            </Paper>
-            <Canvas width={320} height={200} imageData={sourceImageData} />
+          <Grid item component={Card} xs>
+            <SourceImage onChanged={jimpImage => setSourceImage(jimpImage)} />
           </Grid>
-          <Grid item xs={4}>
-            <HiresCheckbox onChange={value => setHires(value)} />
-            <ProfileSelection
-              label="colorspace"
-              initialValue={colorspaceDefault}
-              items={colorspaceOptions}
-              onChange={value => setColorSpace(value)}
-            />
-            <ProfileSelection
-              label="palette"
-              initialValue={paletteDefault}
-              items={paletteOptions}
-              onChange={value => setPalette(value)}
-            />
+          <Grid item component={Card} xs>
+            <ImagePreProcessor jimpImage={sourceImage} onChanged={jimpImage => setProcessedImage(jimpImage)} />
           </Grid>
-          <Grid item xs={4}>
-            Output
-            <TargetImage jimpImage={sourceImage} hires={hires} colorspaceId={colorspace} paletteId={palette} />
+          <Grid item component={Card} xs>
+            <Retropixels jimpImage={processedImage} />
           </Grid>
         </Grid>
       </body>
