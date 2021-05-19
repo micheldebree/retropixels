@@ -43,20 +43,20 @@ function TargetImage(props) {
       const newPixelImage = graphicMode({ hires });
       const resizedImage = jimpImage.clone();
       resizedImage.resize(newPixelImage.mode.width, newPixelImage.mode.height);
-      ditherer.dither(resizedImage.bitmap);
+      if (ditherId !== 'none') {
+        ditherer.dither(resizedImage.bitmap);
+      }
       // TODO: this is a workaround for a bug in dithering
       // that clears the alpha channel
       resizedImage.opaque();
 
       converter.convert(resizedImage.bitmap, newPixelImage);
       setPixelImage(newPixelImage);
-      // onGraphicModeChange(newPixelImage.mode);
     }
   }, [jimpImage, converter, ditherer, hires, graphicMode]);
 
   useEffect(() => {
     setImageData(getImageDataFromPixelImage(pixelImage));
-    // setImageData(getImageDataFromJimpImage(jimpImage));
   }, [pixelImage]);
 
   return <Canvas width={320} height={200} imageData={imageData} />;
