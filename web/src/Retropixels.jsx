@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import { Button, Card, CardContent, CardMedia, CardActions, Slider, Typography } from '@material-ui/core';
-import CloudDownloadIcon from '@material-ui/icons/CloudDownload';
 import HiresCheckbox from './HiresCheckbox';
 import ProfileSelection from './ProfileSelection';
 import TargetImage from './TargetImage';
@@ -66,11 +65,6 @@ function Retropixels(props) {
           valueLabelDisplay="on"
         />
       </CardContent>
-      <CardActions>
-        <Button variant="contained" color="primary">
-          <CloudDownloadIcon /> &nbsp; Download Koala
-        </Button>
-      </CardActions>
     </>
   );
 }

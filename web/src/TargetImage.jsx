@@ -1,7 +1,10 @@
 import React, { useEffect, useState } from 'react';
-import { ColorSpaces, Quantizer, Converter, GraphicModes, Palettes } from 'retropixels-core';
+import { C64Writer, ColorSpaces, Quantizer, Converter, GraphicModes, Palettes } from 'retropixels-core';
+import { Button } from '@material-ui/core';
 import PropTypes from 'prop-types';
 import OrderedDither from 'retropixels-core/target/conversion/OrderedDither';
+import CloudDownloadIcon from '@material-ui/icons/CloudDownload';
+import { saveAs } from 'file-saver';
 import { getImageDataFromPixelImage } from './Utilities';
 import Canvas from './Canvas';
 
@@ -13,9 +16,8 @@ function TargetImage(props) {
   const defaultQuantizer = new Quantizer(Palettes.all[paletteId], ColorSpaces.all[colorspaceId]);
   const defaultConverter = new Converter(defaultQuantizer);
   const defaultDitherer = new OrderedDither(OrderedDither.presets[ditherId], ditherRadius);
-  const defaultPixelImage = graphicMode({ hires });
 
-  const [pixelImage, setPixelImage] = useState(defaultPixelImage);
+  const [pixelImage, setPixelImage] = useState(undefined);
   const [imageData, setImageData] = useState(undefined);
 
   const [quantizer, setQuantizer] = useState(defaultQuantizer);
@@ -59,7 +61,28 @@ function TargetImage(props) {
     setImageData(getImageDataFromPixelImage(pixelImage));
   }, [pixelImage]);
 
-  return <Canvas width={320} height={200} imageData={imageData} />;
+  function saveOutput() {
+    const binary = C64Writer.toBinary(pixelImage);
+    const buffer = C64Writer.toBuffer(binary);
+    const blob = new Blob([buffer], { type: 'application/octet-stream' });
+    const extension = pixelImage.mode.pixelWidth < 2 ? '.art' : '.kla';
+    saveAs(blob, `test${extension}`);
+  }
+
+  let outputFormat;
+  let outputExtension;
+  if (pixelImage !== undefined) {
+    outputFormat = pixelImage.mode.pixelWidth < 2 ? 'Art studio' : 'Koala';
+  }
+
+  return (
+    <>
+      <Canvas width={320} height={200} imageData={imageData} />;
+      <Button variant="contained" disabled={pixelImage === undefined} color="primary" onClick={() => saveOutput()}>
+        <CloudDownloadIcon /> &nbsp; Download {outputFormat}
+      </Button>
+    </>
+  );
 }
 
 TargetImage.propTypes = {
