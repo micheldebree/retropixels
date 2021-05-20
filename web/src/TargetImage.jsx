@@ -70,14 +70,13 @@ function TargetImage(props) {
   }
 
   let outputFormat;
-  let outputExtension;
   if (pixelImage !== undefined) {
     outputFormat = pixelImage.mode.pixelWidth < 2 ? 'Art studio' : 'Koala';
   }
 
   return (
     <>
-      <Canvas width={320} height={200} imageData={imageData} />;
+      <Canvas width={320} height={200} imageData={imageData} />
       <Button variant="contained" disabled={pixelImage === undefined} color="primary" onClick={() => saveOutput()}>
         <CloudDownloadIcon /> &nbsp; Download {outputFormat}
       </Button>

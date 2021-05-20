@@ -26,12 +26,8 @@ function SourceImage(props) {
   return (
     <>
       <h2>input</h2>
-      <CardMedia>
-        <Canvas width={320} height={200} imageData={imageData} />
-      </CardMedia>
-      <CardContent>
-        <ImageUpload onload={jimpImage => onUploaded(jimpImage)} />
-      </CardContent>
+      <Canvas width={320} height={200} imageData={imageData} />
+      <ImageUpload onload={jimpImage => onUploaded(jimpImage)} />
       {/* <ProfileSelection items={['crop', 'fill', 'fit']} onChange={() => {}} /> */}
     </>
   );
