@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
-import { Button, Card, CardContent, CardMedia, CardActions, Slider, Typography } from '@material-ui/core';
+import { Container, Slider, Typography } from '@material-ui/core';
 import HiresCheckbox from './HiresCheckbox';
 import ProfileSelection from './ProfileSelection';
 import TargetImage from './TargetImage';
@@ -25,7 +25,7 @@ function Retropixels(props) {
   return (
     <>
       <h2>output</h2>
-      <CardMedia>
+      <Container>
         <TargetImage
           jimpImage={jimpImage}
           hires={hires}
@@ -34,9 +34,11 @@ function Retropixels(props) {
           ditherId={dither}
           ditherRadius={ditherRadius}
         />
-      </CardMedia>
-      <CardContent>
+      </Container>
+      <Container>
         <HiresCheckbox onChange={value => setHires(value)} />
+      </Container>
+      <Container>
         <ProfileSelection
           label="colorspace"
           initialValue={colorspaceDefault}
@@ -64,7 +66,7 @@ function Retropixels(props) {
           onChange={(event, newValue) => setDitherRadius(newValue)}
           valueLabelDisplay="on"
         />
-      </CardContent>
+      </Container>
     </>
   );
 }

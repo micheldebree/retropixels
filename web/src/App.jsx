@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Grid, Card } from '@material-ui/core';
+import { Grid } from '@material-ui/core';
 import './App.css';
 import SourceImage from './SourceImage';
 import ImagePreProcessor from './ImagePreProcessor';
@@ -16,13 +16,13 @@ function App() {
       {/* <header className="App-header">Retropixels</header> */}
       <body className="App-body">
         <Grid container spacing={3}>
-          <Grid item component={Card} xs>
+          <Grid item xs>
             <SourceImage onChanged={jimpImage => setSourceImage(jimpImage)} />
           </Grid>
-          <Grid item component={Card} xs>
+          <Grid item xs>
             <ImagePreProcessor jimpImage={sourceImage} onChanged={jimpImage => setProcessedImage(jimpImage)} />
           </Grid>
-          <Grid item component={Card} xs>
+          <Grid item xs>
             <Retropixels jimpImage={processedImage} />
           </Grid>
         </Grid>
