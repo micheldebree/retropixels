@@ -62,7 +62,7 @@ function ImagePreProcessor(props) {
         <Canvas width={320} height={200} imageData={imageData} />
       </Container>
 
-      <Container>
+      <Container align="left">
         <FormControlLabel
           control={
             <Checkbox
@@ -99,80 +99,80 @@ function ImagePreProcessor(props) {
           }
           label="Invert"
         />
-        <Container>
-          <FormControlLabel
-            control={
-              <Checkbox
-                checked={mirrorHor}
-                onChange={() => {
-                  setMirrorHor(!mirrorHor);
-                }}
-                name="mirrorHorCheckbox"
-              />
-            }
-            label="Flip Horizontal"
-          />
-          <FormControlLabel
-            control={
-              <Checkbox
-                checked={mirrorVer}
-                onChange={() => {
-                  setMirrorVer(!mirrorVer);
-                }}
-                name="mirrorVerCheckbox"
-              />
-            }
-            label="Flip Vertical"
-          />
-        </Container>
-        <Typography gutterBottom>Brightness</Typography>
-        <Grid container>
-          <Grid item>
-            <Brightness5OutlinedIcon />
-          </Grid>
-          <Grid item xs>
-            <Slider
-              min={-1.0}
-              max={1.0}
-              step={0.1}
-              value={brightness}
-              onChange={(event, newValue) => setBrightness(newValue)}
-              valueLabelDisplay="on"
-            />
-          </Grid>
-        </Grid>
-        <Typography gutterBottom>Contrast</Typography>
-        <Grid container>
-          <Grid item>
-            <Brightness6OutlinedIcon />
-          </Grid>
-          <Grid item xs>
-            <Slider
-              min={-1.0}
-              max={1.0}
-              step={0.1}
-              value={contrast}
-              onChange={(event, newValue) => setContrast(newValue)}
-              valueLabelDisplay="on"
-            />
-          </Grid>
-        </Grid>
-        <Typography gutterBottom>Blur</Typography>
-        <Grid container>
-          <Grid item>
-            <BlurOnOutlinedIcon />
-          </Grid>
-          <Grid item xs>
-            <Slider
-              min={0}
-              max={10}
-              value={blur}
-              onChange={(event, newValue) => setBlur(newValue)}
-              valueLabelDisplay="on"
-            />
-          </Grid>
-        </Grid>
       </Container>
+      <Container align="left">
+        <FormControlLabel
+          control={
+            <Checkbox
+              checked={mirrorHor}
+              onChange={() => {
+                setMirrorHor(!mirrorHor);
+              }}
+              name="mirrorHorCheckbox"
+            />
+          }
+          label="Flip Horizontal"
+        />
+        <FormControlLabel
+          control={
+            <Checkbox
+              checked={mirrorVer}
+              onChange={() => {
+                setMirrorVer(!mirrorVer);
+              }}
+              name="mirrorVerCheckbox"
+            />
+          }
+          label="Flip Vertical"
+        />
+      </Container>
+      <Typography gutterBottom>Brightness</Typography>
+      <Grid container>
+        <Grid item>
+          <Brightness5OutlinedIcon />
+        </Grid>
+        <Grid item xs>
+          <Slider
+            min={-1.0}
+            max={1.0}
+            step={0.1}
+            value={brightness}
+            onChange={(event, newValue) => setBrightness(newValue)}
+            valueLabelDisplay="on"
+          />
+        </Grid>
+      </Grid>
+      <Typography gutterBottom>Contrast</Typography>
+      <Grid container>
+        <Grid item>
+          <Brightness6OutlinedIcon />
+        </Grid>
+        <Grid item xs>
+          <Slider
+            min={-1.0}
+            max={1.0}
+            step={0.1}
+            value={contrast}
+            onChange={(event, newValue) => setContrast(newValue)}
+            valueLabelDisplay="on"
+          />
+        </Grid>
+      </Grid>
+      <Typography gutterBottom>Blur</Typography>
+      <Grid container>
+        <Grid item>
+          <BlurOnOutlinedIcon />
+        </Grid>
+        <Grid item xs>
+          <Slider
+            min={0}
+            max={10}
+            value={blur}
+            onChange={(event, newValue) => setBlur(newValue)}
+            valueLabelDisplay="on"
+          />
+        </Grid>
+      </Grid>
     </>
   );
 }
