@@ -1,6 +1,7 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import PropTypes from 'prop-types';
-import { Container, Slider, Typography } from '@material-ui/core';
+import { Container, Grid, Slider, Typography } from '@material-ui/core';
+import BlurLinearIcon from '@material-ui/icons/BlurLinear';
 import HiresCheckbox from './HiresCheckbox';
 import ProfileSelection from './ProfileSelection';
 import TargetImage from './TargetImage';
@@ -36,6 +37,7 @@ function Retropixels(props) {
         />
       </Container>
       <Container>
+        {/* TODO: use generic checkbox */}
         <HiresCheckbox onChange={value => setHires(value)} />
       </Container>
       <Container>
@@ -58,14 +60,22 @@ function Retropixels(props) {
           onChange={value => setDither(value)}
         />
         <Typography gutterBottom>Dither strength</Typography>
-        <Slider
-          disabled={dither === 'none'}
-          min={0}
-          max={64}
-          value={ditherRadius}
-          onChange={(event, newValue) => setDitherRadius(newValue)}
-          valueLabelDisplay="on"
-        />
+        <Grid container>
+          <Grid item>
+            <BlurLinearIcon />
+          </Grid>
+
+          <Grid item xs>
+            <Slider
+              disabled={dither === 'none'}
+              min={0}
+              max={64}
+              value={ditherRadius}
+              onChange={(event, newValue) => setDitherRadius(newValue)}
+              valueLabelDisplay="on"
+            />
+          </Grid>
+        </Grid>
       </Container>
     </>
   );

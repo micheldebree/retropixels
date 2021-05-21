@@ -1,6 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
-import { Container, Typography, FormControlLabel, Checkbox, Slider } from '@material-ui/core';
+import { Container, Grid, Typography, FormControlLabel, Checkbox, Slider } from '@material-ui/core';
+import Brightness5OutlinedIcon from '@material-ui/icons/Brightness5Outlined';
+import Brightness6OutlinedIcon from '@material-ui/icons/Brightness6Outlined';
+import BlurOnOutlinedIcon from '@material-ui/icons/BlurOnOutlined';
 import { getImageDataFromJimpImage } from './Utilities';
 import Canvas from './Canvas';
 
@@ -123,31 +126,52 @@ function ImagePreProcessor(props) {
           />
         </Container>
         <Typography gutterBottom>Brightness</Typography>
-        <Slider
-          min={-1.0}
-          max={1.0}
-          step={0.1}
-          value={brightness}
-          onChange={(event, newValue) => setBrightness(newValue)}
-          valueLabelDisplay="on"
-        />
+        <Grid container>
+          <Grid item>
+            <Brightness5OutlinedIcon />
+          </Grid>
+          <Grid item xs>
+            <Slider
+              min={-1.0}
+              max={1.0}
+              step={0.1}
+              value={brightness}
+              onChange={(event, newValue) => setBrightness(newValue)}
+              valueLabelDisplay="on"
+            />
+          </Grid>
+        </Grid>
         <Typography gutterBottom>Contrast</Typography>
-        <Slider
-          min={-1.0}
-          max={1.0}
-          step={0.1}
-          value={contrast}
-          onChange={(event, newValue) => setContrast(newValue)}
-          valueLabelDisplay="on"
-        />
+        <Grid container>
+          <Grid item>
+            <Brightness6OutlinedIcon />
+          </Grid>
+          <Grid item xs>
+            <Slider
+              min={-1.0}
+              max={1.0}
+              step={0.1}
+              value={contrast}
+              onChange={(event, newValue) => setContrast(newValue)}
+              valueLabelDisplay="on"
+            />
+          </Grid>
+        </Grid>
         <Typography gutterBottom>Blur</Typography>
-        <Slider
-          min={0}
-          max={10}
-          value={blur}
-          onChange={(event, newValue) => setBlur(newValue)}
-          valueLabelDisplay="on"
-        />
+        <Grid container>
+          <Grid item>
+            <BlurOnOutlinedIcon />
+          </Grid>
+          <Grid item xs>
+            <Slider
+              min={0}
+              max={10}
+              value={blur}
+              onChange={(event, newValue) => setBlur(newValue)}
+              valueLabelDisplay="on"
+            />
+          </Grid>
+        </Grid>
       </Container>
     </>
   );
