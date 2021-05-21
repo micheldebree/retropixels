@@ -22,7 +22,7 @@ function ProfileSelection(props) {
   return (
     <FormControl component="fieldset">
       <FormLabel component="legend">{label}</FormLabel>
-      <RadioGroup aria-label={label} name={`select${label}`} value={value} onChange={handleChange}>
+      <RadioGroup row aria-label={label} name={`select${label}`} value={value} onChange={handleChange}>
         {items.map(i => (
           <FormControlLabel value={i} control={<Radio />} label={i} />
         ))}

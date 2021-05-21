@@ -36,11 +36,11 @@ function Retropixels(props) {
           ditherRadius={ditherRadius}
         />
       </Container>
-      <Container>
+      <Container align="left">
         {/* TODO: use generic checkbox */}
         <HiresCheckbox onChange={value => setHires(value)} />
       </Container>
-      <Container>
+      <Container align="left">
         <ProfileSelection
           label="colorspace"
           initialValue={colorspaceDefault}

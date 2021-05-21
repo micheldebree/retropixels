@@ -1,9 +1,10 @@
-import React, { useState } from 'react';
-import { DropzoneArea } from 'material-ui-dropzone';
+import React, { useState, useEffect } from 'react';
 import Jimp from 'jimp/es';
 import PropTypes from 'prop-types';
-import { Card, Snackbar } from '@material-ui/core';
+import { useDropzone } from 'react-dropzone';
+import { Container, Box, Snackbar } from '@material-ui/core';
 import { Alert } from '@material-ui/lab';
+import CloudUploadIcon from '@material-ui/icons/CloudUpload';
 
 // TODO: return Jimp Image
 // TODO: Only accept image types
@@ -14,6 +15,10 @@ function ImageUpload(props) {
   const { onload } = props;
 
   const [error, setError] = useState(undefined);
+  const { acceptedFiles, fileRejections, getRootProps, getInputProps } = useDropzone({
+    accept: 'image/*',
+    maxFiles: 1
+  });
 
   function readFile(file) {
     const reader = new FileReader();
@@ -33,23 +38,36 @@ function ImageUpload(props) {
     reader.readAsArrayBuffer(file);
   }
 
-  function acceptFiles(acceptedFiles) {
-    acceptedFiles.forEach(f => readFile(f));
-  }
+  useEffect(() => {
+    if (acceptedFiles !== undefined && acceptedFiles.length === 1) {
+      readFile(acceptedFiles[0]);
+    }
+  }, [acceptedFiles]);
+
+  useEffect(() => {
+    if (fileRejections !== undefined && fileRejections.length > 0) {
+      setError(`Cannot load' + ${fileRejections[0].file}`);
+    }
+  }, [fileRejections]);
+
+  // const rejected = fileRejections !== undefined ? fileRejections.length : 0;
+  // const accepted = acceptedFiles !== undefined ? acceptedFiles.length : 0;
 
   return (
-    <>
-      <DropzoneArea
-        onChange={acceptFiles}
-        acceptedFiles={['image/*']}
-        filesLimit={1}
-        showPreviewsInDropzone={false}
-        dropzoneText="Drag and drop an image here or click"
-      />
+    <Container>
+      <Box border={0} m={1} boxShadow={2}>
+        <div {...getRootProps({ className: 'dropzone' })}>
+          <input {...getInputProps()} />
+          <p>Drop image here, or click to select image</p>
+          <CloudUploadIcon />
+          {/* <p>{rejected} rejected</p> */}
+          {/* <p>{accepted} accepted</p> */}
+        </div>
+      </Box>
       <Snackbar open={error} autoHideDuration={6000} onClose={() => setError(undefined)}>
         <Alert severity="error">{error}</Alert>
       </Snackbar>
-    </>
+    </Container>
   );
 }
 
