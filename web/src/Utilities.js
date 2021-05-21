@@ -1,4 +1,3 @@
-import { bitmap } from 'jimp';
 import { ColorSpaces, Quantizer, Converter, GraphicModes, Palettes } from 'retropixels-core';
 
 export function convertJimpImageToPixelImage(jimpImage) {
@@ -34,6 +33,17 @@ export function getImageDataFromJimpImage(jimpImage) {
   return jimpImage !== undefined
     ? new ImageData(Uint8ClampedArray.from(data), jimpImage.bitmap.width, jimpImage.bitmap.height)
     : undefined;
+}
+
+export function clearJimpImage(jimpImage) {
+  jimpImage.scan(0, 0, jimpImage.bitmap.width, jimpImage.bitmap.height, (x, y, idx) => {
+    // this is the image
+
+    jimpImage.bitmap.data[idx + 0] = 0;
+    jimpImage.bitmap.data[idx + 1] = 0;
+    jimpImage.bitmap.data[idx + 2] = 0;
+    jimpImage.bitmap.data[idx + 3] = 0;
+  });
 }
 
 export function getImageDataFromPixelImage(pixelImage) {
