@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
-import { Container, Grid, Slider, Typography } from '@material-ui/core';
+import { Container, Grid, Slider, Divider, Typography } from '@material-ui/core';
 import BlurLinearIcon from '@material-ui/icons/BlurLinear';
 import HiresCheckbox from './HiresCheckbox';
 import ProfileSelection from './ProfileSelection';
@@ -59,7 +59,7 @@ function Retropixels(props) {
           items={ditherOptions}
           onChange={value => setDither(value)}
         />
-        <Typography gutterBottom>Dither strength</Typography>
+        <Typography gutterBottom>dithering strength</Typography>
         <Grid container>
           <Grid item>
             <BlurLinearIcon />

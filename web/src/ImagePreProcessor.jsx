@@ -4,6 +4,7 @@ import { Container, Grid, Typography, FormControlLabel, Checkbox, Slider } from 
 import Brightness5OutlinedIcon from '@material-ui/icons/Brightness5Outlined';
 import Brightness6OutlinedIcon from '@material-ui/icons/Brightness6Outlined';
 import BlurOnOutlinedIcon from '@material-ui/icons/BlurOnOutlined';
+// import FormatColorResetOutlinedIcon from '@material-ui/icons/FormatColorResetOutlined';
 import { getImageDataFromJimpImage } from './Utilities';
 import Canvas from './Canvas';
 
@@ -20,6 +21,7 @@ function ImagePreProcessor(props) {
   const [brightness, setBrightness] = useState(0);
   const [contrast, setContrast] = useState(0);
   const [blur, setBlur] = useState(0);
+  // const [saturation, setSaturation] = useState(0);
 
   useEffect(() => {
     onChanged(image);
@@ -52,6 +54,19 @@ function ImagePreProcessor(props) {
       newImage.invert();
     }
 
+    const colorAdjustments = [];
+
+    // if (saturation > 0) {
+    //   colorAdjustments.push({ apply: 'saturate', params: [saturation] });
+    // }
+    // if (saturation < 0) {
+    //   colorAdjustments.push({ apply: 'desaturate', params: [-saturation] });
+    // }
+    //
+    // if (colorAdjustments.length > 0) {
+    //   newImage.color(colorAdjustments);
+    // }
+
     setImage(newImage);
   }, [jimpImage, normalize, brightness, contrast, greyscale, blur, mirrorHor, mirrorVer, invert]);
 
@@ -73,7 +88,7 @@ function ImagePreProcessor(props) {
               name="normalizeCheckbox"
             />
           }
-          label="Normalize"
+          label="normalize"
         />
         <FormControlLabel
           control={
@@ -85,7 +100,7 @@ function ImagePreProcessor(props) {
               name="greyscaleCheckbox"
             />
           }
-          label="Greyscale"
+          label="greyscale"
         />
         <FormControlLabel
           control={
@@ -97,7 +112,7 @@ function ImagePreProcessor(props) {
               name="invertCheckbox"
             />
           }
-          label="Invert"
+          label="invert"
         />
       </Container>
       <Container align="left">
@@ -111,7 +126,7 @@ function ImagePreProcessor(props) {
               name="mirrorHorCheckbox"
             />
           }
-          label="Flip Horizontal"
+          label="flip Horizontal"
         />
         <FormControlLabel
           control={
@@ -123,10 +138,10 @@ function ImagePreProcessor(props) {
               name="mirrorVerCheckbox"
             />
           }
-          label="Flip Vertical"
+          label="flip Vertical"
         />
       </Container>
-      <Typography gutterBottom>Brightness</Typography>
+      <Typography gutterBottom>brightness</Typography>
       <Grid container>
         <Grid item>
           <Brightness5OutlinedIcon />
@@ -142,7 +157,7 @@ function ImagePreProcessor(props) {
           />
         </Grid>
       </Grid>
-      <Typography gutterBottom>Contrast</Typography>
+      <Typography gutterBottom>contrast</Typography>
       <Grid container>
         <Grid item>
           <Brightness6OutlinedIcon />
@@ -158,7 +173,8 @@ function ImagePreProcessor(props) {
           />
         </Grid>
       </Grid>
-      <Typography gutterBottom>Blur</Typography>
+
+      <Typography gutterBottom>blur</Typography>
       <Grid container>
         <Grid item>
           <BlurOnOutlinedIcon />
@@ -173,6 +189,23 @@ function ImagePreProcessor(props) {
           />
         </Grid>
       </Grid>
+
+      {/* <Typography variant="h5">color adjustments (slow)</Typography> */}
+      {/* <Typography gutterBottom>saturation</Typography> */}
+      {/* <Grid container> */}
+      {/*   <Grid item> */}
+      {/*     <FormatColorResetOutlinedIcon /> */}
+      {/*   </Grid> */}
+      {/*   <Grid item xs> */}
+      {/*     <Slider */}
+      {/*       min={-100} */}
+      {/*       max={100} */}
+      {/*       value={saturation} */}
+      {/*       onChange={(event, newValue) => setSaturation(newValue)} */}
+      {/*       valueLabelDisplay="on" */}
+      {/*     /> */}
+      {/*   </Grid> */}
+      {/* </Grid> */}
     </>
   );
 }

@@ -18,7 +18,7 @@ function HiresCheckbox(props) {
   return (
     <FormControlLabel
       control={<Checkbox checked={checked} onChange={handleOnChange} name="hiresCheckbox" />}
-      label="Hires"
+      label="hires"
     />
   );
 }
