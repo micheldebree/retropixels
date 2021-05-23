@@ -1,17 +1,14 @@
 import React, { useEffect, useState } from 'react';
-import { C64Writer, ColorSpaces, Quantizer, Converter, GraphicModes, Palettes } from 'retropixels-core';
-import { Button } from '@material-ui/core';
+import { ColorSpaces, Quantizer, Converter, GraphicModes, Palettes } from 'retropixels-core';
 import PropTypes from 'prop-types';
 import OrderedDither from 'retropixels-core/target/conversion/OrderedDither';
-import CloudDownloadIcon from '@material-ui/icons/CloudDownload';
-import { saveAs } from 'file-saver';
 import { getImageDataFromPixelImage } from './Utilities';
 import Canvas from './Canvas';
 
 function TargetImage(props) {
   const graphicMode = GraphicModes.all.bitmap;
 
-  const { jimpImage, hires, colorspaceId, paletteId, ditherId, ditherRadius } = props;
+  const { jimpImage, onChanged, hires, colorspaceId, paletteId, ditherId, ditherRadius } = props;
 
   const defaultQuantizer = new Quantizer(Palettes.all[paletteId], ColorSpaces.all[colorspaceId]);
   const defaultConverter = new Converter(defaultQuantizer);
@@ -31,10 +28,6 @@ function TargetImage(props) {
   useEffect(() => {
     setConverter(new Converter(quantizer));
   }, [quantizer]);
-
-  useEffect(() => {
-    setPixelImage(graphicMode({ hires }));
-  }, [hires, graphicMode]);
 
   useEffect(() => {
     setDitherer(new OrderedDither(OrderedDither.presets[ditherId], ditherRadius));
@@ -59,33 +52,19 @@ function TargetImage(props) {
 
   useEffect(() => {
     setImageData(getImageDataFromPixelImage(pixelImage));
-  }, [pixelImage]);
-
-  function saveOutput() {
-    const binary = C64Writer.toBinary(pixelImage);
-    const buffer = C64Writer.toBuffer(binary);
-    const blob = new Blob([buffer], { type: 'application/octet-stream' });
-    const extension = pixelImage.mode.pixelWidth < 2 ? '.art' : '.kla';
-    saveAs(blob, `test${extension}`);
-  }
-
-  let outputFormat;
-  if (pixelImage !== undefined) {
-    outputFormat = pixelImage.mode.pixelWidth < 2 ? 'Art studio' : 'Koala';
-  }
+    onChanged(pixelImage);
+  }, [pixelImage, onChanged]);
 
   return (
     <>
       <Canvas width={320} height={200} imageData={imageData} />
-      <Button variant="contained" disabled={pixelImage === undefined} color="primary" onClick={() => saveOutput()}>
-        <CloudDownloadIcon /> &nbsp; Download {outputFormat}
-      </Button>
     </>
   );
 }
 
 TargetImage.propTypes = {
   jimpImage: PropTypes.shape(),
+  onChanged: PropTypes.func,
   hires: PropTypes.bool,
   colorspaceId: PropTypes.string,
   paletteId: PropTypes.string,
@@ -95,6 +74,7 @@ TargetImage.propTypes = {
 
 TargetImage.defaultProps = {
   jimpImage: undefined,
+  onChanged: () => {},
   hires: false,
   colorspaceId: 'xyz',
   paletteId: 'colodore',

@@ -126,7 +126,7 @@ function ImagePreProcessor(props) {
               name="mirrorHorCheckbox"
             />
           }
-          label="flip Horizontal"
+          label="flip horizontal"
         />
         <FormControlLabel
           control={
@@ -138,7 +138,7 @@ function ImagePreProcessor(props) {
               name="mirrorVerCheckbox"
             />
           }
-          label="flip Vertical"
+          label="flip vertical"
         />
       </Container>
       <Typography gutterBottom>brightness</Typography>
@@ -150,7 +150,7 @@ function ImagePreProcessor(props) {
           <Slider
             min={-1.0}
             max={1.0}
-            step={0.1}
+            step={0.05}
             value={brightness}
             onChange={(event, newValue) => setBrightness(newValue)}
             valueLabelDisplay="on"
@@ -166,7 +166,7 @@ function ImagePreProcessor(props) {
           <Slider
             min={-1.0}
             max={1.0}
-            step={0.1}
+            step={0.05}
             value={contrast}
             onChange={(event, newValue) => setContrast(newValue)}
             valueLabelDisplay="on"
