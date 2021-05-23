@@ -28,9 +28,14 @@ const useStyles = makeStyles(theme => ({
 function App() {
   const [sourceImage, setSourceImage] = useState(undefined);
   const [processedImage, setProcessedImage] = useState(undefined);
+  const [filename, setFilename] = useState(undefined);
 
   const classes = useStyles();
 
+  function onSourceImageChanged(newSourceImage) {
+    setSourceImage(newSourceImage.jimpImage);
+    setFilename(newSourceImage.filename);
+  }
   return (
     <div className="App">
       {/* <header className="App-header">Retropixels</header> */}
@@ -49,13 +54,13 @@ function App() {
         </div>
         <Grid container spacing={3}>
           <Grid item xs>
-            <SourceImage onChanged={jimpImage => setSourceImage(jimpImage)} />
+            <SourceImage onChanged={onSourceImageChanged} />
           </Grid>
           <Grid item xs>
             <ImagePreProcessor jimpImage={sourceImage} onChanged={jimpImage => setProcessedImage(jimpImage)} />
           </Grid>
           <Grid item xs>
-            <Retropixels jimpImage={processedImage} />
+            <Retropixels jimpImage={processedImage} filename={filename}/>
           </Grid>
         </Grid>
       </body>
