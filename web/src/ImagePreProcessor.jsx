@@ -72,7 +72,7 @@ function ImagePreProcessor(props) {
 
   return (
     <>
-      <h2>pre-processing</h2>
+      <h4>pre-processing</h4>
       <Container>
         <Canvas width={320} height={200} imageData={imageData} />
       </Container>

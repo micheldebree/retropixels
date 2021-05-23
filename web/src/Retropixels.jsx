@@ -1,10 +1,11 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
-import { Container, Grid, Slider, Divider, Typography } from '@material-ui/core';
+import { Container, Grid, Slider, Typography } from '@material-ui/core';
 import BlurLinearIcon from '@material-ui/icons/BlurLinear';
 import HiresCheckbox from './HiresCheckbox';
 import ProfileSelection from './ProfileSelection';
 import TargetImage from './TargetImage';
+import { parseFilename} from './Utilities';
 
 // wraps the Targetimage with controls for the various properties
 function Retropixels(props) {
@@ -15,7 +16,7 @@ function Retropixels(props) {
   const paletteOptions = ['colodore', 'pepto', 'deekay'];
   const paletteDefault = 'colodore';
 
-  const { jimpImage } = props;
+  const { jimpImage, filename } = props;
 
   const [colorspace, setColorSpace] = useState(colorspaceDefault);
   const [palette, setPalette] = useState(paletteDefault);
@@ -23,9 +24,12 @@ function Retropixels(props) {
   const [dither, setDither] = useState(ditherDefault);
   const [ditherRadius, setDitherRadius] = useState(32);
 
+  const parsedFilename = parseFilename(filename);
+  const targetBasename = `${parsedFilename.basename.substring(0, 30)}`;
+
   return (
     <>
-      <h2>output</h2>
+      <h4>{targetBasename}</h4>
       <Container>
         <TargetImage
           jimpImage={jimpImage}
@@ -82,11 +86,13 @@ function Retropixels(props) {
 }
 
 Retropixels.propTypes = {
-  jimpImage: PropTypes.shape()
+  jimpImage: PropTypes.shape(),
+  filename: PropTypes.string
 };
 
 Retropixels.defaultProps = {
-  jimpImage: undefined
+  jimpImage: undefined,
+  filename: 'output'
 };
 
 export default Retropixels;

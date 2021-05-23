@@ -4,7 +4,7 @@ import * as Jimp from 'jimp';
 import { Container } from '@material-ui/core';
 import ImageUpload from './ImageUpload';
 import Canvas from './Canvas';
-import { clearJimpImage, getImageDataFromJimpImage } from './Utilities';
+import { abbreviateFilename, clearJimpImage, getImageDataFromJimpImage, parseFilename } from './Utilities';
 import ProfileSelection from './ProfileSelection';
 
 // https://www.reddit.com/r/cemu/comments/aq2wbs/scale_filter_comparison_bilinear_vs_bicubic_vs/
@@ -16,15 +16,20 @@ function SourceImage(props) {
   const [image, setImage] = useState(undefined);
   const [imageData, setImageData] = useState(undefined);
   const [scale, setScale] = useState('fill');
+  const [filename, setFilename] = useState('input');
 
-  function onUploaded(jimpImage) {
-    setUploadedImage(jimpImage);
+  function onUploaded(newUploadedImage) {
+    setUploadedImage(newUploadedImage.jimpImage);
+    setFilename(newUploadedImage.filename);
   }
 
   function cropJimpImage(jimpImage) {
     const isTooSmall = jimpImage.bitmap.width < 320 || jimpImage.bitmap.height < 200;
     let blitImage;
 
+    // if the image is too small, the cropped image is cleared,
+    // and then the smaller image is blitted onto it
+    // this is a workaround for artifacts when cropping images to larger sizes
     if (isTooSmall) {
       blitImage = jimpImage.clone();
     }
@@ -52,16 +57,16 @@ function SourceImage(props) {
   }, [uploadedImage, scale]);
 
   useEffect(() => {
-    onChanged(image);
+    onChanged({ jimpImage: image, filename });
     setImageData(getImageDataFromJimpImage(image));
-  }, [image, onChanged]);
+  }, [image, onChanged, filename]);
 
   return (
     <>
-      <h2>input</h2>
+      <h4>{abbreviateFilename(filename, 30)}</h4>
       <Container>
         <Canvas width={320} height={200} imageData={imageData} />
-        <ImageUpload onload={jimpImage => onUploaded(jimpImage)} />
+        <ImageUpload onload={newUploadedImage => onUploaded(newUploadedImage)} />
       </Container>
       <Container align="left">
         <ProfileSelection

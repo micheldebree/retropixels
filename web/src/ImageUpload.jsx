@@ -29,7 +29,7 @@ function ImageUpload(props) {
       Jimp.read(reader.result)
         .then(img => {
           setError(undefined);
-          onload(img);
+          onload({ jimpImage: img, filename: file.name });
         })
         .catch(err => {
           setError(err.message);
