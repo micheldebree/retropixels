@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import * as Jimp from 'jimp';
 import { Container } from '@material-ui/core';
 import ImageUpload from './ImageUpload';
-import { abbreviateFilename, clearJimpImage, getImageDataFromJimpImage, parseFilename } from './Utilities';
+import { abbreviateFilename, clearJimpImage, getImageDataFromJimpImage } from './Utilities';
 import ProfileSelection from './ProfileSelection';
 
 // https://www.reddit.com/r/cemu/comments/aq2wbs/scale_filter_comparison_bilinear_vs_bicubic_vs/
@@ -64,13 +64,13 @@ function SourceImage(props) {
     <>
       <h4>{abbreviateFilename(filename, 30)}</h4>
       <Container>
-        <ImageUpload imageData={imageData} onload={newUploadedImage => onUploaded(newUploadedImage)} />
+        <ImageUpload imageData={imageData} onload={onUploaded} />
       </Container>
       <Container align="left">
         <ProfileSelection
           label="cropping"
           items={['crop', 'fill', 'fit']}
-          initialValue="fill"
+          value={scale}
           onChange={value => {
             setScale(value);
           }}

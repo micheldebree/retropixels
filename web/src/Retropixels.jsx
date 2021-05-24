@@ -1,12 +1,12 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 // import Jimp from 'jimp/es';
-import { Box, Button, Container, Grid, Slider, Typography } from '@material-ui/core';
+import { Button, Container, Grid, Slider, Typography, Checkbox, FormControlLabel } from '@material-ui/core';
 import BlurLinearIcon from '@material-ui/icons/BlurLinear';
 import CloudDownloadIcon from '@material-ui/icons/CloudDownload';
+import AutorenewIcon from '@material-ui/icons/Autorenew';
 import { C64Writer } from 'retropixels-core';
 import { saveAs } from 'file-saver';
-import HiresCheckbox from './HiresCheckbox';
 import ProfileSelection from './ProfileSelection';
 import TargetImage from './TargetImage';
 import { parseFilename } from './Utilities';
@@ -14,20 +14,25 @@ import { parseFilename } from './Utilities';
 // wraps the Targetimage with controls for the various properties
 function Retropixels(props) {
   const ditherOptions = ['none', 'bayer2x2', 'bayer4x4', 'bayer8x8'];
-  const ditherDefault = 'bayer4x4';
   const colorspaceOptions = ['rgb', 'yuv', 'xyz', 'rainbow'];
-  const colorspaceDefault = 'xyz';
   const paletteOptions = ['colodore', 'pepto', 'deekay'];
+
+  // defaults
+
+  const ditherDefault = 'bayer4x4';
   const paletteDefault = 'colodore';
+  const colorspaceDefault = 'xyz';
+  const hiresDefault = false;
+  const ditherRadiusDefault = 32;
 
   const { jimpImage, filename } = props;
 
   const [pixelImage, setPixelImage] = useState(undefined);
   const [colorspace, setColorSpace] = useState(colorspaceDefault);
   const [palette, setPalette] = useState(paletteDefault);
-  const [hires, setHires] = useState(false);
+  const [hires, setHires] = useState(hiresDefault);
   const [dither, setDither] = useState(ditherDefault);
-  const [ditherRadius, setDitherRadius] = useState(32);
+  const [ditherRadius, setDitherRadius] = useState(ditherRadiusDefault);
 
   let targetFilename = 'output';
   if (pixelImage !== undefined) {
@@ -38,6 +43,14 @@ function Retropixels(props) {
 
   function onNewPixelImage(newPixelImage) {
     setPixelImage(newPixelImage);
+  }
+
+  function reset() {
+    setColorSpace(colorspaceDefault);
+    setPalette(paletteDefault);
+    setHires(hiresDefault);
+    setDither(ditherDefault);
+    setDitherRadius(ditherRadiusDefault);
   }
 
   function saveOutput() {
@@ -59,14 +72,21 @@ function Retropixels(props) {
   //   });
   // }
 
-  let outputFormat;
+  let outputFormat = 'output';
   if (pixelImage !== undefined) {
-    outputFormat = pixelImage.mode.pixelWidth < 2 ? 'Art studio' : 'Koala';
+    outputFormat = pixelImage.mode.pixelWidth === 1 ? 'Art studio' : 'Koala painter';
   }
+
+  const defaultsSet =
+    colorspace === colorspaceDefault &&
+    palette === paletteDefault &&
+    hires === hiresDefault &&
+    dither === ditherDefault &&
+    ditherRadius === ditherRadiusDefault;
 
   return (
     <>
-      <h4>{targetFilename}</h4>
+      <h4>{outputFormat} file</h4>
       <Container>
         <TargetImage
           jimpImage={jimpImage}
@@ -78,29 +98,54 @@ function Retropixels(props) {
           ditherRadius={ditherRadius}
         />
       </Container>
+      <Container>
+        <Grid container>
+          <Grid item xs>
+            <Button variant="contained" disabled={defaultsSet} onClick={() => reset()}>
+              <AutorenewIcon /> &nbsp; defaults
+            </Button>
+          </Grid>
+          <Grid item xs>
+            <Button
+              variant="contained"
+              disabled={pixelImage === undefined}
+              color="primary"
+              onClick={() => saveOutput()}
+            >
+              <CloudDownloadIcon /> &nbsp; Download
+            </Button>
+          </Grid>
+        </Grid>
+      </Container>
       <Container align="left">
         {/* TODO: use generic checkbox */}
-        <HiresCheckbox onChange={value => setHires(value)} />
+        <FormControlLabel
+          control={
+            <Checkbox
+              checked={hires}
+              onChange={() => {
+                setHires(!hires);
+              }}
+              name="mirrorHorCheckbox"
+            />
+          }
+          label="hires"
+        />
       </Container>
       <Container align="left">
         <ProfileSelection
           label="colorspace"
-          initialValue={colorspaceDefault}
+          value={colorspace}
           items={colorspaceOptions}
           onChange={value => setColorSpace(value)}
         />
         <ProfileSelection
           label="palette"
-          initialValue={paletteDefault}
+          value={palette}
           items={paletteOptions}
           onChange={value => setPalette(value)}
         />
-        <ProfileSelection
-          label="dithering"
-          initialValue={ditherDefault}
-          items={ditherOptions}
-          onChange={value => setDither(value)}
-        />
+        <ProfileSelection label="dithering" value={dither} items={ditherOptions} onChange={value => setDither(value)} />
         <Typography gutterBottom>dithering strength</Typography>
         <Grid container>
           <Grid item>
@@ -117,13 +162,6 @@ function Retropixels(props) {
             />
           </Grid>
         </Grid>
-      </Container>
-      <Container>
-        <Box m={2}>
-          <Button variant="contained" disabled={pixelImage === undefined} color="primary" onClick={() => saveOutput()}>
-            <CloudDownloadIcon /> &nbsp; Download {outputFormat} file
-          </Button>
-        </Box>
       </Container>
     </>
   );
