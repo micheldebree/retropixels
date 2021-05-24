@@ -146,10 +146,12 @@ function Retropixels(props) {
           onChange={value => setPalette(value)}
         />
         <ProfileSelection label="dithering" value={dither} items={ditherOptions} onChange={value => setDither(value)} />
-        <Typography gutterBottom>dithering strength</Typography>
+        <Typography gutterBottom align="left">
+          dithering strength
+        </Typography>
         <Grid container>
           <Grid item>
-            <BlurLinearIcon />
+            <BlurLinearIcon /> &nbsp;
           </Grid>
           <Grid item xs>
             <Slider
@@ -158,7 +160,7 @@ function Retropixels(props) {
               max={64}
               value={ditherRadius}
               onChange={(event, newValue) => setDitherRadius(newValue)}
-              valueLabelDisplay="on"
+              valueLabelDisplay="auto"
             />
           </Grid>
         </Grid>
