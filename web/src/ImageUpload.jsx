@@ -4,7 +4,6 @@ import PropTypes from 'prop-types';
 import { useDropzone } from 'react-dropzone';
 import { Container, Box, Snackbar } from '@material-ui/core';
 import { Alert } from '@material-ui/lab';
-import CloudUploadIcon from '@material-ui/icons/CloudUpload';
 import Canvas from './Canvas';
 
 // TODO: return Jimp Image
@@ -21,25 +20,24 @@ function ImageUpload(props) {
     maxFiles: 1
   });
 
-  function readFile(file) {
-    const reader = new FileReader();
-
-    reader.onabort = () => setError('file reading was aborted');
-    reader.onerror = () => setError('file reading has failed');
-    reader.onload = () => {
-      Jimp.read(reader.result)
-        .then(img => {
-          setError(undefined);
-          onload({ jimpImage: img, filename: file.name });
-        })
-        .catch(err => {
-          setError(err.message);
-        });
-    };
-    reader.readAsArrayBuffer(file);
-  }
-
   useEffect(() => {
+    const readFile = file => {
+      const reader = new FileReader();
+
+      reader.onabort = () => setError('file reading was aborted');
+      reader.onerror = () => setError('file reading has failed');
+      reader.onload = () => {
+        Jimp.read(reader.result)
+          .then(img => {
+            setError(undefined);
+            onload({ jimpImage: img, filename: file.name });
+          })
+          .catch(err => {
+            setError(err.message);
+          });
+      };
+      reader.readAsArrayBuffer(file);
+    };
     if (acceptedFiles !== undefined && acceptedFiles.length === 1) {
       readFile(acceptedFiles[0]);
     }
@@ -56,7 +54,7 @@ function ImageUpload(props) {
 
   return (
     <Container>
-      <Box border={1} m={1} boxShadow={2}>
+      <Box border={1} m={1} boxShadow={2} borderRadius="borderRadius" borderColor="grey.500">
         <div {...getRootProps({ className: 'dropzone' })}>
           <input {...getInputProps()} />
           <Canvas width={320} height={200} imageData={imageData} />

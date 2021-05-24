@@ -1,10 +1,11 @@
 import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
-import { Container, Grid, Typography, FormControlLabel, Checkbox, Slider } from '@material-ui/core';
+import { Button, Container, Grid, Typography, FormControlLabel, Checkbox, Slider } from '@material-ui/core';
 import Brightness5OutlinedIcon from '@material-ui/icons/Brightness5Outlined';
 import Brightness6OutlinedIcon from '@material-ui/icons/Brightness6Outlined';
 import BrokenImageOutlinedIcon from '@material-ui/icons/BrokenImageOutlined';
 import BlurOnOutlinedIcon from '@material-ui/icons/BlurOnOutlined';
+import AutorenewIcon from '@material-ui/icons/Autorenew';
 // import FormatColorResetOutlinedIcon from '@material-ui/icons/FormatColorResetOutlined';
 import { getImageDataFromJimpImage } from './Utilities';
 import Canvas from './Canvas';
@@ -12,18 +13,42 @@ import Canvas from './Canvas';
 function ImagePreProcessor(props) {
   const { jimpImage, onChanged } = props;
 
+  // defaults
+
+  const normalizeDefault = true;
+  const greyscaleDefault = false;
+  const mirrorHorDefault = false;
+  const mirrorVerDefault = false;
+  const invertDefault = false;
+  const brightnessDefault = 0;
+  const contrastDefault = 0;
+  const blurDefault = 0;
+  const thresholdDefault = 0;
+
   const [image, setImage] = useState(undefined);
   const [imageData, setImageData] = useState(undefined);
-  const [normalize, setNormalize] = useState(true);
-  const [greyscale, setGreyScale] = useState(false);
-  const [mirrorHor, setMirrorHor] = useState(false);
-  const [mirrorVer, setMirrorVer] = useState(false);
-  const [invert, setInvert] = useState(false);
-  const [brightness, setBrightness] = useState(0);
-  const [contrast, setContrast] = useState(0);
-  const [blur, setBlur] = useState(0);
-  const [threshold, setThreshold] = useState(0);
+  const [normalize, setNormalize] = useState(normalizeDefault);
+  const [greyscale, setGreyscale] = useState(greyscaleDefault);
+  const [mirrorHor, setMirrorHor] = useState(mirrorHorDefault);
+  const [mirrorVer, setMirrorVer] = useState(mirrorVerDefault);
+  const [invert, setInvert] = useState(invertDefault);
+  const [brightness, setBrightness] = useState(brightnessDefault);
+  const [contrast, setContrast] = useState(contrastDefault);
+  const [blur, setBlur] = useState(blurDefault);
+  const [threshold, setThreshold] = useState(thresholdDefault);
   // const [saturation, setSaturation] = useState(0);
+
+  function reset() {
+    setNormalize(normalizeDefault);
+    setGreyscale(greyscaleDefault);
+    setMirrorHor(mirrorHorDefault);
+    setMirrorVer(mirrorVerDefault);
+    setInvert(invertDefault);
+    setBrightness(brightnessDefault);
+    setContrast(contrastDefault);
+    setBlur(blurDefault);
+    setThreshold(thresholdDefault);
+  }
 
   useEffect(() => {
     onChanged(image);
@@ -76,11 +101,27 @@ function ImagePreProcessor(props) {
     setImage(newImage);
   }, [jimpImage, normalize, brightness, contrast, greyscale, blur, mirrorHor, mirrorVer, invert, threshold]);
 
+  const defaultsSet =
+    normalize === normalizeDefault &&
+    greyscale === greyscaleDefault &&
+    mirrorHor === mirrorHorDefault &&
+    mirrorVer === mirrorVerDefault &&
+    invert === invertDefault &&
+    contrast === contrastDefault &&
+    brightness === brightnessDefault &&
+    blur === blurDefault &&
+    threshold === thresholdDefault;
+
   return (
     <>
       <h4>pre-processing</h4>
       <Container>
         <Canvas width={320} height={200} imageData={imageData} />
+      </Container>
+      <Container>
+        <Button variant="contained" disabled={defaultsSet} onClick={() => reset()}>
+          <AutorenewIcon /> &nbsp; defaults
+        </Button>
       </Container>
 
       <Container align="left">
@@ -101,7 +142,7 @@ function ImagePreProcessor(props) {
             <Checkbox
               checked={greyscale}
               onChange={() => {
-                setGreyScale(!greyscale);
+                setGreyscale(!greyscale);
               }}
               name="greyscaleCheckbox"
             />

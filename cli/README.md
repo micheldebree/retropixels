@@ -269,6 +269,12 @@ Run with `node cli.js [options] <infile>`
 
 ## Changelog
 
+### 0.8.5
+
+- Changed: Significantly improved conversion speed
+- Changed: (Internal) Split package into the command line tool (`retropixels`)
+  and core functionality (`retropixels-core`).
+
 ### 0.8.1
 
 - Fixed [[#53](https://github.com/micheldebree/retropixels/issues/53)]
