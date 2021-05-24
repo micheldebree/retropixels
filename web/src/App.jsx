@@ -42,7 +42,7 @@ function App() {
       <body className="App-body">
         <div className={classes.root}>
           <AppBar position="static">
-            <Toolbar>
+            <Toolbar variant="dense">
               <Typography variant="h6" className={classes.title}>
                 Retropixels
               </Typography>

@@ -5,6 +5,7 @@ import { useDropzone } from 'react-dropzone';
 import { Container, Box, Snackbar } from '@material-ui/core';
 import { Alert } from '@material-ui/lab';
 import CloudUploadIcon from '@material-ui/icons/CloudUpload';
+import Canvas from './Canvas';
 
 // TODO: return Jimp Image
 // TODO: Only accept image types
@@ -12,7 +13,7 @@ import CloudUploadIcon from '@material-ui/icons/CloudUpload';
 // Let's the user select an image file
 // When a valid image is selected, calls the "onload" callback with a JimpImage object.
 function ImageUpload(props) {
-  const { onload } = props;
+  const { onload, imageData } = props;
 
   const [error, setError] = useState(undefined);
   const { acceptedFiles, fileRejections, getRootProps, getInputProps } = useDropzone({
@@ -55,11 +56,11 @@ function ImageUpload(props) {
 
   return (
     <Container>
-      <Box border={0} m={1} boxShadow={2}>
+      <Box border={1} m={1} boxShadow={2}>
         <div {...getRootProps({ className: 'dropzone' })}>
           <input {...getInputProps()} />
+          <Canvas width={320} height={200} imageData={imageData} />
           <p>Drop image here, or click to select image</p>
-          <CloudUploadIcon />
           {/* <p>{rejected} rejected</p> */}
           {/* <p>{accepted} accepted</p> */}
         </div>
@@ -73,7 +74,11 @@ function ImageUpload(props) {
 
 ImageUpload.propTypes = {
   // callback when image is loaded successfully
-  onload: PropTypes.func.isRequired
+  onload: PropTypes.func.isRequired,
+  imageData: PropTypes.shape()
 };
 
+ImageUpload.defaultProps = {
+  imageData: undefined
+};
 export default ImageUpload;
