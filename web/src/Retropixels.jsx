@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
+// import Jimp from 'jimp/es';
 import { Box, Button, Container, Grid, Slider, Typography } from '@material-ui/core';
 import BlurLinearIcon from '@material-ui/icons/BlurLinear';
 import CloudDownloadIcon from '@material-ui/icons/CloudDownload';
@@ -30,7 +31,7 @@ function Retropixels(props) {
 
   let targetFilename = 'output';
   if (pixelImage !== undefined) {
-    const extension = pixelImage.mode.pixelWidth < 2 ? '.art' : '.kla';
+    const extension = pixelImage.mode.pixelWidth === 1 ? '.art' : '.kla';
     const parsedFilename = parseFilename(filename);
     targetFilename = `${parsedFilename.basename.substring(0, 30)}${extension}`;
   }
@@ -45,6 +46,18 @@ function Retropixels(props) {
     const blob = new Blob([buffer], { type: 'application/octet-stream' });
     saveAs(blob, targetFilename);
   }
+
+  // function savePNG() {
+  //   JimpPreprocessor.toJimpImage(pixelImage, Palettes.all[palette]).then(outputJimpImage => {
+  //     outputJimpImage.image
+  //       .getBufferAsync(Jimp.MIME_PNG)
+  //       .then(buffer => {
+  //         const blob = new Blob([buffer], { type: 'application/octet-stream' });
+  //         saveAs(blob, 'test.png');
+  //       })
+  //       .catch(error => alert(error));
+  //   });
+  // }
 
   let outputFormat;
   if (pixelImage !== undefined) {

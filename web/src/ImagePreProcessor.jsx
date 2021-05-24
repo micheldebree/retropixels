@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import { Container, Grid, Typography, FormControlLabel, Checkbox, Slider } from '@material-ui/core';
 import Brightness5OutlinedIcon from '@material-ui/icons/Brightness5Outlined';
 import Brightness6OutlinedIcon from '@material-ui/icons/Brightness6Outlined';
+import BrokenImageOutlinedIcon from '@material-ui/icons/BrokenImageOutlined';
 import BlurOnOutlinedIcon from '@material-ui/icons/BlurOnOutlined';
 // import FormatColorResetOutlinedIcon from '@material-ui/icons/FormatColorResetOutlined';
 import { getImageDataFromJimpImage } from './Utilities';
@@ -21,6 +22,7 @@ function ImagePreProcessor(props) {
   const [brightness, setBrightness] = useState(0);
   const [contrast, setContrast] = useState(0);
   const [blur, setBlur] = useState(0);
+  const [threshold, setThreshold] = useState(0);
   // const [saturation, setSaturation] = useState(0);
 
   useEffect(() => {
@@ -54,7 +56,11 @@ function ImagePreProcessor(props) {
       newImage.invert();
     }
 
-    const colorAdjustments = [];
+    if (threshold > 0) {
+      newImage.threshold({ max: threshold, autoGreyscale: false });
+    }
+
+    // const colorAdjustments = [];
 
     // if (saturation > 0) {
     //   colorAdjustments.push({ apply: 'saturate', params: [saturation] });
@@ -68,7 +74,7 @@ function ImagePreProcessor(props) {
     // }
 
     setImage(newImage);
-  }, [jimpImage, normalize, brightness, contrast, greyscale, blur, mirrorHor, mirrorVer, invert]);
+  }, [jimpImage, normalize, brightness, contrast, greyscale, blur, mirrorHor, mirrorVer, invert, threshold]);
 
   return (
     <>
@@ -185,6 +191,22 @@ function ImagePreProcessor(props) {
             max={10}
             value={blur}
             onChange={(event, newValue) => setBlur(newValue)}
+            valueLabelDisplay="on"
+          />
+        </Grid>
+      </Grid>
+
+      <Typography gutterBottom>threshold</Typography>
+      <Grid container>
+        <Grid item>
+          <BrokenImageOutlinedIcon />
+        </Grid>
+        <Grid item xs>
+          <Slider
+            min={0}
+            max={255}
+            value={threshold}
+            onChange={(event, newValue) => setThreshold(newValue)}
             valueLabelDisplay="on"
           />
         </Grid>

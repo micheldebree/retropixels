@@ -3,7 +3,6 @@ import PropTypes from 'prop-types';
 import * as Jimp from 'jimp';
 import { Container } from '@material-ui/core';
 import ImageUpload from './ImageUpload';
-import Canvas from './Canvas';
 import { abbreviateFilename, clearJimpImage, getImageDataFromJimpImage, parseFilename } from './Utilities';
 import ProfileSelection from './ProfileSelection';
 
@@ -65,8 +64,7 @@ function SourceImage(props) {
     <>
       <h4>{abbreviateFilename(filename, 30)}</h4>
       <Container>
-        <Canvas width={320} height={200} imageData={imageData} />
-        <ImageUpload onload={newUploadedImage => onUploaded(newUploadedImage)} />
+        <ImageUpload imageData={imageData} onload={newUploadedImage => onUploaded(newUploadedImage)} />
       </Container>
       <Container align="left">
         <ProfileSelection
