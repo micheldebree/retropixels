@@ -188,10 +188,12 @@ function ImagePreProcessor(props) {
           label="flip vertical"
         />
       </Container>
-      <Typography gutterBottom>brightness</Typography>
+      <Typography gutterBottom align="left">
+        brightness
+      </Typography>
       <Grid container>
         <Grid item>
-          <Brightness5OutlinedIcon />
+          <Brightness5OutlinedIcon /> &nbsp;
         </Grid>
         <Grid item xs>
           <Slider
@@ -200,14 +202,16 @@ function ImagePreProcessor(props) {
             step={0.05}
             value={brightness}
             onChange={(event, newValue) => setBrightness(newValue)}
-            valueLabelDisplay="on"
+            valueLabelDisplay="auto"
           />
         </Grid>
       </Grid>
-      <Typography gutterBottom>contrast</Typography>
+      <Typography gutterBottom align="left">
+        contrast
+      </Typography>
       <Grid container>
         <Grid item>
-          <Brightness6OutlinedIcon />
+          <Brightness6OutlinedIcon /> &nbsp;
         </Grid>
         <Grid item xs>
           <Slider
@@ -216,15 +220,17 @@ function ImagePreProcessor(props) {
             step={0.05}
             value={contrast}
             onChange={(event, newValue) => setContrast(newValue)}
-            valueLabelDisplay="on"
+            valueLabelDisplay="auto"
           />
         </Grid>
       </Grid>
 
-      <Typography gutterBottom>blur</Typography>
+      <Typography gutterBottom align="left">
+        blur
+      </Typography>
       <Grid container>
         <Grid item>
-          <BlurOnOutlinedIcon />
+          <BlurOnOutlinedIcon /> &nbsp;
         </Grid>
         <Grid item xs>
           <Slider
@@ -232,24 +238,20 @@ function ImagePreProcessor(props) {
             max={10}
             value={blur}
             onChange={(event, newValue) => setBlur(newValue)}
-            valueLabelDisplay="on"
+            valueLabelDisplay="auto"
           />
         </Grid>
       </Grid>
 
-      <Typography gutterBottom>threshold</Typography>
+      <Typography gutterBottom align="left">
+        threshold
+      </Typography>
       <Grid container>
         <Grid item>
-          <BrokenImageOutlinedIcon />
+          <BrokenImageOutlinedIcon /> &nbsp;
         </Grid>
         <Grid item xs>
-          <Slider
-            min={0}
-            max={255}
-            value={threshold}
-            onChange={(event, newValue) => setThreshold(newValue)}
-            valueLabelDisplay="on"
-          />
+          <Slider min={0} max={255} value={threshold} onChange={(event, newValue) => setThreshold(newValue)} />
         </Grid>
       </Grid>
 
