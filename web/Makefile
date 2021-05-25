@@ -1,5 +1,16 @@
+BUILD_NR=$(shell git show --no-patch --format='%cs').$(shell git rev-parse --short HEAD)
+COMMIT_SHA=$(shell git rev-parse HEAD)
+COMMIT_URL=https://github.com/micheldebree/retropixels/commit/$(COMMIT_SHA)
+
+.PHONY: start
+.PHONY: build
+
 start:
 	yarn start
+
+build:
+	echo $(BUILD_NR)
+	echo $(COMMIT_URL)
 
 icons: public/favicon-16x16.png \
 	public/favicon-24x24.png \

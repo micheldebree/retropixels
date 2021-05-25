@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 // import Jimp from 'jimp/es';
-import { Button, Container, Grid, Slider, Typography, Checkbox, FormControlLabel } from '@material-ui/core';
+import { Button, Container, Grid, Slider, Typography, Checkbox, FormControlLabel, FormLabel } from '@material-ui/core';
 import BlurLinearIcon from '@material-ui/icons/BlurLinear';
 import CloudDownloadIcon from '@material-ui/icons/CloudDownload';
 import AutorenewIcon from '@material-ui/icons/Autorenew';
@@ -74,7 +74,7 @@ function Retropixels(props) {
 
   let outputFormat = 'output';
   if (pixelImage !== undefined) {
-    outputFormat = pixelImage.mode.pixelWidth === 1 ? 'Art studio' : 'Koala painter';
+    outputFormat = pixelImage.mode.pixelWidth === 1 ? 'art studio' : 'koala painter';
   }
 
   const defaultsSet =
@@ -146,9 +146,7 @@ function Retropixels(props) {
           onChange={value => setPalette(value)}
         />
         <ProfileSelection label="dithering" value={dither} items={ditherOptions} onChange={value => setDither(value)} />
-        <Typography gutterBottom align="left">
-          dithering strength
-        </Typography>
+        <FormLabel component="legend">dithering strength</FormLabel>
         <Grid container>
           <Grid item>
             <BlurLinearIcon /> &nbsp;
