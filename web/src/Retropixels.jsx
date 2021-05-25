@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
-// import Jimp from 'jimp/es';
-import { Button, Container, Grid, Slider, Typography, Checkbox, FormControlLabel, FormLabel } from '@material-ui/core';
+import { Button, Container, Grid, Slider, Checkbox, FormControlLabel, FormLabel } from '@material-ui/core';
 import BlurLinearIcon from '@material-ui/icons/BlurLinear';
 import CloudDownloadIcon from '@material-ui/icons/CloudDownload';
 import AutorenewIcon from '@material-ui/icons/Autorenew';

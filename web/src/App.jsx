@@ -7,9 +7,7 @@ import SourceImage from './SourceImage';
 import ImagePreProcessor from './ImagePreProcessor';
 import Retropixels from './Retropixels';
 import Logo from './logo.svg';
-
-const buildNr = '%BUILD_NR%';
-const commitUrl = '%COMMIT_URL%';
+import AppVersion from './version';
 
 // https://github.com/harishmahamure/photoCompress
 
@@ -47,8 +45,8 @@ function App() {
               <Typography variant="h6" className={classes.title} align="left">
                 Retropixels
               </Typography>
-              <Link href={commitUrl} color="inherit">
-                v{buildNr}
+              <Link href={AppVersion.url} color="inherit" variant="body2">
+                v{AppVersion.buildnr}
               </Link>
               <Button color="inherit" href="https://github.com/micheldebree/retropixels">
                 <GitHubIcon />
