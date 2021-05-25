@@ -45,12 +45,11 @@ function ImageUpload(props) {
 
   useEffect(() => {
     if (fileRejections !== undefined && fileRejections.length > 0) {
-      setError(`Cannot load' + ${fileRejections[0].file}`);
+      const rejectedFile = fileRejections[0];
+      const errorMessages = rejectedFile.errors.map(e => e.message).reduce((a, e) => `${a},${e}`);
+      setError(`Cannot load ${rejectedFile.file.path}: ${errorMessages}`);
     }
   }, [fileRejections]);
-
-  // const rejected = fileRejections !== undefined ? fileRejections.length : 0;
-  // const accepted = acceptedFiles !== undefined ? acceptedFiles.length : 0;
 
   return (
     <Container>
@@ -59,8 +58,6 @@ function ImageUpload(props) {
           <input {...getInputProps()} />
           <Canvas width={320} height={200} imageData={imageData} />
           <p>Drop image here, or click to select image</p>
-          {/* <p>{rejected} rejected</p> */}
-          {/* <p>{accepted} accepted</p> */}
         </div>
       </Box>
       <Snackbar open={error} autoHideDuration={6000} onClose={() => setError(undefined)}>

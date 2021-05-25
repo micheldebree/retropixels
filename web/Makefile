@@ -8,9 +8,9 @@ COMMIT_URL=https://github.com/micheldebree/retropixels/commit/$(COMMIT_SHA)
 start:
 	yarn start
 
-build:
-	echo $(BUILD_NR)
-	echo $(COMMIT_URL)
+build: icons
+	echo "export default {buildnr: '$(BUILD_NR)', url: '$(COMMIT_URL)'}" > src/version.js
+	yarn build
 
 icons: public/favicon-16x16.png \
 	public/favicon-24x24.png \
