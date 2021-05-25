@@ -2,6 +2,9 @@
 
 Convert images to Commodore 64 format.
 
+![Input](cli/paintface.jpg)
+![Output](cli/samples/paintface-Multicolor.png)
+
 This is intended primarily for:
 
 - Commodore 64 developers who want to convert an image to graphics data
@@ -13,6 +16,6 @@ This is intended primarily for:
 
 You can use retropixels:
 
-- Online at [https://www.micheldebree.nl/retropixels]
+- Online at [https://www.micheldebree.nl/retropixels](https://www.micheldebree.nl/retropixels)
 - From the command line, see [retropixels, the command line tool](cli/README.md)
 
