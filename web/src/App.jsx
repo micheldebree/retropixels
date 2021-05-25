@@ -1,16 +1,15 @@
 import React, { useState } from 'react';
-import { Grid } from '@material-ui/core';
+import { Grid, AppBar, Toolbar, Typography, Button, Link } from '@material-ui/core';
 import './App.css';
-import AppBar from '@material-ui/core/AppBar';
-import Toolbar from '@material-ui/core/Toolbar';
-import Typography from '@material-ui/core/Typography';
-import Button from '@material-ui/core/Button';
 import GitHubIcon from '@material-ui/icons/GitHub';
 import { makeStyles } from '@material-ui/core/styles';
 import SourceImage from './SourceImage';
 import ImagePreProcessor from './ImagePreProcessor';
 import Retropixels from './Retropixels';
 import Logo from './logo.svg';
+
+const buildNr = '%BUILD_NR%';
+const commitUrl = '%COMMIT_URL%';
 
 // https://github.com/harishmahamure/photoCompress
 
@@ -48,6 +47,9 @@ function App() {
               <Typography variant="h6" className={classes.title} align="left">
                 Retropixels
               </Typography>
+              <Link href={commitUrl} color="inherit">
+                v{buildNr}
+              </Link>
               <Button color="inherit" href="https://github.com/micheldebree/retropixels">
                 <GitHubIcon />
               </Button>

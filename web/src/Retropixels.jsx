@@ -74,7 +74,7 @@ function Retropixels(props) {
 
   let outputFormat = 'output';
   if (pixelImage !== undefined) {
-    outputFormat = pixelImage.mode.pixelWidth === 1 ? 'art studio' : 'koala painter';
+    outputFormat = pixelImage.mode.pixelWidth === 1 ? 'art studio file' : 'koala painter file';
   }
 
   const defaultsSet =
@@ -86,7 +86,7 @@ function Retropixels(props) {
 
   return (
     <>
-      <h4>{outputFormat} file</h4>
+      <h4>{outputFormat}</h4>
       <Container>
         <TargetImage
           jimpImage={jimpImage}

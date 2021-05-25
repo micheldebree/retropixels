@@ -1,12 +1,11 @@
 import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
-import { Button, Container, Grid, Typography, FormControlLabel, Checkbox, Slider, FormLabel } from '@material-ui/core';
+import { Button, Container, Grid, FormControlLabel, Checkbox, Slider, FormLabel } from '@material-ui/core';
 import Brightness5OutlinedIcon from '@material-ui/icons/Brightness5Outlined';
 import Brightness6OutlinedIcon from '@material-ui/icons/Brightness6Outlined';
 import BrokenImageOutlinedIcon from '@material-ui/icons/BrokenImageOutlined';
 import BlurOnOutlinedIcon from '@material-ui/icons/BlurOnOutlined';
 import AutorenewIcon from '@material-ui/icons/Autorenew';
-// import FormatColorResetOutlinedIcon from '@material-ui/icons/FormatColorResetOutlined';
 import { getImageDataFromJimpImage } from './Utilities';
 import Canvas from './Canvas';
 
@@ -84,19 +83,6 @@ function ImagePreProcessor(props) {
     if (threshold > 0) {
       newImage.threshold({ max: threshold, autoGreyscale: false });
     }
-
-    // const colorAdjustments = [];
-
-    // if (saturation > 0) {
-    //   colorAdjustments.push({ apply: 'saturate', params: [saturation] });
-    // }
-    // if (saturation < 0) {
-    //   colorAdjustments.push({ apply: 'desaturate', params: [-saturation] });
-    // }
-    //
-    // if (colorAdjustments.length > 0) {
-    //   newImage.color(colorAdjustments);
-    // }
 
     setImage(newImage);
   }, [jimpImage, normalize, brightness, contrast, greyscale, blur, mirrorHor, mirrorVer, invert, threshold]);
