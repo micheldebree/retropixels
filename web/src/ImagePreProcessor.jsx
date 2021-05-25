@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
-import { Button, Container, Grid, Typography, FormControlLabel, Checkbox, Slider } from '@material-ui/core';
+import { Button, Container, Grid, Typography, FormControlLabel, Checkbox, Slider, FormLabel } from '@material-ui/core';
 import Brightness5OutlinedIcon from '@material-ui/icons/Brightness5Outlined';
 import Brightness6OutlinedIcon from '@material-ui/icons/Brightness6Outlined';
 import BrokenImageOutlinedIcon from '@material-ui/icons/BrokenImageOutlined';
@@ -187,73 +187,69 @@ function ImagePreProcessor(props) {
           }
           label="flip vertical"
         />
+        <FormLabel component="legend">brightness</FormLabel>
+        <Grid container>
+          <Grid item>
+            <Brightness5OutlinedIcon /> &nbsp;
+          </Grid>
+          <Grid item xs>
+            <Slider
+              min={-1.0}
+              max={1.0}
+              step={0.05}
+              value={brightness}
+              onChange={(event, newValue) => setBrightness(newValue)}
+              valueLabelDisplay="auto"
+            />
+          </Grid>
+        </Grid>
+        <FormLabel component="legend">contrast</FormLabel>
+        <Grid container>
+          <Grid item>
+            <Brightness6OutlinedIcon /> &nbsp;
+          </Grid>
+          <Grid item xs>
+            <Slider
+              min={-1.0}
+              max={1.0}
+              step={0.05}
+              value={contrast}
+              onChange={(event, newValue) => setContrast(newValue)}
+              valueLabelDisplay="auto"
+            />
+          </Grid>
+        </Grid>
+        <FormLabel component="legend">blur</FormLabel>
+        <Grid container>
+          <Grid item>
+            <BlurOnOutlinedIcon /> &nbsp;
+          </Grid>
+          <Grid item xs>
+            <Slider
+              min={0}
+              max={10}
+              value={blur}
+              onChange={(event, newValue) => setBlur(newValue)}
+              valueLabelDisplay="auto"
+            />
+          </Grid>
+        </Grid>
+        <FormLabel component="legend">threshold</FormLabel>
+        <Grid container>
+          <Grid item>
+            <BrokenImageOutlinedIcon /> &nbsp;
+          </Grid>
+          <Grid item xs>
+            <Slider
+              min={0}
+              max={255}
+              value={threshold}
+              onChange={(event, newValue) => setThreshold(newValue)}
+              valueLabelDisplay="auto"
+            />
+          </Grid>
+        </Grid>
       </Container>
-      <Typography gutterBottom align="left">
-        brightness
-      </Typography>
-      <Grid container>
-        <Grid item>
-          <Brightness5OutlinedIcon /> &nbsp;
-        </Grid>
-        <Grid item xs>
-          <Slider
-            min={-1.0}
-            max={1.0}
-            step={0.05}
-            value={brightness}
-            onChange={(event, newValue) => setBrightness(newValue)}
-            valueLabelDisplay="auto"
-          />
-        </Grid>
-      </Grid>
-      <Typography gutterBottom align="left">
-        contrast
-      </Typography>
-      <Grid container>
-        <Grid item>
-          <Brightness6OutlinedIcon /> &nbsp;
-        </Grid>
-        <Grid item xs>
-          <Slider
-            min={-1.0}
-            max={1.0}
-            step={0.05}
-            value={contrast}
-            onChange={(event, newValue) => setContrast(newValue)}
-            valueLabelDisplay="auto"
-          />
-        </Grid>
-      </Grid>
-
-      <Typography gutterBottom align="left">
-        blur
-      </Typography>
-      <Grid container>
-        <Grid item>
-          <BlurOnOutlinedIcon /> &nbsp;
-        </Grid>
-        <Grid item xs>
-          <Slider
-            min={0}
-            max={10}
-            value={blur}
-            onChange={(event, newValue) => setBlur(newValue)}
-            valueLabelDisplay="auto"
-          />
-        </Grid>
-      </Grid>
-
-      <Typography gutterBottom align="left">
-        threshold
-      </Typography>
-      <Grid container>
-        <Grid item>
-          <BrokenImageOutlinedIcon /> &nbsp;
-        </Grid>
-        <Grid item xs>
-          <Slider min={0} max={255} value={threshold} onChange={(event, newValue) => setThreshold(newValue)} />
-        </Grid>
-      </Grid>
 
       {/* <Typography variant="h5">color adjustments (slow)</Typography> */}
       {/* <Typography gutterBottom>saturation</Typography> */}

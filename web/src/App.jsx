@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { Grid } from '@material-ui/core';
 import './App.css';
 import AppBar from '@material-ui/core/AppBar';
@@ -10,6 +10,7 @@ import { makeStyles } from '@material-ui/core/styles';
 import SourceImage from './SourceImage';
 import ImagePreProcessor from './ImagePreProcessor';
 import Retropixels from './Retropixels';
+import Logo from './logo.svg';
 
 // https://github.com/harishmahamure/photoCompress
 
@@ -43,7 +44,8 @@ function App() {
         <div className={classes.root}>
           <AppBar position="static">
             <Toolbar variant="dense">
-              <Typography variant="h6" className={classes.title}>
+              <img src={Logo} alt="Logo" className="logo" />
+              <Typography variant="h6" className={classes.title} align="left">
                 Retropixels
               </Typography>
               <Button color="inherit" href="https://github.com/micheldebree/retropixels">
@@ -60,7 +62,7 @@ function App() {
             <ImagePreProcessor jimpImage={sourceImage} onChanged={jimpImage => setProcessedImage(jimpImage)} />
           </Grid>
           <Grid item xs>
-            <Retropixels jimpImage={processedImage} filename={filename}/>
+            <Retropixels jimpImage={processedImage} filename={filename} />
           </Grid>
         </Grid>
       </body>
