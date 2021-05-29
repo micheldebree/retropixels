@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import * as Jimp from 'jimp';
-import { Button, Container, Grid, FormControlLabel, Checkbox, Slider, FormLabel } from '@material-ui/core';
+import { Button, Container } from '@material-ui/core';
 import Brightness5OutlinedIcon from '@material-ui/icons/Brightness5Outlined';
 import Brightness6OutlinedIcon from '@material-ui/icons/Brightness6Outlined';
 import BrokenImageOutlinedIcon from '@material-ui/icons/BrokenImageOutlined';
@@ -10,6 +10,9 @@ import AutorenewIcon from '@material-ui/icons/Autorenew';
 import { getImageDataFromJimpImage, cropJimpImage, abbreviateFilename } from './Utilities';
 import ImageUpload from './ImageUpload';
 import ProfileSelection from './ProfileSelection';
+import MyCheckbox from './MyCheckbox';
+import MySlider from './MySlider';
+import ResetButton from './ResetButton';
 
 function ImagePreProcessor(props) {
   const { onChanged } = props;
@@ -26,11 +29,19 @@ function ImagePreProcessor(props) {
   const blurDefault = 0;
   const thresholdDefault = 0;
 
+  // the originally uploaded image
   const [sourceImage, setSourceImage] = useState(undefined);
+
+  // the source image after cropping
   const [croppedImage, setCroppedImage] = useState(undefined);
+
+  // the final processed image
   const [image, setImage] = useState(undefined);
-  const [filename, setFilename] = useState('input');
+
+  // the image data to show on the canvas
   const [imageData, setImageData] = useState(undefined);
+
+  const [filename, setFilename] = useState('input');
   const [scale, setScale] = useState('fill');
   const [normalize, setNormalize] = useState(normalizeDefault);
   const [greyscale, setGreyscale] = useState(greyscaleDefault);
@@ -84,6 +95,7 @@ function ImagePreProcessor(props) {
     setCroppedImage(newImage);
   }, [sourceImage, scale]);
 
+  // if the cropped image or any of the controls change, update the image
   useEffect(() => {
     if (croppedImage === undefined) {
       return;
@@ -142,137 +154,78 @@ function ImagePreProcessor(props) {
           onChange={value => {
             setScale(value);
           }}
+          tooltip="Type of cropping to apply to source image"
         />
-      </Container>
-      <Container align="left">
-        <Button size="small" disabled={defaultsSet} startIcon={<AutorenewIcon />} onClick={() => reset()}>
-          defaults
-        </Button>
       </Container>
 
+      <ResetButton onClick={reset} disabled={defaultsSet}/>
+
       <Container align="left">
-        <FormControlLabel
-          control={
-            <Checkbox
-              checked={normalize}
-              onChange={() => {
-                setNormalize(!normalize);
-              }}
-              name="normalizeCheckbox"
-            />
-          }
+        <MyCheckbox
+          name="normalize"
           label="normalize"
+          value={normalize}
+          onChange={v => setNormalize(v)}
+          tooltip="Stretch color intensities to their full range"
         />
-        <FormControlLabel
-          control={
-            <Checkbox
-              checked={greyscale}
-              onChange={() => {
-                setGreyscale(!greyscale);
-              }}
-              name="greyscaleCheckbox"
-            />
-          }
+        <MyCheckbox
+          name="greyscale"
           label="greyscale"
+          value={greyscale}
+          onChange={v => setGreyscale(v)}
+          tooltip="Convert to black and white"
         />
-        <FormControlLabel
-          control={
-            <Checkbox
-              checked={invert}
-              onChange={() => {
-                setInvert(!invert);
-              }}
-              name="invertCheckbox"
-            />
-          }
-          label="invert"
-        />
-        <FormControlLabel
-          control={
-            <Checkbox
-              checked={mirrorHor}
-              onChange={() => {
-                setMirrorHor(!mirrorHor);
-              }}
-              name="mirrorHorCheckbox"
-            />
-          }
+        <MyCheckbox name="invert" label="invert" value={invert} onChange={v => setInvert(v)} tooltip="Invert colors" />
+        <MyCheckbox
+          name="mirrorHor"
           label="flip horizontal"
+          value={mirrorHor}
+          onChange={v => setMirrorHor(v)}
+          tooltip="Mirror image horizontally"
         />
-        <FormControlLabel
-          control={
-            <Checkbox
-              checked={mirrorVer}
-              onChange={() => {
-                setMirrorVer(!mirrorVer);
-              }}
-              name="mirrorVerCheckbox"
-            />
-          }
+        <MyCheckbox
+          name="mirrorVer"
           label="flip vertical"
+          value={mirrorVer}
+          onChange={v => setMirrorVer(v)}
+          tooltip="Mirror image vertically"
         />
-        <FormLabel component="legend">brightness</FormLabel>
-        <Grid container>
-          <Grid item>
-            <Brightness5OutlinedIcon /> &nbsp;
-          </Grid>
-          <Grid item xs>
-            <Slider
-              min={-1.0}
-              max={1.0}
-              step={0.05}
-              value={brightness}
-              onChange={(event, newValue) => setBrightness(newValue)}
-              valueLabelDisplay="auto"
-            />
-          </Grid>
-        </Grid>
-        <FormLabel component="legend">contrast</FormLabel>
-        <Grid container>
-          <Grid item>
-            <Brightness6OutlinedIcon /> &nbsp;
-          </Grid>
-          <Grid item xs>
-            <Slider
-              min={-1.0}
-              max={1.0}
-              step={0.05}
-              value={contrast}
-              onChange={(event, newValue) => setContrast(newValue)}
-              valueLabelDisplay="auto"
-            />
-          </Grid>
-        </Grid>
-        <FormLabel component="legend">blur</FormLabel>
-        <Grid container>
-          <Grid item>
-            <BlurOnOutlinedIcon /> &nbsp;
-          </Grid>
-          <Grid item xs>
-            <Slider
-              min={0}
-              max={10}
-              value={blur}
-              onChange={(event, newValue) => setBlur(newValue)}
-              valueLabelDisplay="auto"
-            />
-          </Grid>
-        </Grid>
-        <FormLabel component="legend">threshold</FormLabel>
-        <Grid container>
-          <Grid item>
-            <BrokenImageOutlinedIcon /> &nbsp;
-          </Grid>
-          <Grid item xs>
-            <Slider
-              min={0}
-              max={255}
-              value={threshold}
-              onChange={(event, newValue) => setThreshold(newValue)}
-              valueLabelDisplay="auto"
-            />
-          </Grid>
-        </Grid>
+        <MySlider
+          label="brightness"
+          value={brightness}
+          min={-1.0}
+          max={1.0}
+          step={0.05}
+          onChange={v => setBrightness(v)}
+          tooltip="Adjust image brightness"
+          icon={<Brightness5OutlinedIcon />}
+        />
+        <MySlider
+          label="contrast"
+          value={contrast}
+          min={-1.0}
+          max={1.0}
+          step={0.05}
+          onChange={v => setContrast(v)}
+          tooltip="Adjust image contrast"
+          icon={<Brightness6OutlinedIcon />}
+        />
+        <MySlider
+          label="blur"
+          value={blur}
+          max={10}
+          onChange={v => setBlur(v)}
+          tooltip="Blur image by this many pixels"
+          icon={<BlurOnOutlinedIcon />}
+        />
+        <MySlider
+          label="threshold"
+          value={threshold}
+          max={255}
+          onChange={v => setThreshold(v)}
+          tooltip="Convert to black and white and remove pixels below this intensity threshold. (0 = off)"
+          icon={<BrokenImageOutlinedIcon />}
+        />
       </Container>
     </>
   );

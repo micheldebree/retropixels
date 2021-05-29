@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Grid, AppBar, Toolbar, Typography, Button, Link } from '@material-ui/core';
+import { Grid, AppBar, Toolbar, Typography, Button, Link, Container } from '@material-ui/core';
 import './App.css';
 import GitHubIcon from '@material-ui/icons/GitHub';
 import { makeStyles } from '@material-ui/core/styles';
@@ -34,7 +34,6 @@ function App() {
   }
   return (
     <div className="App">
-      {/* <header className="App-header">Retropixels</header> */}
       <body className="App-body">
         <div className={classes.root}>
           <AppBar position="static">
@@ -52,6 +51,11 @@ function App() {
             </Toolbar>
           </AppBar>
         </div>
+        <Container align="left">
+          <Typography variant="overline">
+            Convert images to <Link href="https://en.wikipedia.org/wiki/Commodore_64">Commodore 64</Link> format
+          </Typography>
+        </Container>
         <Grid container spacing={3}>
           <Grid item xs>
             <ImagePreProcessor onChanged={onSourceImageChanged} />

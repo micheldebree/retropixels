@@ -1,14 +1,16 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
-import { Button, Container, Grid, Slider, Checkbox, FormControlLabel, FormLabel } from '@material-ui/core';
+import { Button, Container, Tooltip } from '@material-ui/core';
 import BlurLinearIcon from '@material-ui/icons/BlurLinear';
 import CloudDownloadIcon from '@material-ui/icons/CloudDownload';
-import AutorenewIcon from '@material-ui/icons/Autorenew';
 import { C64Writer } from 'retropixels-core';
 import { saveAs } from 'file-saver';
+import { parseFilename } from './Utilities';
 import ProfileSelection from './ProfileSelection';
 import TargetImage from './TargetImage';
-import { parseFilename } from './Utilities';
+import MyCheckbox from './MyCheckbox';
+import MySlider from './MySlider';
+import ResetButton from './ResetButton';
 
 // wraps the Targetimage with controls for the various properties
 function Retropixels(props) {
@@ -22,6 +24,7 @@ function Retropixels(props) {
   const paletteDefault = 'colodore';
   const colorspaceDefault = 'xyz';
   const hiresDefault = false;
+  const nomapsDefault = false;
   const ditherRadiusDefault = 32;
 
   const { jimpImage, filename } = props;
@@ -30,6 +33,7 @@ function Retropixels(props) {
   const [colorspace, setColorSpace] = useState(colorspaceDefault);
   const [palette, setPalette] = useState(paletteDefault);
   const [hires, setHires] = useState(hiresDefault);
+  const [nomaps, setNomaps] = useState(nomapsDefault);
   const [dither, setDither] = useState(ditherDefault);
   const [ditherRadius, setDitherRadius] = useState(ditherRadiusDefault);
 
@@ -48,6 +52,7 @@ function Retropixels(props) {
     setColorSpace(colorspaceDefault);
     setPalette(paletteDefault);
     setHires(hiresDefault);
+    setNomaps(nomapsDefault);
     setDither(ditherDefault);
     setDitherRadius(ditherRadiusDefault);
   }
@@ -80,6 +85,7 @@ function Retropixels(props) {
     colorspace === colorspaceDefault &&
     palette === paletteDefault &&
     hires === hiresDefault &&
+    nomaps === nomapsDefault &&
     dither === ditherDefault &&
     ditherRadius === ditherRadiusDefault;
 
@@ -91,6 +97,7 @@ function Retropixels(props) {
           jimpImage={jimpImage}
           onChanged={onNewPixelImage}
           hires={hires}
+          nomaps={nomaps}
           colorspaceId={colorspace}
           paletteId={palette}
           ditherId={dither}
@@ -98,34 +105,33 @@ function Retropixels(props) {
         />
       </Container>
       <Container>
-        <Button
-          variant="contained"
-          disabled={pixelImage === undefined}
-          color="primary"
-          startIcon={<CloudDownloadIcon />}
-          onClick={() => saveOutput()}
-        >
-          Download
-        </Button>
+        <Tooltip title={`Download the image as ${outputFormat}`} arrow>
+          <Button
+            variant="contained"
+            disabled={pixelImage === undefined}
+            color="primary"
+            startIcon={<CloudDownloadIcon />}
+            onClick={() => saveOutput()}
+          >
+            Download
+          </Button>
+        </Tooltip>
       </Container>
+      <ResetButton onClick={reset} disabled={defaultsSet} />
       <Container align="left">
-        <Button size="small" disabled={defaultsSet} startIcon={<AutorenewIcon />} onClick={() => reset()}>
-          defaults
-        </Button>
-      </Container>
-      <Container align="left">
-        {/* TODO: use generic checkbox */}
-        <FormControlLabel
-          control={
-            <Checkbox
-              checked={hires}
-              onChange={() => {
-                setHires(!hires);
-              }}
-              name="mirrorHorCheckbox"
-            />
-          }
+        <MyCheckbox
+          name="hires"
           label="hires"
+          value={hires}
+          onChange={v => setHires(v)}
+          tooltip="Use high resolution mode instead of multi color"
+        />
+        <MyCheckbox
+          name="nomaps"
+          label="single color layers"
+          value={nomaps}
+          onChange={v => setNomaps(v)}
+          tooltip="Restrict each attribute layer to a single color"
         />
       </Container>
       <Container align="left">
@@ -134,30 +140,31 @@ function Retropixels(props) {
           value={colorspace}
           items={colorspaceOptions}
           onChange={value => setColorSpace(value)}
+          tooltip="Convert colors to this color space before quantizing"
         />
         <ProfileSelection
           label="palette"
           value={palette}
           items={paletteOptions}
           onChange={value => setPalette(value)}
+          tooltip="Use this palette for quantizing"
         />
-        <ProfileSelection label="dithering" value={dither} items={ditherOptions} onChange={value => setDither(value)} />
-        <FormLabel component="legend">dithering strength</FormLabel>
-        <Grid container>
-          <Grid item>
-            <BlurLinearIcon /> &nbsp;
-          </Grid>
-          <Grid item xs>
-            <Slider
-              disabled={dither === 'none'}
-              min={0}
-              max={64}
-              value={ditherRadius}
-              onChange={(event, newValue) => setDitherRadius(newValue)}
-              valueLabelDisplay="auto"
-            />
-          </Grid>
-        </Grid>
+        <ProfileSelection
+          label="dithering"
+          value={dither}
+          items={ditherOptions}
+          onChange={value => setDither(value)}
+          tooltip="Type of dithering to apply"
+        />
+        <MySlider
+          label="dithering strength"
+          value={ditherRadius}
+          max={64}
+          onChange={v => setDitherRadius(v)}
+          tooltip="Strength of dithering"
+          icon={<BlurLinearIcon />}
+          disabled={dither === 'none'}
+        />
       </Container>
     </>
   );
