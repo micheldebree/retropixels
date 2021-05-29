@@ -1,8 +1,0 @@
-{
-	"recommendations": [
-		"EditorConfig.editorconfig",
-		"dbaeumer.vscode-eslint",
-		"rbbit.typescript-hero",
-		"esbenp.prettier-vscode"
-	]
-}
