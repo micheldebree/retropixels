@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import Jimp from 'jimp/es';
 import PropTypes from 'prop-types';
 import { useDropzone } from 'react-dropzone';
-import { Container, Box, Snackbar } from '@material-ui/core';
+import { Container, Box, Snackbar, Typography } from '@material-ui/core';
 import { Alert } from '@material-ui/lab';
 import Canvas from './Canvas';
 
@@ -53,11 +53,13 @@ function ImageUpload(props) {
 
   return (
     <Container>
-      <Box border={1} m={1} boxShadow={2} borderRadius="borderRadius" borderColor="grey.500">
+      <Box border={0} m={1} boxShadow={2} borderRadius="borderRadius" borderColor="textSecondary">
         <div {...getRootProps({ className: 'dropzone' })}>
           <input {...getInputProps()} />
           <Canvas width={320} height={200} imageData={imageData} />
-          <p>Drop image here, or click to select image</p>
+          <Typography color="textSecondary" gutterBottom>
+            Drop image here, or click to browse
+          </Typography>
         </div>
       </Box>
       <Snackbar open={error} autoHideDuration={6000} onClose={() => setError(undefined)}>

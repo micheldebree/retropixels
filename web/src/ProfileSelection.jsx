@@ -1,29 +1,27 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import Radio from '@material-ui/core/Radio';
-import RadioGroup from '@material-ui/core/RadioGroup';
-import FormControlLabel from '@material-ui/core/FormControlLabel';
-import FormControl from '@material-ui/core/FormControl';
-import FormLabel from '@material-ui/core/FormLabel';
+import { Radio, RadioGroup, FormControlLabel, FormControl, FormLabel, Tooltip } from '@material-ui/core';
 
 function ProfileSelection(props) {
-  const { label, value, items, onChange } = props;
+  const { label, value, items, onChange, tooltip } = props;
 
   return (
-    <FormControl component="fieldset">
-      <FormLabel component="legend">{label}</FormLabel>
-      <RadioGroup
-        row
-        aria-label={label}
-        name={`select${label}`}
-        value={value}
-        onChange={event => onChange(event.target.value)}
-      >
-        {items.map(i => (
-          <FormControlLabel value={i} control={<Radio />} label={i} />
-        ))}
-      </RadioGroup>
-    </FormControl>
+    <Tooltip title={tooltip}>
+      <FormControl component="fieldset">
+        <FormLabel component="legend">{label}</FormLabel>
+        <RadioGroup
+          row
+          aria-label={label}
+          name={`select${label}`}
+          value={value}
+          onChange={event => onChange(event.target.value)}
+        >
+          {items.map(i => (
+            <FormControlLabel value={i} control={<Radio />} label={i} />
+          ))}
+        </RadioGroup>
+      </FormControl>
+    </Tooltip>
   );
 }
 
@@ -31,7 +29,8 @@ ProfileSelection.propTypes = {
   label: PropTypes.string,
   value: PropTypes.string.isRequired,
   items: PropTypes.arrayOf(PropTypes.string.isRequired).isRequired,
-  onChange: PropTypes.func.isRequired
+  onChange: PropTypes.func.isRequired,
+  tooltip: PropTypes.string.isRequired
 };
 
 ProfileSelection.defaultProps = {
