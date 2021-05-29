@@ -35,6 +35,23 @@ export function getImageDataFromJimpImage(jimpImage) {
     : undefined;
 }
 
+export function cropJimpImage(jimpImage) {
+  const isTooSmall = jimpImage.bitmap.width < 320 || jimpImage.bitmap.height < 200;
+  let blitImage;
+
+  // if the image is too small, the cropped image is cleared,
+  // and then the smaller image is blitted onto it
+  // this is a workaround for artifacts when cropping images to larger sizes
+  if (isTooSmall) {
+    blitImage = jimpImage.clone();
+  }
+  jimpImage.crop(0, 0, 320, 200);
+  if (blitImage !== undefined) {
+    this.clearJimpImage(jimpImage);
+    jimpImage.blit(blitImage, 0, 0);
+  }
+}
+
 export function clearJimpImage(jimpImage) {
   jimpImage.scan(0, 0, jimpImage.bitmap.width, jimpImage.bitmap.height, (x, y, idx) => {
     // this is the image

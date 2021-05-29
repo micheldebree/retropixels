@@ -1,16 +1,18 @@
 import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
+import * as Jimp from 'jimp';
 import { Button, Container, Grid, FormControlLabel, Checkbox, Slider, FormLabel } from '@material-ui/core';
 import Brightness5OutlinedIcon from '@material-ui/icons/Brightness5Outlined';
 import Brightness6OutlinedIcon from '@material-ui/icons/Brightness6Outlined';
 import BrokenImageOutlinedIcon from '@material-ui/icons/BrokenImageOutlined';
 import BlurOnOutlinedIcon from '@material-ui/icons/BlurOnOutlined';
 import AutorenewIcon from '@material-ui/icons/Autorenew';
-import { getImageDataFromJimpImage } from './Utilities';
-import Canvas from './Canvas';
+import { getImageDataFromJimpImage, cropJimpImage, abbreviateFilename } from './Utilities';
+import ImageUpload from './ImageUpload';
+import ProfileSelection from './ProfileSelection';
 
 function ImagePreProcessor(props) {
-  const { jimpImage, onChanged } = props;
+  const { onChanged } = props;
 
   // defaults
 
@@ -24,8 +26,12 @@ function ImagePreProcessor(props) {
   const blurDefault = 0;
   const thresholdDefault = 0;
 
+  const [sourceImage, setSourceImage] = useState(undefined);
+  const [croppedImage, setCroppedImage] = useState(undefined);
   const [image, setImage] = useState(undefined);
+  const [filename, setFilename] = useState('input');
   const [imageData, setImageData] = useState(undefined);
+  const [scale, setScale] = useState('fill');
   const [normalize, setNormalize] = useState(normalizeDefault);
   const [greyscale, setGreyscale] = useState(greyscaleDefault);
   const [mirrorHor, setMirrorHor] = useState(mirrorHorDefault);
@@ -35,7 +41,6 @@ function ImagePreProcessor(props) {
   const [contrast, setContrast] = useState(contrastDefault);
   const [blur, setBlur] = useState(blurDefault);
   const [threshold, setThreshold] = useState(thresholdDefault);
-  // const [saturation, setSaturation] = useState(0);
 
   function reset() {
     setNormalize(normalizeDefault);
@@ -49,16 +54,41 @@ function ImagePreProcessor(props) {
     setThreshold(thresholdDefault);
   }
 
-  useEffect(() => {
-    onChanged(image);
-    setImageData(getImageDataFromJimpImage(image));
-  }, [image, onChanged]);
+  function onUploaded(newUploadedImage) {
+    setSourceImage(newUploadedImage.jimpImage);
+    setFilename(newUploadedImage.filename);
+  }
 
+  // if the processed image has changed, notify owner
   useEffect(() => {
-    if (jimpImage === undefined) {
+    if (image !== undefined) {
+      onChanged({ jimpImage: image, filename });
+      setImageData(getImageDataFromJimpImage(image));
+    }
+  }, [image, onChanged, filename]);
+
+  // if the source image has changed, apply cropping
+  useEffect(() => {
+    if (sourceImage === undefined) {
       return;
     }
-    const newImage = jimpImage.clone();
+
+    const newImage = sourceImage.clone();
+    if (scale === 'fill') {
+      newImage.cover(320, 200, Jimp.RESIZE_HERMITE);
+    } else if (scale === 'fit') {
+      newImage.contain(320, 200, Jimp.RESIZE_HERMITE);
+    } else {
+      cropJimpImage(newImage);
+    }
+    setCroppedImage(newImage);
+  }, [sourceImage, scale]);
+
+  useEffect(() => {
+    if (croppedImage === undefined) {
+      return;
+    }
+    const newImage = croppedImage.clone();
 
     if (greyscale) {
       newImage.greyscale();
@@ -85,7 +115,7 @@ function ImagePreProcessor(props) {
     }
 
     setImage(newImage);
-  }, [jimpImage, normalize, brightness, contrast, greyscale, blur, mirrorHor, mirrorVer, invert, threshold]);
+  }, [croppedImage, normalize, brightness, contrast, greyscale, blur, mirrorHor, mirrorVer, invert, threshold]);
 
   const defaultsSet =
     normalize === normalizeDefault &&
@@ -100,13 +130,23 @@ function ImagePreProcessor(props) {
 
   return (
     <>
-      <h4>pre-processing</h4>
+      <h4>{abbreviateFilename(filename, 30)}</h4>
       <Container>
-        <Canvas width={320} height={200} imageData={imageData} />
+        <ImageUpload imageData={imageData} onload={onUploaded} />
       </Container>
-      <Container>
-        <Button variant="contained" disabled={defaultsSet} onClick={() => reset()}>
-          <AutorenewIcon /> &nbsp; defaults
+      <Container align="left">
+        <ProfileSelection
+          label="cropping"
+          items={['crop', 'fill', 'fit']}
+          value={scale}
+          onChange={value => {
+            setScale(value);
+          }}
+        />
+      </Container>
+      <Container align="left">
+        <Button size="small" disabled={defaultsSet} startIcon={<AutorenewIcon />} onClick={() => reset()}>
+          defaults
         </Button>
       </Container>
 
@@ -147,8 +187,6 @@ function ImagePreProcessor(props) {
           }
           label="invert"
         />
-      </Container>
-      <Container align="left">
         <FormControlLabel
           control={
             <Checkbox
@@ -236,34 +274,12 @@ function ImagePreProcessor(props) {
           </Grid>
         </Grid>
       </Container>
-
-      {/* <Typography variant="h5">color adjustments (slow)</Typography> */}
-      {/* <Typography gutterBottom>saturation</Typography> */}
-      {/* <Grid container> */}
-      {/*   <Grid item> */}
-      {/*     <FormatColorResetOutlinedIcon /> */}
-      {/*   </Grid> */}
-      {/*   <Grid item xs> */}
-      {/*     <Slider */}
-      {/*       min={-100} */}
-      {/*       max={100} */}
-      {/*       value={saturation} */}
-      {/*       onChange={(event, newValue) => setSaturation(newValue)} */}
-      {/*       valueLabelDisplay="on" */}
-      {/*     /> */}
-      {/*   </Grid> */}
-      {/* </Grid> */}
     </>
   );
 }
 
 ImagePreProcessor.propTypes = {
-  jimpImage: PropTypes.shape(),
   onChanged: PropTypes.func.isRequired
-};
-
-ImagePreProcessor.defaultProps = {
-  jimpImage: undefined
 };
 
 export default ImagePreProcessor;

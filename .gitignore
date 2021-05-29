@@ -14,3 +14,6 @@ acme-master
 src/c64/*.txt
 .run
 web/build
+.vscode
+*.vim
+*.code-workspace

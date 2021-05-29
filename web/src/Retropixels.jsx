@@ -98,23 +98,20 @@ function Retropixels(props) {
         />
       </Container>
       <Container>
-        <Grid container>
-          <Grid item xs>
-            <Button variant="contained" disabled={defaultsSet} onClick={() => reset()}>
-              <AutorenewIcon /> &nbsp; defaults
-            </Button>
-          </Grid>
-          <Grid item xs>
-            <Button
-              variant="contained"
-              disabled={pixelImage === undefined}
-              color="primary"
-              onClick={() => saveOutput()}
-            >
-              <CloudDownloadIcon /> &nbsp; Download
-            </Button>
-          </Grid>
-        </Grid>
+        <Button
+          variant="contained"
+          disabled={pixelImage === undefined}
+          color="primary"
+          startIcon={<CloudDownloadIcon />}
+          onClick={() => saveOutput()}
+        >
+          Download
+        </Button>
+      </Container>
+      <Container align="left">
+        <Button size="small" disabled={defaultsSet} startIcon={<AutorenewIcon />} onClick={() => reset()}>
+          defaults
+        </Button>
       </Container>
       <Container align="left">
         {/* TODO: use generic checkbox */}

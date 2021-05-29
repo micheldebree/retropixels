@@ -3,7 +3,6 @@ import { Grid, AppBar, Toolbar, Typography, Button, Link } from '@material-ui/co
 import './App.css';
 import GitHubIcon from '@material-ui/icons/GitHub';
 import { makeStyles } from '@material-ui/core/styles';
-import SourceImage from './SourceImage';
 import ImagePreProcessor from './ImagePreProcessor';
 import Retropixels from './Retropixels';
 import Logo from './logo.svg';
@@ -25,7 +24,6 @@ const useStyles = makeStyles(theme => ({
 
 function App() {
   const [sourceImage, setSourceImage] = useState(undefined);
-  const [processedImage, setProcessedImage] = useState(undefined);
   const [filename, setFilename] = useState(undefined);
 
   const classes = useStyles();
@@ -56,13 +54,10 @@ function App() {
         </div>
         <Grid container spacing={3}>
           <Grid item xs>
-            <SourceImage onChanged={onSourceImageChanged} />
+            <ImagePreProcessor onChanged={onSourceImageChanged} />
           </Grid>
           <Grid item xs>
-            <ImagePreProcessor jimpImage={sourceImage} onChanged={jimpImage => setProcessedImage(jimpImage)} />
-          </Grid>
-          <Grid item xs>
-            <Retropixels jimpImage={processedImage} filename={filename} />
+            <Retropixels jimpImage={sourceImage} filename={filename} />
           </Grid>
         </Grid>
       </body>
