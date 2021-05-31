@@ -13,7 +13,7 @@ export default class Debugger {
         colorMap.forEachCell((x, y) => {
           colorMap.forEachPixelInCell(x, y, (xx, yy) => {
             const index = colorMap.get(xx, yy);
-            const pixel: number[] = Palettes.colodore.get(index);
+            const pixel: number[] = Palettes.colodore.colors[index];
             Pixels.poke(image.bitmap, xx, yy, pixel);
           });
         });
@@ -40,7 +40,7 @@ export default class Debugger {
         for (let x = 0; x < width; x++) {
           for (let y = 0; y < width; y++) {
             const index = quantizedImage[x + y * width];
-            const pixel: number[] = Palettes.colodore.get(index);
+            const pixel: number[] = Palettes.colodore.colors[index];
             Pixels.poke(image.bitmap, x, y, pixel);
           }
         }

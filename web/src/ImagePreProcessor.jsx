@@ -158,7 +158,7 @@ function ImagePreProcessor(props) {
         />
       </Container>
 
-      <ResetButton onClick={reset} disabled={defaultsSet}/>
+      <ResetButton onClick={reset} disabled={defaultsSet} />
 
       <Container align="left">
         <MyCheckbox

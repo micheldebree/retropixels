@@ -1,11 +1,10 @@
 export default class Palette {
-  public pixels: number[][];
+  public colors: number[][];
 
-  constructor(pixels: number[][]) {
-    this.pixels = pixels === undefined ? [] : pixels;
-  }
+  public enabled: number[] = [];
 
-  public get(index: number): number[] {
-    return this.pixels[index];
+  constructor(colors: number[][]) {
+    this.colors = colors;
+    colors.forEach((color, index) => this.enabled.push(index));
   }
 }
