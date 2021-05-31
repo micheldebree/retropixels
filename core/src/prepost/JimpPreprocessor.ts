@@ -53,7 +53,7 @@ export default class JimpPreprocessor {
           pixelValue = [0, 0, 0, 0xff];
         } else {
           const paletteIndex = pixelImage.peek(x, y);
-          pixelValue = paletteIndex !== undefined ? palette.get(paletteIndex) : Pixels.emptyPixel;
+          pixelValue = paletteIndex !== undefined ? palette.colors[paletteIndex] : Pixels.emptyPixel;
         }
 
         Pixels.poke(image.bitmap, x, y, pixelValue);

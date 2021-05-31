@@ -73,7 +73,7 @@ export function getImageDataFromPixelImage(pixelImage) {
   for (let y = 0; y < pixelImage.mode.height; y++) {
     for (let x = 0; x < pixelImage.mode.width; x++) {
       const paletteIndex = pixelImage.peek(x, y);
-      const pixelValue = paletteIndex !== undefined ? Palettes.all.colodore.get(paletteIndex) : [0, 0, 0, 0];
+      const pixelValue = paletteIndex !== undefined ? Palettes.all.colodore.colors[paletteIndex] : [0, 0, 0, 0];
       for (let xx = 0; xx < pixelImage.mode.pixelWidth; xx++) {
         const index = y * 4 * imageWidth + x * pixelImage.mode.pixelWidth * 4 + xx * 4;
         imageData.data[index] = pixelValue[0];

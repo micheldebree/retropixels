@@ -30,13 +30,15 @@ export default class Quantizer {
 
   constructor(palette: Palette, colorspace: (pixel: number[]) => number[]) {
     this.colorspace = colorspace;
+    //
     // convert palette to colorspace first
-    this.palette = new Palette(palette.pixels.map(p => colorspace(p)));
+    this.palette = new Palette(palette.colors.map(p => colorspace(p)));
+    this.palette.enabled = palette.enabled;
   }
 
   public distance = (realPixel: number[], paletteIndex: number): number => {
     const realPixelConverted = this.colorspace(realPixel);
-    const palettePixel = this.palette.get(paletteIndex);
+    const palettePixel = this.palette.colors[paletteIndex];
 
     return Math.sqrt(
       (realPixelConverted[0] - palettePixel[0]) ** 2 +
@@ -55,9 +57,8 @@ export default class Quantizer {
     // then reduce to just the element with the lowest distance,
     // and return just the index.
 
-    // TODO: simplify
-    return this.palette.pixels
-      .map((palettePixel, index) => [index, this.distance(pixel, index)])
+    return this.palette.enabled
+      .map(index => [index, this.distance(pixel, index)])
       .reduce((acc, current) => (current[1] < acc[1] ? current : acc), [null, Number.POSITIVE_INFINITY])[0];
   }
 
