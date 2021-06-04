@@ -94,7 +94,7 @@ function Retropixels(props) {
 
   return (
     <Grid container>
-      <Grid item>
+      <Grid item xs>
         <h4>{outputFormat}</h4>
         <Container>
           <TargetImage
@@ -172,10 +172,9 @@ function Retropixels(props) {
           />
         </Container>
       </Grid>
-      <Grid item>
+      <Grid item xs>
         <PaletteControl
           palette={Palettes.all[palette]}
-          enabledColors={enabledColors}
           onChange={newEnabledColors => setEnabledColors(newEnabledColors)}
         />
       </Grid>

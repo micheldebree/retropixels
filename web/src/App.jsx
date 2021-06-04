@@ -57,10 +57,10 @@ function App() {
           </Typography>
         </Container>
         <Grid container spacing={3}>
-          <Grid item xs>
+          <Grid item xs={4}>
             <ImagePreProcessor onChanged={onSourceImageChanged} />
           </Grid>
-          <Grid item xs>
+          <Grid item xs={8}>
             <Retropixels jimpImage={sourceImage} filename={filename} />
           </Grid>
         </Grid>
