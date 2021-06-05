@@ -13,19 +13,19 @@ import MySlider from './MySlider';
 import ResetButton from './ResetButton';
 import PaletteControl from './PaletteControl';
 
-// wraps the Targetimage with controls for the various properties
+// options
+const ditherOptions = ['none', 'bayer2x2', 'bayer4x4', 'bayer8x8'];
+const colorspaceOptions = ['rgb', 'yuv', 'xyz', 'rainbow'];
+
+// defaults
+const ditherDefault = 'bayer4x4';
+const paletteDefault = Palettes.all.colodore;
+const colorspaceDefault = 'xyz';
+const hiresDefault = false;
+const nomapsDefault = false;
+const ditherRadiusDefault = 32;
+
 function Retropixels(props) {
-  const ditherOptions = ['none', 'bayer2x2', 'bayer4x4', 'bayer8x8'];
-  const colorspaceOptions = ['rgb', 'yuv', 'xyz', 'rainbow'];
-
-  // defaults
-  const ditherDefault = 'bayer4x4';
-  const paletteDefault = Palettes.all.colodore;
-  const colorspaceDefault = 'xyz';
-  const hiresDefault = false;
-  const nomapsDefault = false;
-  const ditherRadiusDefault = 32;
-
   const { jimpImage, filename } = props;
 
   const [pixelImage, setPixelImage] = useState(undefined);
@@ -37,10 +37,7 @@ function Retropixels(props) {
   const [ditherRadius, setDitherRadius] = useState(ditherRadiusDefault);
 
   // memoize the callback to avoid re-renders
-  const paletteCallback = useCallback(p => {
-    setPalette(p);
-    console.log(p);
-  }, []);
+  const paletteCallback = useCallback(p => setPalette(p), []);
 
   let targetFilename = 'output';
   if (pixelImage !== undefined) {
@@ -55,7 +52,6 @@ function Retropixels(props) {
 
   function reset() {
     setColorSpace(colorspaceDefault);
-    setPalette(paletteDefault);
     setHires(hiresDefault);
     setNomaps(nomapsDefault);
     setDither(ditherDefault);
@@ -88,7 +84,6 @@ function Retropixels(props) {
 
   const defaultsSet =
     colorspace === colorspaceDefault &&
-    palette === paletteDefault &&
     hires === hiresDefault &&
     nomaps === nomapsDefault &&
     dither === ditherDefault &&
@@ -166,7 +161,8 @@ function Retropixels(props) {
           />
         </Container>
       </Grid>
-      <Grid item xs align="left">
+      <Grid item xs>
+        <h4>palette</h4>
         <PaletteControl onChange={paletteCallback} />
       </Grid>
     </Grid>
