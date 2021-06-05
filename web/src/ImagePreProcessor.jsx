@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useCallback } from 'react';
 import PropTypes from 'prop-types';
 import * as Jimp from 'jimp';
 import { Container } from '@material-ui/core';
@@ -52,6 +52,12 @@ function ImagePreProcessor(props) {
   const [blur, setBlur] = useState(blurDefault);
   const [threshold, setThreshold] = useState(thresholdDefault);
 
+  // memoize the callback to avoid re-rendering
+  const onLoadedCallback = useCallback(img => {
+    setSourceImage(img.jimpImage);
+    setFilename(img.filename);
+  }, []);
+
   function reset() {
     setNormalize(normalizeDefault);
     setGreyscale(greyscaleDefault);
@@ -62,11 +68,6 @@ function ImagePreProcessor(props) {
     setContrast(contrastDefault);
     setBlur(blurDefault);
     setThreshold(thresholdDefault);
-  }
-
-  function onUploaded(newUploadedImage) {
-    setSourceImage(newUploadedImage.jimpImage);
-    setFilename(newUploadedImage.filename);
   }
 
   // if the processed image has changed, notify owner
@@ -143,7 +144,7 @@ function ImagePreProcessor(props) {
     <>
       <h4>{abbreviateFilename(filename, 30)}</h4>
       <Container>
-        <ImageUpload imageData={imageData} onload={onUploaded} />
+        <ImageUpload imageData={imageData} onload={onLoadedCallback} />
       </Container>
       <Container align="left">
         <ProfileSelection

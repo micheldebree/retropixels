@@ -37,9 +37,7 @@ function TargetImage(props) {
       const newPixelImage = graphicMode({ hires, nomaps });
       const resizedImage = jimpImage.clone();
       resizedImage.resize(newPixelImage.mode.width, newPixelImage.mode.height);
-      if (ditherId !== 'none') {
-        ditherer.dither(resizedImage.bitmap);
-      }
+      ditherer.dither(resizedImage.bitmap);
       // TODO: this is a workaround for a bug in dithering
       // that clears the alpha channel
       resizedImage.opaque();

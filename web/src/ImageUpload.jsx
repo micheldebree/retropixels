@@ -6,10 +6,7 @@ import { Container, Box, Snackbar, Typography } from '@material-ui/core';
 import { Alert } from '@material-ui/lab';
 import Canvas from './Canvas';
 
-// TODO: return Jimp Image
-// TODO: Only accept image types
-
-// Let's the user select an image file
+// Lets the user select an image file
 // When a valid image is selected, calls the "onload" callback with a JimpImage object.
 function ImageUpload(props) {
   const { onload, imageData } = props;
@@ -41,7 +38,7 @@ function ImageUpload(props) {
     if (acceptedFiles !== undefined && acceptedFiles.length === 1) {
       readFile(acceptedFiles[0]);
     }
-  }, [acceptedFiles]);
+  }, [acceptedFiles, onload]);
 
   useEffect(() => {
     if (fileRejections !== undefined && fileRejections.length > 0) {
