@@ -1,10 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
-import { Checkbox, Grid, List, ListItem, ListItemIcon, Container } from '@material-ui/core';
+import { Checkbox, Grid, List, ListItem, ListItemIcon, Container, Box } from '@material-ui/core';
 import { Palettes } from 'retropixels-core';
 import Brightness1Icon from '@material-ui/icons/Brightness1';
 import ProfileSelection from './ProfileSelection';
 import ResetButton from './ResetButton';
+
+const paletteOptions = ['colodore', 'pepto'];
+const paletteIdDefault = 'colodore';
 
 function PaletteControl(props) {
   const { onChange } = props;
@@ -28,9 +31,6 @@ function PaletteControl(props) {
     15: true
   };
 
-  const paletteOptions = ['colodore', 'pepto'];
-  const paletteIdDefault = 'colodore';
-
   const [paletteId, setPaletteId] = useState(paletteIdDefault);
   const [palette, setPalette] = useState(Palettes.all[paletteId]);
   const [enabledMap, setEnabledMap] = useState(enabledDefault);
@@ -51,19 +51,20 @@ function PaletteControl(props) {
     onChange(palette);
   }, [palette, onChange]);
 
+  // TODO: memoize
+  const nrEnabled = Object.values(enabledMap).filter(v => v).length;
+
+  const defaultsSet = nrEnabled === palette.colors.length && paletteId === paletteIdDefault;
+
   function reset() {
     setEnabledMap(enabledDefault);
     setPaletteId(paletteIdDefault);
   }
 
-  function countChecked() {
-    return Object.values(enabledMap).filter(v => v).length;
-  }
-
   function onChanged(index) {
     return () => {
       const newValue = !enabledMap[index];
-      if (!newValue && countChecked() <= 1) {
+      if (!newValue && nrEnabled <= 1) {
         return;
       }
       const newEnabledMap = { ...enabledMap };
@@ -82,7 +83,9 @@ function PaletteControl(props) {
           <ListItemIcon>
             <Checkbox checked={enabledMap[i]} onChange={onChanged(i)} name={`${id}cb`} />
           </ListItemIcon>
-          <Brightness1Icon boxShadow={1} fontSize="small" style={{ color: `rgb(${r}, ${g}, ${b})` }} />
+          <Box boxShadow={1} borderRadius="borderRadius">
+            <Brightness1Icon fontSize="small" style={{ color: `rgb(${r}, ${g}, ${b})` }} />
+          </Box>
         </ListItem>
       );
     }
@@ -91,18 +94,18 @@ function PaletteControl(props) {
 
   return (
     <>
-      <Container align="left">
-        <ResetButton onClick={reset} />
-      </Container>
       <Grid container>
         <Grid item xs align="left">
-          <ProfileSelection
-            label="palette"
-            value={paletteId}
-            items={paletteOptions}
-            onChange={setPaletteId}
-            tooltip="Use this palette for quantizing"
-          />
+          <ResetButton onClick={reset} disabled={defaultsSet}/>
+          <Container align="left">
+            <ProfileSelection
+              label="palette"
+              value={paletteId}
+              items={paletteOptions}
+              onChange={setPaletteId}
+              tooltip="Use this palette for quantizing"
+            />
+          </Container>
         </Grid>
         <Grid item xs>
           <List dense>{subPalette(0)}</List>
