@@ -96,7 +96,7 @@ function PaletteControl(props) {
     <>
       <Grid container>
         <Grid item xs align="left">
-          <ResetButton onClick={reset} disabled={defaultsSet}/>
+          <ResetButton onClick={reset} disabled={defaultsSet} />
           <Container align="left">
             <ProfileSelection
               label="palette"
