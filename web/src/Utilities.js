@@ -54,8 +54,6 @@ export function cropJimpImage(jimpImage) {
 
 export function clearJimpImage(jimpImage) {
   jimpImage.scan(0, 0, jimpImage.bitmap.width, jimpImage.bitmap.height, (x, y, idx) => {
-    // this is the image
-
     jimpImage.bitmap.data[idx + 0] = 0;
     jimpImage.bitmap.data[idx + 1] = 0;
     jimpImage.bitmap.data[idx + 2] = 0;
@@ -68,20 +66,19 @@ export function getImageDataFromPixelImage(pixelImage) {
     return new ImageData(1, 1);
   }
   const imageWidth = pixelImage.mode.width * pixelImage.mode.pixelWidth;
-  // const imageWidth = pixelImage.mode.width;
   const imageData = new ImageData(imageWidth, pixelImage.mode.height);
-  for (let y = 0; y < pixelImage.mode.height; y++) {
-    for (let x = 0; x < pixelImage.mode.width; x++) {
+  for (let y = 0; y < pixelImage.mode.height; y += 1) {
+    for (let x = 0; x < pixelImage.mode.width; x += 1) {
       const paletteIndex = pixelImage.peek(x, y);
       const pixelValue = paletteIndex !== undefined ? Palettes.all.colodore.colors[paletteIndex] : [0, 0, 0, 0];
-      for (let xx = 0; xx < pixelImage.mode.pixelWidth; xx++) {
+      for (let xx = 0; xx < pixelImage.mode.pixelWidth; xx += 1) {
         const index = y * 4 * imageWidth + x * pixelImage.mode.pixelWidth * 4 + xx * 4;
-        imageData.data[index] = pixelValue[0];
-        imageData.data[index + 1] = pixelValue[1];
-        imageData.data[index + 2] = pixelValue[2];
+        const [r, g, b] = pixelValue;
+        imageData.data[index] = r;
+        imageData.data[index + 1] = g;
+        imageData.data[index + 2] = b;
         imageData.data[index + 3] = 0xff;
       }
-      // Pixels.poke(imageData.data, x, y, pixelValue);
     }
   }
   return imageData;
@@ -99,7 +96,6 @@ export function abbreviateFilename(filename, maxSize) {
     return filename;
   }
   const parsed = parseFilename(filename);
-
   return `${parsed.basename.substring(0, maxSize)}...${parsed.extension}`;
 }
 

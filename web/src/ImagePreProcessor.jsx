@@ -1,12 +1,11 @@
 import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import * as Jimp from 'jimp';
-import { Button, Container } from '@material-ui/core';
+import { Container } from '@material-ui/core';
 import Brightness5OutlinedIcon from '@material-ui/icons/Brightness5Outlined';
 import Brightness6OutlinedIcon from '@material-ui/icons/Brightness6Outlined';
 import BrokenImageOutlinedIcon from '@material-ui/icons/BrokenImageOutlined';
 import BlurOnOutlinedIcon from '@material-ui/icons/BlurOnOutlined';
-import AutorenewIcon from '@material-ui/icons/Autorenew';
 import { getImageDataFromJimpImage, cropJimpImage, abbreviateFilename } from './Utilities';
 import ImageUpload from './ImageUpload';
 import ProfileSelection from './ProfileSelection';

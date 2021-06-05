@@ -7,9 +7,9 @@ import Canvas from './Canvas';
 function TargetImage(props) {
   const graphicMode = GraphicModes.all.bitmap;
 
-  const { jimpImage, onChanged, hires, nomaps, colorspaceId, paletteId, enabledColors, ditherId, ditherRadius } = props;
+  const { jimpImage, onChanged, hires, nomaps, colorspaceId, palette, ditherId, ditherRadius } = props;
 
-  const defaultQuantizer = new Quantizer(Palettes.all[paletteId], ColorSpaces.all[colorspaceId]);
+  const defaultQuantizer = new Quantizer(palette, ColorSpaces.all[colorspaceId]);
   const defaultConverter = new Converter(defaultQuantizer);
   const defaultDitherer = new OrderedDither(OrderedDither.presets[ditherId], ditherRadius);
 
@@ -21,11 +21,8 @@ function TargetImage(props) {
   const [ditherer, setDitherer] = useState(defaultDitherer);
 
   useEffect(() => {
-    const palette = Palettes.all[paletteId];
-    palette.enabled = enabledColors;
-
     setQuantizer(new Quantizer(palette, ColorSpaces.all[colorspaceId]));
-  }, [colorspaceId, paletteId, enabledColors]);
+  }, [colorspaceId, palette]);
 
   useEffect(() => {
     setConverter(new Converter(quantizer));
@@ -70,8 +67,7 @@ TargetImage.propTypes = {
   hires: PropTypes.bool,
   nomaps: PropTypes.bool,
   colorspaceId: PropTypes.string,
-  paletteId: PropTypes.string,
-  enabledColors: PropTypes.arrayOf(PropTypes.number),
+  palette: PropTypes.shape(),
   ditherId: PropTypes.string,
   ditherRadius: PropTypes.number
 };
@@ -82,10 +78,9 @@ TargetImage.defaultProps = {
   hires: false,
   nomaps: false,
   colorspaceId: 'xyz',
-  paletteId: 'colodore',
+  palette: Palettes.all.colodore,
   ditherId: 'bayer4x4',
-  ditherRadius: 32,
-  enabledColors: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15]
+  ditherRadius: 32
 };
 
 export default TargetImage;

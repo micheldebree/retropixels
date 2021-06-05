@@ -60,7 +60,7 @@ function App() {
           <Grid item xs={4}>
             <ImagePreProcessor onChanged={onSourceImageChanged} />
           </Grid>
-          <Grid item xs={8}>
+          <Grid item xs>
             <Retropixels jimpImage={sourceImage} filename={filename} />
           </Grid>
         </Grid>

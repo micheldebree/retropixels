@@ -31,7 +31,7 @@ function MySlider(props) {
 MySlider.propTypes = {
   icon: PropTypes.node.isRequired,
   label: PropTypes.string.isRequired,
-  value: PropTypes.bool.isRequired,
+  value: PropTypes.number.isRequired,
   min: PropTypes.number,
   max: PropTypes.number.isRequired,
   step: PropTypes.number,
