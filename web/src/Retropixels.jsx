@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useCallback } from 'react';
 import PropTypes from 'prop-types';
 import { Button, Container, Tooltip, Grid } from '@material-ui/core';
 import BlurLinearIcon from '@material-ui/icons/BlurLinear';
@@ -11,19 +11,16 @@ import TargetImage from './TargetImage';
 import MyCheckbox from './MyCheckbox';
 import MySlider from './MySlider';
 import ResetButton from './ResetButton';
-import PaletteControl from './Palette';
+import PaletteControl from './PaletteControl';
 
 // wraps the Targetimage with controls for the various properties
 function Retropixels(props) {
   const ditherOptions = ['none', 'bayer2x2', 'bayer4x4', 'bayer8x8'];
   const colorspaceOptions = ['rgb', 'yuv', 'xyz', 'rainbow'];
-  const paletteOptions = ['colodore', 'pepto', 'deekay'];
 
   // defaults
-
   const ditherDefault = 'bayer4x4';
-  const paletteDefault = 'colodore';
-  const enabledColorsDefault = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15];
+  const paletteDefault = Palettes.all.colodore;
   const colorspaceDefault = 'xyz';
   const hiresDefault = false;
   const nomapsDefault = false;
@@ -34,11 +31,16 @@ function Retropixels(props) {
   const [pixelImage, setPixelImage] = useState(undefined);
   const [colorspace, setColorSpace] = useState(colorspaceDefault);
   const [palette, setPalette] = useState(paletteDefault);
-  const [enabledColors, setEnabledColors] = useState(enabledColorsDefault);
   const [hires, setHires] = useState(hiresDefault);
   const [nomaps, setNomaps] = useState(nomapsDefault);
   const [dither, setDither] = useState(ditherDefault);
   const [ditherRadius, setDitherRadius] = useState(ditherRadiusDefault);
+
+  // memoize the callback to avoid re-renders
+  const paletteCallback = useCallback(p => {
+    setPalette(p);
+    console.log(p);
+  }, []);
 
   let targetFilename = 'output';
   if (pixelImage !== undefined) {
@@ -103,8 +105,7 @@ function Retropixels(props) {
             hires={hires}
             nomaps={nomaps}
             colorspaceId={colorspace}
-            paletteId={palette}
-            enabledColors={enabledColors}
+            palette={palette}
             ditherId={dither}
             ditherRadius={ditherRadius}
           />
@@ -148,13 +149,6 @@ function Retropixels(props) {
             tooltip="Convert colors to this color space before quantizing"
           />
           <ProfileSelection
-            label="palette"
-            value={palette}
-            items={paletteOptions}
-            onChange={value => setPalette(value)}
-            tooltip="Use this palette for quantizing"
-          />
-          <ProfileSelection
             label="dithering"
             value={dither}
             items={ditherOptions}
@@ -172,11 +166,8 @@ function Retropixels(props) {
           />
         </Container>
       </Grid>
-      <Grid item xs>
-        <PaletteControl
-          palette={Palettes.all[palette]}
-          onChange={newEnabledColors => setEnabledColors(newEnabledColors)}
-        />
+      <Grid item xs align="left">
+        <PaletteControl onChange={paletteCallback} />
       </Grid>
     </Grid>
   );

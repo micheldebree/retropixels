@@ -17,7 +17,7 @@ function ProfileSelection(props) {
           onChange={event => onChange(event.target.value)}
         >
           {items.map(i => (
-            <FormControlLabel value={i} control={<Radio />} label={i} />
+            <FormControlLabel key={i} value={i} control={<Radio />} label={i} />
           ))}
         </RadioGroup>
       </FormControl>
