@@ -6,8 +6,8 @@ import CloudDownloadIcon from '@material-ui/icons/CloudDownload';
 import { C64Writer, Palettes } from 'retropixels-core';
 import { saveAs } from 'file-saver';
 import { parseFilename } from './Utilities';
-import ProfileSelection from './ProfileSelection';
-import TargetImage from './TargetImage';
+import MyRadioButtons from './MyRadioButtons';
+import RetropixelsImage from './RetropixelsImage';
 import MyCheckbox from './MyCheckbox';
 import MySlider from './MySlider';
 import ResetButton from './ResetButton';
@@ -25,6 +25,17 @@ const hiresDefault = false;
 const nomapsDefault = false;
 const ditherRadiusDefault = 32;
 
+function getDefaultExtension(pixelImage) {
+  return pixelImage.mode.pixelWidth === 1 ? '.art' : '.kla';
+}
+
+function saveOutput(pixelImage, targetFilename) {
+  const binary = C64Writer.toBinary(pixelImage);
+  const buffer = C64Writer.toBuffer(binary);
+  const blob = new Blob([buffer], { type: 'application/octet-stream' });
+  saveAs(blob, targetFilename);
+}
+
 function Retropixels(props) {
   const { jimpImage, filename } = props;
 
@@ -38,16 +49,13 @@ function Retropixels(props) {
 
   // memoize the callback to avoid re-renders
   const paletteCallback = useCallback(p => setPalette(p), []);
+  const newPixelImageCallback = useCallback(i => setPixelImage(i), []);
 
   let targetFilename = 'output';
   if (pixelImage !== undefined) {
-    const extension = pixelImage.mode.pixelWidth === 1 ? '.art' : '.kla';
+    const extension = getDefaultExtension(pixelImage);
     const parsedFilename = parseFilename(filename);
     targetFilename = `${parsedFilename.basename.substring(0, 30)}${extension}`;
-  }
-
-  function onNewPixelImage(newPixelImage) {
-    setPixelImage(newPixelImage);
   }
 
   function reset() {
@@ -56,13 +64,6 @@ function Retropixels(props) {
     setNomaps(nomapsDefault);
     setDither(ditherDefault);
     setDitherRadius(ditherRadiusDefault);
-  }
-
-  function saveOutput() {
-    const binary = C64Writer.toBinary(pixelImage);
-    const buffer = C64Writer.toBuffer(binary);
-    const blob = new Blob([buffer], { type: 'application/octet-stream' });
-    saveAs(blob, targetFilename);
   }
 
   // function savePNG() {
@@ -91,12 +92,12 @@ function Retropixels(props) {
 
   return (
     <Grid container>
-      <Grid item xs>
+      <Grid item xs={12} sm={12} md={6}>
         <h4>{outputFormat}</h4>
         <Container>
-          <TargetImage
+          <RetropixelsImage
             jimpImage={jimpImage}
-            onChanged={onNewPixelImage}
+            onChanged={newPixelImageCallback}
             hires={hires}
             nomaps={nomaps}
             colorspaceId={colorspace}
@@ -112,7 +113,7 @@ function Retropixels(props) {
               disabled={pixelImage === undefined}
               color="primary"
               startIcon={<CloudDownloadIcon />}
-              onClick={() => saveOutput()}
+              onClick={() => saveOutput(pixelImage, targetFilename)}
             >
               Download
             </Button>
@@ -124,37 +125,37 @@ function Retropixels(props) {
             name="hires"
             label="hires"
             value={hires}
-            onChange={v => setHires(v)}
+            onChange={setHires}
             tooltip="Use high resolution mode instead of multi color"
           />
           <MyCheckbox
             name="nomaps"
             label="single color layers"
             value={nomaps}
-            onChange={v => setNomaps(v)}
+            onChange={setNomaps}
             tooltip="Restrict each attribute layer to a single color"
           />
         </Container>
         <Container align="left">
-          <ProfileSelection
+          <MyRadioButtons
             label="colorspace"
             value={colorspace}
             items={colorspaceOptions}
-            onChange={value => setColorSpace(value)}
+            onChange={setColorSpace}
             tooltip="Convert colors to this color space before quantizing"
           />
-          <ProfileSelection
+          <MyRadioButtons
             label="dithering"
             value={dither}
             items={ditherOptions}
-            onChange={value => setDither(value)}
+            onChange={setDither}
             tooltip="Type of dithering to apply"
           />
           <MySlider
             label="dithering strength"
             value={ditherRadius}
             max={64}
-            onChange={v => setDitherRadius(v)}
+            onChange={setDitherRadius}
             tooltip="Strength of dithering"
             icon={<BlurLinearIcon />}
             disabled={dither === 'none'}

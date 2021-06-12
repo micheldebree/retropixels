@@ -41,6 +41,7 @@ During development change the dependency in `cli/package.json`, and re-install w
   - [ ] Colorspace conversions
   - [ ] Distance measuring
   - [ ] Color reducer within a cell
+ - [ ] Separate graphicmode from pixelimage
 
 ## Local development
 

@@ -3,7 +3,7 @@ import { Grid, AppBar, Toolbar, Typography, Button, Link, Container } from '@mat
 import './App.css';
 import GitHubIcon from '@material-ui/icons/GitHub';
 import { makeStyles } from '@material-ui/core/styles';
-import ImagePreProcessor from './ImagePreProcessor';
+import ImageSource from './ImageSource';
 import Retropixels from './Retropixels';
 import Logo from './logo.svg';
 import AppVersion from './version';
@@ -57,10 +57,10 @@ function App() {
           </Typography>
         </Container>
         <Grid container spacing={3}>
-          <Grid item xs={4}>
-            <ImagePreProcessor onChanged={onSourceImageChanged} />
+          <Grid item xs={12} sm={6} md={4}>
+            <ImageSource onChanged={onSourceImageChanged} />
           </Grid>
-          <Grid item xs>
+          <Grid item xs={12} sm={6} md={8}>
             <Retropixels jimpImage={sourceImage} filename={filename} />
           </Grid>
         </Grid>

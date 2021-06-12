@@ -6,27 +6,74 @@ import Brightness5OutlinedIcon from '@material-ui/icons/Brightness5Outlined';
 import Brightness6OutlinedIcon from '@material-ui/icons/Brightness6Outlined';
 import BrokenImageOutlinedIcon from '@material-ui/icons/BrokenImageOutlined';
 import BlurOnOutlinedIcon from '@material-ui/icons/BlurOnOutlined';
-import { getImageDataFromJimpImage, cropJimpImage, abbreviateFilename } from './Utilities';
+import { abbreviateFilename } from './Utilities';
 import ImageUpload from './ImageUpload';
-import ProfileSelection from './ProfileSelection';
+import MyRadioButtons from './MyRadioButtons';
 import MyCheckbox from './MyCheckbox';
 import MySlider from './MySlider';
 import ResetButton from './ResetButton';
 
-function ImagePreProcessor(props) {
+// defaults
+const normalizeDefault = true;
+const greyscaleDefault = false;
+const mirrorHorDefault = false;
+const mirrorVerDefault = false;
+const invertDefault = false;
+const brightnessDefault = 0;
+const contrastDefault = 0;
+const blurDefault = 0;
+const thresholdDefault = 0;
+
+function cropJimpImage(jimpImage) {
+  const isTooSmall = jimpImage.bitmap.width < 320 || jimpImage.bitmap.height < 200;
+  let blitImage;
+
+  // if the image is too small, the cropped image is cleared,
+  // and then the smaller image is blitted onto it
+  // this is a workaround for artifacts when cropping images to larger sizes
+  if (isTooSmall) {
+    blitImage = jimpImage.clone();
+  }
+  jimpImage.crop(0, 0, 320, 200);
+  if (blitImage !== undefined) {
+    this.clearJimpImage(jimpImage);
+    jimpImage.blit(blitImage, 0, 0);
+  }
+}
+
+function cropImage(image, scale) {
+  const newImage = image.clone();
+  if (scale === 'fill') {
+    newImage.cover(320, 200, Jimp.RESIZE_HERMITE);
+  } else if (scale === 'fit') {
+    newImage.contain(320, 200, Jimp.RESIZE_HERMITE);
+  } else {
+    cropJimpImage(newImage);
+  }
+  return newImage;
+}
+
+function getImageDataFromJimpImage(jimpImage) {
+  if (jimpImage === undefined) {
+    return undefined;
+  }
+
+  // TODO: Jimp does not seem to shrink the data array when resizing picture to a smaller size... Confirm?
+  const dataSize = jimpImage.bitmap.width * jimpImage.bitmap.height * 4;
+  let data;
+  if (jimpImage.bitmap.data.length > dataSize) {
+    data = jimpImage.bitmap.data.slice(0, dataSize);
+  } else {
+    data = jimpImage.bitmap.data;
+  }
+
+  return jimpImage !== undefined
+    ? new ImageData(Uint8ClampedArray.from(data), jimpImage.bitmap.width, jimpImage.bitmap.height)
+    : undefined;
+}
+
+function ImageSource(props) {
   const { onChanged } = props;
-
-  // defaults
-
-  const normalizeDefault = true;
-  const greyscaleDefault = false;
-  const mirrorHorDefault = false;
-  const mirrorVerDefault = false;
-  const invertDefault = false;
-  const brightnessDefault = 0;
-  const contrastDefault = 0;
-  const blurDefault = 0;
-  const thresholdDefault = 0;
 
   // the originally uploaded image
   const [sourceImage, setSourceImage] = useState(undefined);
@@ -58,6 +105,7 @@ function ImagePreProcessor(props) {
     setFilename(img.filename);
   }, []);
 
+  // reset all controls to default
   function reset() {
     setNormalize(normalizeDefault);
     setGreyscale(greyscaleDefault);
@@ -83,16 +131,7 @@ function ImagePreProcessor(props) {
     if (sourceImage === undefined) {
       return;
     }
-
-    const newImage = sourceImage.clone();
-    if (scale === 'fill') {
-      newImage.cover(320, 200, Jimp.RESIZE_HERMITE);
-    } else if (scale === 'fit') {
-      newImage.contain(320, 200, Jimp.RESIZE_HERMITE);
-    } else {
-      cropJimpImage(newImage);
-    }
-    setCroppedImage(newImage);
+    setCroppedImage(cropImage(sourceImage, scale));
   }, [sourceImage, scale]);
 
   // if the cropped image or any of the controls change, update the image
@@ -147,13 +186,11 @@ function ImagePreProcessor(props) {
         <ImageUpload imageData={imageData} onload={onLoadedCallback} />
       </Container>
       <Container align="left">
-        <ProfileSelection
+        <MyRadioButtons
           label="cropping"
           items={['crop', 'fill', 'fit']}
           value={scale}
-          onChange={value => {
-            setScale(value);
-          }}
+          onChange={setScale}
           tooltip="Type of cropping to apply to source image"
         />
       </Container>
@@ -165,14 +202,14 @@ function ImagePreProcessor(props) {
           name="normalize"
           label="normalize"
           value={normalize}
-          onChange={v => setNormalize(v)}
+          onChange={setNormalize}
           tooltip="Stretch color intensities to their full range"
         />
         <MyCheckbox
           name="greyscale"
           label="greyscale"
           value={greyscale}
-          onChange={v => setGreyscale(v)}
+          onChange={setGreyscale}
           tooltip="Convert to black and white"
         />
         <MyCheckbox name="invert" label="invert" value={invert} onChange={v => setInvert(v)} tooltip="Invert colors" />
@@ -180,14 +217,14 @@ function ImagePreProcessor(props) {
           name="mirrorHor"
           label="flip horizontal"
           value={mirrorHor}
-          onChange={v => setMirrorHor(v)}
+          onChange={setMirrorHor}
           tooltip="Mirror image horizontally"
         />
         <MyCheckbox
           name="mirrorVer"
           label="flip vertical"
           value={mirrorVer}
-          onChange={v => setMirrorVer(v)}
+          onChange={setMirrorVer}
           tooltip="Mirror image vertically"
         />
         <MySlider
@@ -196,7 +233,7 @@ function ImagePreProcessor(props) {
           min={-1.0}
           max={1.0}
           step={0.05}
-          onChange={v => setBrightness(v)}
+          onChange={setBrightness}
           tooltip="Adjust image brightness"
           icon={<Brightness5OutlinedIcon />}
         />
@@ -206,7 +243,7 @@ function ImagePreProcessor(props) {
           min={-1.0}
           max={1.0}
           step={0.05}
-          onChange={v => setContrast(v)}
+          onChange={setContrast}
           tooltip="Adjust image contrast"
           icon={<Brightness6OutlinedIcon />}
         />
@@ -214,7 +251,7 @@ function ImagePreProcessor(props) {
           label="blur"
           value={blur}
           max={10}
-          onChange={v => setBlur(v)}
+          onChange={setBlur}
           tooltip="Blur image by this many pixels"
           icon={<BlurOnOutlinedIcon />}
         />
@@ -222,7 +259,7 @@ function ImagePreProcessor(props) {
           label="threshold"
           value={threshold}
           max={255}
-          onChange={v => setThreshold(v)}
+          onChange={setThreshold}
           tooltip="Convert to black and white and remove pixels below this intensity threshold. (0 = off)"
           icon={<BrokenImageOutlinedIcon />}
         />
@@ -231,8 +268,8 @@ function ImagePreProcessor(props) {
   );
 }
 
-ImagePreProcessor.propTypes = {
+ImageSource.propTypes = {
   onChanged: PropTypes.func.isRequired
 };
 
-export default ImagePreProcessor;
+export default ImageSource;

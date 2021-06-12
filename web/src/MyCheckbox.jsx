@@ -9,13 +9,7 @@ function MyCheckbox(props) {
     <Tooltip title={tooltip} arrow>
       <FormControlLabel
         control={
-          <Checkbox
-            checked={value}
-            onChange={() => {
-              onChange(!value);
-            }}
-            name={`${name}Checkbox`}
-          />
+          <Checkbox checked={value} onChange={event => onChange(event.target.checked)} name={`${name}Checkbox`} />
         }
         label={label}
       />

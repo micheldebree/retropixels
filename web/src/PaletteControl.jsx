@@ -1,9 +1,9 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import PropTypes from 'prop-types';
 import { Checkbox, Grid, List, ListItem, ListItemIcon, Container, Box } from '@material-ui/core';
 import { Palettes } from 'retropixels-core';
 import Brightness1Icon from '@material-ui/icons/Brightness1';
-import ProfileSelection from './ProfileSelection';
+import MyRadioButtons from './MyRadioButtons';
 import ResetButton from './ResetButton';
 
 const paletteOptions = ['colodore', 'pepto'];
@@ -35,26 +35,19 @@ function PaletteControl(props) {
   const [palette, setPalette] = useState(Palettes.all[paletteId]);
   const [enabledMap, setEnabledMap] = useState(enabledDefault);
 
+  const enabledColors = useMemo(() => Object.keys(enabledMap).filter(k => enabledMap[k]), [enabledMap]);
+
   useEffect(() => {
-    const enabledColors = [];
-    for (let i = 0; i < 16; i += 1) {
-      if (enabledMap[i]) {
-        enabledColors.push(i);
-      }
-    }
     const newPalette = { ...Palettes.all[paletteId] };
     newPalette.enabled = enabledColors;
     setPalette(newPalette);
-  }, [paletteId, enabledMap]);
+  }, [paletteId, enabledColors]);
 
   useEffect(() => {
     onChange(palette);
   }, [palette, onChange]);
 
-  // TODO: memoize
-  const nrEnabled = Object.values(enabledMap).filter(v => v).length;
-
-  const defaultsSet = nrEnabled === palette.colors.length && paletteId === paletteIdDefault;
+  const defaultsSet = enabledColors.length === palette.colors.length && paletteId === paletteIdDefault;
 
   function reset() {
     setEnabledMap(enabledDefault);
@@ -64,7 +57,7 @@ function PaletteControl(props) {
   function onChanged(index) {
     return () => {
       const newValue = !enabledMap[index];
-      if (!newValue && nrEnabled <= 1) {
+      if (!newValue && enabledColors.length <= 1) {
         return;
       }
       const newEnabledMap = { ...enabledMap };
@@ -95,10 +88,10 @@ function PaletteControl(props) {
   return (
     <>
       <Grid container>
-        <Grid item xs align="left">
+        <Grid item xs={12} align="left">
           <ResetButton onClick={reset} disabled={defaultsSet} />
           <Container align="left">
-            <ProfileSelection
+            <MyRadioButtons
               label="palette"
               value={paletteId}
               items={paletteOptions}
@@ -107,10 +100,10 @@ function PaletteControl(props) {
             />
           </Container>
         </Grid>
-        <Grid item xs>
+        <Grid item xs={6}>
           <List dense>{subPalette(0)}</List>
         </Grid>
-        <Grid item xs>
+        <Grid item xs={6}>
           <List dense>{subPalette(8)}</List>
         </Grid>
       </Grid>

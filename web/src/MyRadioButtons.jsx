@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { Radio, RadioGroup, FormControlLabel, FormControl, FormLabel, Tooltip } from '@material-ui/core';
 
-function ProfileSelection(props) {
+function MyRadioButtons(props) {
   const { label, value, items, onChange, tooltip } = props;
 
   return (
@@ -25,7 +25,7 @@ function ProfileSelection(props) {
   );
 }
 
-ProfileSelection.propTypes = {
+MyRadioButtons.propTypes = {
   label: PropTypes.string,
   value: PropTypes.string.isRequired,
   items: PropTypes.arrayOf(PropTypes.string.isRequired).isRequired,
@@ -33,8 +33,8 @@ ProfileSelection.propTypes = {
   tooltip: PropTypes.string.isRequired
 };
 
-ProfileSelection.defaultProps = {
+MyRadioButtons.defaultProps = {
   label: 'Choose'
 };
 
-export default ProfileSelection;
+export default MyRadioButtons;

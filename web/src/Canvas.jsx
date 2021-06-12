@@ -2,9 +2,6 @@ import React, { useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { Box } from '@material-ui/core';
 
-// https://blog.koenvangilst.nl/react-hooks-with-canvas/
-// https://www.w3schools.com/Tags/canvas_putimagedata.asp
-
 function Canvas(props) {
   const canvasRef = React.useRef(null);
   const getContext = () => canvasRef.current.getContext('2d');
@@ -19,13 +16,12 @@ function Canvas(props) {
   }, [imageData]);
 
   return (
-    <Box m={1}>
+    <Box m={2}>
       <canvas ref={canvasRef} width={width} height={height} />
     </Box>
   );
 }
 
-// TODO: get width and height from imagedata
 Canvas.propTypes = {
   width: PropTypes.number.isRequired,
   height: PropTypes.number.isRequired,
