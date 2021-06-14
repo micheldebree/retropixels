@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { ColorSpaces, Quantizer, Converter, GraphicModes, Palettes, OrderedDither } from 'retropixels-core';
 import PropTypes from 'prop-types';
 import Canvas from './Canvas';
+import { getImageDataFromPixelImage } from './Utilities';
 
 const graphicMode = GraphicModes.all.bitmap;
 
@@ -10,29 +11,6 @@ function resizeToTargetSize(jimpImage, pixelImage) {
   const result = jimpImage.clone();
   result.resize(pixelImage.mode.width, pixelImage.mode.height);
   return result;
-}
-
-function getImageDataFromPixelImage(pixelImage) {
-  if (pixelImage === undefined) {
-    return new ImageData(1, 1);
-  }
-  const imageWidth = pixelImage.mode.width * pixelImage.mode.pixelWidth;
-  const imageData = new ImageData(imageWidth, pixelImage.mode.height);
-  for (let y = 0; y < pixelImage.mode.height; y += 1) {
-    for (let x = 0; x < pixelImage.mode.width; x += 1) {
-      const paletteIndex = pixelImage.peek(x, y);
-      const pixelValue = paletteIndex !== undefined ? Palettes.all.colodore.colors[paletteIndex] : [0, 0, 0, 0];
-      for (let xx = 0; xx < pixelImage.mode.pixelWidth; xx += 1) {
-        const index = y * 4 * imageWidth + x * pixelImage.mode.pixelWidth * 4 + xx * 4;
-        const [r, g, b] = pixelValue;
-        imageData.data[index] = r;
-        imageData.data[index + 1] = g;
-        imageData.data[index + 2] = b;
-        imageData.data[index + 3] = 0xff;
-      }
-    }
-  }
-  return imageData;
 }
 
 function RetropixelsImage(props) {
@@ -71,9 +49,9 @@ function RetropixelsImage(props) {
   }, [jimpImage, hires, nomaps, converter, ditherer]);
 
   useEffect(() => {
-    setImageData(getImageDataFromPixelImage(pixelImage));
+    setImageData(getImageDataFromPixelImage(pixelImage, palette));
     onChanged(pixelImage);
-  }, [pixelImage, onChanged]);
+  }, [pixelImage, onChanged, palette]);
 
   return <Canvas width={320} height={200} imageData={imageData} />;
 }

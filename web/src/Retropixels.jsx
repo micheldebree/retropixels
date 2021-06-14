@@ -1,11 +1,13 @@
 import React, { useState, useCallback } from 'react';
 import PropTypes from 'prop-types';
 import { Button, Container, Tooltip, Grid } from '@material-ui/core';
+import { makeStyles } from '@material-ui/core/styles';
 import BlurLinearIcon from '@material-ui/icons/BlurLinear';
 import CloudDownloadIcon from '@material-ui/icons/CloudDownload';
 import { C64Writer, Palettes } from 'retropixels-core';
 import { saveAs } from 'file-saver';
-import { parseFilename } from './Utilities';
+import Jimp from 'jimp/es';
+import { parseFilename, getImageDataFromPixelImage } from './Utilities';
 import MyRadioButtons from './MyRadioButtons';
 import RetropixelsImage from './RetropixelsImage';
 import MyCheckbox from './MyCheckbox';
@@ -25,15 +27,46 @@ const hiresDefault = false;
 const nomapsDefault = false;
 const ditherRadiusDefault = 32;
 
+const useStyles = makeStyles(theme => ({
+  root: {
+    '& > *': {
+      margin: theme.spacing(1)
+    }
+  }
+}));
+
 function getDefaultExtension(pixelImage) {
   return pixelImage.mode.pixelWidth === 1 ? '.art' : '.kla';
 }
 
-function saveOutput(pixelImage, targetFilename) {
+function saveOutput(pixelImage, filename) {
   const binary = C64Writer.toBinary(pixelImage);
   const buffer = C64Writer.toBuffer(binary);
   const blob = new Blob([buffer], { type: 'application/octet-stream' });
-  saveAs(blob, targetFilename);
+  saveAs(blob, filename);
+}
+
+function savePNG(pixelImage, palette, filename) {
+  const width = pixelImage.mode.width * pixelImage.mode.pixelWidth;
+  const { height } = pixelImage.mode;
+  /* eslint-disable no-new */
+  new Jimp(width, height, (err, image) => {
+    /* eslint-enable no-new */
+    if (err) {
+      throw err;
+    }
+
+    const imageData = getImageDataFromPixelImage(pixelImage, palette);
+    // it seems we can just replace the underlying data of the Jimp image
+    image.bitmap.width = imageData.width;
+    image.bitmap.height = imageData.height;
+    image.bitmap.data = imageData.data;
+
+    image.getBufferAsync(Jimp.MIME_PNG).then(buffer => {
+      const blob = new Blob([buffer], { type: 'application/octet-stream' });
+      saveAs(blob, filename);
+    });
+  });
 }
 
 function Retropixels(props) {
@@ -47,15 +80,17 @@ function Retropixels(props) {
   const [dither, setDither] = useState(ditherDefault);
   const [ditherRadius, setDitherRadius] = useState(ditherRadiusDefault);
 
-  // memoize the callback to avoid re-renders
+  // memoize the callbacks to avoid re-renders
   const paletteCallback = useCallback(p => setPalette(p), []);
   const newPixelImageCallback = useCallback(i => setPixelImage(i), []);
 
-  let targetFilename = 'output';
+  let c64OutputFilename = 'output';
+  let pngOutputFilename;
   if (pixelImage !== undefined) {
     const extension = getDefaultExtension(pixelImage);
     const parsedFilename = parseFilename(filename);
-    targetFilename = `${parsedFilename.basename.substring(0, 30)}${extension}`;
+    c64OutputFilename = `${parsedFilename.basename}${extension}`;
+    pngOutputFilename = `${parsedFilename.basename}.png`;
   }
 
   function reset() {
@@ -66,21 +101,9 @@ function Retropixels(props) {
     setDitherRadius(ditherRadiusDefault);
   }
 
-  // function savePNG() {
-  //   JimpPreprocessor.toJimpImage(pixelImage, Palettes.all[palette]).then(outputJimpImage => {
-  //     outputJimpImage.image
-  //       .getBufferAsync(Jimp.MIME_PNG)
-  //       .then(buffer => {
-  //         const blob = new Blob([buffer], { type: 'application/octet-stream' });
-  //         saveAs(blob, 'test.png');
-  //       })
-  //       .catch(error => alert(error));
-  //   });
-  // }
-
   let outputFormat = 'output';
   if (pixelImage !== undefined) {
-    outputFormat = pixelImage.mode.pixelWidth === 1 ? 'art studio file' : 'koala painter file';
+    outputFormat = pixelImage.mode.pixelWidth === 1 ? 'art studio' : 'koala painter';
   }
 
   const defaultsSet =
@@ -90,10 +113,12 @@ function Retropixels(props) {
     dither === ditherDefault &&
     ditherRadius === ditherRadiusDefault;
 
+  const classes = useStyles();
+
   return (
     <Grid container>
       <Grid item xs={12} sm={12} md={6}>
-        <h4>{outputFormat}</h4>
+        <h4>{c64OutputFilename}</h4>
         <Container>
           <RetropixelsImage
             jimpImage={jimpImage}
@@ -106,16 +131,27 @@ function Retropixels(props) {
             ditherRadius={ditherRadius}
           />
         </Container>
-        <Container>
-          <Tooltip title={`Download the image as ${outputFormat}`} arrow>
+        <Container align="left" className={classes.root}>
+          <Tooltip title={`Download the image as ${outputFormat} file`} arrow>
             <Button
               variant="contained"
               disabled={pixelImage === undefined}
               color="primary"
               startIcon={<CloudDownloadIcon />}
-              onClick={() => saveOutput(pixelImage, targetFilename)}
+              onClick={() => saveOutput(pixelImage, c64OutputFilename)}
             >
-              Download
+              {outputFormat}
+            </Button>
+          </Tooltip>
+          <Tooltip title="Download the image" arrow>
+            <Button
+              variant="contained"
+              disabled={pixelImage === undefined}
+              color="primary"
+              startIcon={<CloudDownloadIcon />}
+              onClick={() => savePNG(pixelImage, palette, pngOutputFilename)}
+            >
+              Image
             </Button>
           </Tooltip>
         </Container>
