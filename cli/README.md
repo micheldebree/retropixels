@@ -269,6 +269,11 @@ Run with `node cli.js [options] <infile>`
 
 ## Changelog
 
+### 0.8.6
+
+- Fixed [#71](https://github.com/micheldebree/retropixels/issues/71) Error:
+  Cannot find module 'node:path' (Thanks to Gregory Nacu for reporting)
+
 ### 0.8.5
 
 - Changed: Significantly improved conversion speed

@@ -8,7 +8,6 @@ const fsStat = promisify(fs.stat);
 const retropixels = require('retropixels-core');
 
 const { version } = require('./package');
-const { posix } = require('node:path');
 
 const viewersFolder = '/target/c64/';
 
