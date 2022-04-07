@@ -6,12 +6,15 @@ COMMIT_URL=https://github.com/micheldebree/retropixels/commit/$(COMMIT_SHA)
 .PHONY: build
 .PHONY: icons
 
-start:
+start: node_modules
 	yarn start
 
-build: icons
+build: icons node_modules
 	echo "export default {buildnr: '$(BUILD_NR)', url: '$(COMMIT_URL)'}" > src/version.js
 	yarn build
+
+node_modules:
+	yarn install
 
 icons: 
 	./scale_logo.sh 16
