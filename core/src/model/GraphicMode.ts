@@ -32,11 +32,6 @@ export default class GraphicMode {
     this.id = id;
     this.width = width;
     this.height = height;
-
-    // console.log('Graphicmode:');
-    // console.log('------------');
-    // console.log(width + ' x ' + height + ' pixels');
-    // console.log(this.pixelsPerByte() + ' pixels per byte');
   }
 
   public pixelsPerByte(): number {
@@ -63,7 +58,7 @@ export default class GraphicMode {
    * @param yOffset Added to the y coordinate of the cell top
    * @param callback Called with the top left position in the image of the cell.
    */
-  public forEachCell(yOffset = 0, callback: (x: number, y: number) => void): void {
+  public forEachCell(yOffset: number, callback: (x: number, y: number) => void): void {
     const pixelsPerCellRow: number = this.pixelsPerCellRow();
 
     for (let y: number = yOffset; y < this.height; y += this.rowsPerCell) {

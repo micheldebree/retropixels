@@ -1,6 +1,6 @@
 VERSION=$(shell cat package.json | jq -r .version) 
 
-build:
+build: node_modules
 	yarn build
 
 # First:
@@ -17,6 +17,9 @@ publish: build
 snapshot: build
 	git clean -d -f
 	yarn publish --tag snapshot
+
+node_modules:
+	yarn install
 
 graph:
 	npx madge --ts-config ./tsconfig.json -i  graph.png .
