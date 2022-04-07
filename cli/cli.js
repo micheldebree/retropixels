@@ -135,7 +135,7 @@ function saveExecutable(pixelImage, outFile) {
   try {
     viewerCode = fs.readFileSync(viewerFile);
   } catch (error) {
-    throw (error);
+    throw error;
     // throw new Error(`Executable format is not supported for ${binary.formatName}`);
   }
 
@@ -172,11 +172,11 @@ retropixels.JimpPreprocessor.read(inFile, pixelImage.mode, options.scale)
       fs.writeFileSync(outFile, buffer);
     } else if (options.format === 'prg') {
       outFile = getOutFile('prg');
-      checkOverwrite(outFile);
+      await checkOverwrite(outFile);
       saveExecutable(pixelImage, outFile);
     } else if (options.format === 'png') {
       outFile = getOutFile('png');
-      checkOverwrite(outFile);
+      await checkOverwrite(outFile);
       await retropixels.JimpPreprocessor.write(pixelImage, outFile, palette);
     }
 
@@ -187,7 +187,7 @@ retropixels.JimpPreprocessor.read(inFile, pixelImage.mode, options.scale)
       console.error(`\nERROR: ${error.path} does not exist.\n`);
     } else {
       console.error(`\nERROR: ${error.message}\n`);
-      throw (error);
+      throw error;
     }
     cli.help();
   });

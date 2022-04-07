@@ -1,3 +1,5 @@
+; vim:set ft=c64jasm:
+
 !include "macros.asm"
 
 !let bitmap = $2000

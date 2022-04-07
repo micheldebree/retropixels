@@ -5,25 +5,27 @@ EXAMPLE=paintface
 CMD=node cli.js
 C64CODE=target/c64/koala.prg target/c64/afli.prg target/c64/fli.prg target/c64/artstudio.prg
 
-target/c64/%.prg: c64/%.asm target/c64/
+target/c64/%.prg: c64/%.asm target/c64/ node_modules
 	npx c64jasm --out "$@" "$<"
 
-build: $(C64CODE)
+build: $(C64CODE) node_modules
 
 cleanbuild: clean samples
 
 target/c64/:
 	mkdir -p target/c64
 
+node_modules:
+	yarn install
+
 clean:
 	rm -rf target && rm -f *.png && rm -f *.prg && rm -rf *.kla && rm -rf samples && rm -rf node_modules
-
 
 # First:
 # - update package.json with <version>
 # - commit everything
 # Be careful: when you release, everything that is not in Git is deleted!
-publish: build
+publish: cleanbuild
 	git push
 	git clean -d -f
 	npm publish
@@ -46,20 +48,17 @@ samples: build
 	$(CMD) --overwrite -f prg -m fli -o ./samples/$(EXAMPLE)-FLI.prg $(EXAMPLE).jpg
 	$(CMD) --overwrite -f png -m fli -h -o ./samples/$(EXAMPLE)-AFLI.png $(EXAMPLE).jpg
 	$(CMD) --overwrite -f prg -m fli -h -o ./samples/$(EXAMPLE)-AFLI.prg $(EXAMPLE).jpg
+	convert -extent 384x272 -background black -gravity center ./samples/$(EXAMPLE)-Multicolor.png ./samples/CSDb.png
 
 test: build
-	rm $(EXAMPLE).png || true
-	rm $(EXAMPLE).prg || true
 	$(CMD) --overwrite -f prg -o $(EXAMPLE).prg $(EXAMPLE).jpg
 	$(CMD) --overwrite -f png -o $(EXAMPLE).png $(EXAMPLE).jpg
 	open "$(EXAMPLE).png"
 	x64sc "$(EXAMPLE).prg"
 
 testfli: build
-	rm $(EXAMPLE).png || true
-	rm $(EXAMPLE).prg || true
-	$(CMD) -f prg -m fli "$(EXAMPLE).jpg" "$(EXAMPLE).prg"
-	$(CMD) -f png -m fli "$(EXAMPLE).jpg" "$(EXAMPLE).png"
+	$(CMD) --overwrite -f prg -m fli "$(EXAMPLE).jpg" "$(EXAMPLE).prg"
+	$(CMD) --overwrite -f png -m fli "$(EXAMPLE).jpg" "$(EXAMPLE).png"
 	open "$(EXAMPLE).png"
 	x64sc "$(EXAMPLE).prg"
 

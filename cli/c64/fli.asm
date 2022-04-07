@@ -1,3 +1,5 @@
+; vim:set ft=c64jasm:
+
 !include "macros.asm"
 
 !let tab18   = $0e00

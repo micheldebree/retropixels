@@ -1,3 +1,5 @@
+; vim:set ft=c64jasm:
+
 !macro basic_upstart (address) {
   * = $0801
   !byte $0c,$08,$00,$00,$9e

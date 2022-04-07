@@ -1,3 +1,5 @@
+; vim:set ft=c64jasm:
+
 !include "macros.asm"
 
 !let bitmap = $2000
@@ -8,7 +10,6 @@
 +basic_upstart(start)
 
 start:
-
     lda #$18
     sta $d018
     lda #$d8
