@@ -3644,7 +3644,7 @@ retire@3.0.6:
     read-installed "^4.0.3"
     walkdir "0.4.1"
 
-retropixels-core@../core:
+"retropixels-core@file:../core":
   version "0.1.2"
   dependencies:
     jimp "0.16.1"
