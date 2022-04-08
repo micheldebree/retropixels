@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useCallback, useState } from 'react';
 import { Grid, AppBar, Toolbar, Typography, Button, Link, Container } from '@material-ui/core';
 import './App.css';
 import GitHubIcon from '@material-ui/icons/GitHub';
@@ -28,10 +28,14 @@ function App() {
 
   const classes = useStyles();
 
-  function onSourceImageChanged(newSourceImage) {
-    setSourceImage(newSourceImage.jimpImage);
-    setFilename(newSourceImage.filename);
-  }
+  const onSourceImageChanged = useCallback(
+    newSourceImage => {
+      setSourceImage(newSourceImage.jimpImage);
+      setFilename(newSourceImage.filename);
+    },
+    [setSourceImage, setFilename]
+  );
+
   return (
     <div className="App">
       <body className="App-body">

@@ -16,13 +16,15 @@
     "react-router-prop-types": "1.0.5",
     "react-scripts": "4.0.3",
     "retropixels-core": "../core",
-    "web-vitals": "^1.1.2"
+    "web-vitals": "^2.1.4"
   },
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "eject": "react-scripts eject",
+    "lint": "npx eslint '**/*.jsx'",
+    "fix": "npx eslint --fix '**/*.jsx'"
   },
   "browserslist": {
     "production": [
@@ -38,6 +40,7 @@
   },
   "devDependencies": {
     "@babel/eslint-parser": "7.14.3",
+    "@babel/preset-react": "7.16.7",
     "@testing-library/jest-dom": "5.16.4",
     "@testing-library/react": "^13.0.0",
     "@testing-library/user-event": "^14.0.4",

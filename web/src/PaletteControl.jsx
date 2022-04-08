@@ -86,28 +86,26 @@ function PaletteControl(props) {
   }
 
   return (
-    <>
-      <Grid container>
-        <Grid item xs={12} align="left">
-          <ResetButton onClick={reset} disabled={defaultsSet} />
-          <Container align="left">
-            <MyRadioButtons
-              label="palette"
-              value={paletteId}
-              items={paletteOptions}
-              onChange={setPaletteId}
-              tooltip="Use this palette for quantizing"
-            />
-          </Container>
-        </Grid>
-        <Grid item xs={6}>
-          <List dense>{subPalette(0)}</List>
-        </Grid>
-        <Grid item xs={6}>
-          <List dense>{subPalette(8)}</List>
-        </Grid>
+    <Grid container>
+      <Grid item xs={12} align="left">
+        <ResetButton onClick={reset} disabled={defaultsSet} />
+        <Container align="left">
+          <MyRadioButtons
+            label="palette"
+            value={paletteId}
+            items={paletteOptions}
+            onChange={setPaletteId}
+            tooltip="Use this palette for quantizing"
+          />
+        </Container>
       </Grid>
-    </>
+      <Grid item xs={6}>
+        <List dense>{subPalette(0)}</List>
+      </Grid>
+      <Grid item xs={6}>
+        <List dense>{subPalette(8)}</List>
+      </Grid>
+    </Grid>
   );
 }
 
