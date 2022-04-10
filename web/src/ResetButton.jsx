@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Button, Box, Tooltip } from '@material-ui/core';
-import AutorenewIcon from '@material-ui/icons/Autorenew';
+import { Button, Box, Tooltip } from '@mui/material';
+import AutorenewIcon from '@mui/icons-material/Autorenew';
 
 function ResetButton(props) {
   const { onClick, disabled } = props;

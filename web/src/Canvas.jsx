@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 import PropTypes from 'prop-types';
-import { Box } from '@material-ui/core';
+import { Box } from '@mui/material';
 
 function Canvas(props) {
   const canvasRef = React.useRef(null);

@@ -1,8 +1,8 @@
 import React, { useState, useEffect, useMemo } from 'react';
 import PropTypes from 'prop-types';
-import { Checkbox, Grid, List, ListItem, ListItemIcon, Container, Box } from '@material-ui/core';
+import { Checkbox, Grid, List, ListItem, ListItemIcon, Container, Box } from '@mui/material';
 import { Palettes } from 'retropixels-core';
-import Brightness1Icon from '@material-ui/icons/Brightness1';
+import Brightness1Icon from '@mui/icons-material/Brightness1';
 import MyRadioButtons from './MyRadioButtons';
 import ResetButton from './ResetButton';
 

@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Radio, RadioGroup, FormControlLabel, FormControl, FormLabel, Tooltip } from '@material-ui/core';
+import { Radio, RadioGroup, FormControlLabel, FormControl, FormLabel, Tooltip } from '@mui/material';
 
 function MyRadioButtons(props) {
   const { label, value, items, onChange, tooltip } = props;

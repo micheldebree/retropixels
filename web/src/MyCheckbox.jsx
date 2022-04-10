@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Checkbox, FormControlLabel, Tooltip } from '@material-ui/core';
+import { Checkbox, FormControlLabel, Tooltip } from '@mui/material';
 
 function MyCheckbox(props) {
   const { name, label, value, onChange, tooltip } = props;

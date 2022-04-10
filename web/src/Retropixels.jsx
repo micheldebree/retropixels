@@ -1,9 +1,9 @@
 import React, { useState, useCallback } from 'react';
 import PropTypes from 'prop-types';
-import { Button, Container, Tooltip, Grid } from '@material-ui/core';
-import { makeStyles } from '@material-ui/core/styles';
-import BlurLinearIcon from '@material-ui/icons/BlurLinear';
-import CloudDownloadIcon from '@material-ui/icons/CloudDownload';
+import { Button, Container, Tooltip, Grid } from '@mui/material';
+import { makeStyles } from '@mui/styles';
+import BlurLinearIcon from '@mui/icons-material/BlurLinear';
+import CloudDownloadIcon from '@mui/icons-material/CloudDownload';
 import { C64Writer, Palettes } from 'retropixels-core';
 import { saveAs } from 'file-saver';
 import Jimp from 'jimp/es';
@@ -134,6 +134,7 @@ function Retropixels(props) {
         <Container align="left" className={classes.root}>
           <Tooltip title={`Download the image as ${outputFormat} file`} arrow>
             <Button
+              sx={{marginRight: '2em'}}
               variant="contained"
               disabled={pixelImage === undefined}
               color="primary"

@@ -40,6 +40,7 @@ rules:
   react-hooks/rules-of-hooks: 'warn'
   react-hooks/exhaustive-deps: 'warn'
   react/no-unused-prop-types: 'warn'
+  react/jsx-no-bind: 'warn'
   no-unused-vars: 'warn'
 env:
   jest: true

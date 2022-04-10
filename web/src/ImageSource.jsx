@@ -1,11 +1,11 @@
 import React, { useEffect, useState, useCallback } from 'react';
 import PropTypes from 'prop-types';
 import * as Jimp from 'jimp';
-import { Container } from '@material-ui/core';
-import Brightness5OutlinedIcon from '@material-ui/icons/Brightness5Outlined';
-import Brightness6OutlinedIcon from '@material-ui/icons/Brightness6Outlined';
-import BrokenImageOutlinedIcon from '@material-ui/icons/BrokenImageOutlined';
-import BlurOnOutlinedIcon from '@material-ui/icons/BlurOnOutlined';
+import { Container } from '@mui/material';
+import Brightness5OutlinedIcon from '@mui/icons-material/Brightness5Outlined';
+import Brightness6OutlinedIcon from '@mui/icons-material/Brightness6Outlined';
+import BrokenImageOutlinedIcon from '@mui/icons-material/BrokenImageOutlined';
+import BlurOnOutlinedIcon from '@mui/icons-material/BlurOnOutlined';
 import { abbreviateFilename } from './Utilities';
 import ImageUpload from './ImageUpload';
 import MyRadioButtons from './MyRadioButtons';
@@ -67,9 +67,7 @@ function getImageDataFromJimpImage(jimpImage) {
     data = jimpImage.bitmap.data;
   }
 
-  return jimpImage !== undefined
-    ? new ImageData(Uint8ClampedArray.from(data), jimpImage.bitmap.width, jimpImage.bitmap.height)
-    : undefined;
+  return new ImageData(Uint8ClampedArray.from(data), jimpImage.bitmap.width, jimpImage.bitmap.height);
 }
 
 function ImageSource(props) {

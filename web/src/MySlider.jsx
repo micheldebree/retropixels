@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Grid, Slider, Tooltip, FormLabel } from '@material-ui/core';
+import { Grid, Slider, Tooltip, FormLabel } from '@mui/material';
 
 function MySlider(props) {
   const { label, value, min, max, step, onChange, tooltip, icon, disabled } = props;

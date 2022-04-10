@@ -4,9 +4,10 @@
   "homepage": ".",
   "private": true,
   "dependencies": {
-    "@material-ui/core": "4.12.4",
-    "@material-ui/icons": "4.11.3",
-    "@material-ui/lab": "4.0.0-alpha.61",
+    "@mui/icons-material": "5.6.0",
+    "@mui/lab": "5.0.0-alpha.76",
+    "@mui/material": "5.6.0",
+    "@mui/styles": "5.6.0",
     "file-saver": "2.0.5",
     "jimp": "0.16.1",
     "prop-types": "15.8.1",

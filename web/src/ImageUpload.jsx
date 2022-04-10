@@ -2,8 +2,8 @@ import React, { useState, useEffect } from 'react';
 import Jimp from 'jimp/es';
 import PropTypes from 'prop-types';
 import { useDropzone } from 'react-dropzone';
-import { Container, Box, Snackbar, Typography } from '@material-ui/core';
-import { Alert } from '@material-ui/lab';
+import { Container, Box, Snackbar, Typography } from '@mui/material';
+import { Alert } from '@mui/lab';
 import Canvas from './Canvas';
 
 // Lets the user select an image file
