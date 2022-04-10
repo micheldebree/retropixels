@@ -104,7 +104,7 @@ function ImageSource(props) {
   }, []);
 
   // reset all controls to default
-  function reset() {
+  const reset = useCallback(() => {
     setNormalize(normalizeDefault);
     setGreyscale(greyscaleDefault);
     setMirrorHor(mirrorHorDefault);
@@ -114,7 +114,7 @@ function ImageSource(props) {
     setContrast(contrastDefault);
     setBlur(blurDefault);
     setThreshold(thresholdDefault);
-  }
+  }, []);
 
   // if the processed image has changed, notify owner
   useEffect(() => {

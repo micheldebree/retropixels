@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useMemo } from 'react';
+import React, { useState, useEffect, useMemo, useCallback } from 'react';
 import PropTypes from 'prop-types';
 import { Checkbox, Grid, List, ListItem, ListItemIcon, Container, Box } from '@mui/material';
 import { Palettes } from 'retropixels-core';
@@ -9,27 +9,27 @@ import ResetButton from './ResetButton';
 const paletteOptions = ['colodore', 'pepto'];
 const paletteIdDefault = 'colodore';
 
+const enabledDefault = {
+  0: true,
+  1: true,
+  2: true,
+  3: true,
+  4: true,
+  5: true,
+  6: true,
+  7: true,
+  8: true,
+  9: true,
+  10: true,
+  11: true,
+  12: true,
+  13: true,
+  14: true,
+  15: true
+};
+
 function PaletteControl(props) {
   const { onChange } = props;
-
-  const enabledDefault = {
-    0: true,
-    1: true,
-    2: true,
-    3: true,
-    4: true,
-    5: true,
-    6: true,
-    7: true,
-    8: true,
-    9: true,
-    10: true,
-    11: true,
-    12: true,
-    13: true,
-    14: true,
-    15: true
-  };
 
   const [paletteId, setPaletteId] = useState(paletteIdDefault);
   const [palette, setPalette] = useState(Palettes.all[paletteId]);
@@ -49,10 +49,10 @@ function PaletteControl(props) {
 
   const defaultsSet = enabledColors.length === palette.colors.length && paletteId === paletteIdDefault;
 
-  function reset() {
+  const reset = useCallback(() => {
     setEnabledMap(enabledDefault);
     setPaletteId(paletteIdDefault);
-  }
+  }, []);
 
   function onChanged(index) {
     return () => {

@@ -93,13 +93,13 @@ function Retropixels(props) {
     pngOutputFilename = `${parsedFilename.basename}.png`;
   }
 
-  function reset() {
+  const reset = useCallback(() => {
     setColorSpace(colorspaceDefault);
     setHires(hiresDefault);
     setNomaps(nomapsDefault);
     setDither(ditherDefault);
     setDitherRadius(ditherRadiusDefault);
-  }
+  }, []);
 
   let outputFormat = 'output';
   if (pixelImage !== undefined) {
