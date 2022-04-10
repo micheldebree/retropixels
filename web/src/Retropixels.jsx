@@ -134,7 +134,7 @@ function Retropixels(props) {
         <Container align="left" className={classes.root}>
           <Tooltip title={`Download the image as ${outputFormat} file`} arrow>
             <Button
-              sx={{marginRight: '2em'}}
+              sx={{ marginRight: '2em' }}
               variant="contained"
               disabled={pixelImage === undefined}
               color="primary"
