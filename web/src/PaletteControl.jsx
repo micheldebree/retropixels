@@ -6,8 +6,8 @@ import Brightness1Icon from '@mui/icons-material/Brightness1';
 import MyRadioButtons from './MyRadioButtons';
 import ResetButton from './ResetButton';
 
-const paletteOptions = ['colodore', 'pepto'];
-const paletteIdDefault = 'colodore';
+const paletteOptions = ['PALette', 'colodore', 'pepto'];
+const paletteIdDefault = 'PALette';
 
 const enabledDefault = {
   0: true,

@@ -1,6 +1,6 @@
 {
   "name": "retropixels-core",
-  "version": "0.1.4",
+  "version": "0.1.5",
   "description": "A javascript library to convert images to Commodore 64 format.",
   "main": "target/index.js",
   "scripts": {
