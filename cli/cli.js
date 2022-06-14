@@ -16,10 +16,10 @@ cli
   .usage('[options] <infile>')
   .option('-o, --outfile <outfile>')
   .option('-m, --mode <graphicMode>', 'bitmap (default), fli, afli, sprites')
-  .option('-f, --format <output format>', 'png')
+  .option('-f, --format <output format>', 'png, prg')
   .option('-d, --ditherMode <ditherMode>', 'bayer2x2, bayer4x4 (default), bayer8x8')
   .option('-r, --ditherRadius [0-64]', '0 = no dithering, 32 = default', parseInt)
-  .option('-p, --palette <palette>', 'colodore (default), pepto, deekay')
+  .option('-p, --palette <palette>', 'PALette (default), colodore, pepto, deekay')
   .option('-c, --colorspace <colorspace>', 'xyz (default), yuv, rgb (no conversion), rainbow')
   .option('--cols <columns>', 'number of columns of sprites, default = 8', parseInt)
   .option('--rows <rows>', 'number of rows of sprites, default = 8', parseInt)
@@ -50,7 +50,7 @@ if (options.ditherRadius === undefined) {
 }
 
 if (!options.palette) {
-  options.palette = 'colodore';
+  options.palette = 'PALette';
 }
 
 if (!options.colorspace) {

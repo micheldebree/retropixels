@@ -269,6 +269,12 @@ Run with `node cli.js [options] <infile>`
 
 ## Changelog
 
+### 0.8.10
+
+- Added [#89](https://github.com/micheldebree/retropixels/issues/89) A palette
+  called "PALette". Thanks to Tobias Albert for developing and supplying the
+  palette.
+
 ### 0.8.6
 
 - Fixed [#71](https://github.com/micheldebree/retropixels/issues/71) Error:
