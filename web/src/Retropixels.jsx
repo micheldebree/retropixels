@@ -20,9 +20,9 @@ const ditherOptions = ['none', 'bayer2x2', 'bayer4x4', 'bayer8x8'];
 const colorspaceOptions = ['rgb', 'yuv', 'xyz', 'rainbow'];
 
 // defaults
-const ditherDefault = 'bayer4x4';
+const ditherDefault = 'bayer2x2';
 const paletteDefault = Palettes.all.colodore;
-const colorspaceDefault = 'xyz';
+const colorspaceDefault = 'yuv';
 const hiresDefault = false;
 const nomapsDefault = false;
 const ditherRadiusDefault = 32;

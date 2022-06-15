@@ -1,4 +1,1 @@
-export default {
-  buildnr: '2022-04-07.334531d',
-  url: 'https://github.com/micheldebree/retropixels/commit/334531d7542c3406593a05008c8833f0b991416e'
-};
+export default {buildnr: '2022-06-14.80eabec', url: 'https://github.com/micheldebree/retropixels/commit/80eabecf3855da4ac5bd59da171f4ea9dfbe2a85'}

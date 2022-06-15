@@ -6,6 +6,7 @@ import Brightness5OutlinedIcon from '@mui/icons-material/Brightness5Outlined';
 import Brightness6OutlinedIcon from '@mui/icons-material/Brightness6Outlined';
 import BrokenImageOutlinedIcon from '@mui/icons-material/BrokenImageOutlined';
 import BlurOnOutlinedIcon from '@mui/icons-material/BlurOnOutlined';
+import GradientOutlinedIcon from '@mui/icons-material/GradientOutlined';
 import { abbreviateFilename } from './Utilities';
 import ImageUpload from './ImageUpload';
 import MyRadioButtons from './MyRadioButtons';
@@ -15,7 +16,6 @@ import ResetButton from './ResetButton';
 
 // defaults
 const normalizeDefault = true;
-const greyscaleDefault = false;
 const mirrorHorDefault = false;
 const mirrorVerDefault = false;
 const invertDefault = false;
@@ -23,6 +23,7 @@ const brightnessDefault = 0;
 const contrastDefault = 0;
 const blurDefault = 0;
 const thresholdDefault = 0;
+const saturationDefault = 0;
 
 function cropJimpImage(jimpImage) {
   const isTooSmall = jimpImage.bitmap.width < 320 || jimpImage.bitmap.height < 200;
@@ -88,7 +89,6 @@ function ImageSource(props) {
   const [filename, setFilename] = useState('input');
   const [scale, setScale] = useState('fill');
   const [normalize, setNormalize] = useState(normalizeDefault);
-  const [greyscale, setGreyscale] = useState(greyscaleDefault);
   const [mirrorHor, setMirrorHor] = useState(mirrorHorDefault);
   const [mirrorVer, setMirrorVer] = useState(mirrorVerDefault);
   const [invert, setInvert] = useState(invertDefault);
@@ -96,6 +96,7 @@ function ImageSource(props) {
   const [contrast, setContrast] = useState(contrastDefault);
   const [blur, setBlur] = useState(blurDefault);
   const [threshold, setThreshold] = useState(thresholdDefault);
+  const [saturation, setSaturation] = useState(saturationDefault);
 
   // memoize the callback to avoid re-rendering
   const onLoadedCallback = useCallback(img => {
@@ -106,7 +107,6 @@ function ImageSource(props) {
   // reset all controls to default
   const reset = useCallback(() => {
     setNormalize(normalizeDefault);
-    setGreyscale(greyscaleDefault);
     setMirrorHor(mirrorHorDefault);
     setMirrorVer(mirrorVerDefault);
     setInvert(invertDefault);
@@ -114,6 +114,7 @@ function ImageSource(props) {
     setContrast(contrastDefault);
     setBlur(blurDefault);
     setThreshold(thresholdDefault);
+    setSaturation(saturationDefault);
   }, []);
 
   // if the processed image has changed, notify owner
@@ -139,9 +140,6 @@ function ImageSource(props) {
     }
     const newImage = croppedImage.clone();
 
-    if (greyscale) {
-      newImage.greyscale();
-    }
     if (normalize) {
       newImage.normalize();
     }
@@ -163,19 +161,24 @@ function ImageSource(props) {
       newImage.threshold({ max: threshold, autoGreyscale: false });
     }
 
+    if (saturation > 0) {
+      newImage.color([{ apply: 'saturate', params: [saturation] }]);
+    } else if (saturation < 0) {
+      newImage.color([{ apply: 'desaturate', params: [-saturation] }]);
+    }
+
     setImage(newImage);
-  }, [croppedImage, normalize, brightness, contrast, greyscale, blur, mirrorHor, mirrorVer, invert, threshold]);
+  }, [croppedImage, normalize, brightness, contrast, blur, mirrorHor, mirrorVer, invert, threshold, saturation]);
 
   const defaultsSet =
-    normalize === normalizeDefault &&
-    greyscale === greyscaleDefault &&
     mirrorHor === mirrorHorDefault &&
     mirrorVer === mirrorVerDefault &&
     invert === invertDefault &&
     contrast === contrastDefault &&
     brightness === brightnessDefault &&
     blur === blurDefault &&
-    threshold === thresholdDefault;
+    threshold === thresholdDefault &&
+    saturation === saturationDefault;
 
   return (
     <>
@@ -202,13 +205,6 @@ function ImageSource(props) {
           value={normalize}
           onChange={setNormalize}
           tooltip="Stretch color intensities to their full range"
-        />
-        <MyCheckbox
-          name="greyscale"
-          label="greyscale"
-          value={greyscale}
-          onChange={setGreyscale}
-          tooltip="Convert to black and white"
         />
         <MyCheckbox name="invert" label="invert" value={invert} onChange={v => setInvert(v)} tooltip="Invert colors" />
         <MyCheckbox
@@ -244,6 +240,15 @@ function ImageSource(props) {
           onChange={setContrast}
           tooltip="Adjust image contrast"
           icon={<Brightness6OutlinedIcon />}
+        />
+        <MySlider
+          label="saturation"
+          value={saturation}
+          min={-100}
+          max={100}
+          onChange={setSaturation}
+          tooltip="Adjust color saturation"
+          icon={<GradientOutlinedIcon />}
         />
         <MySlider
           label="blur"

@@ -65,7 +65,8 @@ With
   - `--ditherRadius, r <ditherRadius>` with `<ditherRadius>`:
     - A number between 0 (no dithering) and 64 (heavy dithering). Default is 32.
   - `--palette, -p <palette>` with `<palette>`:
-    - `colodore` (default)
+    - `PALette` (default)
+    - `colodore`
     - `pepto`
     - `deekay`
   - `--colorspace, -c <colorspace>` with `<colorspace>`:
