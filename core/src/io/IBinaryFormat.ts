@@ -1,10 +1,10 @@
-import PixelImage from '../model/PixelImage';
+import PixelImage from '../model/PixelImage'
 
 interface IBinaryFormat {
-  formatName: string;
-  defaultExtension: string;
+  formatName: string
+  defaultExtension: string
 
-  fromPixelImage(pixelImage: PixelImage): void;
-  toMemoryMap(): Uint8Array[];
+  fromPixelImage: (pixelImage: PixelImage) => void
+  toMemoryMap: () => Uint8Array[]
 }
-export default IBinaryFormat;
+export default IBinaryFormat

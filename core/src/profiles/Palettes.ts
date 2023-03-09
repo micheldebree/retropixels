@@ -1,4 +1,4 @@
-import Palette from '../model/Palette';
+import Palette from '../model/Palette'
 
 export default class Palettes {
   // https://sourceforge.net/projects/deniseem/
@@ -19,7 +19,7 @@ export default class Palettes {
     [0xa9, 0xff, 0x9f, 0xff], // light green
     [0x70, 0x6e, 0xeb, 0xff], // light blue
     [0xb2, 0xb2, 0xb2, 0xff] // light gray
-  ]);
+  ])
 
   public static pepto = new Palette([
     [0, 0, 0, 0xff], // black
@@ -38,7 +38,7 @@ export default class Palettes {
     [0x9a, 0xd2, 0x84, 0xff], // light green
     [0x6c, 0x5e, 0xb5, 0xff], // light blue
     [0x95, 0x95, 0x95, 0xff] // light gray
-  ]);
+  ])
 
   public static deekay = new Palette([
     [0, 0, 0, 0xff], // black
@@ -57,7 +57,7 @@ export default class Palettes {
     [0x98, 0xff, 0x98, 0xff], // light green
     [0x50, 0x90, 0xd0, 0xff], // light blue
     [0xb8, 0xb8, 0xb8, 0xff] // light gray
-  ]);
+  ])
 
   public static PALette = new Palette([
     [0, 0, 0, 0xff], // black
@@ -76,12 +76,12 @@ export default class Palettes {
     [0x8c, 0xe9, 0x8b, 0xff], // light green
     [0x6b, 0x66, 0xe4, 0xff], // light blue
     [0xa3, 0xa3, 0xa3, 0xff] // light gray
-  ]);
+  ])
 
   public static all = {
     pepto: Palettes.pepto,
     colodore: Palettes.colodore,
     deekay: Palettes.deekay,
     PALette: Palettes.PALette
-  };
+  }
 }

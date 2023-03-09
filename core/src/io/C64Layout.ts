@@ -1,48 +1,48 @@
-import PixelImage from '../model/PixelImage';
+import PixelImage from '../model/PixelImage'
 
 export default class C64Layout {
-  public static concat(arrayBuffers: Uint8Array[]): Uint8Array {
+  public static concat (arrayBuffers: Uint8Array[]): Uint8Array {
     if (arrayBuffers.length === 1) {
-      return arrayBuffers[0];
+      return arrayBuffers[0]
     }
 
     return arrayBuffers.reduce((total, current) => {
-      const result = new Uint8Array(total.length + current.length);
-      result.set(total, 0);
-      result.set(current, total.length);
-      return result;
-    });
+      const result = new Uint8Array(total.length + current.length)
+      result.set(total, 0)
+      result.set(current, total.length)
+      return result
+    })
   }
 
-  public static pad(buffer: Uint8Array, numberOfBytes: number): Uint8Array {
-    return this.concat([buffer, new Uint8Array(numberOfBytes)]);
+  public static pad (buffer: Uint8Array, numberOfBytes: number): Uint8Array {
+    return this.concat([buffer, new Uint8Array(numberOfBytes)])
   }
 
-  public static convertBitmap(pixelImage: PixelImage): Uint8Array {
-    const bitmapSize: number = (pixelImage.mode.width * pixelImage.mode.height) / pixelImage.mode.pixelsPerByte();
-    const bitmap: Uint8Array = new Uint8Array(bitmapSize);
-    let bitmapIndex = 0;
+  public static convertBitmap (pixelImage: PixelImage): Uint8Array {
+    const bitmapSize: number = (pixelImage.mode.width * pixelImage.mode.height) / pixelImage.mode.pixelsPerByte()
+    const bitmap: Uint8Array = new Uint8Array(bitmapSize)
+    let bitmapIndex = 0
 
     pixelImage.mode.forEachCell(0, (x, y) => {
       pixelImage.mode.forEachCellRow(y, rowY => {
         // pack one character's row worth of pixels into one byte
         pixelImage.mode.forEachByte(x, byteX => {
-          let packedByte = 0;
+          let packedByte = 0
           if (byteX >= pixelImage.mode.fliBugSize) {
             pixelImage.mode.forEachPixel(byteX, (pixelX, shiftTimes) => {
-              packedByte |= pixelImage.mapPixelIndex(pixelX, rowY) << shiftTimes;
-            });
+              packedByte |= pixelImage.mapPixelIndex(pixelX, rowY) << shiftTimes
+            })
           }
-          bitmap[bitmapIndex] = packedByte;
-          bitmapIndex += 1;
-        });
-      });
-    });
+          bitmap[bitmapIndex] = packedByte
+          bitmapIndex += 1
+        })
+      })
+    })
 
-    return bitmap;
+    return bitmap
   }
 
-  public static convertScreenram(
+  public static convertScreenram (
     pixelImage: PixelImage,
     lowerColorIndex: number,
     upperColorIndex: number,
@@ -53,13 +53,13 @@ export default class C64Layout {
       return (
         ((pixelImage.colorMaps[upperColorIndex].get(x, y) << 4) & 0xf0) |
         (pixelImage.colorMaps[lowerColorIndex].get(x, y) & 0x0f)
-      );
-    });
+      )
+    })
   }
 
-  public static convertColorram(pixelImage: PixelImage, colorMapIndex: number): Uint8Array {
+  public static convertColorram (pixelImage: PixelImage, colorMapIndex: number): Uint8Array {
     return pixelImage.extractAttributeData(0, (x, y) => {
-      return pixelImage.colorMaps[colorMapIndex].get(x, y) & 0x0f;
-    });
+      return pixelImage.colorMaps[colorMapIndex].get(x, y) & 0x0f
+    })
   }
 }

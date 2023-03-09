@@ -9,19 +9,12 @@
     "fix": "npx eslint '*/**/*.{js,ts}' --quiet --fix -c .eslintrc.json --no-eslintrc"
   },
   "dependencies": {
-    "jimp": "0.16.1"
+    "jimp": "0.22.7"
   },
   "devDependencies": {
-    "@types/node": "17.0.42",
-    "@typescript-eslint/eslint-plugin": "5.27.1",
-    "@typescript-eslint/parser": "5.27.1",
-    "eslint": "8.17.0",
-    "eslint-config-airbnb-typescript": "17.0.0",
-    "eslint-config-prettier": "8.5.0",
-    "eslint-plugin-import": "2.26.0",
-    "eslint-plugin-prettier": "4.0.0",
-    "prettier": "2.6.2",
-    "typescript": "4.7.3"
+    "@types/node": "18.14.6",
+    "ts-standard": "12.0.2",
+    "typescript": "4.9.5"
   },
   "repository": {
     "type": "git",

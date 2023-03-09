@@ -1,15 +1,15 @@
 #!/usr/bin/env node
 /* jshint esversion: 6 */
-const cli = require('commander');
-const path = require('path');
-const { promisify } = require('util');
-const fs = require('fs');
-const fsStat = promisify(fs.stat);
-const retropixels = require('retropixels-core');
+const cli = require('commander')
+const path = require('path')
+const { promisify } = require('util')
+const fs = require('fs')
+const fsStat = promisify(fs.stat)
+const retropixels = require('retropixels-core')
 
-const { version } = require('./package');
+const { version } = require('./package')
 
-const viewersFolder = '/target/c64/';
+const viewersFolder = '/target/c64/'
 
 cli
   .version(version)
@@ -27,167 +27,166 @@ cli
   .option('--nomaps', 'use one color per attribute instead of a map')
   .option('-s, --scale <mode>', 'none, fill (default)')
   .option('--overwrite', 'force overwrite of existing output file')
-  .parse(process.argv);
+  .parse(process.argv)
 
 // defaults
 
-const options = cli.opts();
+const options = cli.opts()
 
 if (!options.mode) {
-  options.mode = 'bitmap';
+  options.mode = 'bitmap'
 }
 
 if (!options.ditherMode) {
-  options.ditherMode = 'bayer4x4';
+  options.ditherMode = 'bayer4x4'
 }
 
 if (!options.scale) {
-  options.scale = 'fill';
+  options.scale = 'fill'
 }
 
 if (options.ditherRadius === undefined) {
-  options.ditherRadius = 32;
+  options.ditherRadius = 32
 }
 
 if (!options.palette) {
-  options.palette = 'PALette';
+  options.palette = 'PALette'
 }
 
 if (!options.colorspace) {
-  options.colorspace = 'xyz';
+  options.colorspace = 'xyz'
 }
 
 if (!options.cols) {
-  options.cols = 8;
+  options.cols = 8
 }
 
 if (!options.rows) {
-  options.rows = 8;
+  options.rows = 8
 }
 
-const pixelImageBuilder = retropixels.GraphicModes.all[options.mode];
+const pixelImageBuilder = retropixels.GraphicModes.all[options.mode]
 if (!pixelImageBuilder) {
-  console.error(`Unknown graphicMode: ${options.mode}`);
-  cli.help();
-  process.exit(1);
+  console.error(`Unknown graphicMode: ${options.mode}`)
+  cli.help()
+  process.exit(1)
 }
 
-const ditherPreset = retropixels.OrderedDither.presets[options.ditherMode];
+const ditherPreset = retropixels.OrderedDither.presets[options.ditherMode]
 if (!ditherPreset) {
-  console.error(`Unknown ditherMode: ${options.ditherMode}`);
-  cli.help();
-  process.exit(1);
+  console.error(`Unknown ditherMode: ${options.ditherMode}`)
+  cli.help()
+  process.exit(1)
 }
 
-const palette = retropixels.Palettes.all[options.palette];
+const palette = retropixels.Palettes.all[options.palette]
 if (palette === undefined) {
-  console.error(`Unknown palette: ${options.palette}`);
-  cli.help();
-  process.exit(1);
+  console.error(`Unknown palette: ${options.palette}`)
+  cli.help()
+  process.exit(1)
 }
 
-const colorspace = retropixels.ColorSpaces.all[options.colorspace];
+const colorspace = retropixels.ColorSpaces.all[options.colorspace]
 if (colorspace === undefined) {
-  console.error(`Unknown colorspace: ${options.colorspace}`);
-  cli.help();
-  process.exit(1);
+  console.error(`Unknown colorspace: ${options.colorspace}`)
+  cli.help()
+  process.exit(1)
 }
 
-const ditherer = new retropixels.OrderedDither(ditherPreset, options.ditherRadius);
+const ditherer = new retropixels.OrderedDither(ditherPreset, options.ditherRadius)
 
-const inFile = cli.args[0];
+const inFile = cli.args[0]
 
 if (inFile === undefined) {
-  console.error('Input file missing.');
-  cli.help();
+  console.error('Input file missing.')
+  cli.help()
 }
 
-async function checkOverwrite(filename) {
+async function checkOverwrite (filename) {
   try {
-    await fsStat(filename);
+    await fsStat(filename)
   } catch (err) {
     if (err.code !== 'ENOENT') {
-      throw new Error(`Could not write file ${filename}: ${err.code}`);
+      throw new Error(`Could not write file ${filename}: ${err.code}`)
     }
-    return;
+    return
   }
   if (!options.overwrite) {
-    throw new Error(`Output file ${filename} already exists. Use --overwrite to force overwriting output file.`);
+    throw new Error(`Output file ${filename} already exists. Use --overwrite to force overwriting output file.`)
   }
 }
 
-function getOutFile(extension) {
+function getOutFile (extension) {
   if (options.outfile) {
-    return options.outfile;
+    return options.outfile
   }
 
-  const baseName = path.basename(inFile, path.extname(inFile));
-  return `${baseName}.${extension}`;
+  const baseName = path.basename(inFile, path.extname(inFile))
+  return `${baseName}.${extension}`
 }
 
-function saveExecutable(pixelImage, outFile) {
-  const binary = retropixels.C64Writer.toBinary(pixelImage);
+function saveExecutable (pixelImage, outFile) {
+  const binary = retropixels.C64Writer.toBinary(pixelImage)
 
-  const appDir = path.dirname(require.main.filename);
-  const viewerFile = path.join(appDir, `${viewersFolder}${binary.formatName}.prg`);
-  let viewerCode;
+  const appDir = path.dirname(require.main.filename)
+  const viewerFile = path.join(appDir, `${viewersFolder}${binary.formatName}.prg`)
+  let viewerCode
 
   try {
-    viewerCode = fs.readFileSync(viewerFile);
+    viewerCode = fs.readFileSync(viewerFile)
   } catch (error) {
-    throw error;
-    // throw new Error(`Executable format is not supported for ${binary.formatName}`);
+    throw new Error(`Executable format is not supported for ${binary.formatName}`)
   }
 
-  const buffer = retropixels.C64Writer.toBuffer(binary);
-  const writeBuffer = Buffer.concat([viewerCode, buffer]);
+  const buffer = retropixels.C64Writer.toBuffer(binary)
+  const writeBuffer = Buffer.concat([viewerCode, buffer])
 
-  return fs.writeFileSync(outFile, writeBuffer);
+  return fs.writeFileSync(outFile, writeBuffer)
 }
 
-const quantizer = new retropixels.Quantizer(palette, colorspace);
-const converter = new retropixels.Converter(quantizer);
+const quantizer = new retropixels.Quantizer(palette, colorspace)
+const converter = new retropixels.Converter(quantizer)
 
 const pixelImage = pixelImageBuilder({
   rows: options.rows,
   columns: options.cols,
   hires: options.hires,
   nomaps: options.nomaps
-});
+})
 
 retropixels.JimpPreprocessor.read(inFile, pixelImage.mode, options.scale)
   .then(async jimpImage => {
     if (options.ditherMode !== 'none') {
-      ditherer.dither(jimpImage);
+      ditherer.dither(jimpImage)
     }
 
-    converter.convert(jimpImage, pixelImage);
+    converter.convert(jimpImage, pixelImage)
 
-    let outFile;
+    let outFile
     if (!options.format) {
-      const binary = retropixels.C64Writer.toBinary(pixelImage);
-      outFile = getOutFile(binary.defaultExtension);
-      await checkOverwrite(outFile);
-      const buffer = retropixels.C64Writer.toBuffer(binary);
-      fs.writeFileSync(outFile, buffer);
+      const binary = retropixels.C64Writer.toBinary(pixelImage)
+      outFile = getOutFile(binary.defaultExtension)
+      await checkOverwrite(outFile)
+      const buffer = retropixels.C64Writer.toBuffer(binary)
+      fs.writeFileSync(outFile, buffer)
     } else if (options.format === 'prg') {
-      outFile = getOutFile('prg');
-      await checkOverwrite(outFile);
-      saveExecutable(pixelImage, outFile);
+      outFile = getOutFile('prg')
+      await checkOverwrite(outFile)
+      saveExecutable(pixelImage, outFile)
     } else if (options.format === 'png') {
-      outFile = getOutFile('png');
-      await checkOverwrite(outFile);
-      await retropixels.JimpPreprocessor.write(pixelImage, outFile, palette);
+      outFile = getOutFile('png')
+      await checkOverwrite(outFile)
+      await retropixels.JimpPreprocessor.write(pixelImage, outFile, palette)
     }
 
-    console.log(outFile);
+    console.log(outFile)
   })
   .catch(error => {
     if (error.code === 'ENOENT') {
-      console.error(`\nERROR: ${error.path} does not exist.\n`);
+      console.error(`\nERROR: ${error.path} does not exist.\n`)
     } else {
-      console.error(`\nERROR: ${error.message}\n`);
-      throw error;
+      console.error(`\nERROR: ${error.message}\n`)
+      throw error
     }
-    cli.help();
-  });
+    cli.help()
+  })

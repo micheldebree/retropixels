@@ -1,5 +1,5 @@
-import IImageData from '../model/IImageData';
-import Pixels from '../model/Pixels';
+import IImageData from '../model/IImageData'
+import Pixels from '../model/Pixels'
 
 /**
  * Apply ordered dithering to an image.
@@ -109,27 +109,27 @@ export default class OrderedDither {
       [39, 38, 37, 36, 35, 34, 33, 32],
       [56, 55, 54, 53, 52, 51, 50, 49]
     ]
-  };
-
-  private readonly matrix: number[][] = [];
-
-  constructor(normalizedMatrix: number[][], depth: number) {
-    const factor: number = 1 / (normalizedMatrix.length * normalizedMatrix[0].length);
-    this.matrix = normalizedMatrix.map((row, rowIndex) => {
-      return normalizedMatrix[rowIndex].map(column => depth * (factor * column - 0.5));
-    });
   }
 
-  public dither(image: IImageData): void {
+  private readonly matrix: number[][] = []
+
+  constructor (normalizedMatrix: number[][], depth: number) {
+    const factor: number = 1 / (normalizedMatrix.length * normalizedMatrix[0].length)
+    this.matrix = normalizedMatrix.map((row, rowIndex) => {
+      return normalizedMatrix[rowIndex].map(column => depth * (factor * column - 0.5))
+    })
+  }
+
+  public dither (image: IImageData): void {
     for (let y = 0; y < image.height; y += 1) {
       for (let x = 0; x < image.width; x += 1) {
-        Pixels.poke(image, x, y, this.offsetColor(Pixels.peek(image, x, y), x, y));
+        Pixels.poke(image, x, y, this.offsetColor(Pixels.peek(image, x, y), x, y))
       }
     }
   }
 
-  private offsetColor(color: number[], x: number, y: number): number[] {
-    const offset: number = this.matrix[y % this.matrix.length][x % this.matrix[0].length];
-    return Pixels.add(color, [offset, offset, offset]);
+  private offsetColor (color: number[], x: number, y: number): number[] {
+    const offset: number = this.matrix[y % this.matrix.length][x % this.matrix[0].length]
+    return Pixels.add(color, [offset, offset, offset])
   }
 }

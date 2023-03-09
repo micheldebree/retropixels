@@ -1,6 +1,6 @@
 interface IImageData {
-  width: number;
-  height: number;
-  data: Buffer;
+  width: number
+  height: number
+  data: Buffer
 }
-export default IImageData;
+export default IImageData

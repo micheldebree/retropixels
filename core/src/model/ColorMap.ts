@@ -11,22 +11,22 @@
  */
 
 export default class ColorMap {
-  public colors: number[][];
+  public colors: number[][]
 
-  public width: number;
+  public width: number
 
-  public height: number;
+  public height: number
 
-  public resX: number;
+  public resX: number
 
-  public resY: number;
+  public resY: number
 
-  constructor(widthVal: number, heightVal: number, resXVal: number = widthVal, resYVal: number = heightVal) {
-    this.colors = [];
-    this.width = widthVal;
-    this.height = heightVal;
-    this.resX = resXVal;
-    this.resY = resYVal;
+  constructor (widthVal: number, heightVal: number, resXVal: number = widthVal, resYVal: number = heightVal) {
+    this.colors = []
+    this.width = widthVal
+    this.height = heightVal
+    this.resX = resXVal
+    this.resY = resYVal
   }
 
   /**
@@ -35,37 +35,37 @@ export default class ColorMap {
    * @param {number} y            y coordinate
    * @param {number} paletteIndex
    */
-  public put(x: number, y: number, paletteIndex: number): void {
+  public put (x: number, y: number, paletteIndex: number): void {
     if (!this.isInRange(x, y)) {
-      return;
+      return
     }
 
-    const rx: number = this.mapX(x);
+    const rx: number = this.mapX(x)
 
     // add it to the color map
     if (this.colors[rx] === undefined) {
-      this.colors[rx] = [];
+      this.colors[rx] = []
     }
-    this.colors[rx][this.mapY(y)] = paletteIndex;
+    this.colors[rx][this.mapY(y)] = paletteIndex
   }
 
   /**
    * Get the palette index at x, y coordinate.
    * TODO: rename to getIndex
    */
-  public get(x: number, y: number): number {
-    const mX: number = this.mapX(x);
+  public get (x: number, y: number): number {
+    const mX: number = this.mapX(x)
 
     if (this.colors[mX] !== undefined) {
-      return this.colors[mX][this.mapY(y)];
+      return this.colors[mX][this.mapY(y)]
     }
-    return undefined;
+    return undefined
   }
 
-  public forEachCell(callback: (x: number, y: number) => void): void {
+  public forEachCell (callback: (x: number, y: number) => void): void {
     for (let x = 0; x < this.width; x += this.resX) {
       for (let y = 0; y < this.height; y += this.resY) {
-        callback(x, y);
+        callback(x, y)
       }
     }
   }
@@ -76,23 +76,23 @@ export default class ColorMap {
    * @param y top coordinate of the cell
    * @param callback Callback function, receiving absolute pixel coordinates
    */
-  public forEachPixelInCell(x: number, y: number, callback: (x: number, y: number) => void): void {
+  public forEachPixelInCell (x: number, y: number, callback: (x: number, y: number) => void): void {
     for (let ix: number = x; ix < x + this.resX; ix += 1) {
       for (let iy: number = y; iy < y + this.resY; iy += 1) {
-        callback(ix, iy);
+        callback(ix, iy)
       }
     }
   }
 
-  private isInRange(x: number, y: number): boolean {
-    return x >= 0 && x < this.width && y >= 0 && y < this.height;
+  private isInRange (x: number, y: number): boolean {
+    return x >= 0 && x < this.width && y >= 0 && y < this.height
   }
 
-  private mapX(x: number): number {
-    return Math.floor(x / this.resX);
+  private mapX (x: number): number {
+    return Math.floor(x / this.resX)
   }
 
-  private mapY(y: number): number {
-    return Math.floor(y / this.resY);
+  private mapY (y: number): number {
+    return Math.floor(y / this.resY)
   }
 }
