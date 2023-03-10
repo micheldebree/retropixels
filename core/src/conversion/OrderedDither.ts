@@ -115,8 +115,8 @@ export default class OrderedDither {
 
   constructor (normalizedMatrix: number[][], depth: number) {
     const factor: number = 1 / (normalizedMatrix.length * normalizedMatrix[0].length)
-    this.matrix = normalizedMatrix.map((row, rowIndex) => {
-      return normalizedMatrix[rowIndex].map(column => depth * (factor * column - 0.5))
+    this.matrix = normalizedMatrix.map(row => {
+      return row.map(column => depth * (factor * column - 0.5))
     })
   }
 

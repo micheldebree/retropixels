@@ -23,7 +23,6 @@ export default class ArtStudioPicture implements IBinaryFormat {
     this.bitmap = C64Layout.convertBitmap(pixelImage)
     this.screenRam = C64Layout.convertScreenram(pixelImage, 0, 1)
 
-    // TODO: find out what these magic bytes are for
     this.magic = new Uint8Array([0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00])
   }
 

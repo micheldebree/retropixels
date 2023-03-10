@@ -39,7 +39,7 @@ export default class Converter {
 
     // get the color map that has the closest color at x,y to realColor
     let closestMap = 0
-    let minDistance
+    let minDistance: number
     for (let i = 0; i < image.colorMaps.length; i++) {
       const paletteIndex = image.colorMaps[i].get(x, y)
 

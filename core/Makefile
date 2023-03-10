@@ -1,19 +1,21 @@
 VERSION=$(shell cat package.json | jq -r .version) 
 
-build: node_modules
+.PHONY: all
+all: node_modules
 	yarn build
 
 # First:
 # - update package.json with <version>
 # - commit everything
 # Be careful: when you release, everything that is not in Git is deleted!
+.PHONY: publish
 publish: build
 	git push
 	git clean -d -f
 	npm publish
 	git tag core-$(VERSION)
 	git push --tags
-
+.PHONY: snapshot
 snapshot: build
 	git clean -d -f
 	yarn publish --tag snapshot
@@ -21,5 +23,14 @@ snapshot: build
 node_modules:
 	yarn install
 
-graph:
-	npx madge --ts-config ./tsconfig.json -i  graph.png .
+# Resolve dependencies for retropixels-core to this package
+.PHONY: link
+link:
+	yarn link
+
+.PHONY: clean
+clean:
+	rm -rf target
+	rm -rf node_modules
+	rm *.log
+

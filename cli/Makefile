@@ -8,9 +8,8 @@ C64CODE=target/c64/koala.prg target/c64/afli.prg target/c64/fli.prg target/c64/a
 target/c64/%.prg: c64/%.asm target/c64/ node_modules
 	npx c64jasm --out "$@" "$<"
 
-build: $(C64CODE) node_modules
-
-cleanbuild: clean samples
+.PHONY: all
+all: $(C64CODE) node_modules
 
 target/c64/:
 	mkdir -p target/c64
@@ -18,6 +17,7 @@ target/c64/:
 node_modules:
 	yarn install
 
+.PHONY: clean
 clean:
 	rm -rf target && rm -f *.png && rm -f *.prg && rm -rf *.kla && rm -rf samples && rm -rf node_modules
 
@@ -25,18 +25,18 @@ clean:
 # - update package.json with <version>
 # - commit everything
 # Be careful: when you release, everything that is not in Git is deleted!
-publish: cleanbuild
+publish: all
 	git push
 	git clean -d -f
 	npm publish
 	git tag cli-$(VERSION)
 	git push --tags
 
-snapshot: cleanbuild
+snapshot: all
 	git clean -d -f
 	npm publish --tag snapshot
 
-samples: build
+samples: all
 	$(CMD) --overwrite -f png -o ./samples/$(EXAMPLE)-Multicolor.png $(EXAMPLE).jpg
 	$(CMD) --overwrite -f prg -o ./samples/$(EXAMPLE)-Multicolor.prg $(EXAMPLE).jpg
 	$(CMD) --overwrite -o ./samples/$(EXAMPLE)-Multicolor.kla $(EXAMPLE).jpg
@@ -50,19 +50,20 @@ samples: build
 	$(CMD) --overwrite -f prg -m fli -h -o ./samples/$(EXAMPLE)-AFLI.prg $(EXAMPLE).jpg
 	convert -extent 384x272 -background black -gravity center ./samples/$(EXAMPLE)-Multicolor.png ./samples/CSDb.png
 
-test: build
+.PHONY: test
+test: all
 	$(CMD) --overwrite -f prg -o $(EXAMPLE).prg $(EXAMPLE).jpg
 	$(CMD) --overwrite -f png -o $(EXAMPLE).png $(EXAMPLE).jpg
 	open "$(EXAMPLE).png"
 	x64sc "$(EXAMPLE).prg"
 
-testfli: build
+testfli: all
 	$(CMD) --overwrite -f prg -m fli "$(EXAMPLE).jpg" "$(EXAMPLE).prg"
 	$(CMD) --overwrite -f png -m fli "$(EXAMPLE).jpg" "$(EXAMPLE).png"
 	open "$(EXAMPLE).png"
 	x64sc "$(EXAMPLE).prg"
 
-benchmark: build
+benchmark: all
 	hyperfine --export-markdown Benchmark-formats.md \
 		"$(CMD) --overwrite -f png -o ./tmp.png $(EXAMPLE).jpg"  \
 		"$(CMD) --overwrite -f prg -o ./tmp.prg $(EXAMPLE).jpg" \
@@ -79,5 +80,8 @@ benchmark: build
 		"$(CMD) --overwrite -c yuv -o ./tmp.png $(EXAMPLE).jpg" \
 		"$(CMD) --overwrite -c xyz -o ./tmp.png $(EXAMPLE).jpg"
 
-graph:
-	npx madge --ts-config ./tsconfig.json -i  graph.png .
+.PHONY: link
+# link to the local retropixels-core version in ../core
+# run 'make link' in ../core first!
+link:
+	yarn link retropixels-core

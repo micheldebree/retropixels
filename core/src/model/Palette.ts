@@ -5,6 +5,6 @@ export default class Palette {
 
   constructor (colors: number[][]) {
     this.colors = colors
-    colors.forEach((color, index) => this.enabled.push(index))
+    colors.forEach((_color, index) => this.enabled.push(index))
   }
 }

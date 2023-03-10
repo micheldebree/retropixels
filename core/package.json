@@ -1,18 +1,22 @@
 {
   "name": "retropixels-core",
-  "version": "0.1.5",
+  "version": "0.1.6",
   "description": "A javascript library to convert images to Commodore 64 format.",
   "main": "target/index.js",
   "scripts": {
     "build": "npx tsc",
-    "lint": "npx eslint '*/**/*.{js,ts}' --quiet -c .eslintrc.json --no-eslintrc",
-    "fix": "npx eslint '*/**/*.{js,ts}' --quiet --fix -c .eslintrc.json --no-eslintrc"
+    "lint": "npx ts-standard",
+    "fix": "npx ts-standard --fix"
+  },
+  "engines": {
+    "node": ">=18.0.0",
+    "yarn": ">=1.22.0"
   },
   "dependencies": {
     "jimp": "0.22.7"
   },
   "devDependencies": {
-    "@types/node": "18.14.6",
+    "@types/node": "18.15.0",
     "ts-standard": "12.0.2",
     "typescript": "4.9.5"
   },

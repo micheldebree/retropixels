@@ -48,7 +48,7 @@ export default class JimpPreprocessor {
   private static pokeToJimp (image: Jimp, pixelImage: PixelImage, palette: Palette): void {
     for (let y = 0; y < image.bitmap.height; y += 1) {
       for (let x = 0; x < image.bitmap.width; x += 1) {
-        let pixelValue
+        let pixelValue:number[]
         if (x < pixelImage.mode.fliBugSize) {
           pixelValue = [0, 0, 0, 0xff]
         } else {
