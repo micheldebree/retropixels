@@ -7,12 +7,12 @@ export default class Debugger {
   public static async exportColorMap (colorMap: ColorMap, filename: string): Promise<void> {
     return await new Promise((resolve, reject) => {
       new Jimp(colorMap.width, colorMap.height, (err, image) => {
-        if (err) {
+        if (err != null) {
           reject()
         }
         colorMap.forEachCell((x, y) => {
           colorMap.forEachPixelInCell(x, y, (xx, yy) => {
-            const index = colorMap.get(xx, yy)
+            const index = colorMap.getNonEmpty(xx, yy)
             const pixel: number[] = Palettes.colodore.colors[index]
             Pixels.poke(image.bitmap, xx, yy, pixel)
           })
@@ -34,7 +34,7 @@ export default class Debugger {
   ): Promise<void> {
     return await new Promise((resolve, reject) => {
       new Jimp(width, height, (err, image) => {
-        if (err) {
+        if (err != null) {
           reject()
         }
         for (let x = 0; x < width; x++) {

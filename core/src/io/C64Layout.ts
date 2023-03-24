@@ -49,17 +49,18 @@ export default class C64Layout {
     yOffset = 0
   ): Uint8Array {
     return pixelImage.extractAttributeData(yOffset, (x, y) => {
+      const upperColor: number = pixelImage.colorMaps[upperColorIndex].getIndexOrDefault(x, y)
+      const lowerColor: number = pixelImage.colorMaps[lowerColorIndex].getIndexOrDefault(x, y)
       // pack two colors in one byte
       return (
-        ((pixelImage.colorMaps[upperColorIndex].get(x, y) << 4) & 0xf0) |
-        (pixelImage.colorMaps[lowerColorIndex].get(x, y) & 0x0f)
+        ((upperColor << 4) & 0xf0) | (lowerColor & 0x0f)
       )
     })
   }
 
   public static convertColorram (pixelImage: PixelImage, colorMapIndex: number): Uint8Array {
     return pixelImage.extractAttributeData(0, (x, y) => {
-      return pixelImage.colorMaps[colorMapIndex].get(x, y) & 0x0f
+      return pixelImage.colorMaps[colorMapIndex].getIndexOrDefault(x, y) & 0x0f
     })
   }
 }

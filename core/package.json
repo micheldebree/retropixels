@@ -5,8 +5,8 @@
   "main": "target/index.js",
   "scripts": {
     "build": "npx tsc",
-    "lint": "npx ts-standard",
-    "fix": "npx ts-standard --fix"
+    "lint": "npx ts-standard src",
+    "fix": "npx ts-standard src --fix"
   },
   "engines": {
     "node": ">=18.0.0",

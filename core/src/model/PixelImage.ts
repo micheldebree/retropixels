@@ -23,7 +23,7 @@ export default class PixelImage {
    * @param x X coordinate
    * @param y Y coordinate
    */
-  public peek (x: number, y: number): number {
+  public peek (x: number, y: number): number | undefined {
     const colorMapIndex = this.pixelIndex[y][x]
     if (colorMapIndex === undefined) {
       return undefined

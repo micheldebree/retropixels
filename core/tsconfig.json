@@ -11,9 +11,9 @@
     "outDir": "target",
     "sourceMap": true,
     "allowJs": false,
-    "strictNullChecks": false,
+    "strictNullChecks": true,
     "alwaysStrict": true
   },
   "include": ["cli.js", "**/*.ts"],
-  "exclude": ["node_modules", "**/*.spec.ts"]
+  "exclude": ["node_modules", "target", "**/*.spec.ts"]
 }

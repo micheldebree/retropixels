@@ -37,7 +37,7 @@ export default class KoalaPicture implements IBinaryFormat {
     this.screenRam = C64Layout.convertScreenram(pixelImage, 2, 1)
     this.colorRam = C64Layout.convertColorram(pixelImage, 3)
     this.background = new Uint8Array(1)
-    this.background[0] = pixelImage.colorMaps[0].get(0, 0)
+    this.background[0] = pixelImage.colorMaps[0].getNonEmpty(0, 0)
   }
 
   /**

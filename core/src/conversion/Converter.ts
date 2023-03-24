@@ -39,7 +39,7 @@ export default class Converter {
 
     // get the color map that has the closest color at x,y to realColor
     let closestMap = 0
-    let minDistance: number
+    let minDistance: number | undefined
     for (let i = 0; i < image.colorMaps.length; i++) {
       const paletteIndex = image.colorMaps[i].get(x, y)
 
@@ -58,7 +58,7 @@ export default class Converter {
   private static reduceToMax (colors: number[]): number {
     const weights: number[] = []
     let maxWeight: number
-    let maxColor: number
+    let maxColor: number = 0
 
     colors.forEach(c => {
       weights[c] = weights[c] === undefined ? 1 : weights[c] + 1
@@ -67,15 +67,16 @@ export default class Converter {
         maxColor = c
       }
     })
+
     return maxColor
   }
 
   private static extractColorMap (
-    quantizedImage: number[],
+    quantizedImage: Array<number | undefined>,
     toColorMap: ColorMap,
     colorMapIndex: number,
     pixelImage: PixelImage
-  ) {
+  ): void {
     const imageWidth = pixelImage.mode.width
     // for each cell:
     // - put the winning color from the quantized image in the color map cell
@@ -86,8 +87,9 @@ export default class Converter {
       if (toColorMap.get(x, y) === undefined) {
         toColorMap.forEachPixelInCell(x, y, (xx, yy) => {
           // this pixel has not been mapped
-          if (quantizedImage[xx + yy * imageWidth] !== undefined) {
-            colorIndices.push(quantizedImage[xx + yy * imageWidth])
+          const pixel = quantizedImage[xx + yy * imageWidth]
+          if (pixel !== undefined) {
+            colorIndices.push(pixel)
           }
         })
         // best color wins and is put in the color map

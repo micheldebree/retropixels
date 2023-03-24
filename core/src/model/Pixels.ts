@@ -50,7 +50,10 @@ export default class Pixels {
 
   private static coordsToIndex (imageData: IImageData, x: number, y: number): number {
     const result: number = Math.floor(y) * (imageData.width << 2) + (x << 2)
-    return result < imageData.data.length ? result : undefined
+    if (result > imageData.data.length) {
+      throw new Error(`Index ${result} is outside image data size ${imageData.data.length}`)
+    }
+    return result
   }
 
   private static cap (pixelChannel: number): number {

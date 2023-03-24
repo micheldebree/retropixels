@@ -9,7 +9,7 @@ import IBinaryFormat from './IBinaryFormat'
 
 export default class C64Writer {
   public static toBinary (pixelImage: PixelImage): IBinaryFormat {
-    let result: IBinaryFormat
+    let result: IBinaryFormat | undefined
 
     if (pixelImage.mode.id === 'bitmap') {
       if (pixelImage.isHires()) {

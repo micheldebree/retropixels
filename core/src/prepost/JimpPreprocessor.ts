@@ -39,7 +39,7 @@ export default class JimpPreprocessor {
     return await new Promise((resolve, reject) => {
       new Jimp(pixelImage.mode.width, pixelImage.mode.height, (err, image) => {
         this.pokeToJimp(image, pixelImage, palette)
-        if (err) reject(err)
+        if (err != null) reject(err)
         resolve(image)
       })
     })
@@ -48,7 +48,7 @@ export default class JimpPreprocessor {
   private static pokeToJimp (image: Jimp, pixelImage: PixelImage, palette: Palette): void {
     for (let y = 0; y < image.bitmap.height; y += 1) {
       for (let x = 0; x < image.bitmap.width; x += 1) {
-        let pixelValue:number[]
+        let pixelValue: number[]
         if (x < pixelImage.mode.fliBugSize) {
           pixelValue = [0, 0, 0, 0xff]
         } else {

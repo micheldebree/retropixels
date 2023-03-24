@@ -34,9 +34,9 @@ export default class SpritePad implements IBinaryFormat {
 
     const isMulticolor: boolean = pixelImage.mode.pixelWidth === 2
 
-    this.backgroundColor = pixelImage.colorMaps[0].get(0, 0)
-    this.multiColor1 = isMulticolor ? pixelImage.colorMaps[1].get(0, 0) : 0
-    this.multiColor2 = isMulticolor ? pixelImage.colorMaps[2].get(0, 0) : 0
+    this.backgroundColor = pixelImage.colorMaps[0].getNonEmpty(0, 0)
+    this.multiColor1 = isMulticolor ? pixelImage.colorMaps[1].getNonEmpty(0, 0) : 0
+    this.multiColor2 = isMulticolor ? pixelImage.colorMaps[2].getNonEmpty(0, 0) : 0
     // this colormap holds colors for individual sprites
     const spriteColorMapIndex: number = isMulticolor ? 3 : 1
 
@@ -51,7 +51,7 @@ export default class SpritePad implements IBinaryFormat {
       // last byte is mode (bit 7: 1 = multi 0 = hires), and sprite color
 
       const modeFlag: number = isMulticolor ? 0x80 : 0
-      const spriteColor: number = pixelImage.colorMaps[spriteColorMapIndex].get(x, y) & 0x0f
+      const spriteColor: number = pixelImage.colorMaps[spriteColorMapIndex].getNonEmpty(x, y) & 0x0f
 
       this.sprites[this.nrOfSprites][63] = modeFlag | spriteColor
       this.nrOfSprites += 1

@@ -30,7 +30,7 @@ export default class Quantizer {
 
   constructor (palette: Palette, colorspace: (pixel: number[]) => number[]) {
     this.colorspace = colorspace
-    //
+
     // convert palette to colorspace first
     this.palette = new Palette(palette.colors.map(p => colorspace(p)))
     this.palette.enabled = palette.enabled
@@ -59,12 +59,12 @@ export default class Quantizer {
 
     return this.palette.enabled
       .map(index => [index, this.distance(pixel, index)])
-      .reduce((acc, current) => (current[1] < acc[1] ? current : acc), [null, Number.POSITIVE_INFINITY])[0]
+      .reduce((acc, current) => (current[1] < acc[1] ? current : acc), [0, Number.POSITIVE_INFINITY])[0]
   }
 
   // return a palette index for each pixel in the image
   public quantizeImage (image: IImageData): number[] {
-    const result = []
+    const result: number[] = []
     for (let y = 0; y < image.height; y++) {
       for (let x = 0; x < image.width; x++) {
         result.push(this.quantizePixel(Pixels.peek(image, x, y)))

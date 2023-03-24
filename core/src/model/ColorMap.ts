@@ -53,13 +53,27 @@ export default class ColorMap {
    * Get the palette index at x, y coordinate.
    * TODO: rename to getIndex
    */
-  public get (x: number, y: number): number {
+  public get (x: number, y: number): number | undefined {
     const mX: number = this.mapX(x)
 
     if (this.colors[mX] !== undefined) {
       return this.colors[mX][this.mapY(y)]
     }
     return undefined
+  }
+
+  public getNonEmpty (x: number, y: number): number {
+    const result: number | undefined = this.get(x, y)
+    if (result === undefined) {
+      throw new Error(`Index at ${x}, ${y} is undefined.`)
+    }
+    return result
+  }
+
+  // if there is no index at x,y because it is not needed,
+  // return the default
+  public getIndexOrDefault (x: number, y: number): number {
+    return this.get(x,y)?? 0
   }
 
   public forEachCell (callback: (x: number, y: number) => void): void {

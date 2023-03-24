@@ -37,7 +37,7 @@ export default class FLIPicture implements IBinaryFormat {
     }
 
     this.background = new Uint8Array(1)
-    this.background[0] = pixelImage.colorMaps[0].get(0, 0)
+    this.background[0] = pixelImage.colorMaps[0].getNonEmpty(0, 0)
   }
 
   /**
