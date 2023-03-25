@@ -1,15 +1,17 @@
-VERSION=$(shell cat package.json | jq -r .version) 
+VERSION=$(shell cat package.json | jq -r .version)
 
 EXAMPLE=paintface
 
 CMD=node cli.js
 C64CODE=target/c64/koala.prg target/c64/afli.prg target/c64/fli.prg target/c64/artstudio.prg
+CORE=../core
 
 target/c64/%.prg: c64/%.asm target/c64/ node_modules
 	npx c64jasm --out "$@" "$<"
 
 .PHONY: all
-all: $(C64CODE) node_modules
+all: $(C64CODE) node_modules 
+	cd $(CORE) && make
 
 target/c64/:
 	mkdir -p target/c64
@@ -84,4 +86,4 @@ benchmark: all
 # link to the local retropixels-core version in ../core
 # run 'make link' in ../core first!
 link:
-	yarn link retropixels-core
+	yarn link "retropixels-core"

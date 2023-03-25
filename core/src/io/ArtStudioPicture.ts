@@ -1,5 +1,5 @@
 import PixelImage from '../model/PixelImage'
-import C64Layout from './C64Layout'
+import { convertBitmap, convertScreenram } from './C64Layout'
 import IBinaryFormat from './IBinaryFormat'
 
 export default class ArtStudioPicture implements IBinaryFormat {
@@ -20,8 +20,8 @@ export default class ArtStudioPicture implements IBinaryFormat {
     this.loadAddress[0] = 0
     this.loadAddress[1] = 0x20
 
-    this.bitmap = C64Layout.convertBitmap(pixelImage)
-    this.screenRam = C64Layout.convertScreenram(pixelImage, 0, 1)
+    this.bitmap = convertBitmap(pixelImage)
+    this.screenRam = convertScreenram(pixelImage, 0, 1)
 
     this.magic = new Uint8Array([0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00])
   }

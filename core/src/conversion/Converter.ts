@@ -1,6 +1,6 @@
 import IImageData from '../model/IImageData'
 import PixelImage from '../model/PixelImage'
-import Pixels from '../model/Pixels'
+import { peek } from '../model/Pixels'
 import ColorMap from '../model/ColorMap'
 import Quantizer from './Quantizer'
 
@@ -28,7 +28,7 @@ export default class Converter {
     for (let y = 0; y < pixelImage.mode.height; y += 1) {
       for (let x = 0; x < pixelImage.mode.width; x += 1) {
         if (pixelImage.pixelIndex[y][x] === undefined) {
-          this.mapToExistingColorMap(pixelImage, x, y, Pixels.peek(imageData, x, y))
+          this.mapToExistingColorMap(pixelImage, x, y, peek(imageData, x, y))
         }
       }
     }

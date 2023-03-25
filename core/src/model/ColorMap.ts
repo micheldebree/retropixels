@@ -73,7 +73,7 @@ export default class ColorMap {
   // if there is no index at x,y because it is not needed,
   // return the default
   public getIndexOrDefault (x: number, y: number): number {
-    return this.get(x,y)?? 0
+    return this.get(x, y) ?? 0
   }
 
   public forEachCell (callback: (x: number, y: number) => void): void {

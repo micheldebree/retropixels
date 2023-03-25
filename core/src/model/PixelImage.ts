@@ -48,7 +48,7 @@ export default class PixelImage {
 
   public extractAttributeData (yOffset: number, callback: (x: number, y: number) => number): Uint8Array {
     const result: Uint8Array = new Uint8Array(1000).fill(0)
-    let index = 0
+    let index: number = 0
 
     this.mode.forEachCell(yOffset, (x, y) => {
       result[index] = x >= this.mode.fliBugSize ? callback(x, y) : 0
@@ -65,7 +65,7 @@ export default class PixelImage {
     const result: PixelImage[] = []
 
     this.colorMaps.forEach(colorMap => {
-      const pixelImage = new PixelImage(this.mode)
+      const pixelImage: PixelImage = new PixelImage(this.mode)
       pixelImage.colorMaps.push(colorMap)
       for (let x = 0; x < this.mode.width; x += 1) {
         for (let y = 0; y < this.mode.height; y += 1) {

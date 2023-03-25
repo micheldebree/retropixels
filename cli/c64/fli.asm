@@ -74,7 +74,7 @@ ntsc3:   lda #$ea       ; modified to NOP NOP on NTSC
         ; 63 clock cycles which is exactly the length of a PAL C64 rasterline.
 
          nop
-        nop
+         nop
 l0:
          lda tab18+1,x
          sta $d018      ; set new color RAM address

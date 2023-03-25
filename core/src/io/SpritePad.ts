@@ -1,5 +1,5 @@
 import PixelImage from '../model/PixelImage'
-import C64Layout from './C64Layout'
+import { convertBitmap } from './C64Layout'
 import IBinaryFormat from './IBinaryFormat'
 
 export default class SpritePad implements IBinaryFormat {
@@ -30,7 +30,7 @@ export default class SpritePad implements IBinaryFormat {
   private sprites: Uint8Array[] = []
 
   public fromPixelImage (pixelImage: PixelImage): void {
-    const bitmap: Uint8Array = C64Layout.convertBitmap(pixelImage)
+    const bitmap: Uint8Array = convertBitmap(pixelImage)
 
     const isMulticolor: boolean = pixelImage.mode.pixelWidth === 2
 

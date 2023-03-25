@@ -1,5 +1,5 @@
 import PixelImage from '../model/PixelImage'
-import C64Layout from './C64Layout'
+import { convertBitmap, convertScreenram, convertColorram } from './C64Layout'
 import IBinaryFormat from './IBinaryFormat'
 
 /**
@@ -33,9 +33,9 @@ export default class KoalaPicture implements IBinaryFormat {
     this.loadAddress[0] = 0
     this.loadAddress[1] = 0x60
 
-    this.bitmap = C64Layout.convertBitmap(pixelImage)
-    this.screenRam = C64Layout.convertScreenram(pixelImage, 2, 1)
-    this.colorRam = C64Layout.convertColorram(pixelImage, 3)
+    this.bitmap = convertBitmap(pixelImage)
+    this.screenRam = convertScreenram(pixelImage, 2, 1)
+    this.colorRam = convertColorram(pixelImage, 3)
     this.background = new Uint8Array(1)
     this.background[0] = pixelImage.colorMaps[0].getNonEmpty(0, 0)
   }

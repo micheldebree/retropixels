@@ -1,5 +1,5 @@
 import IImageData from '../model/IImageData'
-import Pixels from '../model/Pixels'
+import { peek, poke, add } from '../model/Pixels'
 
 /**
  * Apply ordered dithering to an image.
@@ -123,13 +123,13 @@ export default class OrderedDither {
   public dither (image: IImageData): void {
     for (let y = 0; y < image.height; y += 1) {
       for (let x = 0; x < image.width; x += 1) {
-        Pixels.poke(image, x, y, this.offsetColor(Pixels.peek(image, x, y), x, y))
+        poke(image, x, y, this.offsetColor(peek(image, x, y), x, y))
       }
     }
   }
 
   private offsetColor (color: number[], x: number, y: number): number[] {
     const offset: number = this.matrix[y % this.matrix.length][x % this.matrix[0].length]
-    return Pixels.add(color, [offset, offset, offset])
+    return add(color, [offset, offset, offset])
   }
 }

@@ -4006,7 +4006,7 @@ ret@~0.1.10:
   resolved "https://registry.yarnpkg.com/ret/-/ret-0.1.15.tgz#b8a4825d5bdb1fc3f6f53c2bc33f81388681c7bc"
   integrity sha512-TTlYpa+OL+vMMNG24xSlQGEJ3B/RzEfUlLct7b5G/ytav+wPrplCpVMFuwzXbkecJrb6IYo1iFb0S9v37754mg==
 
-retropixels-core@0.1.5:
+retropixels-core@0.1.6:
   version "0.1.5"
   resolved "https://registry.yarnpkg.com/retropixels-core/-/retropixels-core-0.1.5.tgz#88e25d666c6e329f0a0fb43c736aa585e0c776df"
   integrity sha512-mmZrjCQGjUzhBzVvP3HhaocaL206F2JTFMs2dYEYsgu1cip1wz8AJvpWlF8QFfyUkj4qYckT6WpxXE0DbN7BMQ==

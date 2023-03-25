@@ -1,5 +1,5 @@
 import PixelImage from '../model/PixelImage'
-import C64Layout from './C64Layout'
+import { convertBitmap, convertScreenram, convertColorram, pad } from './C64Layout'
 import IBinaryFormat from './IBinaryFormat'
 
 /**
@@ -28,12 +28,12 @@ export default class FLIPicture implements IBinaryFormat {
     this.loadAddress[0] = 0
     this.loadAddress[1] = 0x3c
 
-    this.colorRam = C64Layout.convertColorram(pixelImage, 1)
-    this.bitmap = C64Layout.convertBitmap(pixelImage)
+    this.colorRam = convertColorram(pixelImage, 1)
+    this.bitmap = convertBitmap(pixelImage)
 
     this.screenRam = []
     for (let i = 0; i < 8; i += 1) {
-      this.screenRam[i] = C64Layout.convertScreenram(pixelImage, 2, 3, i)
+      this.screenRam[i] = convertScreenram(pixelImage, 2, 3, i)
     }
 
     this.background = new Uint8Array(1)
@@ -47,15 +47,15 @@ export default class FLIPicture implements IBinaryFormat {
   public toMemoryMap (): Uint8Array[] {
     return [
       this.loadAddress,
-      C64Layout.pad(this.colorRam, 24),
-      C64Layout.pad(this.screenRam[0], 24),
-      C64Layout.pad(this.screenRam[1], 24),
-      C64Layout.pad(this.screenRam[2], 24),
-      C64Layout.pad(this.screenRam[3], 24),
-      C64Layout.pad(this.screenRam[4], 24),
-      C64Layout.pad(this.screenRam[5], 24),
-      C64Layout.pad(this.screenRam[6], 24),
-      C64Layout.pad(this.screenRam[7], 24),
+      pad(this.colorRam, 24),
+      pad(this.screenRam[0], 24),
+      pad(this.screenRam[1], 24),
+      pad(this.screenRam[2], 24),
+      pad(this.screenRam[3], 24),
+      pad(this.screenRam[4], 24),
+      pad(this.screenRam[5], 24),
+      pad(this.screenRam[6], 24),
+      pad(this.screenRam[7], 24),
       this.bitmap,
       this.background
     ]

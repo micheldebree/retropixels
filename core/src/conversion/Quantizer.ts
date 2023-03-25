@@ -1,6 +1,6 @@
 import IImageData from '../model/IImageData'
 import Palette from '../model/Palette'
-import Pixels from '../model/Pixels'
+import { peek } from '../model/Pixels'
 import { ColorSpace } from '../profiles/ColorSpaces'
 
 // https://www.easyrgb.com/en/math.php
@@ -67,7 +67,7 @@ export default class Quantizer {
     const result: number[] = []
     for (let y = 0; y < image.height; y++) {
       for (let x = 0; x < image.width; x++) {
-        result.push(this.quantizePixel(Pixels.peek(image, x, y)))
+        result.push(this.quantizePixel(peek(image, x, y)))
       }
     }
     return result
