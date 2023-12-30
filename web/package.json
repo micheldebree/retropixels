@@ -18,7 +18,7 @@
     "react-dropzone": "14.2.1",
     "react-router-prop-types": "1.0.5",
     "react-scripts": "4.0.3",
-    "retropixels-core": "../core",
+    "retropixels-core": "0.1.6",
     "web-vitals": "^2.1.4"
   },
   "scripts": {

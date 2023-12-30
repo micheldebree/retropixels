@@ -4,7 +4,7 @@ EXAMPLE=paintface
 
 CMD=node cli.js
 C64CODE=target/c64/koala.prg target/c64/afli.prg target/c64/fli.prg target/c64/artstudio.prg
-CORE=../core
+CORE=../retropixels-core
 
 target/c64/%.prg: c64/%.asm target/c64/ node_modules
 	npx c64jasm --out "$@" "$<"

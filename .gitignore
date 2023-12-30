@@ -17,3 +17,4 @@ web/build
 .vscode
 *.vim
 *.code-workspace
+.DS_Store
