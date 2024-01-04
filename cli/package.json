@@ -1,7 +1,8 @@
 {
   "name": "retropixels",
-  "version": "0.9.10",
+  "version": "0.9.11",
   "description": "A cross platform command line tool to convert images to Commodore 64 format.",
+  "files": ["cli.js","/target"],
   "bin": {
     "retropixels": "./cli.js"
   },

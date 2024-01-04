@@ -273,6 +273,10 @@ Run with `node cli.js [options] <infile>`
 
 ## Changelog
 
+### 0.9.11
+
+- Fixed: Error about Executable format not being supported.
+
 ### 0.9.10
 
 - Added [#103](https://github.com/micheldebree/retropixels/issues/103) Option
