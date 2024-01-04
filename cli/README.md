@@ -81,6 +81,8 @@ With
   - `--hires, -h`: use hires mode instead of multicolor
   - `--scale, -s <mode>` with `<mode>`:
     - `fill` (default): scale and crop to fill output dimensions
+    - `fit` (default): scale and crop to fit output dimensions, potentially
+      padding with to fit aspect ratio
     - `none`: do not scale, only crop
   - `--nomaps`: restrict to a single color per attribute type or sprite
   - `--overwrite`: overwrite if output file already exists
@@ -153,6 +155,7 @@ Number of rows and columns in the grid when using `-m sprites`.
 Sets the way the input image is scaled before converting:
 
 - `fill` (default): scale to fill output dimensions, and crop if necessary
+- `fit` (default): scale to fit output dimensions, and pad if necessary
 - `none` : only crop to output dimensions
 
 **Note**: Mode `none` in multicolor mode _does_ rescale double-width pixels to
@@ -269,6 +272,12 @@ It should work on other platforms but you're on your own there.
 Run with `node cli.js [options] <infile>`
 
 ## Changelog
+
+### 0.9.10
+
+- Added [#103](https://github.com/micheldebree/retropixels/issues/103) Option
+  `fit` for the `--scale` setting, which scales to fit entirely in the screen.
+  Thanks to magwed for requesting.
 
 ### 0.8.10
 

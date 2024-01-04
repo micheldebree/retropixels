@@ -9,7 +9,8 @@ import Palette from '../model/Palette'
 
 enum ScaleMode {
   none = 'none',
-  fill = 'fill'
+  fill = 'fill',
+  fit = 'fit'
 }
 export async function read (filename: string, graphicMode: GraphicMode, scaleMode: ScaleMode): Promise<IImageData> {
   const jimpImage: Jimp = await Jimp.read(filename)
@@ -17,7 +18,10 @@ export async function read (filename: string, graphicMode: GraphicMode, scaleMod
     crop(jimpImage, graphicMode)
   } else if (scaleMode === ScaleMode.fill) {
     cropFill(jimpImage, graphicMode)
+  } else if (scaleMode === ScaleMode.fit) {
+    cropFit(jimpImage, graphicMode)
   }
+
   return jimpImage.bitmap
 }
 export async function write (pixelImage: PixelImage, filename: string, palette: Palette): Promise<Jimp> {
@@ -80,5 +84,10 @@ function crop (jimpImage: Jimp, graphicMode: GraphicMode): void {
 // resize to fill (--scale fill)
 function cropFill (jimpImage: Jimp, graphicMode: GraphicMode): void {
   jimpImage.cover(graphicMode.width * graphicMode.pixelWidth, graphicMode.height * graphicMode.pixelHeight)
+  jimpImage.resize(graphicMode.width, graphicMode.height)
+}
+
+function cropFit (jimpImage: Jimp, graphicMode: GraphicMode): void {
+  jimpImage.contain(graphicMode.width * graphicMode.pixelWidth, graphicMode.height * graphicMode.pixelHeight)
   jimpImage.resize(graphicMode.width, graphicMode.height)
 }

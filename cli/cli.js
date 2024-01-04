@@ -25,7 +25,7 @@ cli
   .option('--rows <rows>', 'number of rows of sprites, default = 8', parseInt)
   .option('-h, --hires', 'hires mode')
   .option('--nomaps', 'use one color per attribute instead of a map')
-  .option('-s, --scale <mode>', 'none, fill (default)')
+  .option('-s, --scale <mode>', 'none, fit, fill (default)')
   .option('--overwrite', 'force overwrite of existing output file')
   .parse(process.argv)
 
