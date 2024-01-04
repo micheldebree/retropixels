@@ -29,7 +29,7 @@ fix:
 # - commit everything
 # Be careful: when you release, everything that is not in Git is deleted!
 .PHONY: publish
-publish: build
+publish: all
 	git push
 	git clean -d -f
 	npm publish
