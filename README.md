@@ -2,7 +2,7 @@
 
 > [!WARNING]
 > This repository has been archived, there will be no further development
-> Please check out [Retropxels+](https://meatloaf.cc/tools/retropixels+/) for a new enhanced version of the web interface.
+> Please check out [Retropixels+](https://meatloaf.cc/tools/retropixels+/) for a new enhanced version of the web interface.
 
 Convert images to Commodore 64 format.
 
